@@ -58,7 +58,7 @@
       </p>
     </Card>
 
-    <Card class="home-card-box home-card__footer" header="相关链接">
+    <Card class="home-card-box home-card__footer" id="otherlinks" header="相关链接">
       <a href="https://discuz.chat/manual-admin/" target="_blank">使用手册</a>
       <a href="https://www.discuz.com" target="_blank">Discuz! Q 官方</a>
       <a href="https://www.discuz.chat" target="_blank">支持论坛</a>
