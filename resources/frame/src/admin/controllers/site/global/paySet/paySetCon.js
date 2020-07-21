@@ -51,12 +51,6 @@ export default {
             this.siteMode = 'public';
             this.changeSettings('site_mode',this.siteMode,'default','false');
           }
-
-      }).catch (() => {
-        this.$message({
-          type: 'info',
-          message: '操作失败'
-        });     
       })
       } else {
         if(type == 'wxpay_close') {
