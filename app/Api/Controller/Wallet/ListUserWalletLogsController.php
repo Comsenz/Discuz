@@ -144,14 +144,13 @@ class ListUserWalletLogsController extends AbstractListController
             $walletLogs->load('order.thread.firstPost')
                 ->map(function (UserWalletLog $log) {
                     if ($log->order && $log->order->thread) {
-                        if ($log->order->thread->type == 1) {
+                        if ($log->order->thread->title) {
                             $title = Str::limit($log->order->thread->title, 40);
                         } else {
                             $title = Str::limit($log->order->thread->firstPost->content, 40);
-                            $title = str_replace("\n", '', $title);
                         }
 
-                        $log->order->thread->title = htmlspecialchars($title);
+                        $log->order->thread->title = strip_tags($title);
                     }
                 });
         }
