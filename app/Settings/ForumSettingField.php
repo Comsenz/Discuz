@@ -21,6 +21,7 @@ namespace App\Settings;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Encryption\Encrypter;
+use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 
 class ForumSettingField
 {
@@ -53,7 +54,13 @@ class ForumSettingField
     public function siteUrlSplicing($imgName)
     {
         if ($imgName) {
-            return $this->url->to('/storage/' . $imgName);
+            if ($this->settings->get('qcloud_cos', 'qcloud')) {
+                return app(Filesystem::class)
+                    ->disk('cos')
+                    ->temporaryUrl($imgName, \Carbon\Carbon::now()->addDay());
+            } else {
+                return $this->url->to('/storage/' . $imgName) . '?' . \Carbon\Carbon::now()->timestamp;
+            }
         }
 
         return '';

@@ -458,7 +458,10 @@ class User extends Model
         $this->liked_count = $this->postUser()
             ->join('posts', 'post_user.post_id', '=', 'posts.id')
             ->where('posts.is_first', true)
+            ->where('posts.is_approved', Post::APPROVED)
+            ->whereNull('posts.deleted_at')
             ->count();
+
         return $this;
     }
 

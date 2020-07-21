@@ -19,6 +19,7 @@
 namespace App\Api\Controller\Order;
 
 use App\Api\Serializer\OrderSerializer;
+use App\Models\Order;
 use App\Models\Post;
 use App\Models\Thread;
 use App\Models\User;
@@ -137,6 +138,22 @@ class ListOrdersController extends AbstractListController
             'pageCount' => ceil($this->total / $limit),
         ]);
 
+        // 主题标题
+        if (in_array('thread.firstPost', $include)) {
+            $orders->load('thread.firstPost')
+                ->map(function (Order $order) {
+                    if ($order && $order->thread) {
+                        if ($order->thread->title) {
+                            $title = Str::limit($order->thread->title, 40);
+                        } else {
+                            $title = Str::limit($order->thread->firstPost->content, 40);
+                            $title = str_replace("\n", '', $title);
+                        }
+
+                        $order->thread->title = strip_tags($title);
+                    }
+                });
+        }
         return $orders->loadMissing($include);
     }
 
