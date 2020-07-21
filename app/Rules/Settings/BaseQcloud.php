@@ -50,4 +50,28 @@ class BaseQcloud extends AbstractRule
             throw new TencentCloudSDKException('tencent_secret_key_error');
         }
     }
+
+    /**
+     * 如果要开启，先判断总开关状态
+     *
+     * @param string $key 要操作的键
+     * @param bool $setKey 要设置的值
+     * @return bool
+     * @throws TencentCloudSDKException
+     */
+    protected function currentKeyStatus($key, $setKey)
+    {
+        if (is_null($key)) {
+            return true;
+        }
+
+        if ($setKey == 1) {
+            // 如果key值要开启，先判断 总开关是否开启
+            if (!$this->settings->get('qcloud_close', 'qcloud')) {
+                throw new TencentCloudSDKException('tencent_qcloud_close_current');
+            }
+        }
+
+        return true;
+    }
 }

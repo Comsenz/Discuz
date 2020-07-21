@@ -22,6 +22,8 @@ use App\Rules\Settings\CashMaxSum;
 use App\Rules\Settings\CashMinSum;
 use App\Rules\Settings\CashSumLimit;
 use App\Rules\Settings\QcloudCaptchaVerify;
+use App\Rules\Settings\QcloudClose;
+use App\Rules\Settings\QcloudMasterSwitch;
 use App\Rules\Settings\QcloudSecretVerify;
 use App\Rules\Settings\QcloudSMSVerify;
 use App\Rules\Settings\QcloudVodCoverTemplateVerify;
@@ -65,7 +67,12 @@ class SetSettingValidator extends AbstractValidator
             'support_img_ext' => [new SupportExt()],
             'support_file_ext' => [new SupportExt()],
             'register_type' => ['in:0,1,2'],
-            'qcloud_sms' => Arr::has($this->data, 'qcloud_sms') ? [new QcloudSMSVerify()] : []
+            'qcloud_close' => [new QcloudClose()],
+            'qcloud_sms' => Arr::has($this->data, 'qcloud_sms') ? [new QcloudSMSVerify()] : [],
+            'qcloud_faceid' => [new QcloudMasterSwitch()],
+            'qcloud_cms_image' => [new QcloudMasterSwitch()],
+            'qcloud_cms_text' => [new QcloudMasterSwitch()],
+            'qcloud_cos' => [new QcloudMasterSwitch()]
         ];
 
         // 腾讯云验证码特殊处理
@@ -80,7 +87,7 @@ class SetSettingValidator extends AbstractValidator
             ];
         }
 
-        //开启验证
+        // 开启视频验证
         if (Arr::has($this->data, 'qcloud_vod') && $this->data['qcloud_vod'] == 1) {
             $rules['qcloud_vod'] = ['filled',
                 new QcloudVodTranscodeVerify($this->settings->get('qcloud_vod_transcode', 'qcloud')),

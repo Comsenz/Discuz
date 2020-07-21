@@ -42,6 +42,7 @@ const config = {
   faceid_error: '身份信息验证不通过',
   invalid_emoji_path: '无效的表情目录',
   notification_is_missing_template_config: '微信推送信息不全',
+  tencent_qcloud_close_current: '腾讯云Api配置未开启',
   tencent_secret_key_error: '腾讯云Secretid或SecretKey不正确',
   tencent_vod_transcode_error: '腾讯云云点播转码模板未设置',
   tencent_vod_subappid_error: '腾讯云云点播子应用错误',
