@@ -64,9 +64,9 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_mode' => $this->settings->get('site_mode'), // pay public
                 'site_close' => (bool)$this->settings->get('site_close'),
                 'site_favicon' => $favicon ?: app(UrlGenerator::class)->to('/favicon.ico'),
-                'site_logo' => $logo ? $logo . '?' . Carbon::now()->timestamp : '', // 拼接日期
-                'site_header_logo' => $headerLogo ? $headerLogo . '?' . Carbon::now()->timestamp : '',
-                'site_background_image' => $backgroundImage ? $backgroundImage . '?' . Carbon::now()->timestamp : '',
+                'site_logo' => $logo ?: '',
+                'site_header_logo' => $headerLogo ?: '',
+                'site_background_image' => $backgroundImage ?: '',
                 'site_url' => $siteUrl,
                 'site_stat' => $this->settings->get('site_stat') ?: '',
                 'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username', 'avatar']),

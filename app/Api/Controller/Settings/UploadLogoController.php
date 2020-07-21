@@ -116,7 +116,7 @@ class UploadLogoController extends AbstractResourceController
 
         $mimes = [
             'watermark_image' => 'mimes:png',
-            'favicon' => 'mimes:jpeg,jpg,png,bmp,gif,ico,svg',
+            'favicon' => 'mimes:jpeg,jpg,png,gif,ico,svg',
         ];
 
         $this->validator->make(
@@ -125,7 +125,7 @@ class UploadLogoController extends AbstractResourceController
                 'type' => [Rule::in($this->allowTypes)],
                 'logo' => [
                     'required',
-                    $mimes[$type] ?? 'mimes:jpeg,jpg,png,bmp,gif',
+                    $mimes[$type] ?? 'mimes:jpeg,jpg,png,gif',
                     'max:5120'
                 ]
             ]
@@ -134,6 +134,13 @@ class UploadLogoController extends AbstractResourceController
         $fileName = $type . '.' . $verifyFile->getClientOriginalExtension();
 
         try {
+            // 开启 cos 时，再存一份，优先使用
+            if ($this->settings->get('qcloud_cos', 'qcloud')) {
+                $cosStream = clone $file->getStream();
+
+                $this->filesystem->disk('cos')->put($fileName, $cosStream);
+            }
+
             $this->filesystem->disk('public')->put($fileName, $file->getStream());
         } catch (Exception $e) {
             throw new $e;
