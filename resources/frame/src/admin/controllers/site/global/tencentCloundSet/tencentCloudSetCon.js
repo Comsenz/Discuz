@@ -151,9 +151,29 @@ export default {
       } else if (type == 'qcloud_cms_text') {
         this.changeSettings('qcloud_cms_text', status);
       } else if (type == 'qcloud_sms') {
-        this.changeSettings('qcloud_sms', status);
+        if (status == 0) {
+          this.$confirm('若您在用户角色中设置了发布内容需先绑定手机，关闭短信服务将同时清空该设置', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.changeSettings('qcloud_sms', status);
+          })
+        } else {
+          this.changeSettings('qcloud_sms', status);
+        }
       } else if (type == 'qcloud_faceid') {
-        this.changeSettings('qcloud_faceid', status);
+        if (status == 0) {
+          this.$confirm('若您在用户角色中设置了发布内容需先实名认证，关闭实名认证服务将同时清空该设置', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.changeSettings('qcloud_faceid', status);
+          })          
+        } else {
+          this.changeSettings('qcloud_faceid', status);
+        }
       } else if (type == 'qcloud_cos') {
         this.changeSettings('qcloud_cos', status);
       } else if (type == 'qcloud_vod') {
