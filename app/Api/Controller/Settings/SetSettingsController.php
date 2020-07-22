@@ -21,10 +21,10 @@ namespace App\Api\Controller\Settings;
 use App\Events\Setting\Saving;
 use App\Events\Setting\Saved;
 use App\Models\Group;
-use App\Settings\SettingsRepository;
 use App\Validators\SetSettingValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Http\DiscuzResponseFactory;
 use Discuz\Qcloud\QcloudTrait;
 use Exception;
@@ -82,7 +82,7 @@ class SetSettingsController implements RequestHandlerInterface
         $settings = collect($request->getParsedBody()->get('data', []))
             ->pluck('attributes')
             ->keyBy(function ($item) {
-                return $item['tag'] . '_' . $item['key'];
+                return ($item['tag'] ?? 'default') . '_' . $item['key'];
             });
 
         /**
@@ -140,7 +140,7 @@ class SetSettingsController implements RequestHandlerInterface
             $this->settings->set(
                 Arr::get($setting, 'key'),
                 trim(Arr::get($setting, 'value')),
-                Arr::get($setting, 'tag')
+                Arr::get($setting, 'tag', 'default')
             );
         });
 
