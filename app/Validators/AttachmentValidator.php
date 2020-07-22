@@ -48,13 +48,7 @@ class AttachmentValidator extends AbstractValidator
      */
     protected function getRules()
     {
-        $type = (int) Arr::get($this->data, 'type');
-        $typeName = Arr::get(Attachment::$allowTypes, $type, head(Attachment::$allowTypes));
-        if ($type == 4) {
-            //消息类型的附件与图片相同
-            $typeName = Arr::get(Attachment::$allowTypes, 1);
-        }
-
+        $typeName = $this->getTypeName();
         // 文件类型
         $mimes = Str::of($this->settings->get("support_{$typeName}_ext"))
             ->explode(',')
@@ -64,7 +58,7 @@ class AttachmentValidator extends AbstractValidator
                 $mimes[$key] = 'mpga';
             }
             if ($value == 'm4a') {
-                $mimes[$key] = 'x-m4a';
+                $mimes[$key] = 'mp4';
             }
             // 无论如何禁止上传 php 文件
             if ($value == 'php') {
@@ -85,5 +79,25 @@ class AttachmentValidator extends AbstractValidator
         }
 
         return $rules;
+    }
+
+    protected function getMessages()
+    {
+        $typeName = $this->getTypeName();
+        return [
+            'file.mimes' => '文件类型错误，支持'.$this->settings->get("support_{$typeName}_ext"),
+        ];
+    }
+
+    private function getTypeName()
+    {
+        $type = (int) Arr::get($this->data, 'type');
+        $typeName = Arr::get(Attachment::$allowTypes, $type, head(Attachment::$allowTypes));
+        if ($type == 4) {
+            //消息类型的附件与图片相同
+            $typeName = Arr::get(Attachment::$allowTypes, 1);
+        }
+
+        return $typeName;
     }
 }
