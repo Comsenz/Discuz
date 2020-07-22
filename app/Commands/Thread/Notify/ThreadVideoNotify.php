@@ -85,6 +85,7 @@ class ThreadVideoNotify
                             $threadVideo->media_url = $value->TranscodeTask->Output->Url;
                             $threadVideo->width = $value->TranscodeTask->Output->Width;
                             $threadVideo->height = $value->TranscodeTask->Output->Height;
+                            $threadVideo->duration = $value->TranscodeTask->Output->Duration;
                         } else {
                             //转码失败
                             $threadVideo->status = ThreadVideo::VIDEO_STATUS_FAIL;
