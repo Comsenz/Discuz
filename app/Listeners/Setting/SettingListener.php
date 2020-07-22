@@ -29,6 +29,7 @@ class SettingListener
      */
     public function subscribe(Dispatcher $events)
     {
+        $events->listen(Saving::class, ChangeSiteMode::class);
         $events->listen(Saving::class, CheckWatermarkSetting::class);
 
         $events->listen(Saved::class, ClearDisabledPermission::class);

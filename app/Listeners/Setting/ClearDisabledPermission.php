@@ -27,7 +27,7 @@ class ClearDisabledPermission
     /**
      * @var SettingsRepository
      */
-    protected $settings;
+    public $settings;
 
     /**
      * @param SettingsRepository $settings

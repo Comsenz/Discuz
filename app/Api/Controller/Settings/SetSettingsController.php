@@ -81,8 +81,12 @@ class SetSettingsController implements RequestHandlerInterface
         // 转换为以 tag + key 为键的集合，即可去重又方便取用
         $settings = collect($request->getParsedBody()->get('data', []))
             ->pluck('attributes')
+            ->map(function ($item) {
+                $item['tag'] = $item['tag'] ?? 'default';
+                return $item;
+            })
             ->keyBy(function ($item) {
-                return ($item['tag'] ?? 'default') . '_' . $item['key'];
+                return $item['tag'] . '_' . $item['key'];
             });
 
         /**
@@ -106,18 +110,6 @@ class SetSettingsController implements RequestHandlerInterface
                 $this->setSiteScale($siteAuthorScale, $siteMasterScale, $settings);
             } else {
                 throw new Exception('scale_sum_not_10');
-            }
-        }
-
-        // 站点模式切换
-        $siteMode = $settings->get('default_site_mode');
-        $siteMode = Arr::get($siteMode, 'value');
-
-        if (in_array($siteMode, ['pay', 'public']) && $siteMode != $this->settings->get('site_mode')) {
-            if ($siteMode === 'pay') {
-                $this->changeSiteMode(Group::UNPAID, Carbon::now(), $settings);
-            } elseif ($siteMode === 'public') {
-                $this->changeSiteMode(Group::MEMBER_ID, '', $settings);
             }
         }
 
@@ -146,20 +138,6 @@ class SetSettingsController implements RequestHandlerInterface
 
         $this->events->dispatch(new Saved($settings));
         return DiscuzResponseFactory::EmptyResponse(204);
-    }
-
-    /**
-     * @param int $groupId
-     * @param Carbon $time
-     * @param Collection $settings
-     */
-    private function changeSiteMode($groupId, $time, &$settings)
-    {
-        $settings->put('default_site_pay_time', [
-            'key' => 'site_pay_time',
-            'value' => $time,
-            'tag' => 'default'
-        ]);
     }
 
     /**
