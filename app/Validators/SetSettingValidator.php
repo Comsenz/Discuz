@@ -65,13 +65,13 @@ class SetSettingValidator extends AbstractValidator
             'support_img_ext' => [new SupportExt()],
             'support_file_ext' => [new SupportExt()],
             'register_type' => ['in:0,1,2'],
-            'qcloud_close' => [new QcloudClose()],
+            'qcloud_close' => Arr::has($this->data, 'qcloud_close') ? [new QcloudClose()] : [],
             'qcloud_sms' => Arr::has($this->data, 'qcloud_sms') ? [new QcloudSMSVerify()] : [],
-            'qcloud_faceid' => [new QcloudMasterSwitch()],
-            'qcloud_cms_image' => [new QcloudMasterSwitch()],
-            'qcloud_cms_text' => [new QcloudMasterSwitch()],
-            'qcloud_cos' => [new QcloudMasterSwitch()],
-            'qcloud_captcha' => [new QcloudMasterSwitch()]
+            'qcloud_faceid' => Arr::has($this->data, 'qcloud_faceid') ? [new QcloudMasterSwitch()] : [],
+            'qcloud_cms_image' => Arr::has($this->data, 'qcloud_cms_image') ? [new QcloudMasterSwitch()] : [],
+            'qcloud_cms_text' => Arr::has($this->data, 'qcloud_cms_text') ? [new QcloudMasterSwitch()] : [],
+            'qcloud_cos' => Arr::has($this->data, 'qcloud_cos') ? [new QcloudMasterSwitch()] : [],
+            'qcloud_captcha' => Arr::has($this->data, 'qcloud_captcha') ? [new QcloudMasterSwitch()] : [],
         ];
 
         // 腾讯云验证码特殊处理
