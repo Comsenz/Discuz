@@ -23,6 +23,7 @@ use App\Settings\SettingsRepository;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use TencentCloud\Common\Exception\TencentCloudSDKException;
 
 class CreateVodUploadSignature
 {
@@ -59,6 +60,10 @@ class CreateVodUploadSignature
         $secretId = $this->settings->get('qcloud_secret_id', 'qcloud');
         $secretKey = $this->settings->get('qcloud_secret_key', 'qcloud');
         $subAppId = $this->settings->get('qcloud_vod_sub_app_id', 'qcloud') ?: 0;
+
+        if (!$this->settings->get('qcloud_close', 'qcloud')) {
+            throw new TencentCloudSDKException('tencent_qcloud_close_current');
+        }
         if (!$secretId || !$secretKey) {
             throw new PermissionDeniedException;
         }
