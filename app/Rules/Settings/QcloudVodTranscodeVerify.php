@@ -61,6 +61,8 @@ class QcloudVodTranscodeVerify extends BaseQcloud
      */
     public function passes($attribute, $value)
     {
+        $this->currentKeyStatus($attribute, $value);
+
         try {
             //开启视频开关时通过setting的值进行验证
             if ($attribute == 'qcloud_vod') {

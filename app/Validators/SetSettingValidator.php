@@ -70,7 +70,8 @@ class SetSettingValidator extends AbstractValidator
             'qcloud_faceid' => [new QcloudMasterSwitch()],
             'qcloud_cms_image' => [new QcloudMasterSwitch()],
             'qcloud_cms_text' => [new QcloudMasterSwitch()],
-            'qcloud_cos' => [new QcloudMasterSwitch()]
+            'qcloud_cos' => [new QcloudMasterSwitch()],
+            'qcloud_captcha' => [new QcloudMasterSwitch()]
         ];
 
         // 腾讯云验证码特殊处理

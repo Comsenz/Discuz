@@ -19,7 +19,6 @@
 namespace App\Rules\Settings;
 
 use Discuz\Contracts\Setting\SettingsRepository;
-use Discuz\Validation\AbstractRule;
 use TencentCloud\Common\Credential;
 use TencentCloud\Common\Exception\TencentCloudSDKException;
 use TencentCloud\Common\Profile\ClientProfile;
