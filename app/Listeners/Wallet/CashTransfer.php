@@ -78,7 +78,7 @@ class CashTransfer
     {
         switch ($event->transfer_type) {
             case GatewayConfig::WECAHT_TRANSFER://微信企业付款
-                $result = $this->wecahtTransfer($event);
+                $this->wecahtTransfer($event);
                 break;
             default:
                 break;

@@ -41,6 +41,8 @@ class Cash
 
     /**
      * @param UserWalletCash $cash_record
+     * @param $ip_address
+     * @param $transfer_type
      */
     public function __construct(UserWalletCash $cash_record, $ip_address, $transfer_type)
     {
