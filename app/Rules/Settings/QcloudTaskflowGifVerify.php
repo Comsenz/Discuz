@@ -44,13 +44,10 @@ class QcloudTaskflowGifVerify extends BaseQcloud
 
     private $randStr;
 
-    protected $subAppId;
 
-    public function __construct($subAppId = '')
+    public function __construct()
     {
         parent::__construct();
-
-        $this->subAppId = $subAppId;
     }
 
     /**
@@ -62,13 +59,16 @@ class QcloudTaskflowGifVerify extends BaseQcloud
     public function passes($attribute, $value)
     {
         try {
-            $this->describeProcedureTemplates($value);
+            $res = $this->describeProcedureTemplates($value);
         } catch (TencentCloudSDKException $e) {
             if ($e->getCode() == 'InvalidParameterValue') {
                 throw new TencentCloudSDKException('InvalidParameterValue');
             } else {
                 throw new TranslatorException('tencent_vod_error', [$e->getCode()]);
             }
+        }
+        if ($res->TotalCount == 0) {
+            throw new TencentCloudSDKException('tencent_vod_taskflow_gif_error');
         }
         return true;
     }
