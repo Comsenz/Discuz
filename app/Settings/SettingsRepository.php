@@ -21,14 +21,23 @@ namespace App\Settings;
 use App\Models\Setting;
 use Discuz\Contracts\Setting\SettingsRepository as ContractsSettingRepository;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class SettingsRepository implements ContractsSettingRepository
 {
+    /**
+     * @var Collection
+     */
     protected $settings = null;
+
+    public function __construct()
+    {
+        $this->settings = new Collection();
+    }
 
     public function all()
     {
-        if ($this->settings) {
+        if ($this->settings->isNotEmpty()) {
             return $this->settings;
         }
 
@@ -59,8 +68,8 @@ class SettingsRepository implements ContractsSettingRepository
             return false;
         }
 
-        $settings = $this->all()->toArray();
-        Arr::set($settings, $tag.'.'.$key, $value);
+        $this->all();
+        $this->settings->put($tag, array_merge($this->tag($tag), [$key => $value]));
 
         $query = Setting::where([['key', $key], ['tag', $tag]]);
 

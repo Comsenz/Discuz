@@ -47,6 +47,16 @@ class SettingsTableSeeder extends Seeder
                 'tag' => 'default',
             ],
             [
+                'key' => 'site_master_scale',   // 站长分成比例
+                'value' => '0',                 // 默认 0
+                'tag' => 'default',
+            ],
+            [
+                'key' => 'site_author_scale',   // 用户分成比例
+                'value' => '10',                // 默认 10
+                'tag' => 'default',
+            ],
+            [
                 'key' => 'register_close',      // 注册开关：0 禁止，1 允许
                 'value' => '1',                 // 默认允许
                 'tag' => 'default',

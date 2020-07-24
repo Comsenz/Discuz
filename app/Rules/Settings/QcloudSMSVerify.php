@@ -19,7 +19,6 @@
 namespace App\Rules\Settings;
 
 use Discuz\Contracts\Setting\SettingsRepository;
-use Discuz\Validation\AbstractRule;
 use TencentCloud\Common\Credential;
 use TencentCloud\Common\Exception\TencentCloudSDKException;
 use TencentCloud\Common\Profile\ClientProfile;
@@ -33,22 +32,27 @@ use TencentCloud\Sms\V20190711\SmsClient;
  * Class QcloudSMSVerify
  * @package App\Rules\Settings
  */
-class QcloudSMSVerify extends AbstractRule
+class QcloudSMSVerify extends BaseQcloud
 {
     private $qcloudSmsAppId;
 
-    private $qcloudSecretId;
+    protected $qcloudSecretId;
 
-    private $qcloudSecretKey;
+    protected $qcloudSecretKey;
 
+    /**
+     * QcloudSMSVerify constructor.
+     * @param null $qcloudSmsAppId
+     * @throws TencentCloudSDKException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function __construct($qcloudSmsAppId = null)
     {
+        parent::__construct();
+
         $this->qcloudSmsAppId = $qcloudSmsAppId; // 不能为空
 
         $settings = app()->make(SettingsRepository::class);
-
-        $this->qcloudSecretId = $settings->get('qcloud_secret_id', 'qcloud');
-        $this->qcloudSecretKey = $settings->get('qcloud_secret_key', 'qcloud');
 
         if (is_null($this->qcloudSmsAppId)) {
             // 执行开启开关
@@ -66,6 +70,10 @@ class QcloudSMSVerify extends AbstractRule
      */
     public function passes($attribute, $value)
     {
+        // 判断总开关
+        $this->currentKeyStatus($attribute, $value);
+
+        // 验证短信Api
         try {
             $cred = new Credential($this->qcloudSecretId, $this->qcloudSecretKey);
             $httpProfile = new HttpProfile();

@@ -18,19 +18,17 @@
 
 namespace App\Api\Controller\Settings;
 
-use App\Events\Setting\Saving;
 use App\Events\Setting\Saved;
-use App\Models\Group;
-use App\Settings\SettingsRepository;
+use App\Events\Setting\Saving;
 use App\Validators\SetSettingValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Http\DiscuzResponseFactory;
 use Discuz\Qcloud\QcloudTrait;
 use Exception;
 use Illuminate\Contracts\Events\Dispatcher as Events;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -81,6 +79,10 @@ class SetSettingsController implements RequestHandlerInterface
         // 转换为以 tag + key 为键的集合，即可去重又方便取用
         $settings = collect($request->getParsedBody()->get('data', []))
             ->pluck('attributes')
+            ->map(function ($item) {
+                $item['tag'] = $item['tag'] ?? 'default';
+                return $item;
+            })
             ->keyBy(function ($item) {
                 return $item['tag'] . '_' . $item['key'];
             });
@@ -109,18 +111,6 @@ class SetSettingsController implements RequestHandlerInterface
             }
         }
 
-        // 站点模式切换
-        $siteMode = $settings->get('default_site_mode');
-        $siteMode = Arr::get($siteMode, 'value');
-
-        if (in_array($siteMode, ['pay', 'public']) && $siteMode != $this->settings->get('site_mode')) {
-            if ($siteMode === 'pay') {
-                $this->changeSiteMode(Group::UNPAID, Carbon::now(), $settings);
-            } elseif ($siteMode === 'public') {
-                $this->changeSiteMode(Group::MEMBER_ID, '', $settings);
-            }
-        }
-
         // 扩展名统一改为小写
         $settings->transform(function ($item, $key) {
             $extArr = ['default_support_img_ext','default_support_file_ext','qcloud_qcloud_vod_ext'];
@@ -140,26 +130,12 @@ class SetSettingsController implements RequestHandlerInterface
             $this->settings->set(
                 Arr::get($setting, 'key'),
                 trim(Arr::get($setting, 'value')),
-                Arr::get($setting, 'tag')
+                Arr::get($setting, 'tag', 'default')
             );
         });
 
         $this->events->dispatch(new Saved($settings));
         return DiscuzResponseFactory::EmptyResponse(204);
-    }
-
-    /**
-     * @param int $groupId
-     * @param Carbon $time
-     * @param Collection $settings
-     */
-    private function changeSiteMode($groupId, $time, &$settings)
-    {
-        $settings->put('default_site_pay_time', [
-            'key' => 'site_pay_time',
-            'value' => $time,
-            'tag' => 'default'
-        ]);
     }
 
     /**

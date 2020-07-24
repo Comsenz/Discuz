@@ -213,40 +213,28 @@ class ListOrdersController extends AbstractListController
         $query->when($order_end_time, function ($query) use ($order_end_time) {
             $query->where('created_at', '<=', $order_end_time);
         });
-        $query->when($order_username, function ($query) use ($order_username) {
+        $query->when($order_username, function ($query, $username) {
             $query->whereIn(
                 'orders.user_id',
-                User::query()
-                    ->select('id', 'username')
-                    ->where('users.username', $order_username)
-                    ->get()
+                User::query()->where('username', 'like', "%{$username}%")->pluck('id')
             );
         });
-        $query->when($order_payee_username, function ($query) use ($order_payee_username) {
+        $query->when($order_payee_username, function ($query, $username) {
             $query->whereIn(
                 'orders.payee_id',
-                User::query()
-                    ->select('id', 'username')
-                    ->where('users.username', $order_payee_username)
-                    ->get()
+                User::query()->where('username', 'like', "%{$username}%")->pluck('id')
             );
         });
-        $query->when($order_product, function ($query) use ($order_product) {
+        $query->when($order_product, function ($query, $title) {
             $query->whereIn(
                 'orders.thread_id',
                 Thread::query()
-                    ->select('threads.id')
                     ->whereIn(
-                        'threads.id',
-                        Post::query()
-                            ->select('posts.thread_id')
-                            ->where('is_first', true)
-                            ->where('content', 'like', "%$order_product%")
-                            ->groupBy('posts.thread_id')
-                            ->get()
+                        'id',
+                        Post::query()->where('is_first', true)->where('content', 'like', "%$title%")->pluck('thread_id')
                     )
-                    ->orWhere('threads.title', 'like', "%$order_product%")
-                    ->get()
+                    ->orWhere('threads.title', 'like', "%$title%")
+                    ->pluck('id')
             );
         });
     }

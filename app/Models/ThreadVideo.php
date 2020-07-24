@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $file_id
  * @property int $width
  * @property int $height
+ * @property float $duration
  * @property string $media_url
  * @property string $cover_url
  * @property Carbon $created_at

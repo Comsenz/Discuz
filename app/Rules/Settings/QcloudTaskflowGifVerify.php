@@ -18,46 +18,58 @@
 
 namespace App\Rules\Settings;
 
-use Discuz\Validation\AbstractRule;
+use App\Exceptions\TranslatorException;
+use Discuz\Qcloud\QcloudTrait;
+use TencentCloud\Common\Exception\TencentCloudSDKException;
 
 /**
- * 站点付费 - 验证
+ * 腾讯云云点播动图任务流 - 验证
  *
- * Class SiteMode
+ * Class QcloudVodVerify
  * @package App\Rules\Settings
  */
-class SiteMode extends AbstractRule
+class QcloudTaskflowGifVerify extends BaseQcloud
 {
+    use QcloudTrait;
+
     /**
      * 默认错误提示
      * @var string
      */
     public $message = 'set_error';
 
-    private $sitePrice;
+    private $key;
 
-    public function __construct($sitePrice)
+    private $ticket;
+
+    private $randStr;
+
+
+    public function __construct()
     {
-        $this->sitePrice = $sitePrice;
+        parent::__construct();
     }
 
     /**
-     * 判断开启站点付费时,价格不能为空
-     *
      * @param string $attribute
-     * @param mixed $value
+     * @param $value
      * @return bool
+     * @throws TencentCloudSDKException|TranslatorException
      */
     public function passes($attribute, $value)
     {
-        if ($value == 'pay') {
-            // 验证 价格不能为空
-            if (empty($this->sitePrice)) {
-                $this->message = 'site_mode_not_found_price';
-                return false;
+        try {
+            $res = $this->describeProcedureTemplates($value);
+        } catch (TencentCloudSDKException $e) {
+            if ($e->getCode() == 'InvalidParameterValue') {
+                throw new TencentCloudSDKException('InvalidParameterValue');
+            } else {
+                throw new TranslatorException('tencent_vod_error', [$e->getCode()]);
             }
         }
-
+        if ($res->TotalCount == 0) {
+            throw new TencentCloudSDKException('tencent_vod_taskflow_gif_error');
+        }
         return true;
     }
 
@@ -68,6 +80,12 @@ class SiteMode extends AbstractRule
      */
     public function message()
     {
-        return trans('setting.' . $this->message);
+    }
+
+    /**
+     * @param $array
+     */
+    public function errorMessage($array)
+    {
     }
 }

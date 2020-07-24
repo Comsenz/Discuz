@@ -26,10 +26,10 @@ use App\Rules\Settings\QcloudClose;
 use App\Rules\Settings\QcloudMasterSwitch;
 use App\Rules\Settings\QcloudSecretVerify;
 use App\Rules\Settings\QcloudSMSVerify;
+use App\Rules\Settings\QcloudTaskflowGifVerify;
 use App\Rules\Settings\QcloudVodCoverTemplateVerify;
 use App\Rules\Settings\QcloudVodTranscodeVerify;
 use App\Rules\Settings\QcloudVodVerify;
-use App\Rules\Settings\SiteMode;
 use App\Rules\Settings\SupportExt;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\AbstractValidator;
@@ -63,16 +63,16 @@ class SetSettingValidator extends AbstractValidator
             'cash_min_sum' => ['gte:0', new CashMinSum($this->faker('cash_max_sum', 0), $this->faker('cash_sum_limit', 0))],
             'cash_max_sum' => ['gte:0', new CashMaxSum($this->faker('cash_sum_limit', 0))],
             'cash_sum_limit' => ['gte:0', new CashSumLimit()],
-            'site_mode' => ['in:pay,public', new SiteMode($this->faker('site_price'))],
             'support_img_ext' => [new SupportExt()],
             'support_file_ext' => [new SupportExt()],
             'register_type' => ['in:0,1,2'],
-            'qcloud_close' => [new QcloudClose()],
+            'qcloud_close' => Arr::has($this->data, 'qcloud_close') ? [new QcloudClose()] : [],
             'qcloud_sms' => Arr::has($this->data, 'qcloud_sms') ? [new QcloudSMSVerify()] : [],
-            'qcloud_faceid' => [new QcloudMasterSwitch()],
-            'qcloud_cms_image' => [new QcloudMasterSwitch()],
-            'qcloud_cms_text' => [new QcloudMasterSwitch()],
-            'qcloud_cos' => [new QcloudMasterSwitch()]
+            'qcloud_faceid' => Arr::has($this->data, 'qcloud_faceid') ? [new QcloudMasterSwitch()] : [],
+            'qcloud_cms_image' => Arr::has($this->data, 'qcloud_cms_image') ? [new QcloudMasterSwitch()] : [],
+            'qcloud_cms_text' => Arr::has($this->data, 'qcloud_cms_text') ? [new QcloudMasterSwitch()] : [],
+            'qcloud_cos' => Arr::has($this->data, 'qcloud_cos') ? [new QcloudMasterSwitch()] : [],
+            'qcloud_captcha' => Arr::has($this->data, 'qcloud_captcha') ? [new QcloudMasterSwitch()] : [],
         ];
 
         // 腾讯云验证码特殊处理
@@ -112,6 +112,9 @@ class SetSettingValidator extends AbstractValidator
             $rules['qcloud_vod_cover_template'] = [new QcloudVodCoverTemplateVerify()];
         }
 
+        if (Arr::has($this->data, 'qcloud_vod_taskflow_gif')) {
+            $rules['qcloud_vod_taskflow_gif'] = [new QcloudTaskflowGifVerify()];
+        }
         return $rules;
     }
 

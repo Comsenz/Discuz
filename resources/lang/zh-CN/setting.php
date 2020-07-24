@@ -10,6 +10,8 @@ return [
     'set_error' => '设值失败',
 
     // site
+    'invalid_site_mode' => '无效的站点模式',
+    'pay_site_mode_need_open_payment' => '付费模式需配置支付方式',
     'site_mode_not_found_price' => '请设置加入价格',
 
     'min_greater_than_max' => '单次提现最小金额 不能大于 最大金额',
