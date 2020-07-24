@@ -51,6 +51,8 @@ const config = {
   qcloud_vod_cover_template_not_found: '腾讯云云点播截图模板不存在',
   tencent_vod_error : '腾讯云云点播配置错误',
   tencent_qcloud_sms_app_error : '腾讯云短信配置错误',
+  tencent_vod_taskflow_gif_error : '动图封面任务流名称错误',
+
 };
 
 Vue.prototype.getLang = function (key) {
