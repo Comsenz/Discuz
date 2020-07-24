@@ -26,6 +26,7 @@ use App\Rules\Settings\QcloudClose;
 use App\Rules\Settings\QcloudMasterSwitch;
 use App\Rules\Settings\QcloudSecretVerify;
 use App\Rules\Settings\QcloudSMSVerify;
+use App\Rules\Settings\QcloudTaskflowGifVerify;
 use App\Rules\Settings\QcloudVodCoverTemplateVerify;
 use App\Rules\Settings\QcloudVodTranscodeVerify;
 use App\Rules\Settings\QcloudVodVerify;
