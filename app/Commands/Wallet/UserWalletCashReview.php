@@ -56,6 +56,14 @@ class UserWalletCashReview
      * @var string
      */
     public $ip_address;
+    /**
+     * @var ConnectionInterface
+     */
+    public $connection;
+    /**
+     * @var Dispatcher
+     */
+    public $events;
 
     /**
      * 初始化命令参数
