@@ -18,8 +18,11 @@ export default {
       newPassword: "",
       wechatNickName: "",
       sex: "",
-      disabled: false,
+      // disabled: false,    // 
+      noAdmin: false,  // 判断是否是admin
       disabledReason: false,
+      oldPassword: '', // 旧密码
+      confirmPassword: '', // 确认新密码
       reasonsForDisable: "", //禁用原用
       realname: "", //实名认证是否显示
       expired_at: "", // 选择过期时间
@@ -81,7 +84,8 @@ export default {
             this.sex = response.readdata.wechat._data.sex;
           }
           if (userId == this.userInfo.id) {
-            this.disabled = true;
+            // this.disabled = false;
+            this.noAdmin = true;
           }
           if (this.userInfo.status == 1) {
             this.disabledReason = true;
@@ -185,7 +189,9 @@ export default {
               status: this.userInfo.status,
               refuse_message: this.reasonsForDisable,
               expired_at: this.expired_at,
-              username: this.userName
+              username: this.userName,
+              password: this.oldPassword,
+              password_confirmation: this.confirmPassword
             }
           }
         }
