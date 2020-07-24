@@ -111,6 +111,9 @@ class SetSettingValidator extends AbstractValidator
             $rules['qcloud_vod_cover_template'] = [new QcloudVodCoverTemplateVerify()];
         }
 
+        if (Arr::has($this->data, 'qcloud_vod_taskflow_gif')) {
+            $rules['qcloud_vod_taskflow_gif'] = [new QcloudTaskflowGifVerify()];
+        }
         return $rules;
     }
 

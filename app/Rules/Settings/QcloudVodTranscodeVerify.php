@@ -57,7 +57,7 @@ class QcloudVodTranscodeVerify extends BaseQcloud
      * @param string $attribute
      * @param $value
      * @return bool
-     * @throws TencentCloudSDKException
+     * @throws TencentCloudSDKException|TranslatorException
      */
     public function passes($attribute, $value)
     {

@@ -23,12 +23,12 @@ use Discuz\Qcloud\QcloudTrait;
 use TencentCloud\Common\Exception\TencentCloudSDKException;
 
 /**
- * 腾讯云云点播 - 验证
+ * 腾讯云云点播动图任务流 - 验证
  *
  * Class QcloudVodVerify
  * @package App\Rules\Settings
  */
-class QcloudVodVerify extends BaseQcloud
+class QcloudTaskflowGifVerify extends BaseQcloud
 {
     use QcloudTrait;
 
@@ -62,15 +62,10 @@ class QcloudVodVerify extends BaseQcloud
     public function passes($attribute, $value)
     {
         try {
-            //开启视频开关时通过setting的值进行验证
-            if ($attribute == 'qcloud_vod') {
-                $value = $this->subAppId;
-            }
-
-            $this->describeStorageData($value);
+            $this->describeProcedureTemplates($value);
         } catch (TencentCloudSDKException $e) {
-            if ($e->getCode() == 'FailedOperation.InvalidVodUser') {
-                throw new TencentCloudSDKException('tencent_vod_subappid_error');
+            if ($e->getCode() == 'InvalidParameterValue') {
+                throw new TencentCloudSDKException('InvalidParameterValue');
             } else {
                 throw new TranslatorException('tencent_vod_error', [$e->getCode()]);
             }
