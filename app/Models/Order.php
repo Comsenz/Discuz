@@ -42,6 +42,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $payment_type
  * @property int $is_anonymous
  * @property string $remark
+ * @property Carbon $expired_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Thread $thread
