@@ -76,7 +76,7 @@ class AttachmentValidator extends AbstractValidator
 
         // 文件大小
         if ($size = $this->settings->get('support_max_size', 'default', 0)) {
-            $rules['file'][] = 'max:' . ($size * 1024 * 1024);
+            $rules['file'][] = 'max:' . ($size * 1024);
         }
 
         return $rules;
