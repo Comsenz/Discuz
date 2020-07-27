@@ -52,8 +52,8 @@ export default {
         }
       ],
       waterMarkPosi: 0,
-      verticalSpacing: 0,
-      horizontalSpacing: 0
+      verticalSpacing: 0, // 垂直
+      horizontalSpacing: 0 // 水平
     };
   },
   created() {
@@ -81,7 +81,7 @@ export default {
           }
 
           this.verticalSpacing = res.readdata._data.watermark.vertical_spacing;
-          this.verticalSpacing = res.readdata._data.watermark.horizontal_spacing;
+          this.horizontalSpacing = res.readdata._data.watermark.horizontal_spacing;
         }
       });
     },
