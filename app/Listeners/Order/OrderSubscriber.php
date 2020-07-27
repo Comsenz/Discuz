@@ -56,6 +56,7 @@ class OrderSubscriber
             $order->user->expired_at = Carbon::now()->addDays($day);
             $order->expired_at = Carbon::now()->addDays($day);
             $order->user->save();
+            $order->save();
         }
 
         // 打赏主题的订单，支付成功后通知主题作者
