@@ -31,6 +31,7 @@ class SettingListener
     {
         $events->listen(Saving::class, ChangeSiteMode::class);
         $events->listen(Saving::class, CheckWatermarkSetting::class);
+        $events->listen(Saving::class, CheckPayAppId::class);
 
         $events->listen(Saved::class, ClearDisabledPermission::class);
         $events->listen(Saved::class, QcloudSettingReport::class);
