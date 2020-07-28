@@ -66,5 +66,5 @@ return [
     'tencent_captcha_unknown_CaptchaCode' => '验证码未知错误:腾讯云验证码未知CaptchaCode',
 
 
-    'wxpay_appid_error' => 'app_id只能选择"公众号接口配置"或"小程序配置"中设置的值',
+    'wxpay_appid_error' => 'app_id只能选择 公众号接口配置 或 小程序配置 中设置的值',
 ];
