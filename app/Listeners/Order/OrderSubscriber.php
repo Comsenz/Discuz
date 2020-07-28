@@ -52,9 +52,9 @@ class OrderSubscriber
         if ($order->type == Order::ORDER_TYPE_REGISTER && $order->status == Order::ORDER_STATUS_PAID) {
             $day = app()->make(SettingsRepository::class)->get('site_expire');
 
-            // 修改用户过期时间、订单过期时间
+            // 修改用户过期时间、订单过期时间,如果没有有效期，订单过期时间设置为null
             $order->user->expired_at = Carbon::now()->addDays($day);
-            $order->expired_at = Carbon::now()->addDays($day);
+            $order->expired_at = $day ? Carbon::now()->addDays($day) : null;
             $order->user->save();
             $order->save();
         }
