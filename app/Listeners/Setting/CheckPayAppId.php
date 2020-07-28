@@ -63,7 +63,7 @@ class CheckPayAppId
                 ],
             ],
             [
-                'in' => '支付app_id需要在设置的公众号app_id或小程序app_id中选择'
+                'in' => trans('setting.wxpay_appid_error')
             ]
         )->validate();
     }
