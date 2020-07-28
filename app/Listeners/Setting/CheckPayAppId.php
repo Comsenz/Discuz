@@ -47,24 +47,25 @@ class CheckPayAppId
      */
     public function handle(Saving $event)
     {
-        $app_ids = [
-            $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
-            $this->settings->get('offiaccount_app_id', 'wx_offiaccount')
-        ];
-
         $settings = $event->settings->where('tag', 'wxpay')->pluck('value', 'key')->all();
+        if (Arr::get($settings, 'app_id')) {
+            $app_ids = [
+                $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
+                $this->settings->get('offiaccount_app_id', 'wx_offiaccount')
+            ];
 
-        $this->validator->make(
-            $settings,
-            [
-                'app_id' => [
-                    'required',
-                    Rule::in($app_ids),
+            $this->validator->make(
+                $settings,
+                [
+                    'app_id' => [
+                        'required',
+                        Rule::in($app_ids),
+                    ],
                 ],
-            ],
-            [
-                'in' => trans('setting.wxpay_appid_error')
-            ]
-        )->validate();
+                [
+                    'in' => trans('setting.wxpay_appid_error')
+                ]
+            )->validate();
+        }
     }
 }
