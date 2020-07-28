@@ -139,6 +139,7 @@ class ListNotificationController extends AbstractListController
                 if (!empty($user)) {
                     $item->user_name = $user->username;
                     $item->user_avatar = $user->avatar;
+                    $item->realname = $user->realname;
                 }
                 // 查询主题相关内容
                 if (!empty($threadID = Arr::get($item->data, 'thread_id', 0))) {
