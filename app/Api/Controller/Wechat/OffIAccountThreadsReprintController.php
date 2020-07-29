@@ -88,6 +88,11 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
     protected $specialChar;
 
     /**
+     * @var Client
+     */
+    protected $client;
+
+    /**
      * OffIAccountThreadsReprintController constructor.
      *
      * @param ThreadRepository $thread
@@ -97,11 +102,12 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
      * @param UrlGenerator $url
      * @param SpecialCharServer $specialChar
      */
-    public function __construct(ThreadRepository $thread, Filesystem $filesystem, ForumSettingField $forumField, SettingsRepository $settings, UrlGenerator $url, SpecialCharServer $specialChar)
+    public function __construct(ThreadRepository $thread, Filesystem $filesystem, ForumSettingField $forumField, SettingsRepository $settings, UrlGenerator $url, SpecialCharServer $specialChar, Client $client)
     {
         $this->thread = $thread;
         $this->filesystem = $filesystem;
         $this->forumField = $forumField;
+        $this->client = $client;
         $this->settings = $settings;
         $this->url = $url;
         $this->specialChar = $specialChar;
@@ -188,10 +194,10 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
         }
 
         $build = [
-            'title' => $title,   // 标题
-            'thumb_media_id' => $assetMediaId,          // 图文消息的封面图片素材id（必须是永久 media_ID）
-            'show_cover' => 1, // 是否显示封面
-            'content' => $this->content,   // 图文消息的具体内容，支持HTML标签，必须少于2万字符，小于1M，且此处会去除JS
+            'title' => $title,                  // 标题
+            'thumb_media_id' => $assetMediaId,  // 图文消息的封面图片素材id（必须是永久 media_ID）
+            'show_cover' => 1,                  // 是否显示封面
+            'content' => $this->content,        // 图文消息的具体内容，支持HTML标签，必须少于2万字符，小于1M，且此处会去除JS
         ];
         $article = new Article($build);
         $response = $this->easyWechat->material->uploadArticle($article);
@@ -238,7 +244,7 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
      */
     public function uploadAssetImg($url, $fileName, $field = ['media_id'])
     {
-        $response = (new Client())->request('get', $url);
+        $response = $this->client->request('get', $url);
         if ($response->getStatusCode() != 200) {
             throw new \Exception('获取封面图失败');
         }
