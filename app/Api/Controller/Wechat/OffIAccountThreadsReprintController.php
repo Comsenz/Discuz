@@ -26,6 +26,7 @@ use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Http\DiscuzResponseFactory;
 use Discuz\Http\UrlGenerator;
+use Discuz\SpecialChar\SpecialCharServer;
 use Discuz\Wechat\EasyWechatTrait;
 use EasyWeChat\Kernel\Messages\Article;
 use GuzzleHttp\Client;
@@ -82,6 +83,11 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
     protected $content;
 
     /**
+     * @var SpecialCharServer
+     */
+    protected $specialChar;
+
+    /**
      * OffIAccountThreadsReprintController constructor.
      *
      * @param ThreadRepository $thread
@@ -89,14 +95,16 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
      * @param ForumSettingField $forumField
      * @param SettingsRepository $settings
      * @param UrlGenerator $url
+     * @param SpecialCharServer $specialChar
      */
-    public function __construct(ThreadRepository $thread, Filesystem $filesystem, ForumSettingField $forumField, SettingsRepository $settings, UrlGenerator $url)
+    public function __construct(ThreadRepository $thread, Filesystem $filesystem, ForumSettingField $forumField, SettingsRepository $settings, UrlGenerator $url, SpecialCharServer $specialChar)
     {
         $this->thread = $thread;
         $this->filesystem = $filesystem;
         $this->forumField = $forumField;
         $this->settings = $settings;
         $this->url = $url;
+        $this->specialChar = $specialChar;
         $this->easyWechat = $this->offiaccount();
     }
 
@@ -104,7 +112,6 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
      * @param ServerRequestInterface $request
      * @return ResponseInterface
      * @throws PermissionDeniedException
-     * @throws \Exception
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
@@ -116,23 +123,44 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
         // 获取内容
         $this->content = $thread->firstPost->formatContent();
 
-        /**
-         * filter code block
-         */
-        $this->filterCodeBlockFormatter();
-
-        // 判断是否有图片，取第一张当做封面图
-        if (!$thread->firstPost->images->isEmpty()) {
-            $imageModel = $thread->firstPost->images->first();
-            $this->processingPicture($imageModel, function ($arr) use (&$url, &$fileName) {
-                $url = $arr['url'];
-                $fileName = $arr['file_name'];
-            });
-            // 过滤添加其余图片
-            if ($thread->firstPost->images->count() > 1) {
-                $this->filterImgFormatter($thread->firstPost->images);
+        // 判断是否是视频贴
+        $isImg = false;
+        $isVideo = false;
+        if ($thread->type == 2) {
+            $isVideo = true;
+            // details/129
+            if (!empty($thread->threadVideo)) {
+                $fileName = $thread->threadVideo->file_name;
+                $extension = '.' . pathinfo($fileName, PATHINFO_EXTENSION);
+                $fileName = str_replace($extension, '.png', $fileName);
+                $url = $thread->threadVideo->cover_url;
+            } else {
+                $isImg = true;
             }
         } else {
+            /**
+             * filter code block
+             */
+            $this->filterCodeBlockFormatter();
+
+            // 判断是否有图片，取第一张当做封面图
+            if (!$thread->firstPost->images->isEmpty()) {
+                $imageModel = $thread->firstPost->images->first();
+                $this->processingPicture($imageModel, function ($arr) use (&$url, &$fileName) {
+                    $url = $arr['url'];
+                    $fileName = $arr['file_name'];
+                });
+                // 过滤添加其余图片
+                if ($thread->firstPost->images->count() > 1) {
+                    $this->filterImgFormatter($thread->firstPost->images);
+                }
+            } else {
+                $isImg = true;
+            }
+        }
+
+        // 如果缺失封面图，统一用站点Logo图
+        if ($isImg) {
             // 默认图
             $url = $this->forumField->siteUrlSplicing($this->settings->get('header_logo'));
             if (empty($url)) {
@@ -141,13 +169,24 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
             $fileName = 'header_logo.png';
         }
 
+        $isVideo ? $field = ['url', 'media_id'] : $field = ['media_id'];
+
         /**
          * Upload
          */
-        $assetMediaId = Arr::get($this->uploadAssetImg($url, $fileName), 'media_id');
+        $resultImg = $this->uploadAssetImg($url, $fileName, $field);
+        $assetMediaId = Arr::get($resultImg, 'media_id');
+
+        if ($isVideo) {
+            $assetUrl = Arr::get($resultImg, 'url');
+            $this->videoFormatter($thread->id, $assetUrl);
+            $title = $this->specialChar->purify($thread->getContentByType(50));
+        } else {
+            $title = $thread->getContentByType(50);
+        }
 
         $build = [
-            'title' => $title = $thread->getContentByType(50),   // 标题
+            'title' => $title,   // 标题
             'thumb_media_id' => $assetMediaId,          // 图文消息的封面图片素材id（必须是永久 media_ID）
             'show_cover' => 1, // 是否显示封面
             'content' => $this->content,   // 图文消息的具体内容，支持HTML标签，必须少于2万字符，小于1M，且此处会去除JS
@@ -210,6 +249,10 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
         $absolutePath = $this->filesystem->path($complete);
 
         $result = $this->easyWechat->material->uploadImage($absolutePath);
+        if (array_key_exists('errcode', $result)) {
+            throw new \Exception($result['errmsg']);
+        }
+
         // remove
         unlink($absolutePath);
 
@@ -285,6 +328,27 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
         }
 
         return $this->content;
+    }
+
+    /**
+     * 过滤视频帖子
+     *
+     * @param int $threadId 主题ID
+     * @param string $assetUrl 视频封面图素材地址
+     */
+    public function videoFormatter($threadId, $assetUrl)
+    {
+        $toUrl = $this->url->to('/details/' . $threadId);
+
+        $str = '<p style="text-align: center;">
+                    <a target="_blank" href="%s" tab="outerlink" data-linktype="2">
+                        <img class="rich_pages js_insertlocalimg" data-ratio="0.625" data-s="300,640" data-src="%s" data-type="png" data-w="1280" style=""/>
+                        点击跳转视频原地址
+                    </a>
+               </p>';
+
+        $string = sprintf($str, $toUrl, $assetUrl);
+        $this->content = $this->content . $string;
     }
 
 }
