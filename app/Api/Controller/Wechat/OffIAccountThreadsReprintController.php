@@ -134,6 +134,9 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
                 $extension = '.' . pathinfo($fileName, PATHINFO_EXTENSION);
                 $fileName = str_replace($extension, '.png', $fileName);
                 $url = $thread->threadVideo->cover_url;
+                if (empty($url)) {
+                    $isImg = true;
+                }
             } else {
                 $isImg = true;
             }
