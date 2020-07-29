@@ -128,7 +128,6 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
         $isVideo = false;
         if ($thread->type == 2) {
             $isVideo = true;
-            // details/129
             if (!empty($thread->threadVideo)) {
                 $fileName = $thread->threadVideo->file_name;
                 $extension = '.' . pathinfo($fileName, PATHINFO_EXTENSION);
