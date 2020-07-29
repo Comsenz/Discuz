@@ -48,7 +48,7 @@ class CheckPayAppId
     public function handle(Saving $event)
     {
         $settings = $event->settings->where('tag', 'wxpay')->pluck('value', 'key')->all();
-        if (Arr::get($settings, 'app_id')) {
+        if (Arr::has($settings, 'app_id')) {
             $app_ids = [
                 $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
                 $this->settings->get('offiaccount_app_id', 'wx_offiaccount')
