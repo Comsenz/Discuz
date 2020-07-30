@@ -32,7 +32,7 @@
       </CardRow>
     </Card>
 
-    <Card header="服务器地址(URL)：" v-if="type === 'wx_offiaccount'">
+    <!-- <Card header="服务器地址(URL)：" v-if="type === 'wx_offiaccount'">
       <CardRow :description="typeCopywriting[type].serverUrl">
         <p>{{serverUrl}}</p>
       </CardRow>
@@ -56,7 +56,7 @@
           <span class="random-btn" @click="randomClick('aes')">随机生成</span>
         </template>
       </CardRow>
-    </Card>
+    </Card> -->
 
     <Card class="footer-btn">
       <el-button type="primary" size="medium" @click="submitConfiguration" >提交</el-button>

@@ -25,6 +25,7 @@ use App\Repositories\UserFollowRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DeleteUserFollow
 {
@@ -70,7 +71,12 @@ class DeleteUserFollow
         $this->events = $events;
         $this->assertRegistered($this->actor);
 
-        $userFollowRes = $userFollowRepository->findOrFail($this->to_user_id, $this->from_user_id, $this->actor);
+        try {
+            $userFollowRes = $userFollowRepository->findOrFail($this->to_user_id, $this->from_user_id, $this->actor);
+        } catch (ModelNotFoundException $e) {
+            //关注关系不存在等于删除成功
+            return true;
+        }
 
         $deleteRes = $userFollowRes->delete();
 

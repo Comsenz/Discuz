@@ -21,6 +21,7 @@ namespace App\Api\Controller\Mobile;
 use App\Api\Serializer\SmsSendSerializer;
 use App\Models\MobileCode;
 use App\Repositories\MobileCodeRepository;
+use App\Rules\Captcha;
 use App\SmsMessages\SendCodeMessage;
 use Discuz\Api\Controller\AbstractCreateController;
 use Discuz\Contracts\Setting\SettingsRepository;
@@ -131,7 +132,15 @@ class SendController extends AbstractCreateController
             $mobileRule = 'required';
         }
 
+        // 验证码
+        $data['captcha'] = [
+            Arr::pull($data, 'captcha_ticket', ''),
+            Arr::pull($data, 'captcha_rand_str', ''),
+            ip($request->getServerParams()),
+        ];
+
         $this->validation->make($data, [
+            'captcha' => [new Captcha],
             'mobile' => $mobileRule,
             'type' => 'required|in:' . implode(',', $this->type),
         ])->validate();

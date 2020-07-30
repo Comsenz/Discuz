@@ -109,6 +109,7 @@ class UserWalletCashReview
         if (!in_array($cash_status, [UserWalletCash::STATUS_REVIEWED, UserWalletCash::STATUS_REVIEW_FAILED])) {
             throw new WalletException('operate_forbidden');
         }
+
         $status_result = []; //结果数组
         $collection    = collect($ids)
             ->unique()
@@ -121,6 +122,10 @@ class UserWalletCashReview
                 }
                 $cash_record->cash_status = $cash_status;
                 if ($cash_status == UserWalletCash::STATUS_REVIEWED) {
+                    //检查证书
+                    if (!file_exists(storage_path().'/cert/apiclient_cert.pem') || !file_exists(storage_path().'/cert/apiclient_key.pem')) {
+                        throw new WalletException('pem_notexist');
+                    }
                     //审核通过
                     if ($cash_record->save()) {
                         //触发提现钩子事件
