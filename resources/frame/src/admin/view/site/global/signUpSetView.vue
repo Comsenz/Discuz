@@ -52,6 +52,44 @@
       </CardRow>
     </Card>-->
 
+     <Card header="用户协议：" class="card-radio-con">
+      <CardRow description="新用户注册时显示网站用户协议">
+        <el-radio @change="changeRegister('1')" v-model="register" label="1">是</el-radio>
+        <el-radio @change="changeRegister('0')" v-model="register" label="0">否</el-radio>
+      </CardRow>
+    </Card>
+
+    <Card v-show="register === '1'" v-bind:class="{ fullScreen: registerFull }"> 
+      <CardRow description="用户协议的详细内容 双击输入框可扩大/缩小">
+        <el-input
+          type="textarea"
+          :autosize="{ minRows: 4, maxRows: 4}"
+          placeholder="用户协议"
+          v-model="register_content"
+          @dblclick.native="changeSize('registerFull')" 
+        ></el-input>
+      </CardRow>
+    </Card>
+
+    <Card header="隐私政策：" class="card-radio-con">
+      <CardRow description="新用户注册时显示网站隐私政策">
+        <el-radio @change="changePrivacy('1')" v-model="privacy" label="1">是</el-radio>
+        <el-radio @change="changePrivacy('0')" v-model="privacy" label="0">否</el-radio>
+      </CardRow>
+    </Card>
+
+    <Card v-show="privacy === '1'" v-bind:class="{ fullScreen: privacyFull }">
+      <CardRow description="隐私政策的详细内容 双击输入框可扩大/缩小">
+        <el-input
+          type="textarea"
+          :autosize="{ minRows: 4, maxRows: 4}"
+          placeholder="隐私政策"
+          v-model="privacy_content"
+          @dblclick.native="changeSize('privacyFull')" 
+        ></el-input>
+      </CardRow>
+    </Card>
+
     <Card class="footer-btn">
       <el-button type="primary" size="medium" @click="submission">提交</el-button>
     </Card>

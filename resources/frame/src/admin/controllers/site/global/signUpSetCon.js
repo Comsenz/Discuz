@@ -14,6 +14,12 @@ export default {
       register_type: 0,      // 注册模式
       qcloud_sms: true,
       qcloud_wx: true,
+      privacy: "0", //隐私协议
+      register: "0", //用户协议
+      register_content:'',
+      privacy_content:'',
+      registerFull: false,
+      privacyFull: false,
     }
   },
   created(){
@@ -31,6 +37,7 @@ export default {
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
+          const regData = res.readdata._data.set_reg;
           // this.pwdLength = res.readdata._data.setreg.password_length
           this.checked = res.readdata._data.set_reg.register_close;
           this.register_validate = res.readdata._data.set_reg.register_validate;
@@ -38,7 +45,12 @@ export default {
           this.checkList = res.readdata._data.set_reg.password_strength;
           this.register_captcha = res.readdata._data.set_reg.register_captcha;
           this.register_type = res.readdata._data.set_reg.register_type;
+          this.agreement_privacy = regData.privacy;
+          this.agreement_register = regData.register;
+          this.agreement_register_content = regData.register_content;
+          this.agreement_privacy_content = regData.privacy_content;
           if(res.readdata._data.qcloud.qcloud_sms == true) {
+
             this.qcloud_sms = false
           }
           if(res.readdata._data.passport.offiaccount_close == true) {
@@ -49,6 +61,21 @@ export default {
           }
         }
       })
+    },
+    changeRegister(register) {
+      this.register = register;
+      if(register==='0') {
+        this.register_content = '';
+      }
+    },
+    changePrivacy(privacy) {
+      this.privacy = privacy;
+      if(privacy==='0') {
+        this.privacy_content = '';
+      }
+    },
+    changeSize(obj){
+       this[obj]= !this[obj];
     },
     submission(){ //提交注册信息接口
       var reg = /^\d+$|^\d+[.]?\d+$/;
@@ -85,6 +112,34 @@ export default {
                 "key":'register_captcha',
                 "value":this.register_captcha,
                 "tag": 'default'
+              }
+            },
+            {
+              attributes: {
+                key: "privacy",
+                value: this.privacy,
+                tag: "agreement"
+              }
+            },
+            {
+              attributes: {
+                key: "register",
+                value: this.register,
+                tag: "agreement"
+              }
+            },
+            {
+              attributes: {
+                key: "register_content",
+                value: this.register_content ? this.register_content : "",
+                tag: "agreement"
+              }
+            },
+            {
+              attributes: {
+                key: "privacy_content",
+                value: this.privacy_content ? this.privacy_content : "",
+                tag: "agreement"
               }
             },
             {
