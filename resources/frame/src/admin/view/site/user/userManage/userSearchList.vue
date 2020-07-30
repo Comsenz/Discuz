@@ -23,7 +23,7 @@
             <el-table-column prop="_data.id" label="编号" width="80"> </el-table-column>
             <el-table-column label="头像" width="60" align="center">
               <template slot-scope="scope" class="image-slot">
-                <el-image style="width: 32px; height: 32px" :src="scope.row._data.avatarUrl ? scope.row._data.avatarUrl : '/static/images/noavatar.gif'" lazy></el-image>
+                <el-image style="width: 32px; height: 32px" :src="scope.row._data.avatarUrl ? scope.row._data.avatarUrl : '/static-admin/images/noavatar.gif'" lazy></el-image>
               </template>
             </el-table-column>
 

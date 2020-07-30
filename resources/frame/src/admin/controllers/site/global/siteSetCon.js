@@ -27,30 +27,35 @@ export default {
       dialogVisible: false,
       fileList: [],
       deleBtn: false,
+      disabled: true, // 付费模式置灰
       numberimg: [
         {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
-          text: "站点LOGO"
+          text: "站点LOGO",
+          textrule: "推荐高度：88px"
         },
         {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
-          text: "首页头部LOGO"
+          text: "首页头部LOGO",
+          textrule: "推荐高度：88px"
         },
         {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
-          text: "首页头部背景"
+          text: "首页头部背景",
+          textrule: "尺寸：750px*400px"
         },
         {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
-          text: "ICON"
+          text: "ICON",
+          textrule: "尺寸：120px*120px"
         },
       ]
     };
@@ -143,8 +148,12 @@ export default {
               this.radio2 = "2";
             }
             this.siteCloseMsg = data.readdata._data.set_site.site_close_msg;
-
-            // this.$message({'修改成功'});
+            // 微信支付关闭时置灰付费模式
+            if (data.readdata._data.paycenter.wxpay_close == false) {
+              this.disabled = true;
+            } else {
+              this.disabled = false;
+            }
           }
         })
         .catch(error => {});

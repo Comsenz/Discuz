@@ -9,7 +9,7 @@ export default {
       tableData: [{
         name: '公众号接口配置',
         type: 'h5',
-        description: '用户在微信内使用微信授权登录',
+        description: '用户在微信内使用微信授权登录，需配置服务号',
         status:true,
         icon:'iconH'
       }, {

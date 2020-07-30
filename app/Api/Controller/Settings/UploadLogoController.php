@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Api\Controller\Settings;
@@ -105,7 +116,7 @@ class UploadLogoController extends AbstractResourceController
 
         $mimes = [
             'watermark_image' => 'mimes:png',
-            'favicon' => 'mimes:jpeg,jpg,png,bmp,gif,ico,svg',
+            'favicon' => 'mimes:jpeg,jpg,png,gif,ico,svg',
         ];
 
         $this->validator->make(
@@ -114,7 +125,7 @@ class UploadLogoController extends AbstractResourceController
                 'type' => [Rule::in($this->allowTypes)],
                 'logo' => [
                     'required',
-                    $mimes[$type] ?? 'mimes:jpeg,jpg,png,bmp,gif',
+                    $mimes[$type] ?? 'mimes:jpeg,jpg,png,gif',
                     'max:5120'
                 ]
             ]
@@ -123,6 +134,13 @@ class UploadLogoController extends AbstractResourceController
         $fileName = $type . '.' . $verifyFile->getClientOriginalExtension();
 
         try {
+            // 开启 cos 时，再存一份，优先使用
+            if ($this->settings->get('qcloud_cos', 'qcloud')) {
+                $cosStream = clone $file->getStream();
+
+                $this->filesystem->disk('cos')->put($fileName, $cosStream);
+            }
+
             $this->filesystem->disk('public')->put($fileName, $file->getStream());
         } catch (Exception $e) {
             throw new $e;

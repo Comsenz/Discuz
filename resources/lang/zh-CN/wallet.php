@@ -12,6 +12,7 @@ return [
     'cash_failure'              => '提现失败，退回',
     'cash_review_failure'       => '审核不通过，退回',
     'operate_forbidden'         => '非法操作',
+    'pem_notexist'              => '证书不存在，请先上传证书',
 
     // 分割线
 

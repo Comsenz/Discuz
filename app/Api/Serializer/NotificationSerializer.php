@@ -1,15 +1,24 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Api\Serializer;
 
-use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
-use Illuminate\Support\Arr;
 
 /**
  * Class NotificationSerializer
@@ -41,6 +50,7 @@ class NotificationSerializer extends AbstractSerializer
         $result = array_merge($result, [
             'user_name' => $model->user_name ?: '',
             'user_avatar' => $model->user_avatar ?: '',
+            'isReal' => $this->getIsReal($model->realname),
             'thread_username' => $model->thread_username ?: '',
             'thread_user_groups' => $model->thread_user_groups ?: '',
             'thread_created_at' => $model->thread_created_at ?: '',
@@ -48,5 +58,20 @@ class NotificationSerializer extends AbstractSerializer
         ]);
 
         return $result;
+    }
+
+    /**
+     * 是否实名认证
+     *
+     * @param $realname
+     * @return string
+     */
+    public function getIsReal($realname)
+    {
+        if (isset($realname) && $realname != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

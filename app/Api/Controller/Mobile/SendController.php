@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Api\Controller\Mobile;
@@ -10,6 +21,7 @@ namespace App\Api\Controller\Mobile;
 use App\Api\Serializer\SmsSendSerializer;
 use App\Models\MobileCode;
 use App\Repositories\MobileCodeRepository;
+use App\Rules\Captcha;
 use App\SmsMessages\SendCodeMessage;
 use Discuz\Api\Controller\AbstractCreateController;
 use Discuz\Contracts\Setting\SettingsRepository;
@@ -120,7 +132,15 @@ class SendController extends AbstractCreateController
             $mobileRule = 'required';
         }
 
+        // 验证码
+        $data['captcha'] = [
+            Arr::pull($data, 'captcha_ticket', ''),
+            Arr::pull($data, 'captcha_rand_str', ''),
+            ip($request->getServerParams()),
+        ];
+
         $this->validation->make($data, [
+            'captcha' => [new Captcha],
             'mobile' => $mobileRule,
             'type' => 'required|in:' . implode(',', $this->type),
         ])->validate();

@@ -1,9 +1,19 @@
 <?php
 
-
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Commands\Wallet;
@@ -46,6 +56,14 @@ class UserWalletCashReview
      * @var string
      */
     public $ip_address;
+    /**
+     * @var ConnectionInterface
+     */
+    public $connection;
+    /**
+     * @var Dispatcher
+     */
+    public $events;
 
     /**
      * 初始化命令参数
@@ -91,6 +109,7 @@ class UserWalletCashReview
         if (!in_array($cash_status, [UserWalletCash::STATUS_REVIEWED, UserWalletCash::STATUS_REVIEW_FAILED])) {
             throw new WalletException('operate_forbidden');
         }
+
         $status_result = []; //结果数组
         $collection    = collect($ids)
             ->unique()
@@ -103,6 +122,10 @@ class UserWalletCashReview
                 }
                 $cash_record->cash_status = $cash_status;
                 if ($cash_status == UserWalletCash::STATUS_REVIEWED) {
+                    //检查证书
+                    if (!file_exists(storage_path().'/cert/apiclient_cert.pem') || !file_exists(storage_path().'/cert/apiclient_key.pem')) {
+                        throw new WalletException('pem_notexist');
+                    }
                     //审核通过
                     if ($cash_record->save()) {
                         //触发提现钩子事件

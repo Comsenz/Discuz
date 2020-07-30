@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Api\Serializer;
@@ -53,9 +64,9 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_mode' => $this->settings->get('site_mode'), // pay public
                 'site_close' => (bool)$this->settings->get('site_close'),
                 'site_favicon' => $favicon ?: app(UrlGenerator::class)->to('/favicon.ico'),
-                'site_logo' => $logo ? $logo . '?' . Carbon::now()->timestamp : '', // 拼接日期
-                'site_header_logo' => $headerLogo ? $headerLogo . '?' . Carbon::now()->timestamp : '',
-                'site_background_image' => $backgroundImage ? $backgroundImage . '?' . Carbon::now()->timestamp : '',
+                'site_logo' => $logo ?: '',
+                'site_header_logo' => $headerLogo ?: '',
+                'site_background_image' => $backgroundImage ?: '',
                 'site_url' => $siteUrl,
                 'site_stat' => $this->settings->get('site_stat') ?: '',
                 'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username', 'avatar']),
@@ -149,7 +160,7 @@ class ForumSettingSerializer extends AbstractSerializer
         }
 
         // 开启视频服务 - 满足条件返回
-        if ($attributes['qcloud']['qcloud_vod']) {
+        if ($attributes['qcloud']['qcloud_close'] && $attributes['qcloud']['qcloud_vod']) {
             $attributes['qcloud'] += $this->forumField->getQCloudVod();
         } else {
             //未开启vod服务 不可发布视频主题

@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Validators;
@@ -37,13 +48,7 @@ class AttachmentValidator extends AbstractValidator
      */
     protected function getRules()
     {
-        $type = (int) Arr::get($this->data, 'type');
-        $typeName = Arr::get(Attachment::$allowTypes, $type, head(Attachment::$allowTypes));
-        if ($type == 4) {
-            //消息类型的附件与图片相同
-            $typeName = Arr::get(Attachment::$allowTypes, 1);
-        }
-
+        $typeName = $this->getTypeName();
         // 文件类型
         $mimes = Str::of($this->settings->get("support_{$typeName}_ext"))
             ->explode(',')
@@ -51,6 +56,10 @@ class AttachmentValidator extends AbstractValidator
         $mimes = $mimes->each(function ($value, $key) use ($mimes) {
             if ($value == 'mp3') {
                 $mimes[$key] = 'mpga';
+            }
+            if ($value == 'm4a') {
+                $mimes[] = 'mp4';
+                $mimes[] = 'x-m4a';
             }
             // 无论如何禁止上传 php 文件
             if ($value == 'php') {
@@ -67,9 +76,29 @@ class AttachmentValidator extends AbstractValidator
 
         // 文件大小
         if ($size = $this->settings->get('support_max_size', 'default', 0)) {
-            $rules['file'][] = 'max:' . ($size * 1024 * 1024);
+            $rules['file'][] = 'max:' . ($size * 1024);
         }
 
         return $rules;
+    }
+
+    protected function getMessages()
+    {
+        $typeName = $this->getTypeName();
+        return [
+            'file.mimes' => '文件类型错误，支持'.$this->settings->get("support_{$typeName}_ext"),
+        ];
+    }
+
+    private function getTypeName()
+    {
+        $type = (int) Arr::get($this->data, 'type');
+        $typeName = Arr::get(Attachment::$allowTypes, $type, head(Attachment::$allowTypes));
+        if ($type == 4) {
+            //消息类型的附件与图片相同
+            $typeName = Arr::get(Attachment::$allowTypes, 1);
+        }
+
+        return $typeName;
     }
 }
