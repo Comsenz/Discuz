@@ -43,11 +43,16 @@
       iframe.onload = function() {
         setInterval(function() {
           if(!iframe) return;
-          document.title = iframe.contentWindow.document.title;
+          if(document.title !== iframe.contentWindow.document.title) {
+            document.title = iframe.contentWindow.document.title;
+          }
           if(document.querySelector('link[type="image/x-icon"]') === null && iframe.contentWindow.document.querySelector('link[type="image/x-icon"]')) {
             document.head.append(iframe.contentWindow.document.querySelector('link[type="image/x-icon"]'));
           }
-          history.replaceState({}, iframe.contentWindow.document.title, iframe.contentWindow.location.href.replace('&from=pc', '').replace('?from=pc', ''));
+          var iframeHref = iframe.contentWindow.location.href.replace('&from=pc', '').replace('?from=pc', '');
+          if(window.location.href !== iframeHref) {
+            history.replaceState({}, iframe.contentWindow.document.title, iframeHref);
+          }
         }, 700);
       };
       document.body.append(iframe);

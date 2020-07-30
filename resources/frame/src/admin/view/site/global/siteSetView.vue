@@ -41,6 +41,7 @@
                 </div>
                 <i v-else class="el-icon-circle-plus-outline"></i>
                 <p class="avatar-logo">{{item.text}}</p>
+                <p class="avatar-pm">{{item.textrule}}</p>
                 <p class="avatar-pm">大小：小于5M</p>
               </el-upload>
               <el-button
@@ -63,7 +64,7 @@
     <Card header="站点模式：" class="card-radio-con">
       <CardRow description="你的Discuz!Q 站点的运行模式">
         <el-radio @change="radioChange('public')" v-model="radio" label="1">公开模式</el-radio>
-        <el-radio @change="radioChange('pay')" v-model="radio" label="2">付费模式</el-radio>
+        <el-radio @change="radioChange('pay')" v-model="radio" label="2" :disabled="disabled">付费模式</el-radio>
       </CardRow>
     </Card>
 
@@ -121,7 +122,7 @@
     </Card>
 
     <Card header="第三方统计：">
-      <CardRow description="你的Discuz!Q 网站的第三方统计代码">
+      <CardRow description="你的Discuz!Q 网站的第三方统计代码（禁止使用含有document.write的统计代码）">
         <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 4}" v-model="siteStat"></el-input>
       </CardRow>
     </Card>

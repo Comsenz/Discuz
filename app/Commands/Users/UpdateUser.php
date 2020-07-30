@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Commands\Users;
@@ -178,56 +189,59 @@ class UpdateUser
         }
 
         if ($groups = Arr::get($attributes, 'groupId')) {
-            $this->assertCan($this->actor, 'edit.group', $user);
+            // 判断是否是修改admin
+            if ($user->id != 1) {
+                $this->assertCan($this->actor, 'edit.group', $user);
 
-            // 获取新用户组 id
-            $newGroups = collect($groups)->filter(function ($groupId) {
-                return (int) $groupId;
-            })->unique()->sort();
+                // 获取新用户组 id
+                $newGroups = collect($groups)->filter(function ($groupId) {
+                    return (int) $groupId;
+                })->unique()->sort();
 
-            // 获取旧用户组
-            $oldGroups = $user->groups->keyBy('id')->sortKeys();
+                // 获取旧用户组
+                $oldGroups = $user->groups->keyBy('id')->sortKeys();
 
-            // 当新旧用户组不一致时，更新用户组并发送通知
-            if ($newGroups && $newGroups != $oldGroups->keys()) {
-                // 更新用户组
-                $user->groups()->sync($newGroups);
+                // 当新旧用户组不一致时，更新用户组并发送通知
+                if ($newGroups && $newGroups != $oldGroups->keys()) {
+                    // 更新用户组
+                    $user->groups()->sync($newGroups);
 
-                $deleteGroups = array_diff($oldGroups->keys()->toArray(), $newGroups->toArray());
-                if ($deleteGroups) {
-                    //删除付费用户组
-                    $groupsPaid = Group::whereIn('id', $deleteGroups)->where('is_paid', Group::IS_PAID)->pluck('id')->toArray();
-                    if (!empty($groupsPaid)) {
-                        GroupPaidUser::whereIn('group_id', $groupsPaid)
-                            ->where('user_id', $user->id)
-                            ->update(['operator_id' => $this->actor->id, 'deleted_at' => Carbon::now(), 'delete_type' => GroupPaidUser::DELETE_TYPE_ADMIN]);
+                    $deleteGroups = array_diff($oldGroups->keys()->toArray(), $newGroups->toArray());
+                    if ($deleteGroups) {
+                        //删除付费用户组
+                        $groupsPaid = Group::whereIn('id', $deleteGroups)->where('is_paid', Group::IS_PAID)->pluck('id')->toArray();
+                        if (!empty($groupsPaid)) {
+                            GroupPaidUser::whereIn('group_id', $groupsPaid)
+                                ->where('user_id', $user->id)
+                                ->update(['operator_id' => $this->actor->id, 'deleted_at' => Carbon::now(), 'delete_type' => GroupPaidUser::DELETE_TYPE_ADMIN]);
+                        }
                     }
-                }
-                $newPaidGroups = $user->groups()->where('is_paid', Group::IS_PAID)->get();
-                if ($newPaidGroups->count()) {
-                    //新增付费用户组处理
-                    foreach ($newPaidGroups as $paidgGroupKey => $paidGroupVal) {
-                        $this->events->dispatch(
-                            new PaidGroup($paidGroupVal->id, $user, null, $this->actor)
-                        );
+                    $newPaidGroups = $user->groups()->where('is_paid', Group::IS_PAID)->get();
+                    if ($newPaidGroups->count()) {
+                        //新增付费用户组处理
+                        foreach ($newPaidGroups as $paidgGroupKey => $paidGroupVal) {
+                            $this->events->dispatch(
+                                new PaidGroup($paidGroupVal->id, $user, null, $this->actor)
+                            );
+                        }
                     }
+
+                    // 发送系统通知
+                    $notifyData = [
+                        'new' => Group::find($newGroups),
+                        'old' => $oldGroups,
+                    ];
+
+                    // 系统通知
+                    $user->notify(new System(GroupMessage::class, $notifyData));
+
+                    // 微信通知
+                    $user->notify(new System(WechatGroupMessage::class, $notifyData));
                 }
-
-                // 发送系统通知
-                $notifyData = [
-                    'new' => Group::find($newGroups),
-                    'old' => $oldGroups,
-                ];
-
-                // 系统通知
-                $user->notify(new System(GroupMessage::class, $notifyData));
-
-                // 微信通知
-                $user->notify(new System(WechatGroupMessage::class, $notifyData));
             }
         }
-
-        if ($username = Arr::get($attributes, 'username')) {
+        $username = Arr::get($attributes, 'username');
+        if ($username && $username != $user->username) {
             $validator['username'] = $username;
 
             // 敏感词校验
@@ -247,7 +261,6 @@ class UpdateUser
             }
 
             $user->changeUsername($username, $isAdmin);
-
         }
 
         if (Arr::has($attributes, 'signature')) {

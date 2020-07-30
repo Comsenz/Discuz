@@ -48,6 +48,8 @@ export default {
       currentPaga:1,
       total:0,
 
+      incomeSide: '',
+
       options: [
         {
           value: '0',
@@ -126,7 +128,8 @@ export default {
           'filter[username]':this.operationUser,
           'filter[start_time]':this.orderTime[0],
           'filter[end_time]':this.orderTime[1],
-          'filter[status]':this.value
+          'filter[status]':this.value,
+          'filter[payee_username]':this.incomeSide
         }
       }).then(res=>{
         if (res.errors){

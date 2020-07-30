@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Listeners\Setting;
@@ -43,131 +54,75 @@ class QcloudSettingReport
      */
     public function handle(Saved $event)
     {
-        $data = [];
-        $user_uin = '';
-        $event->settings->each(function ($setting) use (&$data, &$user_uin) {
-            $key = Arr::get($setting, 'key');
-            $value = (bool) Arr::get($setting, 'value');
-            $tag = Arr::get($setting, 'tag');
-            if ($tag != 'qcloud') {
-                return true;
-            }
-            $action = $value ? 'on' : 'off';
-            switch ($key) {
-                case 'qcloud_close':
-                case 'qcloud_app_id':
-                case 'qcloud_secret_id':
-                case 'qcloud_secret_key':
-                    //云API
-                    if (empty($user_uin)) {
-                        $user_uin = $this->MsUserInfo();
-                        if (!isset($user_uin['UserUin'])) {
-                            $user_uin = '';
-                            return false;
-                        }
-                    }
-                    if ($key != 'qcloud_close') {
-                        $action = ((bool) $this->settings->get('qcloud_close', 'qcloud')) ? 'on' : 'off';
-                    }
-
-                    $port = $this->request->getUri()->getPort();
-                    $siteUrl = $this->request->getUri()->getScheme() . '://' . $this->request->getUri()->getHost().(in_array($port, [80, 443, null]) ? '' : ':'.$port);
-
-                    $data['site'] = [
-                        'action' => $action,
-                        'url' => $siteUrl,
-                        'uin' => $user_uin['UserUin'],
-                    ];
-                    break;
-                case 'qcloud_cms_image':
-                    //图片内容安全
-                    $data['ims'] = [
-                        'action' => $action
-                    ];
-                    break;
-                case 'qcloud_cms_text':
-                    //文本内容安全
-                    $data['tms'] = [
-                        'action' => $action
-                    ];
-                    break;
-                case 'qcloud_sms':
-                case 'qcloud_sms_app_id':
-                case 'qcloud_sms_app_key':
-                case 'qcloud_sms_template_id':
-                case 'qcloud_sms_sign':
-                    if ($key != 'qcloud_sms') {
-                        $action = ((bool) $this->settings->get('qcloud_sms', 'qcloud')) ? 'on' : 'off';
-                    }
-                    //短信
-                    $data['sms'] = [
-                        'action' => $action,
-                        'appid' => $this->settings->get('qcloud_sms_app_id', 'qcloud')
-                    ];
-                    break;
-                case 'qcloud_faceid':
-                    //实名认证
-                    $data['faceid'] = [
-                        'action' => $action
-                    ];
-                    break;
-                case 'qcloud_cos':
-                case 'qcloud_cos_bucket_name':
-                case 'qcloud_cos_bucket_area':
-                case 'qcloud_cos_cdn_url':
-                    //对象存储
-                    if ($key != 'qcloud_cos') {
-                        $action = ((bool) $this->settings->get('qcloud_cos', 'qcloud')) ? 'on' : 'off';
-                    }
-                    $data['cos'] = [
-                        'action' => $action,
-                        'bucket' => $this->settings->get('qcloud_cos_bucket_name', 'qcloud'),
-                        'region' => $this->settings->get('qcloud_cos_bucket_area', 'qcloud')
-                    ];
-                    break;
-                case 'qcloud_vod':
-                case 'qcloud_vod_sub_app_id':
-                case 'qcloud_vod_transcode':
-                case 'qcloud_vod_cover_template':
-                case 'qcloud_vod_ext':
-                case 'qcloud_vod_size':
-                    //视频
-                    if ($key != 'qcloud_vod') {
-                        $action = ((bool) $this->settings->get('qcloud_vod', 'qcloud')) ? 'on' : 'off';
-                    }
-                    $data['vod'] = [
-                        'action' => $action,
-                        'subappid' => $this->settings->get('qcloud_vod_sub_app_id', 'qcloud')
-                    ];
-                    break;
-                case 'qcloud_captcha':
-                case 'qcloud_captcha_app_id':
-                case 'qcloud_captcha_secret_key':
-                case 'qcloud_captcha_ticket':
-                case 'qcloud_captcha_randstr':
-                    //验证码
-                    if ($key != 'qcloud_captcha') {
-                        $action = ((bool) $this->settings->get('qcloud_captcha', 'qcloud')) ? 'on' : 'off';
-                    }
-                    $data['captcha'] = [
-                        'action' => $action,
-                        'appid' => $this->settings->get('qcloud_captcha_app_id', 'qcloud')
-                    ];
-                    break;
-                default:
-                    break;
-            }
-
-        });
-        if (!empty($data)) {
-            $data['site_id'] = $this->settings->get('site_id', 'default');
+        $settings = $event->settings->toArray();
+        $tags = array_column($settings, 'tag');
+        if (in_array('qcloud', $tags)) {
             try {
-                $this->qcloudReport($data)->then(function (ResponseInterface $response) {
-                    //$response->getBody()->getContents();
-                })->wait();
+                $data = [];
+                $qcloud_setting = $this->settings->tag('qcloud');
+                $port = $this->request->getUri()->getPort();
+                $site_url = $this->request->getUri()->getScheme() . '://' . $this->request->getUri()->getHost() . (in_array($port, [80, 443, null]) ? '' : ':' . $port);
+                $site_id = $this->settings->get('site_id', 'default');
+                if (empty($site_id)) {
+                    try {
+                        $this->report(['url' => $site_url])->then(function (ResponseInterface $response) use (&$site_id) {
+                            $data = json_decode($response->getBody()->getContents(), true);
+                            $site_id = Arr::get($data, 'site_id');
+                            $this->settings->set('site_id', $site_id);
+                            $this->settings->set('site_secret', Arr::get($data, 'site_secret'));
+                        })->wait();
+                    } catch (Exception $e) {
+                        //
+                    }
+                }
+                $data['site_id'] = $site_id;
+                $user_uin = $this->MsUserInfo();
+                $data['site'] = [
+                    'action' => $this->getAction(Arr::get($qcloud_setting, 'qcloud_close')),
+                    'url' => $site_url,
+                    'uin' => Arr::get($user_uin, 'UserUin')
+                ];
+                $data['ims'] = [
+                    'action' => $this->getAction(Arr::get($qcloud_setting, 'qcloud_cms_image'))
+                ];
+                $data['tms'] = [
+                    'action' => $this->getAction(Arr::get($qcloud_setting, 'qcloud_cms_text'))
+                ];
+                $data['sms'] = [
+                    'action' => $this->getAction(Arr::get($qcloud_setting, 'qcloud_sms')),
+                    'appid' => Arr::get($qcloud_setting, 'qcloud_sms_app_id')
+                ];
+                $data['faceid'] = [
+                    'action' => $this->getAction(Arr::get($qcloud_setting, 'qcloud_faceid')),
+                ];
+                $data['cos'] = [
+                    'action' => $this->getAction(Arr::get($qcloud_setting, 'qcloud_cos')),
+                    'bucket' => Arr::get($qcloud_setting, 'qcloud_cos_bucket_name'),
+                    'region' => Arr::get($qcloud_setting, 'qcloud_cos_bucket_area')
+                ];
+                $data['vod'] = [
+                    'action' => $this->getAction(Arr::get($qcloud_setting, 'qcloud_vod')),
+                    'subappid' => Arr::get($qcloud_setting, 'qcloud_vod_sub_app_id')
+                ];
+                $data['captcha'] = [
+                    'action' => $this->getAction(Arr::get($qcloud_setting, 'qcloud_captcha')),
+                    'appid' => Arr::get($qcloud_setting, 'qcloud_captcha_app_id')
+                ];
+                try {
+                    $this->qcloudReport($data)->then(function (ResponseInterface $response) {
+                        $response->getBody()->getContents();
+                    })->wait();
+                } catch (Exception $e) {
+                    //
+                }
             } catch (Exception $e) {
-
+                //
             }
         }
+    }
+
+    private function getAction($value)
+    {
+        return ((bool) $value) ? 'on' : 'off';
     }
 }

@@ -10,6 +10,8 @@ return [
     'set_error' => '设值失败',
 
     // site
+    'invalid_site_mode' => '无效的站点模式',
+    'pay_site_mode_need_open_payment' => '付费模式需配置支付方式',
     'site_mode_not_found_price' => '请设置加入价格',
 
     'min_greater_than_max' => '单次提现最小金额 不能大于 最大金额',
@@ -19,7 +21,7 @@ return [
     'max_greater_than_limit' => '单次提现最大金额 不能大于 单日提现总金额',
     'max_exceed_5000' => '单次提现最大金额 不能超过 5000',
 
-    'limit_exceed_5000' => '单日提现总金额 不能超过 5000',
+    'limit_exceed' => '单日提现总金额 不能超过 100000000',
 
     'setting_fill_register_reason' => '注册时的注册原因必须必填',
 
@@ -62,4 +64,7 @@ return [
     'tencent_captcha_code_100' => '验证码错误(100):的配置参数错误',
     'tencent_captcha_unknown_error' => '验证码未知错误:腾讯云未知错误',
     'tencent_captcha_unknown_CaptchaCode' => '验证码未知错误:腾讯云验证码未知CaptchaCode',
+
+
+    'wxpay_appid_error' => 'app_id只能选择 公众号接口配置 或 小程序配置 中设置的值',
 ];

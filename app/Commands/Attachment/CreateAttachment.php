@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Commands\Attachment;
@@ -91,13 +102,17 @@ class CreateAttachment
 
         $file = $this->file;
 
-        // 移动到临时文件目录
+        $ext = pathinfo($file->getClientFilename(), PATHINFO_EXTENSION);
+        $ext = $ext ? ".$ext" : '';
+
         $tmpFile = tempnam(storage_path('/tmp'), 'attachment');
-        $file->moveTo($tmpFile);
+        $tmpFileWithExt = $tmpFile . $ext;
+
+        $file->moveTo($tmpFileWithExt);
 
         try {
             $file = new UploadedFile(
-                $tmpFile,
+                $tmpFileWithExt,
                 $file->getClientFilename(),
                 $file->getClientMediaType(),
                 $file->getError(),
@@ -105,7 +120,7 @@ class CreateAttachment
             );
 
             // 验证
-            $validator->valid(['type' => $this->type, 'file' => $file]);
+            $validator->valid(['type' => $this->type, 'size' => $file->getSize(), 'file' => $file]);
 
             $this->events->dispatch(
                 new Uploading($this->actor, $file)
@@ -140,8 +155,8 @@ class CreateAttachment
 
             $this->dispatchEventsFor($attachment);
         } finally {
-            // 删除临时文件
             @unlink($tmpFile);
+            @unlink($tmpFileWithExt);
         }
 
         return $attachment;

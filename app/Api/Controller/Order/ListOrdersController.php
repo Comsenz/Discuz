@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Api\Controller\Order;
@@ -127,6 +138,22 @@ class ListOrdersController extends AbstractListController
             'pageCount' => ceil($this->total / $limit),
         ]);
 
+        // 主题标题
+        if (in_array('thread.firstPost', $include)) {
+            $orders->load('thread.firstPost')
+                ->map(function (Order $order) {
+                    if ($order && $order->thread) {
+                        if ($order->thread->title) {
+                            $title = Str::limit($order->thread->title, 40);
+                        } else {
+                            $title = Str::limit($order->thread->firstPost->content, 40);
+                            $title = str_replace("\n", '', $title);
+                        }
+
+                        $order->thread->title = strip_tags($title);
+                    }
+                });
+        }
         return $orders->loadMissing($include);
     }
 
@@ -168,6 +195,7 @@ class ListOrdersController extends AbstractListController
         $order_start_time = Arr::get($filter, 'start_time'); //订单创建开始时间
         $order_end_time = Arr::get($filter, 'end_time'); //订单创建结束时间
         $order_username = Arr::get($filter, 'username'); //订单创建人
+        $order_payee_username = Arr::get($filter, 'payee_username'); //订单收款人
         $order_product = Arr::get($filter, 'product'); //商品
 
         $query->when($status !== '', function ($query) use ($status) {
@@ -185,31 +213,28 @@ class ListOrdersController extends AbstractListController
         $query->when($order_end_time, function ($query) use ($order_end_time) {
             $query->where('created_at', '<=', $order_end_time);
         });
-        $query->when($order_username, function ($query) use ($order_username) {
+        $query->when($order_username, function ($query, $username) {
             $query->whereIn(
                 'orders.user_id',
-                User::query()
-                    ->select('id', 'username')
-                    ->where('users.username', $order_username)
-                    ->get()
+                User::query()->where('username', 'like', "%{$username}%")->pluck('id')
             );
         });
-        $query->when($order_product, function ($query) use ($order_product) {
+        $query->when($order_payee_username, function ($query, $username) {
+            $query->whereIn(
+                'orders.payee_id',
+                User::query()->where('username', 'like', "%{$username}%")->pluck('id')
+            );
+        });
+        $query->when($order_product, function ($query, $title) {
             $query->whereIn(
                 'orders.thread_id',
                 Thread::query()
-                    ->select('threads.id')
                     ->whereIn(
-                        'threads.id',
-                        Post::query()
-                            ->select('posts.thread_id')
-                            ->where('is_first', true)
-                            ->where('content', 'like', "%$order_product%")
-                            ->groupBy('posts.thread_id')
-                            ->get()
+                        'id',
+                        Post::query()->where('is_first', true)->where('content', 'like', "%$title%")->pluck('thread_id')
                     )
-                    ->orWhere('threads.title', 'like', "%$order_product%")
-                    ->get()
+                    ->orWhere('threads.title', 'like', "%$title%")
+                    ->pluck('id')
             );
         });
     }

@@ -1,14 +1,24 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Api\Controller\Topic;
 
 use App\Api\Serializer\TopicSerializer;
-use App\Models\Post;
 use App\Models\ThreadTopic;
 use App\Models\Topic;
 use App\Repositories\TopicRepository;
@@ -141,9 +151,39 @@ class ListTopicController extends AbstractListController
      */
     public function search($filter, $sort, $limit = null, $offset = 0)
     {
-        $query = $this->topics->query();
+        $query = $this->topics->query()->select('topics.*');
+
+        if ($username = trim(Arr::get($filter, 'username'))) {
+            $query->join('users', 'users.id', '=', 'topics.user_id')
+                ->where('users.username', 'like', '%'.$username.'%');
+        }
+
         if ($content = trim(Arr::get($filter, 'content'))) {
-            $query->where('content', 'like', '%'.$content.'%');
+            $query->where('topics.content', 'like', '%'.$content.'%');
+        }
+
+        if ($createdAtBegin = Arr::get($filter, 'createdAtBegin')) {
+            $query->where('topics.created_at', '>=', $createdAtBegin);
+        }
+
+        if ($createdAtEnd = Arr::get($filter, 'createdAtEnd')) {
+            $query->where('topics.created_at', '<=', $createdAtEnd);
+        }
+
+        if ($threadCountBegin = Arr::get($filter, 'threadCountBegin')) {
+            $query->where('topics.thread_count', '>=', $threadCountBegin);
+        }
+
+        if ($threadCountEnd = Arr::get($filter, 'threadCountEnd')) {
+            $query->where('topics.thread_count', '<=', $threadCountEnd);
+        }
+
+        if ($viewCountBegin = Arr::get($filter, 'viewCountBegin')) {
+            $query->where('topics.view_count', '>=', $viewCountBegin);
+        }
+
+        if ($viewCountEnd = Arr::get($filter, 'viewCountEnd')) {
+            $query->where('topics.view_count', '<=', $viewCountEnd);
         }
 
         foreach ((array) $sort as $field => $order) {

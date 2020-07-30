@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Api\Controller\Users;
@@ -25,6 +36,7 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Events\Dispatcher as Events;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -116,7 +128,8 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             $this->assertPermission((bool)$this->settings->get('register_close'));
 
             $data['code'] = Arr::get($attributes, 'code');
-            $data['username'] = $wechatUser->nickname;
+            //用户名只允许15个字
+            $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
             $data['register_ip'] = ip($request->getServerParams());
             $data['register_port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT');
             $user = $this->bus->dispatch(

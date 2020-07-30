@@ -52,12 +52,35 @@
       >
     </Card>
 
+    <Card header="用户名：">
+      <CardRow>
+        <el-input v-model="userName"></el-input>
+      </CardRow>
+    </Card>
+
+    <Card header="旧密码：" v-if="noAdmin">
+      <CardRow description="如果不更改密码此处请留空">
+        <el-input
+          v-model="oldPassword"
+          clearable
+        ></el-input>
+      </CardRow>
+    </Card>
+
     <Card header="新密码：">
       <CardRow description="如果不更改密码此处请留空">
         <el-input
           v-model="newPassword"
           clearable
-          :disabled="disabled"
+        ></el-input>
+      </CardRow>
+    </Card>
+
+    <Card header="确认新密码："  v-if="noAdmin">
+      <CardRow description="如果不更改密码此处请留空">
+        <el-input
+          v-model="confirmPassword"
+          clearable
         ></el-input>
       </CardRow>
     </Card>

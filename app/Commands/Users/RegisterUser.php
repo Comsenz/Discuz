@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Commands\Users;
@@ -76,9 +87,11 @@ class RegisterUser
 
         $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_port', 'register_reason']));
 
-        // 注册验证码
+        // 注册验证码(无感模式不走验证码，开启也不走)
         $captcha = '';  // 默认为空将不走验证
-        if ((bool)$settings->get('register_captcha') && (bool)$settings->get('qcloud_captcha', 'qcloud')) {
+        if ((bool)$settings->get('register_captcha') &&
+            (bool)$settings->get('qcloud_captcha', 'qcloud') &&
+            ($settings->get('register_type', 'default') != 2)) {
             $captcha = [
                 Arr::get($this->data, 'captcha_ticket', ''),
                 Arr::get($this->data, 'captcha_rand_str', ''),

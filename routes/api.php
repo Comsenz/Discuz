@@ -352,3 +352,4 @@ $route->get('/offiaccount/reply/{id}', 'offiaccount.reply.resource', ApiControll
 $route->delete('/offiaccount/reply/{id}', 'offiaccount.reply.delete', ApiController\Wechat\OffIAccountReplyDeleteController::class);
 $route->get('/offiaccount/menu', 'offiaccount.menu.list', ApiController\Wechat\OffIAccountMenuListController::class);
 $route->post('/offiaccount/menu', 'offiaccount.menu.batchCreate', ApiController\Wechat\OffIAccountMenuBatchCreateController::class);
+$route->get('/offiaccount/reprint/{id}', 'offiaccount.threads.reprint', ApiController\Wechat\OffIAccountThreadsReprintController::class);

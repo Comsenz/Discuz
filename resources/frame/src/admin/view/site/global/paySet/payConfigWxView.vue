@@ -3,7 +3,7 @@
     <Card header="微信支付配置"></Card>
 
     <Card header="APPID：">
-      <CardRow description="appid是微信公众帐号或开放平台APP的唯一标识">
+      <CardRow description="appid是微信公众帐号或小程序的唯一标识">
         <el-input v-model="appId"></el-input>
       </CardRow>
     </Card>

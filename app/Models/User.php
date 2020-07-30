@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Models;
@@ -208,9 +219,15 @@ class User extends Model
         return $this;
     }
 
-    public function changeAvatar($path)
+    /**
+     * @param string $path
+     * @param bool $isRemote
+     * @return $this
+     */
+    public function changeAvatar($path, $isRemote = false)
     {
-        $this->avatar = $path;
+        $this->avatar = ($isRemote ? 'cos://' : '') . $path;
+        $this->avatar_at = $path ? Carbon::now() : null;
 
         return $this;
     }
@@ -322,7 +339,7 @@ class User extends Model
                 $value = app(Filesystem::class)
                     ->disk('avatar_cos')
                     ->temporaryUrl(
-                        'public/avatar/' . $this->id . '.png',
+                        'public/avatar/' . Str::after($value, '://'),
                         \Carbon\Carbon::now()->addHour()
                     );
             }
@@ -441,7 +458,10 @@ class User extends Model
         $this->liked_count = $this->postUser()
             ->join('posts', 'post_user.post_id', '=', 'posts.id')
             ->where('posts.is_first', true)
+            ->where('posts.is_approved', Post::APPROVED)
+            ->whereNull('posts.deleted_at')
             ->count();
+
         return $this;
     }
 
@@ -531,7 +551,8 @@ class User extends Model
     {
         return $this->belongsToMany(Thread::class)
             ->as('favoriteState')
-            ->withPivot('created_at');
+            ->withPivot('created_at')
+            ->whereNotNull('threads.user_id');
     }
 
     /**
@@ -609,12 +630,16 @@ class User extends Model
     }
 
     /**
-     * Check whether the user has a certain permission based on their groups.
+     * 检查用户是否具有一定的权限基于他们的用户组。
+     * 传入字符串时，返回是否具有此权限。
+     * 传入数组时，如果第二个参数为 true (default) 返回是否同时具有这些权限，
+     * 如果第二个参数为 false 则返回是否具有这些权限其中之一。
      *
-     * @param string $permission
+     * @param string|array $permission
+     * @param bool $condition
      * @return bool
      */
-    public function hasPermission($permission)
+    public function hasPermission($permission, bool $condition = true)
     {
         if ($this->isAdmin()) {
             return true;
@@ -624,7 +649,23 @@ class User extends Model
             $this->permissions = $this->getPermissions();
         }
 
-        return in_array($permission, $this->permissions);
+        if (is_array($permission)) {
+            foreach ($permission as $item) {
+                if ($condition) {
+                    if (! in_array($item, $this->permissions)) {
+                        return false;
+                    }
+                } else {
+                    if (in_array($item, $this->permissions)) {
+                        return true;
+                    }
+                }
+            }
+
+            return $condition;
+        } else {
+            return in_array($permission, $this->permissions);
+        }
     }
 
     /**

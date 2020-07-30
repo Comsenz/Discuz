@@ -27,30 +27,35 @@ export default {
       dialogVisible: false,
       fileList: [],
       deleBtn: false,
+      disabled: true, // 付费模式置灰
       numberimg: [
         {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
-          text: "站点LOGO"
+          text: "站点LOGO",
+          textrule: "推荐高度：88px"
         },
         {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
-          text: "首页头部LOGO"
+          text: "首页头部LOGO",
+          textrule: "推荐高度：88px"
         },
         {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
-          text: "首页头部背景"
+          text: "首页头部背景",
+          textrule: "尺寸：750px*400px"
         },
         {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
-          text: "ICON"
+          text: "ICON",
+          textrule: "尺寸：120px*120px"
         },
       ]
     };
@@ -143,8 +148,12 @@ export default {
               this.radio2 = "2";
             }
             this.siteCloseMsg = data.readdata._data.set_site.site_close_msg;
-
-            // this.$message({'修改成功'});
+            // 微信支付关闭时置灰付费模式
+            if (data.readdata._data.paycenter.wxpay_close == false) {
+              this.disabled = true;
+            } else {
+              this.disabled = false;
+            }
           }
         })
         .catch(error => {});
@@ -153,6 +162,9 @@ export default {
     deleteImage(file, index, fileList) {
       let type = "";
       switch (index) {
+        case 0:
+          type = "logo";
+          break;
         case 1:
           type = "header_logo";
           break;
@@ -160,10 +172,10 @@ export default {
           type = "background_image";
           break;
         case 3:
-          type = "logo";
-        case 4:
           type = "favicon";
+          break;
         default:
+          this.$message.error('未知类型');
       }
       this.numberimg[index].imageUrl = "";
       this.appFetch({
@@ -240,10 +252,11 @@ export default {
       const isJPG =
         file.type == "image/jpeg" ||
         file.type == "image/png" ||
-        file.type == "image/gif";
+        file.type == "image/gif" ||
+        file.type == "image/ico";
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isJPG) {
-        this.$message.warning("上传头像图片只能是 JPG/PNG/GIF 格式!");
+        this.$message.warning("上传头像图片只能是 JPG/PNG/GIF/ICO 格式!");
         return isJPG;
       }
       if (!isLt2M) {
@@ -256,6 +269,9 @@ export default {
     uploaderLogo(e, index) {
       let type = "";
       switch (index) {
+        case 0:
+          type = "logo";
+          break;
         case 1:
           type = "header_logo";
           break;
@@ -263,10 +279,10 @@ export default {
           type = "background_image";
           break;
         case 3:
-          type = "logo";
-        case 4:
           type = "favicon";
+          break;
         default:
+          this.$message.error('未知类型');
       }
       let logoFormData = new FormData();
       logoFormData.append("logo", e.file);
@@ -389,7 +405,11 @@ export default {
       })
         .then(data => {
           if (data.errors) {
-            this.$message.error(data.errors[0].code + '\n' + data.errors[0].detail[0]);
+            if (data.errors[0].detail) {
+              this.$message.error(data.errors[0].code + '\n' + data.errors[0].detail[0])
+            } else {
+              this.$message.error(data.errors[0].code);
+            }
           } else {
             this.$message({
               message: "提交成功",

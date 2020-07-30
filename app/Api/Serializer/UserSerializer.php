@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Api\Serializer;
@@ -12,6 +23,8 @@ use App\Repositories\UserFollowRepository;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Tobscure\JsonApi\Relationship;
 
 class UserSerializer extends AbstractSerializer
@@ -62,7 +75,6 @@ class UserSerializer extends AbstractSerializer
             'likedCount'        => (int) $model->liked_count,
             'signature'         => $model->signature,
             'usernameBout'      => (int) $model->username_bout,
-            'follow'            => $this->userFollow->findFollowDetail($this->actor->id, $model->id), //TODO 解决N+1
             'status'            => $model->status,
             'loginAt'           => $this->formatDate($model->login_at),
             'joinedAt'          => $this->formatDate($model->joined_at),
@@ -71,12 +83,21 @@ class UserSerializer extends AbstractSerializer
             'updatedAt'         => $this->formatDate($model->updated_at),
             'canEdit'           => $canEdit,
             'canDelete'         => $gate->allows('delete', $model),
-            'showGroups'        => $model->hasPermission('showGroups'),     // 是否显示用户组
+            'showGroups'        => $gate->allows('showGroups', $model),     // 是否显示用户组
             'registerReason'    => $model->register_reason,                 // 注册原因
             'banReason'         => '',                                      // 禁用原因
             'denyStatus'        => (bool)$model->denyStatus,
         ];
 
+        $whitelist = [
+            '/api/follow/',
+            '/api/users/'.Arr::get($this->getRequest()->getQueryParams(), 'id', '').'/',
+            '/api/threads/'.Arr::get($this->getRequest()->getQueryParams(), 'id', '').'/'
+        ];
+        if (Str::contains($this->getRequest()->getUri()->getPath().'/', $whitelist)) {
+            //需要时再查询关注状态 存在n+1
+            $attributes['follow'] = $this->userFollow->findFollowDetail($this->actor->id, $model->id);
+        }
         // 判断禁用原因
         if ($model->status == 1) {
             $attributes['banReason'] = !empty($model->latelyLog) ? $model->latelyLog->message : '' ;
@@ -101,8 +122,8 @@ class UserSerializer extends AbstractSerializer
         if ($this->actor->id === $model->id) {
             $attributes += [
                 'canWalletPay'  => $gate->allows('walletPay', $model),
-                'walletBalance' => $model->userWallet->available_amount,
-                'walletFreeze'  => $model->userWallet->freeze_amount,
+                'walletBalance' => $this->actor->userWallet->available_amount,
+                'walletFreeze'  => $this->actor->userWallet->freeze_amount,
             ];
         }
 

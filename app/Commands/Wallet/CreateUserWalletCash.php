@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Commands\Wallet;
@@ -95,8 +106,13 @@ class CreateUserWalletCash
         $cash_apply_amount = sprintf('%.2f', $cash_apply_amount);
 
         //今日已申提现总额
-        $totday_cash_amount = UserWalletCash::where('created_at', '>=', Carbon::today())->sum('cash_apply_amount');
-        if (($totday_cash_amount + $cash_apply_amount) > $cash_sum_limit) {
+        $totday_cash_amount = UserWalletCash::where('user_id', $this->actor->id)
+            ->where('created_at', '>=', Carbon::today())
+            ->where('refunds_status', UserWalletCash::REFUNDS_STATUS_NO)
+            ->sum('cash_apply_amount');
+        $totday_cash_amount += $cash_apply_amount;
+
+        if (bccomp($cash_sum_limit, $totday_cash_amount, 2) == -1) {
             //超出提现限额
             throw new WalletException('cash_sum_limit');
         }

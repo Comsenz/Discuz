@@ -442,7 +442,7 @@
   <body>
     <div class="container">
       <h1>
-        <img src="{{$logo}}" title="logo" />
+        <img src="{{$logo}}" title="logo" style="max-width: 90%;" />
       </h1>
 
       <div class="animated fadeIn">

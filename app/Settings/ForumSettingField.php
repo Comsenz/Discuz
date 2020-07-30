@@ -1,16 +1,27 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Settings;
 
 use Discuz\Contracts\Setting\SettingsRepository;
-use Discuz\Foundation\Application;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Encryption\Encrypter;
+use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 
 class ForumSettingField
 {
@@ -43,7 +54,13 @@ class ForumSettingField
     public function siteUrlSplicing($imgName)
     {
         if ($imgName) {
-            return $this->url->to('/storage/' . $imgName);
+            if ($this->settings->get('qcloud_cos', 'qcloud')) {
+                return app(Filesystem::class)
+                    ->disk('cos')
+                    ->temporaryUrl($imgName, \Carbon\Carbon::now()->addDay());
+            } else {
+                return $this->url->to('/storage/' . $imgName) . '?' . \Carbon\Carbon::now()->timestamp;
+            }
         }
 
         return '';

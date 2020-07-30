@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Commands\Post;
@@ -13,7 +24,6 @@ use App\Events\Post\Saved;
 use App\Events\Post\Saving;
 use App\Models\Post;
 use App\Models\PostMod;
-use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\PostRepository;
 use App\Validators\PostValidator;
@@ -96,17 +106,16 @@ class EditPost
             $post->timestamps = false;
         }
 
-        if (isset($attributes['isApproved'])) {
+        if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
             $this->assertCan($this->actor, 'approve', $post);
-            $message = $attributes['message'] ?? '';
-            $post->is_approved = $attributes['isApproved'];
 
-            // 操作审核时触发 回复内容通知和记录日志
-            $post->raise(new PostWasApproved(
-                $post,
-                $this->actor,
-                ['message' => $message]
-            ));
+            if ($post->is_approved != $attributes['isApproved']) {
+                $post->is_approved = $attributes['isApproved'];
+
+                $post->raise(
+                    new PostWasApproved($post, $this->actor, ['message' => $attributes['message'] ?? ''])
+                );
+            }
         }
 
         if (isset($attributes['isDeleted'])) {
@@ -127,29 +136,19 @@ class EditPost
 
         $validator->valid($post->getDirty());
 
-        // 待审核帖子
-        if ($post->is_approved === Post::UNAPPROVED) {
-            // 记录触发的审核词
-            if ($censor->wordMod) {
-                /** @var PostMod $stopWords */
-                $stopWords = PostMod::query()->firstOrNew(['post_id' => $post->id]);
+        // 记录触发的审核词
+        if ($post->is_approved === Post::UNAPPROVED && $censor->wordMod) {
+            /** @var PostMod $stopWords */
+            $stopWords = PostMod::query()->firstOrNew(['post_id' => $post->id]);
 
-                $stopWords->stop_word = implode(',', array_unique($censor->wordMod));
+            $stopWords->stop_word = implode(',', array_unique($censor->wordMod));
 
-                $post->stopWords()->save($stopWords);
-            }
-
-            // 如果是首贴，将主题放入待审核
-            if ($post->is_first) {
-                $post->thread->is_approved = Thread::UNAPPROVED;
-
-                $post->thread->save();
-            }
+            $post->stopWords()->save($stopWords);
         }
 
         $post->save();
 
-        $post->raise(new Saved($post, $this->actor, array_merge($this->data, ['edit' => true])));
+        $post->raise(new Saved($post, $this->actor, $this->data));
 
         $this->dispatchEventsFor($post, $this->actor);
 

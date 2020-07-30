@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Traits;
@@ -35,6 +46,33 @@ use s9e\TextFormatter\Utils;
 trait PostNoticesTrait
 {
     /**
+     * 发送通知
+     *
+     * @param Post $post
+     * @param User $actor
+     * @param string $type
+     * @param string $message
+     */
+    public function postNotices(Post $post, User $actor, $type, $message = '')
+    {
+        // 无需给自己发送通知
+        if ($post->user_id == $actor->id) {
+            return;
+        }
+
+        $message = $message ?: '无';
+
+        switch ($type) {
+            case 'isApproved':  // 内容审核通知
+                $this->postisapproved($post, ['refuse' => $message]);
+                break;
+            case 'isDeleted':   // 内容删除通知
+                $this->postIsDeleted($post, ['refuse' => $message]);
+                break;
+        }
+    }
+
+    /**
      * 发送@通知
      *
      * @param Post $post
@@ -57,7 +95,7 @@ trait PostNoticesTrait
 
             // 微信通知
             $user->notify(new Related($post, $actor, WechatRelatedMessage::class, [
-                'message' => $post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
+                'message' => $post->getSummaryContent(Post::NOTICE_LENGTH, true)['content'],
                 'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
                     'actor_username' => $actor->username    // 发送人姓名
                 ]),
@@ -111,8 +149,8 @@ trait PostNoticesTrait
                 $post->thread->user->notify(new Replied($post, $post->user, RepliedMessage::class));
                 // 发送微信通知
                 $post->thread->user->notify(new Replied($post, $post->user, WechatRepliedMessage::class, [
-                    'message' => $post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
-                    'subject' => $post->thread->getContentByType(Thread::CONTENT_LENGTH),
+                    'message' => $post->getSummaryContent(Post::NOTICE_LENGTH, true)['content'],
+                    'subject' => $post->thread->getContentByType(Thread::CONTENT_LENGTH, true),
                     'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
                         'actor_username' => $post->user->username    // 发送人姓名
                     ]),
@@ -134,23 +172,6 @@ trait PostNoticesTrait
      */
     public function getPostTitle(Post $post)
     {
-        return $post->thread->type == 1 ? $post->thread->title : $post->formatContent();
-    }
-
-    /**
-     * 过滤原因值
-     *
-     * @param $attach
-     * @return mixed|string
-     */
-    public function reasonValuePost($attach)
-    {
-        if (Arr::has($attach, 'message')) {
-            if (!empty($attach['message'])) {
-                return $attach['message'];
-            }
-        }
-
-        return '无';
+        return $post->thread->type === Thread::TYPE_OF_LONG ? $post->thread->title : $post->formatContent();
     }
 }

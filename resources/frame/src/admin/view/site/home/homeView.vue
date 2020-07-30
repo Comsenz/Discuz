@@ -1,5 +1,9 @@
 <template>
   <div class="home-box">
+
+    <Card class="home-card-box" id="other_content_header" intercept="true" style="border:0;padding:0;">
+    </Card>
+
     <Card class="home-card-box" header="待处理事项" intercept="true">
       <p class="pending-p">
         等待审核的主题数
@@ -58,20 +62,10 @@
       </p>
     </Card>
 
-    <Card class="home-card-box" header="Discuz! Q开发团队" intercept="true">
-      <p class="section">
-        <span class="section-title">版权所有：</span>
-        <span><a href="https://cloud.tencent.com/" target="_blank">腾讯云</a></span>
-      </p>
-      <p class="section">
-        <span class="section-title">官方唯一合作：</span>
-        <span><a href="https://www.comsenz-service.com/" target="_blank">康创联盛</a></span>
-      </p>
-    </Card>
-
-    <Card class="home-card-box home-card__footer" header="相关链接">
+    <Card class="home-card-box home-card__footer" id="other_content_footer" header="相关链接">
       <a href="https://discuz.chat/manual-admin/" target="_blank">使用手册</a>
-      <a href="https://www.discuz.net/" target="_blank">Discuz!&nbsp;支持论坛</a>
+      <a href="https://www.discuz.com" target="_blank">Discuz! Q 官方</a>
+      <a href="https://www.discuz.chat" target="_blank">支持论坛</a>
       <a href="https://cloud.tencent.com/" target="_blank">腾讯云</a>
       <a href="http://www.dnspod.cn/" target="_blank">DNSPod</a>
     </Card>

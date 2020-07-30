@@ -36,17 +36,23 @@ const config = {
   login_failures_times_toplimit: '密码错误次数达到5次，请15分钟后再次尝试',
   site_closed: "站点已关闭！",
   ban_user: "您的帐号被禁用，无法访问本站点",
-  register_validate: '帐号审核中,请审核通过尝试',
+  register_validate: '帐号审核中，请审核通过后尝试',
   mobile_is_already_bind: '手机已经绑定',
   setting_fill_register_reason: '注册时的注册原因必须必填',
   faceid_error: '身份信息验证不通过',
   invalid_emoji_path: '无效的表情目录',
   notification_is_missing_template_config: '微信推送信息不全',
+  tencent_qcloud_close_current: '腾讯云Api配置未开启',
   tencent_secret_key_error: '腾讯云Secretid或SecretKey不正确',
   tencent_vod_transcode_error: '腾讯云云点播转码模板未设置',
   tencent_vod_subappid_error: '腾讯云云点播子应用错误',
   pay_password_failures_times_toplimit: '您输入的密码错误次数已超限，请点击忘记密码找回或次日后重试',
   offIAccount_server_config_signature_failed: '公众号服务器配置：签名验证失败',
+  qcloud_vod_cover_template_not_found: '腾讯云云点播截图模板不存在',
+  tencent_vod_error : '腾讯云云点播配置错误',
+  tencent_qcloud_sms_app_error : '腾讯云短信配置错误',
+  tencent_vod_taskflow_gif_error : '动图封面任务流名称错误',
+
 };
 
 Vue.prototype.getLang = function (key) {

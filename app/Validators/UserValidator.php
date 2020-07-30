@@ -1,22 +1,31 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Validators;
 
 use App\Models\User;
+use App\Rules\Captcha;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\AbstractValidator;
-use Discuz\Qcloud\QcloudTrait;
 use Illuminate\Validation\Factory;
 
 class UserValidator extends AbstractValidator
 {
-    use QcloudTrait;
-
     /**
      * @var User
      */
@@ -26,13 +35,6 @@ class UserValidator extends AbstractValidator
      * @var SettingsRepository
      */
     protected $settings;
-
-    /**
-     * 腾讯云验证码开关。
-     *
-     * @var bool
-     */
-    protected $qCloudCaptchaSwitch = false;
 
     /**
      * The default minimum password length.
@@ -84,11 +86,8 @@ class UserValidator extends AbstractValidator
 
         $this->settings = $settings;
 
-        // 获取后台设置的腾讯云验证码开关
-        $this->qCloudCaptchaSwitch = (bool)$settings->get('qcloud_captcha', 'qcloud');
-
         // 获取后台设置的密码长度
-        $settingsPasswordLength = (int)$settings->get('password_length');
+        $settingsPasswordLength = (int) $settings->get('password_length');
 
         // 获取后台设置的密码强度
         $settingsPasswordStrength = array_filter(explode(',', trim($settings->get('password_strength'), ',')));
@@ -116,44 +115,20 @@ class UserValidator extends AbstractValidator
     protected function getRules()
     {
         $rules = [
-            'username' => [
-                'required',
-                'max:15',
-                'unique:users'
-            ],
+            'username' => 'required|max:15|unique:users',
             'password' => $this->getPasswordRules(),
             'pay_password' => 'sometimes|required|confirmed|digits:6',
             'pay_password_token' => 'sometimes|required|session_token:reset_pay_password',
-            'groupId' => 'required',
-            'identity' => [
-                'required',
-                'regex:/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/',
-            ],
-            'realname' => 'required',
             'register_reason' => 'filled|max:50',
+            'groupId' => 'required',
+            'realname' => 'required',
+            'identity' => ['required', 'regex:/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/'],
+            'captcha' => ['sometimes', new Captcha],
         ];
 
         if ($this->user) {
             $rules['password'][] = 'confirmed';
-            $rules['pay_password_token'] .= ',' . ($this->user ? $this->user->id : null);
-        }
-
-        // 当腾讯云验证码开启时，且数据中有 captcha 时，检查验证码
-        if ($this->qCloudCaptchaSwitch) {
-            $rules['captcha'] = [
-                'sometimes',
-                function ($attribute, $value, $fail) {
-                    if (count(array_filter($value)) == 3) {
-                        $result = $this->describeCaptchaResult(...$value);
-
-                        if ($result['CaptchaCode'] != 1) {
-                            $fail(trans('validation.wrong') . "({$result['CaptchaCode']})");
-                        }
-                    } else {
-                        $fail(trans('validation.wrong'));
-                    }
-                },
-            ];
+            $rules['pay_password_token'] .= ',' . $this->user->id;
         }
 
         return $rules;

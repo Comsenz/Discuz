@@ -42,6 +42,11 @@
         </el-select>
       </div>
 
+     <div class="order-record__search-condition">
+        <span class="order-record__search-condition__title">收入方：</span>
+        <el-input clearable v-model="incomeSide" placeholder="搜索收入方"></el-input>
+      </div>
+
       <div class="order-record__search-condition">
         <el-button  type="primary" size="medium" @click="searchClick">搜索</el-button>
       </div>

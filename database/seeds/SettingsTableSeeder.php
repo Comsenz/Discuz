@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 use Illuminate\Database\Seeder;
@@ -36,6 +47,16 @@ class SettingsTableSeeder extends Seeder
                 'tag' => 'default',
             ],
             [
+                'key' => 'site_master_scale',   // 站长分成比例
+                'value' => '0',                 // 默认 0
+                'tag' => 'default',
+            ],
+            [
+                'key' => 'site_author_scale',   // 用户分成比例
+                'value' => '10',                // 默认 10
+                'tag' => 'default',
+            ],
+            [
                 'key' => 'register_close',      // 注册开关：0 禁止，1 允许
                 'value' => '1',                 // 默认允许
                 'tag' => 'default',
@@ -57,7 +78,7 @@ class SettingsTableSeeder extends Seeder
             ],
             [
                 'key' => 'support_img_ext',     // 默认支持的图片扩展名
-                'value' => 'png,gif,jpg,jpeg,bmp,heic',
+                'value' => 'png,gif,jpg,jpeg,heic',
                 'tag' => 'default',
             ],
             [

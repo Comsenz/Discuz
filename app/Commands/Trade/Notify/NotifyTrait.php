@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Commands\Trade\Notify;
@@ -20,9 +31,10 @@ trait NotifyTrait
 {
     /**
      * 支付成功，后续操作
-     * @param  string $payment_sn 订单编号
-     * @param  string $trade_no 支付平台交易号
-     * @param  SettingsRepository $setting 配置
+     * @param string $payment_sn 订单编号
+     * @param string $trade_no 支付平台交易号
+     * @param SettingsRepository $setting 配置
+     * @param Dispatcher $events
      * @return Order
      */
     public function paymentSuccess($payment_sn, $trade_no, SettingsRepository $setting, Dispatcher $events)

@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Traits;
@@ -17,6 +28,8 @@ use App\MessageTemplate\Wechat\WechatPostModMessage;
 use App\MessageTemplate\Wechat\WechatPostOrderMessage;
 use App\MessageTemplate\Wechat\WechatPostStickMessage;
 use App\MessageTemplate\Wechat\WechatPostThroughMessage;
+use App\Models\Thread;
+use App\Models\User;
 use App\Notifications\System;
 use Illuminate\Support\Arr;
 
@@ -28,6 +41,44 @@ use Illuminate\Support\Arr;
  */
 trait ThreadNoticesTrait
 {
+    /**
+     * 发送通知
+     *
+     * @param Thread $thread
+     * @param User $actor
+     * @param string $type
+     * @param string $message
+     */
+    public function threadNotices(Thread $thread, User $actor, $type, $message = '')
+    {
+        // 审核通过时发送 @ 通知
+        if ($type === 'isApproved' && $thread->is_approved === Thread::APPROVED) {
+            $this->sendRelated($thread->firstPost, $thread->user);
+        }
+
+        // 无需给自己发送通知
+        if ($thread->user_id == $actor->id) {
+            return;
+        }
+
+        $message = $message ?: '无';
+
+        switch ($type) {
+            case 'isEssence':   // 内容加精通知
+                $this->sendIsEssence($thread);
+                break;
+            case 'isSticky':    // 内容置顶通知
+                $this->sendIsSticky($thread);
+                break;
+            case 'isApproved':  // 内容审核通知
+                $this->sendIsApproved($thread, ['refuse' => $message]);
+                break;
+            case 'isDeleted':   // 内容删除通知
+                $this->sendIsDeleted($thread, ['refuse' => $message]);
+                break;
+        }
+    }
+
     /**
      * 内容置顶通知
      *
@@ -128,38 +179,5 @@ trait ThreadNoticesTrait
     public function getThreadTitle($thread)
     {
         return empty($thread->title) ? $thread->firstPost->content : $thread->title;
-    }
-
-    /**
-     * 过滤原因值
-     *
-     * @param $attach
-     * @return mixed|string
-     */
-    public function reasonValue($attach)
-    {
-        if (Arr::has($attach, 'message')) {
-            if (!empty($attach['message'])) {
-                return $attach['message'];
-            }
-        }
-
-        return '无';
-    }
-
-    /**
-     * 检查值 是否修改
-     *
-     * @param $thread
-     * @param $field
-     * @return bool
-     */
-    public function checkOriginal($thread, $field)
-    {
-        if ($thread->{$field} != $thread->getRawOriginal($field)) {
-            return true;
-        }
-
-        return false;
     }
 }

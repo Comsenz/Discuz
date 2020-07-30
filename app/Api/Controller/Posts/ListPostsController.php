@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\Api\Controller\Posts;
@@ -111,7 +122,12 @@ class ListPostsController extends AbstractListController
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-        $include = array_merge($this->extractInclude($request), ['likeState']);
+
+        /**
+         * thread 解决查询付费状态 N + 1 问题
+         * likeState 解决查询点赞状态 N + 1 问题
+         */
+        $include = array_merge($this->extractInclude($request), ['thread', 'likeState']);
 
         $posts = $this->search($actor, $filter, $sort, $limit, $offset);
 
@@ -152,7 +168,7 @@ class ListPostsController extends AbstractListController
         if (Arr::get($filter, 'highlight') == 'yes') {
             $posts->load('stopWords');
 
-            $posts->map(function ($post) {
+            $posts->map(function (Post $post) {
                 if ($post->stopWords) {
                     $stopWords = explode(',', $post->stopWords->stop_word);
                     $replaceWords = array_map(function ($word) {
@@ -338,8 +354,11 @@ class ListPostsController extends AbstractListController
             ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function (Post $post) {
-                // 截取内容
-                $post->content = Str::limit($post->content, 70);
+                $content = Str::of($post->content);
+
+                if ($content->length() > Post::SUMMARY_LENGTH) {
+                    $post->content = $content->substr(0, Post::SUMMARY_LENGTH)->finish(Post::SUMMARY_END_WITH);
+                }
 
                 return $post;
             });
