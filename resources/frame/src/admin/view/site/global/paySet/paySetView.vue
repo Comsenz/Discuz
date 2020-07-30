@@ -34,24 +34,30 @@
           label="操作"
           width="180">
           <template slot-scope="scope">
-            <div v-if="scope.row.status">
+            <div>
               <el-button
                 size="mini"
                 @click="configClick(scope.row.tag)"
               >配置</el-button>
               <el-button
+                v-if="scope.row.status"
                 size="mini"
                 @click.native.prevent="loginSetting(scope.$index,scope.row.type,'0')"
               >关闭</el-button>
+            <el-button
+              v-else
+              size="mini"
+              @click.native.prevent="loginSetting(scope.$index,scope.row.type,'1')"
+            >开启</el-button>
             </div>
 
-            <el-button
+            <!-- <el-button
               v-else
               size="mini"
               type="primary"
               plain
               @click.native.prevent="loginSetting(scope.$index,scope.row.type,'1')"
-            >开启</el-button>
+            >开启</el-button> -->
 
           </template>
         </el-table-column>
