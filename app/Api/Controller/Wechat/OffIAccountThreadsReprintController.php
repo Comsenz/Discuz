@@ -350,8 +350,8 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
 
         $str = '<p style="text-align: center;">
                     <a target="_blank" href="%s" tab="outerlink" data-linktype="2">
-                        <img class="rich_pages js_insertlocalimg" data-ratio="0.625" data-s="300,640" data-src="%s" data-type="png" data-w="1280" style=""/>
-                        点击跳转视频原地址
+                        <img class="rich_pages js_insertlocalimg" data-ratio="0.625" data-s="300,640" data-src="%s" data-type="png" data-w="1280" style="width: 300px !important"/>
+                        <p style="text-align: center">点击跳转视频原地址</p>
                     </a>
                </p>';
 
