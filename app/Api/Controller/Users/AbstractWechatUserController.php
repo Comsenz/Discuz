@@ -112,6 +112,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                 );
                 $wechatUser->user_id = $user->id;
                 $wechatUser->save();
+                $wechatUser->setRelation('user', $user);
             }
         }
 
