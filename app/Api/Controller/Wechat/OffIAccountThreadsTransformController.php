@@ -142,9 +142,10 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
         $regexVideo = '/<iframe[\s\S]*?data-src="(?<video>.*?)">\s*<\/iframe>/iu';
         if (preg_match_all($regexVideo, $this->content, $matchContent)) {
             // 匹配替换 Video 标签
-            collect($matchContent['video'])->each(function ($item, $key) use ($matchContent) {
+            $matchContentShift = array_shift($matchContent);
+            collect($matchContent['video'])->each(function ($item, $key) use ($matchContentShift) {
                 $label = '<video src="' . $item . '"></video>';
-                $this->content = str_replace($matchContent[$key], $label, $this->content);
+                $this->content = str_replace($matchContentShift[$key], $label, $this->content);
             });
         }
 
