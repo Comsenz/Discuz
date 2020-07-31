@@ -21,6 +21,9 @@ namespace App\Api\Controller\Settings;
 use App\Api\Serializer\ForumSettingSerializer;
 use App\Models\User;
 use Discuz\Api\Controller\AbstractResourceController;
+use Discuz\Contracts\Setting\SettingsRepository;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -37,11 +40,39 @@ class ForumSettingsController extends AbstractResourceController
     public $optionalInclude = ['users'];
 
     /**
+     * @var SettingsRepository
+     */
+    public $settings;
+
+    /**
+     * @param SettingsRepository $settings
+     */
+    public function __construct(SettingsRepository $settings)
+    {
+        $this->settings = $settings;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $data = [];
+        $filter = $this->extractFilter($request);
+
+        $tag = Str::of(Arr::get($filter, 'tag', ''))->replace(' ', '')->explode(',')->filter();
+
+        if ($tag->contains('agreement')) {
+            $agreement = $this->settings->tag('agreement') ?? [];
+
+            $data['agreement'] = [
+                'privacy' => (bool) ($agreement['privacy'] ?? false),
+                'privacy_content' => $agreement['privacy_content'] ?? '',
+                'register' => (bool) ($agreement['register'] ?? false),
+                'register_content' => $agreement['register_content'] ?? '',
+            ];
+        } else {
+            $data = [];
+        }
 
         if (in_array('users', $this->extractInclude($request))) {
             $data['users'] = User::orderBy('created_at', 'desc')->limit(5)->get(['id', 'username', 'avatar']);
