@@ -188,7 +188,7 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
 
             $attachment = new Attachment;
             try {
-                collect($matchContent['src'])->each(function ($item) use ($attachment, $build) {
+                collect($matchContent['src'])->each(function ($item) use ($attachment, $build, $post) {
                     $model = clone $attachment;
                     $result = $this->uploadImg($item);
                     $build = array_merge($build, $result, [
@@ -199,6 +199,12 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
                     ]);
                     $model->setRawAttributes($build);
                     $model->save();
+
+                    // 把 img 标签过滤去掉
+                    $replaceImg = '/<p\s*style="text-align:\s*center;"><img[\s\S]*?\/><\/p>/iu';
+                    $this->content = preg_replace($replaceImg, '', $this->content);
+                    $post->content = $this->content;
+                    $post->save();
                 });
             } catch (\Exception $e) {
                 // 删除主题和帖子
