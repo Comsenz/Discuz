@@ -106,7 +106,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
             if ($this->settings->get('register_type') == 2) {
                 $data['code'] = Arr::get($request->getQueryParams(), 'inviteCode');
                 $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
-                $data['register_reason'] = '公众号网页注册';
+                $data['register_reason'] = trans('user.register_by_wechat_h5');
                 $user = $this->bus->dispatch(
                     new AutoRegisterUser($request->getAttribute('actor'), $data)
                 );

@@ -22,9 +22,7 @@ use App\Censor\Censor;
 use App\Censor\CensorNotPassedException;
 use App\Events\Users\Registered;
 use App\Events\Users\Saving;
-use App\Exceptions\TranslatorException;
 use App\Models\User;
-use App\Validators\UserValidator;
 use Carbon\Carbon;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\EventsDispatchTrait;
@@ -77,7 +75,7 @@ class AutoRegisterUser
 
         // 审核模式，设置注册为审核状态
         if ($settings->get('register_validate')) {
-            $this->data['register_reason'] = $this->data['register_reason'] ?: 'auto register';
+            $this->data['register_reason'] = $this->data['register_reason'] ?: trans('user.register_by_auto');
             $this->data['status'] = 2;
         }
 

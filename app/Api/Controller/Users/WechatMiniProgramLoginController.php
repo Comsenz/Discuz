@@ -130,7 +130,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             //注册邀请码
             $data['code'] = Arr::get($attributes, 'code');
             $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
-            $data['register_reason'] = '微信小程序注册';
+            $data['register_reason'] = trans('user.register_by_wechat_miniprogram');
             $user = $this->bus->dispatch(
                 new AutoRegisterUser($request->getAttribute('actor'), $data)
             );
