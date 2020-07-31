@@ -241,14 +241,14 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
          */
         $fileName = Str::random(40) . '.png';
         $filePath = $this->upload->getPath();
-        $this->upload->put($this->attachmentType, $img, $fileName, $filePath);
+        $complete = $filePath . $fileName;
+        $this->upload->put($this->attachmentType, $img, $fileName, $complete);
 
         /**
          * 判断是否开启 Cos
          */
         if (!$isRemote = $this->upload->isRemote()) {
             // 图片存入本地
-            $complete = $filePath . $fileName;
             $this->filesystem->put($complete, $img);
             $absolutePath = $this->filesystem->path($complete);
 

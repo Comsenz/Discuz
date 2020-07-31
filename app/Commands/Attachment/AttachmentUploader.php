@@ -114,7 +114,7 @@ class AttachmentUploader
             ], $options);
         }
 
-        $this->filesystem->put($path . $fileName, $file, $options);
+        $this->filesystem->put($path, $file, $options);
     }
 
     /**
