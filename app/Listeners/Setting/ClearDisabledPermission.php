@@ -52,6 +52,11 @@ class ClearDisabledPermission
             Permission::query()->where('permission', 'publishNeedBindPhone')->delete();
         }
 
+        // 关闭微信支付时，清除 「发布付费贴和被支付」权限
+        if (! $this->settings->get('wxpay', 'wxpay_close')) {
+            Permission::query()->where('permission', 'createThreadPaid')->delete();
+        }
+
         // 关闭腾讯云实名认证时，清除「发布内容需先实名认证」权限
         if (! $this->settings->get('qcloud_faceid', 'qcloud')) {
             Permission::query()->where('permission', 'publishNeedRealName')->delete();

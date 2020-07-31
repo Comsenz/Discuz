@@ -79,6 +79,7 @@ class ThreadSerializer extends AbstractSerializer
             'canDelete'         => $gate->allows('delete', $model),
             'canHide'           => $gate->allows('hide', $model),
             'canEdit'           => $gate->allows('edit', $model),
+            'canCreateThreadPaid' => $model->user->can('createThreadPaid'),
         ];
 
         if ($model->deleted_at) {
