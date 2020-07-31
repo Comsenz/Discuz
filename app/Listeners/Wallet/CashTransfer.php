@@ -100,7 +100,7 @@ class CashTransfer
         $user_id = $event->cash_record->user_id;
         $user_wecaht = User::findOrfail($user_id)->wechat;
         if ($user_wecaht && $user_wecaht->mp_openid) {
-            $openid = $user_wecaht->min_openid;
+            $openid = $user_wecaht->mp_openid;
             $config['app_id'] = $offiaccount_app_id;
         } elseif ($user_wecaht && $user_wecaht->min_openid) {
             $openid = $user_wecaht->min_openid;
