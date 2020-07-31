@@ -29,6 +29,6 @@ return [
 
     'cash_operate_desc'         => '提现',
 
-    'unbind_wechat'         => '未绑定微信',
+    'unbind_wechat'         => '请绑定微信后再进行操作',
 
 ];
