@@ -49,12 +49,7 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
     /**
      * {@inheritdoc}
      */
-    public $include = [
-        'user',
-        'firstPost',
-        'firstPost.images',
-        'threadVideo',
-    ];
+    public $include = [];
 
     /**
      * @var Dispatcher
@@ -186,7 +181,6 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
         $regex = '/data-s="(\w|,|.){0,9}"\s*data-src="(?<src>.*?)"\s*data-type="/iu';
         if (preg_match_all($regex, $this->content, $matchContent)) {
             $build = [
-                'uuid' => Str::uuid(),
                 'user_id' => $actor->id,
                 'ip' => $ip,
                 'type_id' => $postId,
@@ -197,7 +191,12 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
                 collect($matchContent['src'])->each(function ($item) use ($attachment, $build) {
                     $model = clone $attachment;
                     $result = $this->uploadImg($item);
-                    $build = array_merge($build, $result);
+                    $build = array_merge($build, $result, [
+                        'uuid' => Str::uuid(),
+                        'attachment' => $result['file_name'],
+                        'file_type' => 'image/png',
+                        'file_size' => $result['file_size'],
+                    ]);
                     $model->setRawAttributes($build);
                     $model->save();
                 });
@@ -262,6 +261,8 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
             'type' => $this->attachmentType,
             'is_remote' => $isRemote,
             'file_path' => $filePath,
+            'file_name' => $fileName,
+            'file_size' => Str::length($img), // 二进制长度 = 图片大小
         ];
     }
 }
