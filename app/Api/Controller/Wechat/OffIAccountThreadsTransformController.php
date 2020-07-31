@@ -138,13 +138,30 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
         $material = array_shift($response['news_item']);
         $this->content = $material['content'];
 
+        // 匹配公众号所有图片
+        // $regex = '/data-s="(\w|,|.){0,9}"\s*data-src="(?<src>.*?)"\s*data-type="/iu';
+        // if (preg_match_all($regex, $this->content, $matchContent)) {
+        //     try {
+        //         collect($matchContent['src'])->each(function ($item) {
+        //             // 把 img 标签过滤去掉
+        //             $replaceImg = '/<p\s*style="text-align:\s*center;"><img[\s\S]*?\/><\/p>/iu';
+        //             $this->content = preg_replace($replaceImg, '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@', $this->content);
+        //             dd($this->content);
+        //             // $post->content = $this->content;
+        //             // $post->save();
+        //             dd($this->content);
+        //         });
+        //     } catch (\Exception $e) {
+        //         throw new \Exception('asset_transform_error');
+        //     }
+        // }
+
         // 检测是否有视频 替换成 Video 标签
         $regexVideo = '/<iframe[\s\S]*?data-src="(?<video>.*?)">\s*<\/iframe>/iu';
         if (preg_match_all($regexVideo, $this->content, $matchContent)) {
             // 匹配替换 Video 标签
             collect($matchContent['video'])->each(function ($item, $key) use ($matchContent) {
-                $label = '<video>';
-                $label .= $item . '</video>';
+                $label = '<video src="' . $item . '"></video>';
                 $this->content = str_replace($matchContent[$key], $label, $this->content);
             });
         }
@@ -202,7 +219,7 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
 
                     // 把 img 标签过滤去掉
                     $replaceImg = '/<p\s*style="text-align:\s*center;"><img[\s\S]*?\/><\/p>/iu';
-                    $this->content = preg_replace($replaceImg, '', $this->content);
+                    $this->content = preg_replace($replaceImg, '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@', $this->content);
                     $post->content = $this->content;
                     $post->save();
                 });
@@ -243,7 +260,7 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
         /**
          * 判断是否开启 Cos
          */
-        if (! $isRemote = $this->upload->isRemote()) {
+        if (!$isRemote = $this->upload->isRemote()) {
             // 图片存入本地
             $complete = $filePath . $fileName;
             $this->filesystem->put($complete, $img);
