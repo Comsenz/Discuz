@@ -136,6 +136,8 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
         }
 
         $material = array_shift($response['news_item']);
+        $materialUrl = $material['url'];
+        $materialUrl = str_replace('_', '\_', $materialUrl);
         $this->content = $material['content'];
 
         // 检测是否有视频 替换成 Video 标签
@@ -143,8 +145,9 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
         if (preg_match_all($regexVideo, $this->content, $matchContent)) {
             // 匹配替换 Video 标签
             $matchContentShift = array_shift($matchContent);
-            collect($matchContent['video'])->each(function ($item, $key) use ($matchContentShift) {
-                $label = '<video src="' . $item . '"></video>';
+            collect($matchContent['video'])->each(function ($item, $key) use ($matchContentShift, $materialUrl) {
+                $label = '<a target="_blank" href="%s">跳转到原文播放视频</a>';
+                $label = sprintf($label, $materialUrl);
                 $this->content = str_replace($matchContentShift[$key], $label, $this->content);
             });
         }
@@ -205,8 +208,6 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
                     $this->content = preg_replace($replaceImg, '', $this->content);
                     $replaceImages = '/<p><img[\s\S]*?\/>/iu';
                     $this->content = preg_replace($replaceImages, '', $this->content);
-                    $post->content = $this->content;
-                    $post->save();
                 });
             } catch (\Exception $e) {
                 // 删除主题和帖子
