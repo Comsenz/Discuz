@@ -31,13 +31,13 @@ export default {
         url:'forum',
         method:'get',
         data:{
-
+          'filter[tag]': 'agreement'
         }
       }).then(res=>{
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
-          const regData = res.readdata._data.set_reg;
+          const agreement = res.readdata._data.agreement;
           // this.pwdLength = res.readdata._data.setreg.password_length
           this.checked = res.readdata._data.set_reg.register_close;
           this.register_validate = res.readdata._data.set_reg.register_validate;
@@ -45,10 +45,10 @@ export default {
           this.checkList = res.readdata._data.set_reg.password_strength;
           this.register_captcha = res.readdata._data.set_reg.register_captcha;
           this.register_type = res.readdata._data.set_reg.register_type;
-          this.agreement_privacy = regData.privacy;
-          this.agreement_register = regData.register;
-          this.agreement_register_content = regData.register_content;
-          this.agreement_privacy_content = regData.privacy_content;
+          this.privacy = agreement.privacy ? "1" : "0";
+          this.register = agreement.register ? "1" : "0";
+          this.register_content = agreement.register_content;
+          this.privacy_content = agreement.privacy_content;
           if(res.readdata._data.qcloud.qcloud_sms == true) {
 
             this.qcloud_sms = false
