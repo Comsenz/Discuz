@@ -205,7 +205,7 @@ class ForumSettingSerializer extends AbstractSerializer
             }
         }
 
-        return $attributes;
+        return $attributes + Arr::except($model, 'id');
     }
 
     public function getId($model)

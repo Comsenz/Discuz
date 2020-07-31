@@ -34,6 +34,7 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Events\Dispatcher as Events;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -95,8 +96,9 @@ abstract class AbstractWechatQyUserController extends AbstractResourceController
                 ));
                 $wechatUser->save();
             }
-            $data['username'] = $wechatUser->nickname;
+            $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
             $data['register_ip'] = ip($request->getServerParams());
+            $data['register_port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT');
             $registerWechatQyUser = $this->bus->dispatch(
                 new RegisterWechatQyUser($request->getAttribute('actor'), $data)
             );
