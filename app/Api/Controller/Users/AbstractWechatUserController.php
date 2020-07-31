@@ -98,12 +98,17 @@ abstract class AbstractWechatUserController extends AbstractResourceController
         /** @var UserWechat $wechatUser */
         $wechatUser = UserWechat::where($this->getType(), $wxuser->getId())->orWhere('unionid', Arr::get($wxuser->getRaw(), 'unionid'))->first();
 
-        if ($wechatUser && !$wechatUser->user) {
+        if (!$wechatUser || !$wechatUser->user) {
             //站点关闭
             $this->assertPermission((bool)$this->settings->get('register_close'));
 
             //如果开启无感登陆，自动注册用户
             if ($this->settings->get('register_type') == 2) {
+                if (!$wechatUser) {
+                    $wechatUser = new UserWechat();
+                }
+                $wechatUser->setRawAttributes($this->fixData($wxuser->getRaw(), $actor));
+
                 $data['code'] = Arr::get($request->getQueryParams(), 'inviteCode');
                 $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
                 $data['register_reason'] = trans('user.register_by_wechat_h5');
