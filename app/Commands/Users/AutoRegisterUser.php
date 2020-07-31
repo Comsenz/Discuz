@@ -55,6 +55,7 @@ class AutoRegisterUser
      */
     public function handle(Dispatcher $events, Censor $censor, SettingsRepository $settings)
     {
+        $this->events = $events;
         $request = app('request');
 
         $this->data['register_ip'] = ip($request->getServerParams());
@@ -86,7 +87,7 @@ class AutoRegisterUser
 
         $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_port', 'register_reason', 'status']));
 
-        $events->dispatch(
+        $this->events->dispatch(
             new Saving($user, $this->actor, $this->data)
         );
 

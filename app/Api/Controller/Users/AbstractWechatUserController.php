@@ -91,12 +91,12 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
         $driver = $this->socialite->driver($this->getDriver());
 
-        $user = $driver->user();
+        $wxuser = $driver->user();
 
         $actor = $request->getAttribute('actor');
 
         /** @var UserWechat $wechatUser */
-        $wechatUser = UserWechat::where($this->getType(), $user->getId())->orWhere('unionid', Arr::get($user->getRaw(), 'unionid'))->first();
+        $wechatUser = UserWechat::where($this->getType(), $wxuser->getId())->orWhere('unionid', Arr::get($wxuser->getRaw(), 'unionid'))->first();
 
         if ($wechatUser && !$wechatUser->user) {
             //站点关闭
@@ -122,7 +122,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                 'password' => ''
             ];
 
-            $data = $this->fixData($user->getRaw(), $actor);
+            $data = $this->fixData($wxuser->getRaw(), $actor);
             unset($data['user_id']);
             $wechatUser->setRawAttributes($data);
             $wechatUser->save();
@@ -138,19 +138,19 @@ abstract class AbstractWechatUserController extends AbstractResourceController
             return json_decode($response->getBody());
         }
 
-        $this->error($user, $actor, $wechatUser);
+        $this->error($wxuser, $actor, $wechatUser);
     }
 
     /**
-     * @param $user
+     * @param $wxuser
      * @param $actor
      * @param UserWechat $wechatUser
      * @return mixed
      * @throws NoUserException
      */
-    private function error($user, $actor, $wechatUser)
+    private function error($wxuser, $actor, $wechatUser)
     {
-        $rawUser = $user->getRaw();
+        $rawUser = $wxuser->getRaw();
 
         if (!$wechatUser) {
             $wechatUser = new UserWechat();
