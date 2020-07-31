@@ -96,14 +96,15 @@ class CashTransfer
         $miniprogram_app_id = $this->settings->get('miniprogram_app_id', 'wx_miniprogram');
         $offiaccount_app_id = $this->settings->get('offiaccount_app_id', 'wx_offiaccount');
 
-        //获取用户openid
+        //如果有公众号openid那么拿公众号appid提现，如果有小程序openid那么拿小程序appid提现
         $user_id = $event->cash_record->user_id;
         $user_wecaht = User::findOrfail($user_id)->wechat;
-
-        if ($user_wecaht && ($config['app_id'] == $miniprogram_app_id)) {
+        if ($user_wecaht && $user_wecaht->mp_openid) {
             $openid = $user_wecaht->min_openid;
-        } elseif ($user_wecaht && ($config['app_id'] == $offiaccount_app_id)) {
-            $openid = $user_wecaht->mp_openid;
+            $config['app_id'] = $offiaccount_app_id;
+        } elseif ($user_wecaht && $user_wecaht->min_openid) {
+            $openid = $user_wecaht->min_openid;
+            $config['app_id'] = $miniprogram_app_id;
         } else {
             $openid = '';
         }

@@ -28,4 +28,7 @@ return [
     'expend_artificial'         => '人工支出',
 
     'cash_operate_desc'         => '提现',
+
+    'unbind_wechat'         => '未绑定微信',
+
 ];

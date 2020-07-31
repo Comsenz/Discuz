@@ -77,6 +77,10 @@ class CreateUserWalletCash
         // 判断有没有权限执行此操作
         $this->assertCan($this->actor, 'cash.create');
 
+        if (!$this->actor->wechat) {
+            throw new WalletException('unbind_wechat');
+        }
+
         $this->data = collect(Arr::get($this->data, 'data.attributes'));
 
         $cash_setting = $setting->tag('cash');
