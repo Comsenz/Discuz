@@ -20,7 +20,7 @@ namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\TokenSerializer;
 use App\Commands\Users\GenJwtToken;
-use App\Commands\Users\RegisterWechatMiniProgramUser;
+use App\Commands\Users\AutoRegisterUser;
 use App\Events\Users\Logind;
 use App\Models\UserWechat;
 use App\Settings\SettingsRepository;
@@ -127,13 +127,12 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             //未绑定的用户注册
             $this->assertPermission((bool)$this->settings->get('register_close'));
 
+            //注册邀请码
             $data['code'] = Arr::get($attributes, 'code');
-            //用户名只允许15个字
             $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
-            $data['register_ip'] = ip($request->getServerParams());
-            $data['register_port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT');
+            $data['register_reason'] = '微信小程序注册';
             $user = $this->bus->dispatch(
-                new RegisterWechatMiniProgramUser($request->getAttribute('actor'), $data)
+                new AutoRegisterUser($request->getAttribute('actor'), $data)
             );
             $wechatUser->user_id = $user->id;
         }

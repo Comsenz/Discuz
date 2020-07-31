@@ -30,24 +30,13 @@ use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
-use Illuminate\Validation\ValidationException;
 
-class RegisterWechatMiniProgramUser
+class AutoRegisterUser
 {
     use EventsDispatchTrait;
 
-    /**
-     * The user performing the action.
-     *
-     * @var User
-     */
     public $actor;
 
-    /**
-     * The attributes of the new user.
-     *
-     * @var array
-     */
     public $data;
 
     /**
@@ -64,15 +53,15 @@ class RegisterWechatMiniProgramUser
      * @param Dispatcher $events
      * @param Censor $censor
      * @param SettingsRepository $settings
-     * @param UserValidator $validator
      * @return User
-     * @throws ValidationException
-     * @throws TranslatorException
      */
-    public function handle(Dispatcher $events, Censor $censor, SettingsRepository $settings, UserValidator $validator)
+    public function handle(Dispatcher $events, Censor $censor, SettingsRepository $settings)
     {
-        $this->events = $events;
+        $request = app('request');
 
+        $this->data['register_ip'] = ip($request->getServerParams());
+        $this->data['register_port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT');
+        //自动注册没有密码，后续用户可以设置密码
         $this->data['password'] = '';
 
         // 敏感词校验
@@ -88,7 +77,7 @@ class RegisterWechatMiniProgramUser
 
         // 审核模式，设置注册为审核状态
         if ($settings->get('register_validate')) {
-            $this->data['register_reason'] = '微信小程序注册';
+            $this->data['register_reason'] = $this->data['register_reason'] ?: 'auto register';
             $this->data['status'] = 2;
         }
 
@@ -99,7 +88,7 @@ class RegisterWechatMiniProgramUser
 
         $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_port', 'register_reason', 'status']));
 
-        $this->events->dispatch(
+        $events->dispatch(
             new Saving($user, $this->actor, $this->data)
         );
 

@@ -21,14 +21,18 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\TokenSerializer;
 use App\Api\Serializer\UserProfileSerializer;
 use App\Commands\Users\GenJwtToken;
+use App\Commands\Users\AutoRegisterUser;
 use App\Events\Users\Logind;
 use App\Exceptions\NoUserException;
 use App\Models\SessionToken;
 use App\Models\UserWechat;
+use App\Settings\SettingsRepository;
 use Discuz\Api\Controller\AbstractResourceController;
+use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Discuz\Contracts\Socialite\Factory;
@@ -37,6 +41,8 @@ use Illuminate\Contracts\Events\Dispatcher as Events;
 
 abstract class AbstractWechatUserController extends AbstractResourceController
 {
+    use AssertPermissionTrait;
+
     protected $socialite;
 
     protected $bus;
@@ -47,13 +53,16 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
     protected $events;
 
-    public function __construct(Factory $socialite, Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events)
+    protected $settings;
+
+    public function __construct(Factory $socialite, Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events, SettingsRepository $settings)
     {
         $this->socialite = $socialite;
         $this->bus = $bus;
         $this->cache = $cache;
         $this->validation = $validation;
         $this->events = $events;
+        $this->settings = $settings;
     }
 
     public $serializer = TokenSerializer::class;
@@ -86,7 +95,25 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
         $actor = $request->getAttribute('actor');
 
+        /** @var UserWechat $wechatUser */
         $wechatUser = UserWechat::where($this->getType(), $user->getId())->orWhere('unionid', Arr::get($user->getRaw(), 'unionid'))->first();
+
+        if ($wechatUser && !$wechatUser->user) {
+            //站点关闭
+            $this->assertPermission((bool)$this->settings->get('register_close'));
+
+            //如果开启无感登陆，自动注册用户
+            if ($this->settings->get('register_type') == 2) {
+                $data['code'] = Arr::get($request->getQueryParams(), 'inviteCode');
+                $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
+                $data['register_reason'] = '公众号网页注册';
+                $user = $this->bus->dispatch(
+                    new AutoRegisterUser($request->getAttribute('actor'), $data)
+                );
+                $wechatUser->user_id = $user->id;
+                $wechatUser->save();
+            }
+        }
 
         if ($wechatUser && $wechatUser->user) {
             //创建 token
