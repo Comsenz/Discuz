@@ -14,6 +14,7 @@ return [
     'user_has_deleted' => '该用户已删除',
     'user_update_error' => '修改信息失败',
     'not_match_used_password' => '原密码不匹配',
+    'cannot_use_the_same_password' => '新密码与原密码不能相同。',
     'username_error' => '用户名不能有特殊字符。',
     'identity_error' => '身份证为 15 位或 18 位。',
 

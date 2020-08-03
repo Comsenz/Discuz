@@ -106,9 +106,14 @@ class UpdateUser
             if ($isSelf) {
                 //小程序注册的账号密码为空，不验证旧密码
                 if ($this->actor->password != '') {
-                    $verifyPwd = $user->checkPassword(Arr::get($attributes, 'password'));
-                    if (!$verifyPwd) {
+                    // 验证原密码
+                    if (! $user->checkPassword(Arr::get($attributes, 'password'))) {
                         throw new TranslatorException('user_update_error', ['not_match_used_password']);
+                    }
+
+                    // 验证新密码与原密码不能相同
+                    if ($user->checkPassword($newPassword)) {
+                        throw new TranslatorException('user_update_error', ['cannot_use_the_same_password']);
                     }
                 }
 
