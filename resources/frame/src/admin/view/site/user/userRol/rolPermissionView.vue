@@ -82,6 +82,16 @@
       </CardRow>
     </Card>
 
+     <Card>
+      <CardRow description="允许发布付费内容、允许被打赏">
+        <el-checkbox
+          v-model="checked"
+          label="createThreadPaid"
+          :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7' || wechatPayment"
+        >发布付费内容</el-checkbox>
+      </CardRow>
+    </Card>
+
     <Card header="安全设置："></Card>
     <Card>
       <CardRow description="启用验证码需先在腾讯云设置中开启验证码服务">
