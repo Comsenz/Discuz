@@ -135,6 +135,11 @@ class Group extends Model
         return $this->hasMany(Permission::class);
     }
 
+    public function permissionWithoutCategories()
+    {
+        return $this->permission()->where('permission', 'not like', 'category%');
+    }
+
     /**
      * Check whether the group has a certain permission.
      *
