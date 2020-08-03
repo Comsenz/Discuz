@@ -87,7 +87,6 @@ class UserSerializer extends AbstractSerializer
             'registerReason'    => $model->register_reason,                 // 注册原因
             'banReason'         => '',                                      // 禁用原因
             'denyStatus'        => (bool)$model->denyStatus,
-            'canCreateThreadPaid'  => $gate->allows('createThreadPaid', $model), // 是否被打赏/付费权限
         ];
 
         $whitelist = [
