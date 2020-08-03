@@ -106,7 +106,9 @@ class Bind
         }
 
         //解密获取数据，更新/插入wechatUser
-        $wechatUser->user_id = $user->id ?: null;
+        if (!$wechatUser->user_id) {
+            $wechatUser->user_id = $user->id ?: null;
+        }
         $wechatUser->unionid = $unionid;
         $wechatUser->min_openid = $openid;
         $wechatUser->nickname = $decryptedData['nickName'];
