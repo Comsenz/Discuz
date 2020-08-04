@@ -35,6 +35,7 @@
               slot="reference"
               width="100"
               style="padding-right: 40px;"
+              v-if="scope.row.id"
               @click="permission(scope.row.id)"
               >设置权限</el-button
             >
