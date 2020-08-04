@@ -131,8 +131,10 @@ class ExportUserController implements RequestHandlerInterface
             $query->select(['id', 'user_id', 'name']);
         }])->get($userField);
 
-        return $users->map(function (User $user) use ($columnMap) {
-            $user->sex = ($user->sex == 1) ? '男' : '女';
+        $sex = ['', '男', '女'];
+
+        return $users->map(function (User $user) use ($columnMap, $sex) {
+            $user->sex = $sex[$user->wechat ? $user->wechat->sex : 0];
             if ($user->status == 0) {
                 $user->status = '正常';
             } elseif ($user->status == 1) {

@@ -47,7 +47,7 @@
 
                   <el-button type="danger" size="mini" @click="singleOperation('del',scope.row._data.id);scope._self.$refs[`popover-${scope.$index}`].doClose()" >确定</el-button>
                 </div>
-                <el-button type="text" slot="reference">删除</el-button>
+                <!-- <el-button type="text" slot="reference">删除</el-button> -->
               </el-popover>
             </template>
           </el-table-column>

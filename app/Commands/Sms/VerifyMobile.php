@@ -90,7 +90,6 @@ class VerifyMobile
 
     /**
      * @return mixed
-     * @throws PermissionDeniedException
      */
     protected function login()
     {
@@ -106,14 +105,23 @@ class VerifyMobile
             $this->mobileCode->setRelation('user', $user);
         }
 
+        //公众号绑定
         if ($token = Arr::get($this->params, 'token')) {
             $this->bind->wechat($token, $this->mobileCode->user);
-            // 判断是否开启了注册审核
             if (!(bool)$this->settings->get('register_validate')) {
                 // 在注册绑定微信后 发送注册微信通知
                 $this->mobileCode->user->notify(new System(WechatRegisterMessage::class));
             }
         }
+
+        //小程序绑定
+        if ($js_code = Arr::get($this->params, 'js_code') &&
+            $iv = Arr::has($this->params, 'iv') &&
+            $encryptedData = Arr::has($this->params, 'encryptedData')
+        ) {
+            $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $this->mobileCode->user);
+        }
+
 
         $this->events->dispatch(
             new Logind($this->mobileCode->user)

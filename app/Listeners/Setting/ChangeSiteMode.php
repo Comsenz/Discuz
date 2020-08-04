@@ -87,7 +87,7 @@ class ChangeSiteMode
 
     /**
      * @param Collection $settings
-     * @param Carbon $time
+     * @param Carbon|null $time
      */
     private function setChangeTime(Collection $settings, Carbon $time = null)
     {

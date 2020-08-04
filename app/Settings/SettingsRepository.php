@@ -69,7 +69,7 @@ class SettingsRepository implements ContractsSettingRepository
         }
 
         $this->all();
-        $this->settings->put($tag, array_merge($this->tag($tag), [$key => $value]));
+        $this->settings->put($tag, array_merge((array) $this->tag($tag), [$key => $value]));
 
         $query = Setting::where([['key', $key], ['tag', $tag]]);
 

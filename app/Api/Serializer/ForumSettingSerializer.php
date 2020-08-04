@@ -143,6 +143,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'can_view_user_list' => $this->actor->can('viewUserList'),
                 'can_edit_user_group' => $this->actor->can('user.edit.group'),
                 'can_create_invite' => $this->actor->can('createInvite'),
+                'can_create_thread_paid' => $this->actor->can('createThreadPaid'),
                 'create_thread_with_captcha' => ! $this->actor->isAdmin() && $this->actor->can('createThreadWithCaptcha'),
                 'publish_need_real_name' => ! $this->actor->isAdmin() && $this->actor->can('publishNeedRealName') && ! $this->actor->realname,
                 'publish_need_bind_phone' => ! $this->actor->isAdmin() && $this->actor->can('publishNeedBindPhone') && ! $this->actor->mobile,
@@ -205,7 +206,7 @@ class ForumSettingSerializer extends AbstractSerializer
             }
         }
 
-        return $attributes;
+        return $attributes + Arr::except($model, 'id');
     }
 
     public function getId($model)

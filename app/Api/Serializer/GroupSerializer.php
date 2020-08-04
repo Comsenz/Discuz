@@ -58,4 +58,9 @@ class GroupSerializer extends AbstractSerializer
     {
         return $this->hasMany($group, GroupPermissionSerializer::class);
     }
+
+    public function permissionWithoutCategories($group)
+    {
+        return $this->hasMany($group, GroupPermissionSerializer::class);
+    }
 }

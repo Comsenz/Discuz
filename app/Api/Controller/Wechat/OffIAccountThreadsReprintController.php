@@ -101,9 +101,17 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
      * @param SettingsRepository $settings
      * @param UrlGenerator $url
      * @param SpecialCharServer $specialChar
+     * @param Client $client
      */
-    public function __construct(ThreadRepository $thread, Filesystem $filesystem, ForumSettingField $forumField, SettingsRepository $settings, UrlGenerator $url, SpecialCharServer $specialChar, Client $client)
-    {
+    public function __construct(
+        ThreadRepository $thread,
+        Filesystem $filesystem,
+        ForumSettingField $forumField,
+        SettingsRepository $settings,
+        UrlGenerator $url,
+        SpecialCharServer $specialChar,
+        Client $client
+    ) {
         $this->thread = $thread;
         $this->filesystem = $filesystem;
         $this->forumField = $forumField;
@@ -118,6 +126,7 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
      * @param ServerRequestInterface $request
      * @return ResponseInterface
      * @throws PermissionDeniedException
+     * @throws \Exception
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
@@ -181,6 +190,8 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
 
         /**
          * Upload
+         * @var string $url
+         * @var string $fileName
          */
         $resultImg = $this->uploadAssetImg($url, $fileName, $field);
         $assetMediaId = Arr::get($resultImg, 'media_id');
@@ -358,5 +369,4 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
         $string = sprintf($str, $toUrl, $assetUrl);
         $this->content = $this->content . $string;
     }
-
 }

@@ -115,7 +115,10 @@ class EditThread
         if (isset($attributes['price']) && $thread->type !== Thread::TYPE_OF_TEXT) {
             $this->assertCan($this->actor, 'edit', $thread);
 
-            $thread->price = (float) $attributes['price'];
+            // 是否有权发布付费贴
+            if ($thread->price = (float) $attributes['price']) {
+                $this->assertCan($this->actor, 'createThreadPaid');
+            }
         }
 
         if ($thread->price > 0 && isset($attributes['free_words'])) {

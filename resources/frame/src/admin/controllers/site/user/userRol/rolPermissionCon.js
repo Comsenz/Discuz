@@ -13,6 +13,7 @@ export default {
       captchaDisabled: false,     // 是否开启验证码
       realNameDisabled: false,    // 是否开启实名认证
       bindPhoneDisabled: false,   // 是否开启短信验证
+      wechatPayment: false,       // 是否开启微信支付
     }
   },
   methods: {
@@ -36,13 +37,16 @@ export default {
           if (res.readdata._data.qcloud.qcloud_sms === false) {
             this.bindPhoneDisabled = true
           }
+          if (res.readdata._data.paycenter.wxpay_close === false) {
+             this.wechatPayment = true;
+          }
         }
       })
     },
     /*
     * 权限列表中英文对应拿到后，在页面的label中对应填写
     * */
-
+    
 
     submitClick() {
       this.patchGroupPermission();
@@ -98,7 +102,7 @@ export default {
       }).catch(err => {
       })
     }
-
+   
   },
   created() {
     this.getGroupResource();

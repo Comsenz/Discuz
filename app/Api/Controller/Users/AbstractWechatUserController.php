@@ -21,14 +21,18 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\TokenSerializer;
 use App\Api\Serializer\UserProfileSerializer;
 use App\Commands\Users\GenJwtToken;
+use App\Commands\Users\AutoRegisterUser;
 use App\Events\Users\Logind;
 use App\Exceptions\NoUserException;
 use App\Models\SessionToken;
 use App\Models\UserWechat;
+use App\Settings\SettingsRepository;
 use Discuz\Api\Controller\AbstractResourceController;
+use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Discuz\Contracts\Socialite\Factory;
@@ -37,6 +41,8 @@ use Illuminate\Contracts\Events\Dispatcher as Events;
 
 abstract class AbstractWechatUserController extends AbstractResourceController
 {
+    use AssertPermissionTrait;
+
     protected $socialite;
 
     protected $bus;
@@ -47,13 +53,16 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
     protected $events;
 
-    public function __construct(Factory $socialite, Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events)
+    protected $settings;
+
+    public function __construct(Factory $socialite, Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events, SettingsRepository $settings)
     {
         $this->socialite = $socialite;
         $this->bus = $bus;
         $this->cache = $cache;
         $this->validation = $validation;
         $this->events = $events;
+        $this->settings = $settings;
     }
 
     public $serializer = TokenSerializer::class;
@@ -82,11 +91,35 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
         $driver = $this->socialite->driver($this->getDriver());
 
-        $user = $driver->user();
+        $wxuser = $driver->user();
 
         $actor = $request->getAttribute('actor');
 
-        $wechatUser = UserWechat::where($this->getType(), $user->getId())->orWhere('unionid', Arr::get($user->getRaw(), 'unionid'))->first();
+        /** @var UserWechat $wechatUser */
+        $wechatUser = UserWechat::where($this->getType(), $wxuser->getId())->orWhere('unionid', Arr::get($wxuser->getRaw(), 'unionid'))->first();
+
+        if (!$wechatUser || !$wechatUser->user) {
+            //站点关闭
+            $this->assertPermission((bool)$this->settings->get('register_close'));
+
+            //如果开启无感登陆，自动注册用户
+            if ($this->settings->get('register_type') == 2) {
+                if (!$wechatUser) {
+                    $wechatUser = new UserWechat();
+                }
+                $wechatUser->setRawAttributes($this->fixData($wxuser->getRaw(), $actor));
+
+                $data['code'] = Arr::get($request->getQueryParams(), 'inviteCode');
+                $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
+                $data['register_reason'] = trans('user.register_by_wechat_h5');
+                $user = $this->bus->dispatch(
+                    new AutoRegisterUser($request->getAttribute('actor'), $data)
+                );
+                $wechatUser->user_id = $user->id;
+                $wechatUser->save();
+                $wechatUser->setRelation('user', $user);
+            }
+        }
 
         if ($wechatUser && $wechatUser->user) {
             //创建 token
@@ -95,7 +128,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                 'password' => ''
             ];
 
-            $data = $this->fixData($user->getRaw(), $actor);
+            $data = $this->fixData($wxuser->getRaw(), $actor);
             unset($data['user_id']);
             $wechatUser->setRawAttributes($data);
             $wechatUser->save();
@@ -111,19 +144,19 @@ abstract class AbstractWechatUserController extends AbstractResourceController
             return json_decode($response->getBody());
         }
 
-        $this->error($user, $actor, $wechatUser);
+        $this->error($wxuser, $actor, $wechatUser);
     }
 
     /**
-     * @param $user
+     * @param $wxuser
      * @param $actor
      * @param UserWechat $wechatUser
      * @return mixed
      * @throws NoUserException
      */
-    private function error($user, $actor, $wechatUser)
+    private function error($wxuser, $actor, $wechatUser)
     {
-        $rawUser = $user->getRaw();
+        $rawUser = $wxuser->getRaw();
 
         if (!$wechatUser) {
             $wechatUser = new UserWechat();

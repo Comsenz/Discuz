@@ -41,7 +41,7 @@ export default {
     },
     loginSetting(index,type,status){
       if (status == 0 && this.siteMode == 'pay') {
-        this.$confirm('您当前开启了付费模式，若关闭微信支付，站点模式将切换为公开模式', {
+        this.$confirm('您当前开启了付费模式，若关闭微信支付，站点模式将切换为公开模式，若您在用户角色中设置了允许发布付费内容，关闭微信支付服务将同时清空该设置', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -51,7 +51,17 @@ export default {
             this.siteMode = 'public';
             this.changeSettings('site_mode',this.siteMode,'default','false');
           }
-      })
+        })
+      } else if (status == 0 && this.siteMode == 'public') {
+        this.$confirm('若您在用户角色中设置了允许发布付费内容，关闭微信支付服务将同时清空该设置', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if(type == 'wxpay_close') {
+            this.changeSettings('wxpay_close',status,'wxpay','true');
+          }
+        })
       } else {
         if(type == 'wxpay_close') {
           this.changeSettings('wxpay_close',status,'wxpay', 'true');
