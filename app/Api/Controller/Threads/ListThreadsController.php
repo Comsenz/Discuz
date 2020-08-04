@@ -159,6 +159,7 @@ class ListThreadsController extends AbstractListController
         ]);
 
         Thread::setStateUser($actor, $threads);
+        Post::setStateUser($actor);
 
         // 特殊关联：最新三条回复
         if (in_array('lastThreePosts', $include)) {

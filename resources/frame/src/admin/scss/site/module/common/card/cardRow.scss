@@ -26,3 +26,12 @@
 
   }
 }
+//满屏输入框
+.card-box.fullScreen {
+  .card-row-lf {
+    width:100%;
+  }
+  .card-row-rf{
+    display: none;
+  }
+}

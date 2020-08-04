@@ -30,4 +30,7 @@ return [
     'expend_block'              => '块付费支出',
 
     'cash_operate_desc'         => '提现',
+
+    'unbind_wechat'         => '请绑定微信后再进行操作',
+
 ];

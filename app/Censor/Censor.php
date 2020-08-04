@@ -179,7 +179,7 @@ class Censor
             ->cursor()
             ->tapEach(function ($word) use (&$content, $type) {
                 // 转义元字符并生成正则
-                $find = '/' . addcslashes($word->find, '\/^$()[]{}|+?.*') . '/i';
+                $find = '/' . addcslashes($word->find, '\/^$()[]{}|+?.*') . '/iu';
 
                 // 将 {n} 转换为 .{0,n}（当 n 为 0 - 99 时）
                 $find = preg_replace('/\\\{(\d{1,2})\\\}/', '.{0,${1}}', $find);

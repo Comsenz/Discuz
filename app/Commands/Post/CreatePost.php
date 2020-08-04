@@ -166,7 +166,8 @@ class CreatePost
                 }
 
                 // 检查是否在同一主题下的
-                $this->replyUserId = $post->where('id', $this->replyPostId)
+                $this->replyUserId = $post->newQuery()
+                    ->where('id', $this->replyPostId)
                     ->where('thread_id', $thread->id)
                     ->value('user_id');
 
@@ -200,9 +201,9 @@ class CreatePost
 
         // 存在审核敏感词时，将回复内容放入待审核
         if ($isMod) {
-            $post->is_approved = 0;
+            $post->is_approved = Post::UNAPPROVED;
         } else {
-            $post->is_approved = 1;
+            $post->is_approved = Post::APPROVED;
         }
 
         $post->raise(new Created($post, $this->actor, $this->data));
@@ -216,7 +217,7 @@ class CreatePost
         $post->save();
 
         // 记录触发的审核词
-        if ($post->is_approved == 0 && $censor->wordMod) {
+        if ($post->is_approved === Post::UNAPPROVED && $censor->wordMod) {
             $stopWords = new PostMod;
             $stopWords->stop_word = implode(',', array_unique($censor->wordMod));
 

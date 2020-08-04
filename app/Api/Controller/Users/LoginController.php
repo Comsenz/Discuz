@@ -66,6 +66,7 @@ class LoginController extends AbstractResourceController
      * @param Document $document
      * @return array|mixed
      * @throws ValidationException
+     * @throws \Discuz\Socialite\Exception\SocialiteException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -83,8 +84,16 @@ class LoginController extends AbstractResourceController
         if ($response->getStatusCode() === 200) {
             $user = $this->app->make(UserRepository::class)->getUser();
 
+            //绑定公众号信息
             if ($token = Arr::get($data, 'token')) {
                 $this->bind->wechat($token, $user);
+            }
+
+            //绑定小程序信息
+            if ($js_code = Arr::get($data, 'js_code') &&
+                $iv = Arr::has($data, 'iv') &&
+                $encryptedData = Arr::has($data, 'encryptedData')) {
+                $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $user);
             }
 
             $this->events->dispatch(new Logind($user));

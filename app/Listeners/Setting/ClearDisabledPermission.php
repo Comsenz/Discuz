@@ -42,9 +42,13 @@ class ClearDisabledPermission
      */
     public function handle(Saved $event)
     {
-        // 关闭微信支付时，站点模式设为公开模式
+        // 关闭微信支付时
         if (! $this->settings->get('wxpay_close', 'wxpay')) {
+            // 站点模式设为公开模式
             $this->settings->set('site_mode', 'public');
+
+            // 清除 「发布付费贴和被支付」权限
+            Permission::query()->where('permission', 'createThreadPaid')->delete();
         }
 
         // 关闭腾讯云短信时，清除「发布内容需先绑定手机」权限
