@@ -163,38 +163,7 @@ class EditThread
             new Saving($thread, $this->actor, $this->data)
         );
 
-        $type = $thread->type;
-        $validAttr = $thread->getDirty() + compact('type');
-        //视频贴验证是否上传视频
-        $file_id = Arr::get($this->data, 'attributes.file_id');
-        $file_name = Arr::get($this->data, 'attributes.file_name');
-
-        if ($file_id !== null || $file_name !== null) {
-            $validAttr += compact('file_id', 'file_name');
-        }
-        $validator->valid($validAttr);
-
-        //编辑视频
-        if ($thread->type == Thread::TYPE_OF_VIDEO && $file_id) {
-            /** @var ThreadVideo $threadVideo */
-            $threadVideo = $threadVideos->findOrFailByThreadId($thread->id);
-
-            if ($threadVideo->file_id != $attributes['file_id']) {
-                // 将旧的视频主题 id 设为 0
-                $threadVideo->thread_id = 0;
-                $threadVideo->save();
-
-                // 创建新的视频记录
-                $video = $bus->dispatch(
-                    new CreateThreadVideo($this->actor, $thread, $this->data)
-                );
-
-                $thread->setRelation('threadVideo', $video);
-
-                // 重新上传视频修改为审核状态
-                $thread->is_approved = Thread::UNAPPROVED;
-            }
-        }
+        $validator->valid($thread->getDirty());
 
         $thread->save();
 

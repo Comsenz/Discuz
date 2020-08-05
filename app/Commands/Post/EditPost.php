@@ -20,11 +20,14 @@ namespace App\Commands\Post;
 
 use App\BlockEditor\BlocksParser;
 use App\Censor\Censor;
+use App\Commands\Thread\CreateThreadVideo;
 use App\Events\Post\PostWasApproved;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
 use App\Models\Post;
 use App\Models\PostMod;
+use App\Models\Thread;
+use App\Models\ThreadVideo;
 use App\Models\User;
 use App\Repositories\PostRepository;
 use App\Validators\PostValidator;
@@ -93,11 +96,36 @@ class EditPost
         if (isset($attributes['content'])) {
             $this->assertCan($this->actor, 'edit', $post);
 
+            //解析内容，检查块各类型权限，检查内容敏感词，检查数据正确性
             $BlocksParser = new BlocksParser(collect(Arr::get($this->data, 'attributes.content')), $post);
             $content = $BlocksParser->parse();
+            $blocksTypeList = $BlocksParser->BlocksTypeList();
+
             // 存在审核敏感词时，将主题放入待审核
             if ($censor->isMod) {
                 $post->is_approved = Post::UNAPPROVED;
+            }
+
+            //编辑视频
+            if (Arr::has($blocksTypeList, 'video')) {
+                /** @var ThreadVideo $threadVideo */
+                $threadVideo = $post->thread->threadVideos->findOrFailByThreadId($thread->id);
+
+                if ($threadVideo->file_id != $attributes['file_id']) {
+                    // 将旧的视频主题 id 设为 0
+                    $threadVideo->thread_id = 0;
+                    $threadVideo->save();
+
+                    // 创建新的视频记录
+                    $video = $bus->dispatch(
+                        new CreateThreadVideo($this->actor, $thread, $this->data)
+                    );
+
+                    $thread->setRelation('threadVideo', $video);
+
+                    // 重新上传视频修改为审核状态
+                    $thread->is_approved = Thread::UNAPPROVED;
+                }
             }
 
             $post->revise($content, $this->actor);
