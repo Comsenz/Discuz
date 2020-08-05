@@ -207,6 +207,16 @@ return [
         'horizontal_spacing'    => '水印水平边距',
         'vertical_spacing'      => '水印垂直边距',
 
+        // settings - wxpay
+
+
+        // settings - qcloud
+        'qcloud_captcha_app_id'         => '腾讯云验证码 AppId',
+        'qcloud_captcha_secret_key'     => '腾讯云验证码 App Secret Key',
+
+        'qcloud_cos_bucket_name'        => '腾讯云 COS 桶名',
+        'qcloud_cos_bucket_area'        => '腾讯云 COS 地域',
+
         // sms
         'sms_code'              => '验证码',
         'sms_type' => '验证码类型',
