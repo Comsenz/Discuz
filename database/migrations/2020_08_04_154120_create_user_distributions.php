@@ -3,7 +3,7 @@
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateUserDistributes extends Migration
+class CreateUserDistributions extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateUserDistributes extends Migration
      */
     public function up()
     {
-        $this->schema()->create('user_distributes', function (Blueprint $table) {
+        $this->schema()->create('user_distributions', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('pid')->nullable()->comment('父级id');

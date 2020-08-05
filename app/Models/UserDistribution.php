@@ -36,7 +36,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon updated_at
  * @property Carbon created_at
  */
-class UserDistribute extends Model
+class UserDistribution extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;

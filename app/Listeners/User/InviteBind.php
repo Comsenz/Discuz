@@ -21,7 +21,7 @@ namespace App\Listeners\User;
 use App\Events\Users\Registered;
 use App\Models\Group;
 use App\Models\Invite;
-use App\Models\UserDistribute;
+use App\Models\UserDistribution;
 use App\Models\UserFollow;
 use App\Repositories\InviteRepository;
 use Carbon\Carbon;
@@ -94,7 +94,7 @@ class InviteBind
                         ]);
 
                         // 建立上下级关系
-                        UserDistribute::query()->create([
+                        UserDistribution::query()->create([
                             'pid' => $invite->user_id,
                             'user_id' => $event->user->id,
                             'invites_code' => $code,
