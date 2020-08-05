@@ -8,6 +8,8 @@ namespace App\BlockEditor\Blocks;
 
 use App\BlockEditor\Exception\BlockInvalidException;
 use App\Censor\Censor;
+use App\Models\Post;
+use App\Models\PostMod;
 use App\Models\Topic;
 use App\Models\User;
 use Discuz\SpecialChar\SpecialCharServer;
@@ -26,6 +28,13 @@ class TextBlock extends BlockAbstract
         $this->data['value'] = $censor->checkText($this->data['value']);
         if ($censor->isMod) {
             $this->data['isMod'] = true;
+            // 记录触发的审核词
+            if ($censor->wordMod) {
+                $stopWords = new PostMod;
+                $stopWords->stop_word = implode(',', array_unique($censor->wordMod));
+
+                $this->post->stopWords()->save($stopWords);
+            }
         }
 
         //转义、过滤内容
