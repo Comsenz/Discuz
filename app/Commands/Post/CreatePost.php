@@ -33,9 +33,11 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Exception;
+use Franzl\Middleware\Whoops\Formats\Json;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 
 class CreatePost
@@ -43,11 +45,8 @@ class CreatePost
     use AssertPermissionTrait;
     use EventsDispatchTrait;
 
-    /**
-     * The id of the thread.
-     *
-     * @var int
-     */
+    public $blocks;
+
     public $threadId;
 
     /**
@@ -93,14 +92,16 @@ class CreatePost
     public $port;
 
     /**
+     * @param Collection $blocks
      * @param int $threadId
      * @param User $actor
      * @param array $data
      * @param string $ip
      * @param int $port
      */
-    public function __construct($threadId, User $actor, array $data, $ip, $port)
+    public function __construct($blocks, $threadId, User $actor, array $data, $ip, $port)
     {
+        $this->blocks = $blocks;
         $this->threadId = $threadId;
         $this->replyPostId = Arr::get($data, 'attributes.replyId', null);
         $this->actor = $actor;
@@ -130,8 +131,7 @@ class CreatePost
 
         $isComment = (bool) Arr::get($this->data, 'attributes.isComment');
 
-        $BlocksParser = new BlocksParser(collect(Arr::get($this->data, 'attributes.content')), $post);
-        $content = $BlocksParser->parse();
+        $content = $this->blocks;
 
         $isMod = false;
         foreach ($content->get('blocks') as $block) {

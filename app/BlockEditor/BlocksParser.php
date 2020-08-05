@@ -48,6 +48,27 @@ class BlocksParser
     }
 
     /**
+     * 获取块类型列表
+     * @return array
+     */
+    public function BlocksTypeList()
+    {
+        $typeList = [];
+        if (!empty($this->data->get('blocks'))) {
+            foreach ($this->data->get('blocks') as $block) {
+                $typeList[] = Arr::get($block, 'type');
+                if (isset($data['child'])) {
+                    foreach ($block['child'] as $payValue) {
+                        $typeList[] = Arr::get($payValue, 'type');
+                    }
+                }
+            }
+        }
+
+        return array_unique($typeList);
+    }
+
+    /**
      * @param $blocks
      * @param int $level json解析的最大层级数
      * @return mixed

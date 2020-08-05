@@ -18,10 +18,12 @@
 
 namespace App\Commands\Thread;
 
+use App\BlockEditor\BlocksParser;
 use App\Censor\Censor;
 use App\Commands\Post\CreatePost;
 use App\Events\Thread\Created;
 use App\Events\Thread\Saving;
+use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\User;
@@ -98,38 +100,19 @@ class CreateThread
     {
         $this->events = $events;
 
-        $thread->type = (int) Arr::get($this->data, 'attributes.type', Thread::TYPE_OF_TEXT);
+        //解析内容，检查块各类型权限，检查内容敏感词，检查数据正确性
+        $BlocksParser = new BlocksParser(collect(Arr::get($this->data, 'attributes.content')), new Post());
+        $blocks = $BlocksParser->parse();
+        $blocksTypeList = $BlocksParser->BlocksTypeList();
 
-        $this->canCreateThread($thread->type);
-
-        // 敏感词校验
         $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
-
-        // 存在审核敏感词/发布视频主题时，将主题放入待审核
-        if ($censor->isMod || $thread->type == Thread::TYPE_OF_VIDEO) {
+        if ($censor->isMod || in_array('video', $blocksTypeList)) {
+            //存在审核敏感词/存在视频块时，将主题放入待审核
             $thread->is_approved = Thread::UNAPPROVED;
         }
-
+        $thread->title = $title;
         $thread->user_id = $this->actor->id;
         $thread->created_at = Carbon::now();
-
-        // 长文帖需要设置标题
-        if ($thread->type === Thread::TYPE_OF_LONG) {
-            $thread->title = $title;
-        }
-
-        // 非文字贴可设置价格
-        if ($thread->type !== Thread::TYPE_OF_TEXT) {
-            // 是否有权发布付费贴
-            if ($thread->price = (float) Arr::get($this->data, 'attributes.price', 0)) {
-                $this->assertCan($this->actor, 'createThreadPaid');
-            }
-
-            // 付费长文帖可设置免费阅读字数
-            if ($thread->type === Thread::TYPE_OF_LONG && $thread->price) {
-                $thread->free_words = (int) Arr::get($this->data, 'attributes.free_words', 0);
-            }
-        }
 
         $thread->setRelation('user', $this->actor);
 
@@ -155,7 +138,7 @@ class CreateThread
 
         try {
             $post = $bus->dispatch(
-                new CreatePost($thread->id, $this->actor, $this->data, $this->ip, $this->port)
+                new CreatePost($blocks, $thread->id, $this->actor, $this->data, $this->ip, $this->port)
             );
         } catch (Exception $e) {
             $thread->delete();
@@ -179,36 +162,5 @@ class CreateThread
         $thread->save();
 
         return $thread;
-    }
-
-    /**
-     * 是否有权限发布主题
-     *
-     * @param int $type
-     * @throws PermissionDeniedException
-     */
-    protected function canCreateThread($type)
-    {
-        switch ($type) {
-            case Thread::TYPE_OF_TEXT:
-                $this->assertCan($this->actor, 'createThread');
-                break;
-            case Thread::TYPE_OF_LONG:
-                $this->assertCan($this->actor, 'createThreadLong');
-
-                // 是否有权发布音频
-                if (Arr::get($this->data, 'attributes.file_id', '')) {
-                    $this->assertCan($this->actor, 'createAudio');
-                }
-                break;
-            case Thread::TYPE_OF_VIDEO:
-                $this->assertCan($this->actor, 'createThreadVideo');
-                break;
-            case Thread::TYPE_OF_IMAGE:
-                $this->assertCan($this->actor, 'createThreadImage');
-                break;
-            default:
-                // TODO 是否允许发布其他未知类型主题
-        }
     }
 }
