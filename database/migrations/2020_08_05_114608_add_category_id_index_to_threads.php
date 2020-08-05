@@ -14,6 +14,7 @@ class AddCategoryIdIndexToThreads extends Migration
     {
         $this->schema()->table('threads', function (Blueprint $table) {
             $table->index('category_id', 'idx_category_id');
+            $table->index('is_sticky', 'idx_is_sticky');
         });
     }
 
@@ -26,6 +27,7 @@ class AddCategoryIdIndexToThreads extends Migration
     {
         $this->schema()->table('threads', function (Blueprint $table) {
             $table->dropIndex('idx_category_id');
+            $table->dropIndex('idx_is_sticky');
         });
     }
 }
