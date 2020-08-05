@@ -20,25 +20,34 @@ namespace App\Listeners\Setting;
 
 use App\Events\Setting\Saving;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Wechat\EasyWechatTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class CheckPayAppId
+class CheckCaptcha
 {
-    public $validator;
+    use EasyWechatTrait;
 
+    /**
+     * @var SettingsRepository
+     */
     public $settings;
 
     /**
-     * @param Validator $validator
-     * @param SettingsRepository $settings
+     * @var Validator
      */
-    public function __construct(Validator $validator, SettingsRepository $settings)
+    public $validator;
+
+    /**
+     * @param SettingsRepository $settings
+     * @param Validator $validator
+     */
+    public function __construct(SettingsRepository $settings, Validator $validator)
     {
-        $this->validator = $validator;
         $this->settings = $settings;
+        $this->validator = $validator;
     }
 
     /**
@@ -47,26 +56,18 @@ class CheckPayAppId
      */
     public function handle(Saving $event)
     {
-        $settings = $event->settings->where('tag', 'wxpay')->pluck('value', 'key')->all();
+        // 合并原配置与新配置（新值覆盖旧值）
+        $settings = array_merge(
+            (array) $this->settings->tag('qcloud'),
+            $event->settings->where('tag', 'qcloud')->pluck('value', 'key')->toArray()
+        );
 
-        if (Arr::has($settings, 'app_id')) {
-            $app_ids = [
-                $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
-                $this->settings->get('offiaccount_app_id', 'wx_offiaccount')
-            ];
+        $captcha = (bool) Arr::get($settings, 'qcloud_captcha');
 
-            $this->validator->make(
-                $settings,
-                [
-                    'app_id' => [
-                        'required',
-                        Rule::in($app_ids),
-                    ],
-                ],
-                [
-                    'in' => trans('setting.wxpay_appid_error')
-                ]
-            )->validate();
-        }
+        $this->validator->make($settings, [
+            'qcloud_captcha' => 'nullable|boolean',
+            'qcloud_captcha_app_id' => [Rule::requiredIf($captcha)],
+            'qcloud_captcha_secret_key' => [Rule::requiredIf($captcha)],
+        ])->validate();
     }
 }
