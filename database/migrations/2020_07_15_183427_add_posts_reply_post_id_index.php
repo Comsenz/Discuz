@@ -29,7 +29,7 @@ class AddPostsReplyPostIdIndex extends Migration
     public function up()
     {
         $this->schema()->table('posts', function (Blueprint $table) {
-            $table->index('reply_post_id');
+            $table->index('reply_post_id', 'idx_reply_post_id');
         });
     }
 
@@ -41,7 +41,7 @@ class AddPostsReplyPostIdIndex extends Migration
     public function down()
     {
         $this->schema()->table('posts', function (Blueprint $table) {
-            $table->dropIndex('reply_post_id');
+            $table->dropIndex('idx_reply_post_id');
         });
     }
 }
