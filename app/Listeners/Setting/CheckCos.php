@@ -21,7 +21,9 @@ namespace App\Listeners\Setting;
 use App\Events\Setting\Saving;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Wechat\EasyWechatTrait;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class CheckCos
@@ -60,10 +62,12 @@ class CheckCos
             $event->settings->where('tag', 'qcloud')->pluck('value', 'key')->toArray()
         );
 
+        $cos = (bool) Arr::get($settings, 'qcloud_cos');
+
         $this->validator->make($settings, [
             'qcloud_cos' => 'nullable|boolean',
-            'qcloud_cos_bucket_name' => 'filled',
-            'qcloud_cos_bucket_area' => 'filled',
+            'qcloud_cos_bucket_name' => [Rule::requiredIf($cos)],
+            'qcloud_cos_bucket_area' => [Rule::requiredIf($cos)],
             'qcloud_cos_cdn_url' => 'nullable|string',
         ])->validate();
     }

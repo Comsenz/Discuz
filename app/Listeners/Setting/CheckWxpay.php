@@ -21,6 +21,7 @@ namespace App\Listeners\Setting;
 use App\Events\Setting\Saving;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Wechat\EasyWechatTrait;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -61,6 +62,8 @@ class CheckWxpay
             $event->settings->where('tag', 'wxpay')->pluck('value', 'key')->toArray()
         );
 
+        $wxpay = (bool) Arr::get($settings, 'wxpay_close');
+
         $appIds = [
             $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
             $this->settings->get('offiaccount_app_id', 'wx_offiaccount')
@@ -68,9 +71,9 @@ class CheckWxpay
 
         $this->validator->make($settings, [
             'wxpay_close' => 'nullable|boolean',
-            'app_id' => ['filled', Rule::in($appIds)],
-            'mch_id' => 'filled',
-            'api_key' => 'filled',
+            'app_id' => [Rule::requiredIf($wxpay), Rule::in($appIds)],
+            'mch_id' => [Rule::requiredIf($wxpay)],
+            'api_key' => [Rule::requiredIf($wxpay)],
         ], [
             'in' => trans('setting.wxpay_appid_error')
         ])->validate();

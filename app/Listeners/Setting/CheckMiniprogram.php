@@ -56,8 +56,8 @@ class CheckMiniprogram
     {
         // 合并原配置与新配置（新值覆盖旧值）
         $settings = array_merge(
-            $this->settings->tag('wx_miniprogram'),
-            $event->settings->where('tag', 'wx_miniprogram')->pluck('value', 'key')->all()
+            (array) $this->settings->tag('wx_miniprogram'),
+            $event->settings->where('tag', 'wx_miniprogram')->pluck('value', 'key')->toArray()
         );
 
         $this->validator->make($settings, [

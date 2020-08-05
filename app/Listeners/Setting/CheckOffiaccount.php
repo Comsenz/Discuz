@@ -23,6 +23,7 @@ use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Wechat\EasyWechatTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class CheckOffiaccount
@@ -61,6 +62,8 @@ class CheckOffiaccount
             $event->settings->where('tag', 'wx_offiaccount')->pluck('value', 'key')->toArray()
         );
 
+        $offiaccount = (bool) Arr::get($settings, 'offiaccount_close');
+
         $this->validator->make($settings, [
             'offiaccount_close' => [
                 function ($attribute, $value, $fail) use ($settings) {
@@ -68,8 +71,8 @@ class CheckOffiaccount
                     $this->getAccessToken($settings, $fail);
                 },
             ],
-            'offiaccount_app_id' => 'filled',
-            'offiaccount_app_secret' => 'filled',
+            'offiaccount_app_id' => [Rule::requiredIf($offiaccount)],
+            'offiaccount_app_secret' => [Rule::requiredIf($offiaccount)],
         ])->validate();
     }
 
