@@ -26,7 +26,7 @@ use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class CheckOffiaccount
+class CheckCos
 {
     use EasyWechatTrait;
 
@@ -58,41 +58,17 @@ class CheckOffiaccount
     {
         // 合并原配置与新配置（新值覆盖旧值）
         $settings = array_merge(
-            (array) $this->settings->tag('wx_offiaccount'),
-            $event->settings->where('tag', 'wx_offiaccount')->pluck('value', 'key')->toArray()
+            (array) $this->settings->tag('qcloud'),
+            $event->settings->where('tag', 'qcloud')->pluck('value', 'key')->toArray()
         );
 
-        $offiaccount = (bool) Arr::get($settings, 'offiaccount_close');
+        $cos = (bool) Arr::get($settings, 'qcloud_cos');
 
         $this->validator->make($settings, [
-            'offiaccount_close' => [
-                function ($attribute, $value, $fail) use ($settings) {
-                    // 获取一次 Access token 验证配置是否正确
-                    $this->getAccessToken($settings, $fail);
-                },
-            ],
-            'offiaccount_app_id' => [Rule::requiredIf($offiaccount)],
-            'offiaccount_app_secret' => [Rule::requiredIf($offiaccount)],
+            'qcloud_cos' => 'nullable|boolean',
+            'qcloud_cos_bucket_name' => [Rule::requiredIf($cos)],
+            'qcloud_cos_bucket_area' => [Rule::requiredIf($cos)],
+            'qcloud_cos_cdn_url' => 'nullable|string',
         ])->validate();
-    }
-
-    /**
-     * @param  array $settings
-     * @param  \Closure $fail
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
-    public function getAccessToken($settings, $fail)
-    {
-        try {
-            $this->offiaccount([
-                'app_id' => Arr::get($settings, 'offiaccount_app_id'),
-                'secret' => Arr::get($settings, 'offiaccount_app_secret'),
-            ])->access_token->getToken();
-        } catch (\EasyWeChat\Kernel\Exceptions\HttpException $e) {
-            $fail(implode(' - ', $e->formattedResponse));
-        }
     }
 }

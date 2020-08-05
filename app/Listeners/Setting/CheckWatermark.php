@@ -24,7 +24,7 @@ use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class CheckWatermarkSetting
+class CheckWatermark
 {
     /**
      * @var Validator
