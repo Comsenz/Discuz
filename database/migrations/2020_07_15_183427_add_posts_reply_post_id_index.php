@@ -30,6 +30,7 @@ class AddPostsReplyPostIdIndex extends Migration
     {
         $this->schema()->table('posts', function (Blueprint $table) {
             $table->index('reply_post_id', 'idx_reply_post_id');
+            $table->index('is_sticky', 'idx_is_sticky');
         });
     }
 
@@ -42,6 +43,7 @@ class AddPostsReplyPostIdIndex extends Migration
     {
         $this->schema()->table('posts', function (Blueprint $table) {
             $table->dropIndex('idx_reply_post_id');
+            $table->dropIndex('idx_is_sticky');
         });
     }
 }
