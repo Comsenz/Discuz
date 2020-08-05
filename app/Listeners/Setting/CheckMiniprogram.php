@@ -21,7 +21,9 @@ namespace App\Listeners\Setting;
 use App\Events\Setting\Saving;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Wechat\EasyWechatTrait;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class CheckMiniprogram
@@ -60,11 +62,13 @@ class CheckMiniprogram
             $event->settings->where('tag', 'wx_miniprogram')->pluck('value', 'key')->toArray()
         );
 
+        $miniprogram = (bool) Arr::get($settings, 'miniprogram_close');
+
         $this->validator->make($settings, [
             'miniprogram_close' => 'nullable|boolean',
-            'miniprogram_app_id' => 'filled',
-            'miniprogram_app_secret' => 'filled',
             'miniprogram_video' => 'nullable|boolean',
+            'miniprogram_app_id' => [Rule::requiredIf($miniprogram)],
+            'miniprogram_app_secret' => [Rule::requiredIf($miniprogram)],
         ])->validate();
     }
 }
