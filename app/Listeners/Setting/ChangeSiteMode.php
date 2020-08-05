@@ -74,6 +74,7 @@ class ChangeSiteMode
                 [
                     'site_mode.in' => trans('setting.invalid_site_mode'),
                     'site_price.required_if' => trans('setting.site_mode_not_found_price'),
+                    'site_price.not_in' => trans('setting.site_mode_not_found_price'),
                 ]
             );
 
