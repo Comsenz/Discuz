@@ -111,22 +111,6 @@ class EditThread
             $thread->timestamps = false;
         }
 
-        // 非文字贴可设置价格
-        if (isset($attributes['price']) && $thread->type !== Thread::TYPE_OF_TEXT) {
-            $this->assertCan($this->actor, 'edit', $thread);
-
-            // 是否有权发布付费贴
-            if ($thread->price = (float) $attributes['price']) {
-                $this->assertCan($this->actor, 'createThreadPaid');
-            }
-        }
-
-        if ($thread->price > 0 && isset($attributes['free_words'])) {
-            $this->assertCan($this->actor, 'edit', $thread);
-
-            $thread->free_words = (int) $attributes['free_words'];
-        }
-
         if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
             $this->assertCan($this->actor, 'approve', $thread);
 
