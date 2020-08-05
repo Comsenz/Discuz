@@ -41,6 +41,7 @@ class SettingListener
         $events->listen(Saving::class, CheckCos::class);                        // 腾讯云对象存储 COS
 
         $events->listen(Saved::class, ClearDisabledPermission::class);
+        $events->listen(Saved::class, ClearDisabledSettings::class);
         $events->listen(Saved::class, QcloudSettingReport::class);
     }
 }
