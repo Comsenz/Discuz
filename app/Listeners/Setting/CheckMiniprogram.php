@@ -23,7 +23,6 @@ use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Wechat\EasyWechatTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class CheckMiniprogram
@@ -56,19 +55,26 @@ class CheckMiniprogram
      */
     public function handle(Saving $event)
     {
-        // 合并原配置与新配置（新值覆盖旧值）
-        $settings = array_merge(
-            (array) $this->settings->tag('wx_miniprogram'),
-            $event->settings->where('tag', 'wx_miniprogram')->pluck('value', 'key')->toArray()
-        );
+        $settings = $event->settings->where('tag', 'wx_miniprogram')->pluck('value', 'key')->toArray();
 
-        $miniprogram = (bool) Arr::get($settings, 'miniprogram_close');
+        if (Arr::hasAny($settings, [
+            'miniprogram_close',
+            'miniprogram_video',
+            'miniprogram_app_id',
+            'miniprogram_app_secret',
+        ])) {
+            // 合并原配置与新配置（新值覆盖旧值）
+            $settings = array_merge((array) $this->settings->tag('wx_miniprogram'), $settings);
 
-        $this->validator->make($settings, [
-            'miniprogram_close' => 'nullable|boolean',
-            'miniprogram_video' => 'nullable|boolean',
-            'miniprogram_app_id' => [Rule::requiredIf($miniprogram)],
-            'miniprogram_app_secret' => [Rule::requiredIf($miniprogram)],
-        ])->validate();
+            $this->validator->make($settings, [
+                'miniprogram_close' => 'nullable|boolean',
+                'miniprogram_video' => 'nullable|boolean',
+                'miniprogram_app_id' => 'required_if:miniprogram_close,1',
+                'miniprogram_app_secret' => 'required_if:miniprogram_close,1',
+            ], [
+                'miniprogram_app_id.required_if' => trans('setting.app_id_cannot_be_empty'),
+                'miniprogram_app_secret.required_if' => trans('setting.app_secret_cannot_be_empty'),
+            ])->validate();
+        }
     }
 }

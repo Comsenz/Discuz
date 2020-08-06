@@ -23,7 +23,6 @@ use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Wechat\EasyWechatTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class CheckCos
@@ -56,19 +55,23 @@ class CheckCos
      */
     public function handle(Saving $event)
     {
-        // 合并原配置与新配置（新值覆盖旧值）
-        $settings = array_merge(
-            (array) $this->settings->tag('qcloud'),
-            $event->settings->where('tag', 'qcloud')->pluck('value', 'key')->toArray()
-        );
+        $settings = $event->settings->where('tag', 'qcloud')->pluck('value', 'key')->toArray();
 
-        $cos = (bool) Arr::get($settings, 'qcloud_cos');
+        if (Arr::hasAny($settings, [
+            'qcloud_cos',
+            'qcloud_cos_bucket_name',
+            'qcloud_cos_bucket_area',
+            'qcloud_cos_cdn_url',
+        ])) {
+            // 合并原配置与新配置（新值覆盖旧值）
+            $settings = array_merge((array) $this->settings->tag('qcloud'), $settings);
 
-        $this->validator->make($settings, [
-            'qcloud_cos' => 'nullable|boolean',
-            'qcloud_cos_bucket_name' => [Rule::requiredIf($cos)],
-            'qcloud_cos_bucket_area' => [Rule::requiredIf($cos)],
-            'qcloud_cos_cdn_url' => 'nullable|string',
-        ])->validate();
+            $this->validator->make($settings, [
+                'qcloud_cos' => 'nullable|boolean',
+                'qcloud_cos_cdn_url' => 'nullable|string',
+                'qcloud_cos_bucket_name' => 'required_if:qcloud_cos,1',
+                'qcloud_cos_bucket_area' => 'required_if:qcloud_cos,1',
+            ])->validate();
+        }
     }
 }

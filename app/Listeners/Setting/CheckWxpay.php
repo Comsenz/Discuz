@@ -56,26 +56,33 @@ class CheckWxpay
      */
     public function handle(Saving $event)
     {
-        // 合并原配置与新配置（新值覆盖旧值）
-        $settings = array_merge(
-            (array) $this->settings->tag('wxpay'),
-            $event->settings->where('tag', 'wxpay')->pluck('value', 'key')->toArray()
-        );
+        $settings = $event->settings->where('tag', 'wxpay')->pluck('value', 'key')->toArray();
 
-        $wxpay = (bool) Arr::get($settings, 'wxpay_close');
+        if (Arr::hasAny($settings, [
+            'wxpay_close',
+            'app_id',
+            'mch_id',
+            'api_key',
+        ])) {
+            // 合并原配置与新配置（新值覆盖旧值）
+            $settings = array_merge((array) $this->settings->tag('wxpay'), $settings);
 
-        $appIds = [
-            $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
-            $this->settings->get('offiaccount_app_id', 'wx_offiaccount')
-        ];
+            $appIds = [
+                $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
+                $this->settings->get('offiaccount_app_id', 'wx_offiaccount')
+            ];
 
-        $this->validator->make($settings, [
-            'wxpay_close' => 'nullable|boolean',
-            'app_id' => [Rule::requiredIf($wxpay), Rule::in($appIds)],
-            'mch_id' => [Rule::requiredIf($wxpay)],
-            'api_key' => [Rule::requiredIf($wxpay)],
-        ], [
-            'in' => trans('setting.wxpay_appid_error')
-        ])->validate();
+            $this->validator->make($settings, [
+                'wxpay_close' => 'nullable|boolean',
+                'app_id' => ['required_if:wxpay_close,1', Rule::in($appIds)],
+                'mch_id' => 'required_if:wxpay_close,1',
+                'api_key' => 'required_if:wxpay_close,1',
+            ], [
+                'app_id.in' => trans('setting.wxpay_appid_error'),
+                'app_id.required_if' => trans('setting.app_id_cannot_be_empty'),
+                'mch_id.required_if' => trans('setting.mch_id_cannot_be_empty'),
+                'api_key.required_if' => trans('setting.api_key_cannot_be_empty'),
+            ])->validate();
+        }
     }
 }
