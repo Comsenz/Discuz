@@ -72,6 +72,8 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username', 'avatar']),
                 'site_install' => $this->settings->get('site_install'), // 安装时间
                 'site_record' => $this->settings->get('site_record'),
+                'site_cover' => $this->settings->get('site_cover') ?: '',
+                'site_record_code' => $this->settings->get('site_record_code') ?: '',
             ],
 
             // 注册设置

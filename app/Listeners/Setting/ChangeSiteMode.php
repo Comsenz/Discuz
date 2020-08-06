@@ -68,13 +68,10 @@ class ChangeSiteMode
                                 $fail(trans('setting.pay_site_mode_need_open_payment'));
                             }
                         },
-                    ],
-                    'site_price' => 'required_if:site_mode,pay|filled|not_in:0',
+                    ]
                 ],
                 [
                     'site_mode.in' => trans('setting.invalid_site_mode'),
-                    'site_price.required_if' => trans('setting.site_mode_not_found_price'),
-                    'site_price.not_in' => trans('setting.site_mode_not_found_price'),
                 ]
             );
 
