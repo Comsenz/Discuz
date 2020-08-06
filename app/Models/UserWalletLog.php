@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $user_id
+ * @property int $source_user_id
  * @property float $change_available_amount
  * @property float $change_freeze_amount
  * @property int $change_type
@@ -61,6 +62,8 @@ class UserWalletLog extends Model
 
     const TYPE_INCOME_ARTIFICIAL = 32; //人工收入
 
+    const TYPE_INCOME_SCALE_REWARD  = 33; //分成打赏收入
+
     const TYPE_EXPEND_ARTIFICIAL = 50; //人工支出
 
     const TYPE_EXPEND_GROUP      = 51; //加入用户组支出
@@ -72,6 +75,8 @@ class UserWalletLog extends Model
     const TYPE_INCOME_THREAD     = 60; //付费主题收入
 
     const TYPE_EXPEND_THREAD     = 61; //付费主题支出
+
+    const TYPE_INCOME_SCALE_THREAD  = 62; //分成付费主题收入
 
     const TYPE_EXPEND_RENEW      = 71; //站点续费支出
 
@@ -85,6 +90,7 @@ class UserWalletLog extends Model
      * @param string $change_desc
      * @param int|null $user_wallet_cash_id
      * @param int|null $order_id
+     * @param $source_user_id
      * @return UserWalletLog
      */
     public static function createWalletLog(
@@ -94,7 +100,8 @@ class UserWalletLog extends Model
         $change_type,
         $change_desc,
         $user_wallet_cash_id = null,
-        $order_id = null
+        $order_id = null,
+        $source_user_id = 0
     ) {
         $wallet_log                          = new static;
         $wallet_log->user_id                 = $user_id;
@@ -103,9 +110,11 @@ class UserWalletLog extends Model
         $wallet_log->change_type             = $change_type;
         $wallet_log->change_desc             = $change_desc;
         $wallet_log->user_wallet_cash_id     = $user_wallet_cash_id;
-        $wallet_log->order_id     = $order_id;
+        $wallet_log->order_id                = $order_id;
+        $wallet_log->source_user_id          = $source_user_id;
 
         $wallet_log->save();
+
         return $wallet_log;
     }
 
