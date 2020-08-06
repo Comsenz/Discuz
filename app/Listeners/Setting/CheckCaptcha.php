@@ -23,7 +23,6 @@ use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Wechat\EasyWechatTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class CheckCaptcha
@@ -56,18 +55,21 @@ class CheckCaptcha
      */
     public function handle(Saving $event)
     {
-        // 合并原配置与新配置（新值覆盖旧值）
-        $settings = array_merge(
-            (array) $this->settings->tag('qcloud'),
-            $event->settings->where('tag', 'qcloud')->pluck('value', 'key')->toArray()
-        );
+        $settings = $event->settings->where('tag', 'qcloud')->pluck('value', 'key')->toArray();
 
-        $captcha = (bool) Arr::get($settings, 'qcloud_captcha');
+        if (Arr::hasAny($settings, [
+            'qcloud_captcha',
+            'qcloud_captcha_app_id',
+            'qcloud_captcha_secret_key',
+        ])) {
+            // 合并原配置与新配置（新值覆盖旧值）
+            $settings = array_merge((array) $this->settings->tag('qcloud'), $settings);
 
-        $this->validator->make($settings, [
-            'qcloud_captcha' => 'nullable|boolean',
-            'qcloud_captcha_app_id' => [Rule::requiredIf($captcha)],
-            'qcloud_captcha_secret_key' => [Rule::requiredIf($captcha)],
-        ])->validate();
+            $this->validator->make($settings, [
+                'qcloud_captcha' => 'nullable|boolean',
+                'qcloud_captcha_app_id' => 'required_if:qcloud_captcha,1',
+                'qcloud_captcha_secret_key' => 'required_if:qcloud_captcha,1',
+            ])->validate();
+        }
     }
 }

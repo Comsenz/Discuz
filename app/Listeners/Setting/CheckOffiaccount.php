@@ -23,7 +23,6 @@ use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Wechat\EasyWechatTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class CheckOffiaccount
@@ -56,43 +55,40 @@ class CheckOffiaccount
      */
     public function handle(Saving $event)
     {
-        // 合并原配置与新配置（新值覆盖旧值）
-        $settings = array_merge(
-            (array) $this->settings->tag('wx_offiaccount'),
-            $event->settings->where('tag', 'wx_offiaccount')->pluck('value', 'key')->toArray()
-        );
+        $settings = $event->settings->where('tag', 'wx_offiaccount')->pluck('value', 'key')->toArray();
 
-        $offiaccount = (bool) Arr::get($settings, 'offiaccount_close');
+        if (Arr::hasAny($settings, [
+            'offiaccount_close',
+            'offiaccount_app_id',
+            'offiaccount_app_secret',
+        ])) {
+            // 合并原配置与新配置（新值覆盖旧值）
+            $settings = array_merge((array) $this->settings->tag('wx_offiaccount'), $settings);
 
-        $this->validator->make($settings, [
-            'offiaccount_close' => [
-                function ($attribute, $value, $fail) use ($settings) {
-                    // 获取一次 Access token 验证配置是否正确
-                    $this->getAccessToken($settings, $fail);
-                },
-            ],
-            'offiaccount_app_id' => [Rule::requiredIf($offiaccount)],
-            'offiaccount_app_secret' => [Rule::requiredIf($offiaccount)],
-        ])->validate();
-    }
-
-    /**
-     * @param  array $settings
-     * @param  \Closure $fail
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
-    public function getAccessToken($settings, $fail)
-    {
-        try {
-            $this->offiaccount([
+            // 微信公众号需要的配置
+            $settings['offiaccount'] = [
                 'app_id' => Arr::get($settings, 'offiaccount_app_id'),
                 'secret' => Arr::get($settings, 'offiaccount_app_secret'),
-            ])->access_token->getToken();
-        } catch (\EasyWeChat\Kernel\Exceptions\HttpException $e) {
-            $fail(implode(' - ', $e->formattedResponse));
+            ];
+
+            $this->validator->make($settings, [
+                'offiaccount_close' => 'nullable|boolean',
+                'offiaccount_app_id' => 'required_if:offiaccount_close,1',
+                'offiaccount_app_secret' => 'required_if:offiaccount_close,1',
+                'offiaccount' => [
+                    function ($attribute, $value, $fail) {
+                        // 开启微信公众号时，获取一次 Access token 验证配置是否正确
+                        try {
+                            $this->offiaccount($value)->access_token->getToken();
+                        } catch (\EasyWeChat\Kernel\Exceptions\HttpException $e) {
+                            $fail(trans('setting.offiaccount_error') . ($e->formattedResponse['errcode'] ?? ''));
+                        }
+                    },
+                ],
+            ], [
+                'offiaccount_app_id.required_if' => trans('setting.app_id_cannot_be_empty'),
+                'offiaccount_app_secret.required_if' => trans('setting.app_secret_cannot_be_empty'),
+            ])->validate();
         }
     }
 }
