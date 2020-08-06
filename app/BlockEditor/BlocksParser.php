@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace App\BlockEditor;
@@ -57,15 +68,43 @@ class BlocksParser
         if (!empty($this->data->get('blocks'))) {
             foreach ($this->data->get('blocks') as $block) {
                 $typeList[] = Arr::get($block, 'type');
-                if (isset($data['child'])) {
-                    foreach ($block['child'] as $payValue) {
-                        $typeList[] = Arr::get($payValue, 'type');
+                if (isset($block['data']['child'])) {
+                    foreach ($block['data'] as $payChildBlock) {
+                        $typeList[] = Arr::get($payChildBlock, 'type');
                     }
                 }
             }
         }
 
         return array_unique($typeList);
+    }
+
+    /**
+     * 获取指定类型的value
+     * @param $type
+     * @return array
+     */
+    public function BlocksValue($type)
+    {
+        $valueList = [];
+        if (!empty($this->data->get('blocks'))) {
+            foreach ($this->data->get('blocks') as $block) {
+                //免费快
+                if (Arr::get($block, 'type') == $type) {
+                    $valueList[] = Arr::get($block, 'data.value');
+                }
+                //付费快
+                if (isset($block['data']['child'])) {
+                    foreach ($block['data']['child'] as $payChildBlock) {
+                        if (Arr::get($payChildBlock, 'type') == $type) {
+                            $valueList[] = Arr::get($payChildBlock, 'data.value');
+                        }
+                    }
+                }
+            }
+        }
+
+        return array_unique($valueList);
     }
 
     /**
@@ -84,7 +123,7 @@ class BlocksParser
             foreach ($blocks as $key => &$value) {
                 $type = Arr::get($value, 'type');
                 $parser = $this->getBlockInstance($type);
-                if(!isset($value['data']['value']) && $type != 'pay') {
+                if (!isset($value['data']['value']) && $type != 'pay') {
                     throw new BlockInvalidException('block_invalid_key_not_exist');
                 }
                 $data = Arr::get($value, 'data');
@@ -195,4 +234,3 @@ class BlocksParser
 }
 
  */
-

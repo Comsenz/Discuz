@@ -19,6 +19,7 @@
 namespace App\Commands\Post;
 
 use App\BlockEditor\BlocksParser;
+use App\BlockEditor\Exception\BlockInvalidException;
 use App\Censor\Censor;
 use App\Commands\Thread\CreateThreadVideo;
 use App\Events\Post\PostWasApproved;
@@ -30,10 +31,13 @@ use App\Models\Thread;
 use App\Models\ThreadVideo;
 use App\Models\User;
 use App\Repositories\PostRepository;
+use App\Repositories\ThreadVideoRepository;
 use App\Validators\PostValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
+use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
@@ -78,14 +82,17 @@ class EditPost
 
     /**
      * @param Dispatcher $events
+     * @param BusDispatcher $bus
      * @param PostRepository $posts
      * @param Censor $censor
      * @param PostValidator $validator
      * @return Post
      * @throws PermissionDeniedException
      * @throws ValidationException
+     * @throws BlockInvalidException
+     * @throws BindingResolutionException
      */
-    public function handle(Dispatcher $events, PostRepository $posts, Censor $censor, PostValidator $validator)
+    public function handle(Dispatcher $events, BusDispatcher $bus, PostRepository $posts, Censor $censor, PostValidator $validator)
     {
         $this->events = $events;
 
@@ -109,23 +116,42 @@ class EditPost
             //编辑视频
             if (Arr::has($blocksTypeList, 'video')) {
                 /** @var ThreadVideo $threadVideo */
-                $threadVideo = $post->thread->threadVideos->findOrFailByThreadId($thread->id);
+                $threadVideos = app()->make(ThreadVideoRepository::class);
+                $threadVideo = $threadVideos->findOrFailByThreadId($post->thread->id);
+                $blocksTypeList = $BlocksParser->BlocksValue('video');
 
-                if ($threadVideo->file_id != $attributes['file_id']) {
-                    // 将旧的视频主题 id 设为 0
+                foreach ($threadVideo as $video) {
+                    //已删除视频块
                     $threadVideo->thread_id = 0;
+                    //未改变视频块
+                    if ($key = array_search($video->id, $blocksTypeList) !== false) {
+                        unset($blocksTypeList[$key]);
+                        $threadVideo->thread_id = $post->thread->id;
+                    }
                     $threadVideo->save();
-
-                    // 创建新的视频记录
-                    $video = $bus->dispatch(
-                        new CreateThreadVideo($this->actor, $thread, $this->data)
-                    );
-
-                    $thread->setRelation('threadVideo', $video);
-
-                    // 重新上传视频修改为审核状态
-                    $thread->is_approved = Thread::UNAPPROVED;
                 }
+                //新增视频块
+                if (!empty($blocksTypeList)) {
+                    foreach ($blocksTypeList as $newVideo) {
+                        // 创建新的视频记录 attributes.file_id
+                        $data = [
+                            'attributes' => [
+                                'file_id'   => $newVideo
+                            ]
+                        ];
+                        $video = $bus->dispatch(
+                            new CreateThreadVideo($this->actor, $post->thread, $data)
+                        );
+
+                        $post->thread->setRelation('threadVideo', $video);
+
+                        // 重新上传视频修改为审核状态
+                        $post->thread->is_approved = Thread::UNAPPROVED;
+
+                        $post->thread->save();
+                    }
+                }
+
             }
 
             $post->revise($content, $this->actor);
