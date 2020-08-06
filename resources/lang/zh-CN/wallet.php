@@ -19,7 +19,9 @@ return [
     'income_register'           => '注册收入',
     'income_artificial'         => '人工收入',
     'income_reward'             => '打赏主题收入',
+    'income_scale_reward'       => '分成打赏主题收入',
     'income_thread'             => '付费主题收入',
+    'income_scale_thread'       => '分成付费主题收入',
 
     'expend_renew'              => '站点续费支出',
     'expend_reward'             => '打赏主题支出',
@@ -29,8 +31,6 @@ return [
 
     'cash_operate_desc'         => '提现',
 
-    'income_scale_reward'       => '分成打赏收入',
-    'income_scale_thread'       => '分成付费主题收入',
 
     'unbind_wechat'         => '请绑定微信后再进行操作',
 
