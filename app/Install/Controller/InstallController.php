@@ -77,7 +77,7 @@ class InstallController implements RequestHandlerInterface
     {
         $input = $request->getParsedBody();
         $input['ip'] = ip($request->getServerParams());
-        $input['port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT');
+        $input['port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT', 0);
         $port = $request->getUri()->getPort();
         $input['site_url'] = $request->getUri()->getScheme() . '://' . $request->getUri()->getHost().(in_array($port, [80, 443, null]) ? '' : ':'.$port);
 
