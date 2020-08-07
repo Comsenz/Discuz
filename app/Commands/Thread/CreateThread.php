@@ -92,7 +92,6 @@ class CreateThread
      * @param Thread $thread
      * @param ThreadValidator $validator
      * @return Thread
-     * @throws PermissionDeniedException
      * @throws ValidationException
      * @throws Exception
      */

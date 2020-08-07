@@ -53,12 +53,7 @@ class SaveAudioToDatabase
 
         $fileId = Arr::get($data, 'attributes.file_id', '');
 
-        /**
-         * 回复 或 长文首贴 可发音频
-         */
-        $canCreateAudio = !$post->is_first || ($post->is_first && $post->thread->type === 1);
-
-        if ($fileId && $canCreateAudio) {
+        if ($fileId) {
             $audio = $this->bus->dispatch(
                 new CreateThreadVideo($actor, $post, $data)
             );

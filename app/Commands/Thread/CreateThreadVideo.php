@@ -63,6 +63,7 @@ class CreateThreadVideo
      * @param User $actor
      * @param Model $model
      * @param array $data
+     * 块编辑器调用时 $data 需要传入 [attributes:['file_id':'']],可选值file_name media_url cover_url
      */
     public function __construct(User $actor, Model $model, array $data)
     {

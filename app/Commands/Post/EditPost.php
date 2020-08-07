@@ -121,13 +121,12 @@ class EditPost
                 $blocksTypeList = $BlocksParser->BlocksValue('video');
 
                 foreach ($threadVideo as $video) {
-                    //已删除视频块
-                    $threadVideo->thread_id = 0;
                     //未改变视频块
                     if ($key = array_search($video->id, $blocksTypeList) !== false) {
                         unset($blocksTypeList[$key]);
-                        $threadVideo->thread_id = $post->thread->id;
                     }
+                    //已删除视频块
+                    $threadVideo->thread_id = 0;
                     $threadVideo->save();
                 }
                 //新增视频块
@@ -147,7 +146,6 @@ class EditPost
 
                         // 重新上传视频修改为审核状态
                         $post->thread->is_approved = Thread::UNAPPROVED;
-
                         $post->thread->save();
                     }
                 }
