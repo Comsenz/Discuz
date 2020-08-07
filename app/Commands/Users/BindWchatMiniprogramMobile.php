@@ -65,7 +65,7 @@ class BindWchatMiniprogramMobile
         if ($mobile) {
             $usedCount = $users->query()->where('mobile', $mobile)->count();
             if ($usedCount) {
-                throw new \Exception('mobile_number_has_been_bound');
+                throw new \Exception('mobile_is_already_bind');
             }
             $this->actor->changeMobile($mobile);
             $this->actor->save();
