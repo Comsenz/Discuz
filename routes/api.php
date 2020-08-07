@@ -123,6 +123,7 @@ $route->get('/export/users', 'export.users', ApiController\Users\ExportUserContr
 
 $route->post('/sms/send', 'sms.send', ApiController\Mobile\SendController::class);
 $route->post('/sms/verify', 'sms.verify', ApiController\Mobile\VerifyController::class);
+$route->post('/mobile/bind/miniprogram', 'mobile.miniprogram', ApiController\Mobile\WechatMiniprogramBindController::class);
 
 /*
 |--------------------------------------------------------------------------
