@@ -56,6 +56,7 @@ class ListUserWalletLogsController extends AbstractListController
      */
     public $optionalInclude = [
         'userWallet',
+        'sourceUser',
         'userWalletCash',
         'order.thread',
         'order.thread.user',
@@ -110,7 +111,11 @@ class ListUserWalletLogsController extends AbstractListController
     }
 
     /**
-     * {@inheritdoc}
+     * @param ServerRequestInterface $request
+     * @param Document $document
+     * @return Collection|mixed
+     * @throws \Discuz\Auth\Exception\NotAuthenticatedException
+     * @throws \Tobscure\JsonApi\Exception\InvalidParameterException
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
@@ -179,7 +184,7 @@ class ListUserWalletLogsController extends AbstractListController
 
         $query->skip($offset)->take($limit);
 
-        foreach ((array) $sort as $field => $order) {
+        foreach ((array)$sort as $field => $order) {
             $query->orderBy(Str::snake($field), $order);
         }
 
@@ -193,12 +198,13 @@ class ListUserWalletLogsController extends AbstractListController
      */
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
-        $log_user = (int) Arr::get($filter, 'user'); //用户
+        $log_user = (int)Arr::get($filter, 'user'); //用户
         $log_change_desc = Arr::get($filter, 'change_desc'); //变动描述
         $log_change_type = Arr::get($filter, 'change_type'); //变动类型
         $log_username = Arr::get($filter, 'username'); //变动钱包所属人
         $log_start_time = Arr::get($filter, 'start_time'); //变动时间范围：开始
         $log_end_time = Arr::get($filter, 'end_time'); //变动时间范围：结束
+        $log_source_username = Arr::get($filter, 'source_username');
 
         $query->when($log_user, function ($query) use ($log_user) {
             $query->where('user_id', $log_user);
@@ -218,6 +224,9 @@ class ListUserWalletLogsController extends AbstractListController
         });
         $query->when($log_username, function ($query) use ($log_username) {
             $query->whereIn('user_wallet_logs.user_id', User::where('users.username', $log_username)->select('id', 'username')->get());
+        });
+        $query->when($log_source_username, function ($query) use ($log_source_username) {
+            $query->whereIn('user_wallet_logs.source_user_id', User::where('users.username', 'like', '%' . $log_source_username . '%')->select('id', 'username')->get());
         });
     }
 }
