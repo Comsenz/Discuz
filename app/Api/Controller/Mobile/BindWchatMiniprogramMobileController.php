@@ -22,17 +22,13 @@ use App\Api\Serializer\UserSerializer;
 use App\Commands\Users\BindWchatMiniprogramMobile;
 use Discuz\Api\Controller\AbstractCreateController;
 use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Contracts\Setting\SettingsRepository;
-use Discuz\Socialite\Exception\SocialiteException;
-use Discuz\Wechat\EasyWechatTrait;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class WechatMiniprogramBindController extends AbstractCreateController
+class BindWchatMiniprogramMobileController extends AbstractCreateController
 {
     use AssertPermissionTrait;
 
