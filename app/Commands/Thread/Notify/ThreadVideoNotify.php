@@ -130,8 +130,17 @@ class ThreadVideoNotify
             $censor->checkText($post->content);
             if (!$censor->isMod && $threadVideo->status == ThreadVideo::VIDEO_STATUS_SUCCESS) {
                 $thread = $threads->findOrFail($threadVideo->thread_id);
-                $thread->is_approved = 1;
-                $thread->save();
+                $videoCount = $threadVideos->query()
+                    ->where('type', ThreadVideo::TYPE_OF_VIDEO)
+                    ->where('thread_id', $threadVideo->thread_id)
+                    ->where('status', '<>', ThreadVideo::VIDEO_STATUS_SUCCESS)
+                    ->count();
+
+                //全部视频都转码成功后切换视频主题审核状态
+                if ($videoCount == 0) {
+                    $thread->is_approved = 1;
+                    $thread->save();
+                }
 
                 //解析并创建话题和关系
                 $thread->firstPost->setContentAttribute($thread->firstPost->content);
