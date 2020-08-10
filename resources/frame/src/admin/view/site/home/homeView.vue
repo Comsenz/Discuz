@@ -39,6 +39,9 @@
       <p class="section">
         <span class="section-title">Discuz!程序版本：</span>
         <span>{{siteInfo.version}}</span>
+        <span v-if="newVersion" class="section-title section-title-right">
+          <a href="https://discuz.com/docs/release_notes.html" target="_blank">( 新版本：{{siteInfo.version}} )</a>
+        </span>
       </p>
       <p class="section">
         <span class="section-title">服务器系统及PHP：</span>
