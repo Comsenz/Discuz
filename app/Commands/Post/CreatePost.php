@@ -24,7 +24,6 @@ use App\Events\Post\Created;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
 use App\Models\Post;
-use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
@@ -33,7 +32,6 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Exception;
-use Franzl\Middleware\Whoops\Formats\Json;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
@@ -45,7 +43,7 @@ class CreatePost
     use AssertPermissionTrait;
     use EventsDispatchTrait;
 
-    public $blocks;
+    public $BlocksParser;
 
     public $threadId;
 
@@ -92,16 +90,16 @@ class CreatePost
     public $port;
 
     /**
-     * @param Collection $blocks
+     * @param BlocksParser $BlocksParser
      * @param int $threadId
      * @param User $actor
      * @param array $data
      * @param string $ip
      * @param int $port
      */
-    public function __construct($blocks, $threadId, User $actor, array $data, $ip, $port)
+    public function __construct($BlocksParser, $threadId, User $actor, array $data, $ip, $port)
     {
-        $this->blocks = $blocks;
+        $this->BlocksParser = $BlocksParser;
         $this->threadId = $threadId;
         $this->replyPostId = Arr::get($data, 'attributes.replyId', null);
         $this->actor = $actor;
@@ -130,8 +128,8 @@ class CreatePost
         $isFirst = empty($thread->post_count);
 
         $isComment = (bool) Arr::get($this->data, 'attributes.isComment');
-
-        $content = $this->blocks;
+        $audioList = $this->BlocksParser->BlocksValue('audio');
+        $content = $this->BlocksParser->parse();
 
         $isMod = false;
         foreach ($content->get('blocks') as $block) {
@@ -144,11 +142,6 @@ class CreatePost
         if (! $isFirst) {
             // 非首帖，检查是否有权回复
             $this->assertCan($this->actor, 'reply', $thread);
-
-            // 是否有权发布音频
-            if (Arr::get($this->data, 'attributes.file_id', '')) {
-                $this->assertCan($this->actor, 'createAudio');
-            }
 
             // 引用回复
             if (! empty($this->replyPostId)) {
@@ -203,6 +196,11 @@ class CreatePost
             $post->is_approved = Post::UNAPPROVED;
         } else {
             $post->is_approved = Post::APPROVED;
+        }
+
+        //音频关系解析
+        if (count($audioList) > 0) {
+            $post->file_ids = $audioList;
         }
 
         $post->raise(new Created($post, $this->actor, $this->data));

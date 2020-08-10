@@ -43,12 +43,30 @@ class SaveAudioToDatabase
     }
 
     /**
+     * @TODO 编辑器 音频修改为多条
      * @param Created $event
      */
     public function handle(Created $event)
     {
         $post = $event->post;
         $actor = $event->actor;
+
+        foreach ($post->file_ids as $file_id) {
+            // 创建新的音频记录 attributes.file_id
+            $data = [
+                'attributes' => [
+                    'file_id'   => $file_id
+                ]
+            ];
+
+            $video = $this->bus->dispatch(
+                new CreateThreadVideo($actor, $post, $data)
+            );
+
+            $post->setRelation('postAudio', $video);
+        }
+
+
         $data = Arr::get($this->request->getParsedBody(), 'data', []);
 
         $fileId = Arr::get($data, 'attributes.file_id', '');

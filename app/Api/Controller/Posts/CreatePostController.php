@@ -20,7 +20,9 @@ namespace App\Api\Controller\Posts;
 
 use App\Api\Serializer\CommentPostSerializer;
 use App\Api\Serializer\PostSerializer;
+use App\BlockEditor\BlocksParser;
 use App\Commands\Post\CreatePost;
+use App\Models\Post;
 use Discuz\Api\Controller\AbstractCreateController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
@@ -65,6 +67,7 @@ class CreatePostController extends AbstractCreateController
         $threadId = Arr::get($data, 'relationships.thread.data.id');
         $ip = ip($request->getServerParams());
         $port = Arr::get($request->getServerParams(), 'REMOTE_PORT', 0);
+        $BlocksParser = new BlocksParser(collect(Arr::get($data, 'attributes.content')), new Post());
 
         $isComment = (bool) Arr::get($data, 'attributes.isComment');
 
@@ -75,7 +78,7 @@ class CreatePostController extends AbstractCreateController
         }
 
         return $this->bus->dispatch(
-            new CreatePost($threadId, $actor, $data, $ip, $port)
+            new CreatePost($BlocksParser, $threadId, $actor, $data, $ip, $port)
         );
     }
 }

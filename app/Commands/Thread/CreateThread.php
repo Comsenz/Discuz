@@ -101,7 +101,6 @@ class CreateThread
 
         //解析内容，检查块各类型权限，检查内容敏感词，检查数据正确性
         $BlocksParser = new BlocksParser(collect(Arr::get($this->data, 'attributes.content')), new Post());
-        $blocks = $BlocksParser->parse();
         $blocksTypeList = $BlocksParser->BlocksTypeList();
 
         $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
@@ -141,7 +140,7 @@ class CreateThread
 
         try {
             $post = $bus->dispatch(
-                new CreatePost($blocks, $thread->id, $this->actor, $this->data, $this->ip, $this->port)
+                new CreatePost($BlocksParser, $thread->id, $this->actor, $this->data, $this->ip, $this->port)
             );
         } catch (Exception $e) {
             $thread->delete();
