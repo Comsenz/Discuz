@@ -149,6 +149,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'publish_need_real_name' => ! $this->actor->isAdmin() && $this->actor->can('publishNeedRealName') && ! $this->actor->realname,
                 'publish_need_bind_phone' => ! $this->actor->isAdmin() && $this->actor->can('publishNeedBindPhone') && ! $this->actor->mobile,
                 'initialized_pay_password' => (bool)$this->actor->pay_password,  // 是否初始化支付密码
+                'can_invite_user_scale' => $this->actor->groups->first()->scale ? true : false,
             ],
         ];
 

@@ -41,6 +41,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Collection $users
  * @property Collection $permissions
  * @method truncate()
+ * @method first()
  * @method create(array $array)
  * @method insert(array $array)
  * @method static find(mixed $GUEST_ID)
