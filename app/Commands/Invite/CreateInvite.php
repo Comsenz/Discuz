@@ -69,14 +69,14 @@ class CreateInvite
 
         $this->assertCan($this->actor, 'createInvite');
 
-        $invite = Invite::creation(
-            Arr::get($this->data, 'attributes.group_id'),
-            Invite::TYPE_ADMIN,
-            Str::random(32),
-            Carbon::now()->timestamp,
-            Carbon::now()->addDays(7)->timestamp,
-            $this->actor->id
-        );
+        $invite = Invite::creation([
+            'group_id' => Arr::get($this->data, 'attributes.group_id'),
+            'type' => Invite::TYPE_ADMIN,
+            'code' => Str::random(32),
+            'dateline' => Carbon::now()->timestamp,
+            'endtime' => Carbon::now()->addDays(7)->timestamp,
+            'user_id' => $this->actor->id
+        ]);
 
         $this->events->dispatch(
             new Saving($invite, $this->actor, $this->data)

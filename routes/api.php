@@ -249,6 +249,7 @@ $route->delete('/notification/{id}', 'notification.delete', ApiController\Notifi
 */
 
 $route->get('/invite', 'invite.list', ApiController\Invite\ListInviteController::class);
+$route->get('/invite/users', 'invite.user.list', ApiController\Invite\ListInviteUsersController::class);
 $route->get('/invite/{code}', 'invite.resource', ApiController\Invite\ResourceInviteController::class);
 $route->get('/userInviteCode', 'invite.userInviteCode', ApiController\Invite\UserInviteCodeController::class);
 $route->post('/invite', 'invite.create.admin', ApiController\Invite\CreateAdminInviteController::class);

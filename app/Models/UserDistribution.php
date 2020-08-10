@@ -42,11 +42,11 @@ class UserDistribution extends Model
     use ScopeVisibilityTrait;
 
     protected $fillable = [
-        'user_id',
         'pid',
+        'user_id',
+        'invites_code',
         'be_scale',
         'level',
-        'invites_code',
     ];
 
     /**

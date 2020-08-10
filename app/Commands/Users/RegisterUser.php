@@ -22,11 +22,13 @@ use App\Censor\Censor;
 use App\Events\Users\Registered;
 use App\Events\Users\Saving;
 use App\Exceptions\TranslatorException;
+use App\Models\Invite;
 use App\Models\User;
 use App\Validators\UserValidator;
 use Carbon\Carbon;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\EventsDispatchTrait;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
@@ -74,6 +76,13 @@ class RegisterUser
 
         $password = Arr::get($this->data, 'password');
         $password_confirmation = Arr::get($this->data, 'password_confirmation');
+
+        // check invite code
+        if (Arr::has($this->data, 'code')) {
+            if (!$exists = Invite::query()->where('code', Arr::get($this->data, 'code'))->exists()) {
+                throw new DecryptException(trans('user.register_decrypt_code_failed'));
+            }
+        }
 
         // 敏感词校验
         $censor->checkText(Arr::get($this->data, 'username'), 'username');
