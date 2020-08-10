@@ -73,6 +73,7 @@ class UpdateGroup
         $group->is_paid = (bool) Arr::get($this->data, 'attributes.is_paid');
         $group->fee = (float) Arr::get($this->data, 'attributes.fee');
         $group->days = (int) Arr::get($this->data, 'attributes.days');
+        $group->scale = (int) Arr::get($this->data, 'attributes.scale');
 
         $this->validator->valid($group->getDirty());
 
