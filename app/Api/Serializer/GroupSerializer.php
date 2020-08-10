@@ -47,7 +47,7 @@ class GroupSerializer extends AbstractSerializer
             'isPaid'            => (bool) $model->is_paid,
             'fee'               => (float) $model->fee,
             'days'              => (int) $model->days,
-            'scale'             => (int) $model->scale,
+            'scale'             => $model->scale,
         ];
     }
 

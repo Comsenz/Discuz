@@ -28,7 +28,7 @@ class GroupValidator extends AbstractValidator
             'name' => ['required'],
             'fee' => 'filled|numeric|min:0',
             'days' => 'sometimes|min:0|int',
-            'scale' => 'numeric|min:0|max:10'
+            'scale' => 'min:0|max:10'
         ];
     }
 
