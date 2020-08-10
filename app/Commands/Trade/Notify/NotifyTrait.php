@@ -169,6 +169,7 @@ trait NotifyTrait
                 }
                 break;
             case Order::ORDER_TYPE_BLOCK:
+                // @TODO 编辑器 修改普通用户邀请注册分成
                 $change_type = UserWalletLog::TYPE_INCOME_BLOCK;
                 $change_type_lang = 'wallet.income_block';
                 break;
