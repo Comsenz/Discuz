@@ -98,7 +98,7 @@ abstract class AbstractWechatQyUserController extends AbstractResourceController
             }
             $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
             $data['register_ip'] = ip($request->getServerParams());
-            $data['register_port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT');
+            $data['register_port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT', 0);
             $registerWechatQyUser = $this->bus->dispatch(
                 new RegisterWechatQyUser($request->getAttribute('actor'), $data)
             );

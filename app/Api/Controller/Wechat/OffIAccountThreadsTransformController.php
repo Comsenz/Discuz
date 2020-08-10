@@ -124,7 +124,7 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
         $this->assertAdmin($actor);
         $mediaId = Arr::get($request->getQueryParams(), 'media_id');
         $ip = ip($request->getServerParams());
-        $port = Arr::get($request->getServerParams(), 'REMOTE_PORT'); // 端口
+        $port = Arr::get($request->getServerParams(), 'REMOTE_PORT', 0); // 端口
 
         $response = $this->easyWechat->material->get($mediaId);
         if (array_key_exists('errcode', $response)) {

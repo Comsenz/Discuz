@@ -37,9 +37,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int is_paid
  * @property float fee
  * @property int days
+ * @property int scale
  * @property Collection $users
  * @property Collection $permissions
  * @method truncate()
+ * @method first()
  * @method create(array $array)
  * @method insert(array $array)
  * @method static find(mixed $GUEST_ID)
@@ -133,6 +135,11 @@ class Group extends Model
     public function permission()
     {
         return $this->hasMany(Permission::class);
+    }
+
+    public function permissionWithoutCategories()
+    {
+        return $this->permission()->where('permission', 'not like', 'category%');
     }
 
     /**

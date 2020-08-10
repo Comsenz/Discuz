@@ -135,7 +135,10 @@ class CreateThread
 
         // 非文字贴可设置价格
         if ($thread->type !== Thread::TYPE_OF_TEXT) {
-            $thread->price = (float) Arr::get($this->data, 'attributes.price', 0);
+            // 是否有权发布付费贴
+            if ($thread->price = (float) Arr::get($this->data, 'attributes.price', 0)) {
+                $this->assertCan($this->actor, 'createThreadPaid');
+            }
 
             // 付费长文帖可设置免费阅读字数
             if ($thread->type === Thread::TYPE_OF_LONG && $thread->price) {

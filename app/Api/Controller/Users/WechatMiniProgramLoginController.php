@@ -22,15 +22,14 @@ use App\Api\Serializer\TokenSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\AutoRegisterUser;
 use App\Events\Users\Logind;
-use App\Models\UserWechat;
 use App\Settings\SettingsRepository;
+use App\User\Bind;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Socialite\Exception\SocialiteException;
 use Discuz\Wechat\EasyWechatTrait;
-use EasyWeChat\Kernel\Exceptions\DecryptException;
-use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use Exception;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Events\Dispatcher as Events;
@@ -57,25 +56,28 @@ class WechatMiniProgramLoginController extends AbstractResourceController
 
     protected $settings;
 
-    public function __construct(Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events, SettingsRepository $settings)
+    protected $bind;
+
+    public function __construct(Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events, SettingsRepository $settings, Bind $bind)
     {
         $this->bus = $bus;
         $this->cache = $cache;
         $this->validation = $validation;
         $this->events = $events;
         $this->settings = $settings;
+        $this->bind = $bind;
     }
 
     /**
      * @inheritDoc
      * @throws SocialiteException
-     * @throws InvalidConfigException
-     * @throws DecryptException
      * @throws PermissionDeniedException
+     * @throws Exception
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
+        $actor = $request->getAttribute('actor');
         $js_code = Arr::get($attributes, 'js_code');
         $iv = Arr::get($attributes, 'iv');
         $encryptedData =Arr::get($attributes, 'encryptedData');
@@ -84,36 +86,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             ['js_code' => 'required','iv' => 'required','encryptedData' => 'required']
         )->validate();
 
-        $app = $this->miniProgram();
-        //获取小程序登陆session key
-        $authSession = $app->auth->session($js_code);
-        if (isset($authSession['errcode']) && $authSession['errcode'] != 0) {
-            throw new SocialiteException($authSession['errmsg'], $authSession['errcode']);
-        }
-        $decryptedData = $app->encryptor->decryptData(Arr::get($authSession, 'session_key'), $iv, $encryptedData);
-        $unionid = Arr::get($decryptedData, 'unionId') ?: Arr::get($authSession, 'unionid', '');
-        $openid  =  Arr::get($decryptedData, 'openId') ?: Arr::get($authSession, 'openid');
-
-        //获取小程序用户信息
-        /** @var UserWechat $wechatUser */
-        $wechatUser = UserWechat::when($unionid, function ($query, $unionid) {
-            return $query->where('unionid', $unionid);
-        })->orWhere('min_openid', $openid)->first();
-
-        if (!$wechatUser) {
-            $wechatUser = UserWechat::build([]);
-        }
-
-        //解密获取数据，更新/插入wechatUser
-        $wechatUser->unionid = $unionid;
-        $wechatUser->min_openid = $openid;
-        $wechatUser->nickname = $decryptedData['nickName'];
-        $wechatUser->city = $decryptedData['city'];
-        $wechatUser->province = $decryptedData['province'];
-        $wechatUser->country = $decryptedData['country'];
-        $wechatUser->sex = $decryptedData['gender'];
-        $wechatUser->headimgurl = $decryptedData['avatarUrl'];
-
+        $wechatUser = $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $actor);
 
         if ($wechatUser->user_id) {
             //已绑定的用户登陆

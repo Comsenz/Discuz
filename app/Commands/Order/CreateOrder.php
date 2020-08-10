@@ -107,8 +107,16 @@ class CreateOrder
                     ->first();
 
                 if ($thread) {
+                    // 判断该主题作者是否有 被打赏的权限
+                    $this->assertCan($thread->user, 'createThreadPaid');
+
                     $payeeId = $thread->user_id;
                     $amount = sprintf('%.2f', (float) $this->data->get('amount'));
+
+                    // 查询收款人是否有上级邀请
+                    if ($thread->user->userDistribution->exists()) {
+                        $be_scale = $thread->user->userDistribution->be_scale;
+                    }
                 } else {
                     throw new OrderException('order_post_not_found');
                 }
@@ -135,8 +143,16 @@ class CreateOrder
 
                 // 主题存在且未付过费
                 if ($thread && ! $order) {
+                    // 判断该主题作者是否有 被付费的权限
+                    $this->assertCan($thread->user, 'createThreadPaid');
+
                     $payeeId = $thread->user_id;
                     $amount = $thread->price;
+
+                    // 查询收款人是否有上级邀请
+                    if ($thread->user->userDistribution->exists()) {
+                        $be_scale = $thread->user->userDistribution->be_scale;
+                    }
                 } else {
                     throw new OrderException('order_post_not_found');
                 }
@@ -186,6 +202,7 @@ class CreateOrder
         $order->payment_sn      = $payment_sn;
         $order->order_sn        = $this->getOrderSn();
         $order->amount          = $amount;
+        $order->be_scale        = $be_scale ?? 0;
         $order->user_id         = $this->actor->id;
         $order->type            = $orderType;
         $order->thread_id       = isset($thread) ? $thread->id : null;

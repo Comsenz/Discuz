@@ -16,6 +16,7 @@ export default {
       visible:false,
       delLoading:false,             //删除按钮状态
       subLoading:false,             //提交按钮状态
+      showClass:false,              //分类权限显示隐藏
     }
   },
 
@@ -32,6 +33,7 @@ export default {
     },
 
     tableContAdd(){
+      this.showClass = false;
       this.createCategoriesStatus = true;
       this.categoriesList.push({
         name:"",
@@ -43,6 +45,7 @@ export default {
 
     submitClick(){     //提交
       this.subLoading = true;
+      this.showClass = true;
 
       /*if (this.createCategoriesStatus && this.multipleSelection.length > 0){
         this.$message({

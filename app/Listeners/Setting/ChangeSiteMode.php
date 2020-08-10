@@ -68,12 +68,10 @@ class ChangeSiteMode
                                 $fail(trans('setting.pay_site_mode_need_open_payment'));
                             }
                         },
-                    ],
-                    'site_price' => 'required_if:site_mode,pay',
+                    ]
                 ],
                 [
                     'site_mode.in' => trans('setting.invalid_site_mode'),
-                    'site_price.required_if' => trans('setting.site_mode_not_found_price'),
                 ]
             );
 
@@ -87,7 +85,7 @@ class ChangeSiteMode
 
     /**
      * @param Collection $settings
-     * @param Carbon $time
+     * @param Carbon|null $time
      */
     private function setChangeTime(Collection $settings, Carbon $time = null)
     {

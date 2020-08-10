@@ -19,23 +19,33 @@
 namespace App\Listeners\Setting;
 
 use App\Events\Setting\Saving;
+use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Wechat\EasyWechatTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class CheckWatermarkSetting
+class CheckCaptcha
 {
+    use EasyWechatTrait;
+
+    /**
+     * @var SettingsRepository
+     */
+    public $settings;
+
     /**
      * @var Validator
      */
     public $validator;
 
     /**
+     * @param SettingsRepository $settings
      * @param Validator $validator
      */
-    public function __construct(Validator $validator)
+    public function __construct(SettingsRepository $settings, Validator $validator)
     {
+        $this->settings = $settings;
         $this->validator = $validator;
     }
 
@@ -45,15 +55,21 @@ class CheckWatermarkSetting
      */
     public function handle(Saving $event)
     {
-        $settings = $event->settings->where('tag', 'watermark')->pluck('value', 'key')->all();
+        $settings = $event->settings->where('tag', 'qcloud')->pluck('value', 'key')->toArray();
 
-        $watermark = (bool) Arr::get($settings, 'watermark');
+        if (Arr::hasAny($settings, [
+            'qcloud_captcha',
+            'qcloud_captcha_app_id',
+            'qcloud_captcha_secret_key',
+        ])) {
+            // 合并原配置与新配置（新值覆盖旧值）
+            $settings = array_merge((array) $this->settings->tag('qcloud'), $settings);
 
-        $this->validator->make($settings, [
-            'watermark' => 'nullable|boolean',
-            'position' => [Rule::requiredIf($watermark), 'integer', 'between:1,9'],
-            'horizontal_spacing' => [Rule::requiredIf($watermark), 'integer', 'between:0,9999'],
-            'vertical_spacing' => [Rule::requiredIf($watermark), 'integer', 'between:0,9999'],
-        ])->validate();
+            $this->validator->make($settings, [
+                'qcloud_captcha' => 'nullable|boolean',
+                'qcloud_captcha_app_id' => 'required_if:qcloud_captcha,1',
+                'qcloud_captcha_secret_key' => 'required_if:qcloud_captcha,1',
+            ])->validate();
+        }
     }
 }

@@ -73,6 +73,7 @@ class ResourceThreadController extends AbstractResourceController
      */
     public $optionalInclude = [
         'user.groups',
+        'user.groups.permissionWithoutCategories',
         'category',
         'firstPost.likedUsers',
         'posts.likedUsers',

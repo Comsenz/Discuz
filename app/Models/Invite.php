@@ -36,6 +36,7 @@ use Illuminate\Support\Carbon;
  * @property int $status
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property Group $group
  * @package App\Models
  */
 class Invite extends Model
@@ -43,17 +44,12 @@ class Invite extends Model
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
 
-    const TYPE_GENERAL = 1; //普通会员邀请
-
-    const TYPE_ADMIN = 2;   //管理员邀请
-
-    const STATUS_INVALID = 0;  //失效
-
-    const STATUS_UNUSED = 1;   //未使用
-
-    const STATUS_USED = 2;     //已使用
-
-    const STATUS_EXPIRED = 3;   //已过期
+    const TYPE_GENERAL = 1;     // 普通会员邀请
+    const TYPE_ADMIN = 2;       // 管理员邀请
+    const STATUS_INVALID = 0;   // 失效
+    const STATUS_UNUSED = 1;    // 未使用
+    const STATUS_USED = 2;      // 已使用
+    const STATUS_EXPIRED = 3;   // 已过期
 
     /**
      * 与模型关联的数据表.
@@ -83,6 +79,17 @@ class Invite extends Model
      */
     const UPDATED_AT = 'updated_at';
 
+    protected $fillable = [
+        'group_id',
+        'type',
+        'code',
+        'dateline',
+        'endtime',
+        'user_id',
+        'to_user_id',
+        'status',
+    ];
+
     /**
      * 模型的「启动」方法.
      *
@@ -94,38 +101,20 @@ class Invite extends Model
     }
 
     /**
-     * 创建邀请码.
+     * Create a new user distribute
      *
-     * @param $user_group_id
-     * @param $code
-     * @param $dateline
-     * @param $endtime
-     * @param $user_id
+     * @param array $attributes
      * @return static
      */
-    public static function creation(
-        $group_id,
-        $type,
-        $code,
-        $dateline,
-        $endtime,
-        $user_id
-    ) {
-        // 实例一个模型
+    public static function creation(array $attributes)
+    {
         $invite = new static;
 
-        // 设置模型属性值
-        $invite->group_id = $group_id;
-        $invite->type = $type;
-        $invite->code = $code;
-        $invite->dateline = $dateline;
-        $invite->endtime = $endtime;
-        $invite->user_id = $user_id;
+        $invite->fill($attributes);
 
         // 暂存需要执行的事件
         $invite->raise(new Created($invite));
 
-        // 返回模型
         return $invite;
     }
 

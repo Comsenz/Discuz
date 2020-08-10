@@ -14,6 +14,8 @@ export default {
       realNameDisabled: false,    // 是否开启实名认证
       showScale: false,   // 是否开启推广下线
       scale: 0, // 提成比例
+      bindPhoneDisabled: false,   // 是否开启短信验证
+      wechatPayment: false,       // 是否开启微信支付
     }
   },
   methods: {
@@ -39,6 +41,8 @@ export default {
           }
           if (res.readdata._data.others.can_invite_user_scale === false) {
             this.showScale = true
+          if (res.readdata._data.paycenter.wxpay_close === false) {
+             this.wechatPayment = true;
           }
         }
       })
@@ -46,7 +50,7 @@ export default {
     /*
     * 权限列表中英文对应拿到后，在页面的label中对应填写
     * */
-
+    
 
     submitClick() {
       if(!this.checkNum()){
@@ -148,7 +152,7 @@ export default {
       }
       return true;
     }
-
+   
   },
   created() {
     this.getGroupResource();

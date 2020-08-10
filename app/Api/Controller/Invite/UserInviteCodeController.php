@@ -19,6 +19,7 @@
 namespace App\Api\Controller\Invite;
 
 use App\Exceptions\NoUserException;
+use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Http\DiscuzResponseFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -26,12 +27,18 @@ use Psr\Http\Message\ResponseInterface;
 
 class UserInviteCodeController implements RequestHandlerInterface
 {
+    use AssertPermissionTrait;
+
     /**
-     * {@inheritdoc}
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @throws NoUserException
+     * @throws \Discuz\Auth\Exception\NotAuthenticatedException
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $actor = $request->getAttribute('actor');
+        $this->assertRegistered($actor);
 
         if (!$actor) {
             throw new NoUserException();
