@@ -64,6 +64,11 @@ class CreateUserFollow
         }
         $toUser = $user->findOrFail($this->to_user_id);
 
+        //在黑名单中，不能创建会话
+        if (in_array($this->actor->id, array_column($toUser->deny->toArray(), 'id'))) {
+            throw new PermissionDeniedException('user_deny');
+        }
+
         //判断是否需要设置互相关注
         $toUserFollow = $userFollow->where(['from_user_id'=>$this->to_user_id,'to_user_id'=>$this->actor->id])->first();
         $is_mutual = UserFollow::NOT_MUTUAL;

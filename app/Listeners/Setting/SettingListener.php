@@ -29,12 +29,19 @@ class SettingListener
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(Saving::class, ChangeSiteMode::class);
-        $events->listen(Saving::class, CheckWatermarkSetting::class);
-        $events->listen(Saving::class, CheckPayAppId::class);
-        $events->listen(Saving::class, CheckOffiaccount::class);
+        // Local Service
+        $events->listen(Saving::class, ChangeSiteMode::class);                  // 站点模式
+        $events->listen(Saving::class, CheckWatermark::class);                  // 水印设置
+
+        // Third Party Services
+        $events->listen(Saving::class, CheckOffiaccount::class);                // 微信公众号
+        $events->listen(Saving::class, CheckMiniprogram::class);                // 微信小程序
+        $events->listen(Saving::class, CheckWxpay::class);                      // 微信支付
+        $events->listen(Saving::class, CheckCaptcha::class);                    // 腾讯云验证码
+        $events->listen(Saving::class, CheckCos::class);                        // 腾讯云对象存储 COS
 
         $events->listen(Saved::class, ClearDisabledPermission::class);
+        $events->listen(Saved::class, ClearDisabledSettings::class);
         $events->listen(Saved::class, QcloudSettingReport::class);
     }
 }

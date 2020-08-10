@@ -22,7 +22,6 @@ use App\Api\Serializer\TokenSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\AutoRegisterUser;
 use App\Events\Users\Logind;
-use App\Models\UserWechat;
 use App\Settings\SettingsRepository;
 use App\User\Bind;
 use Discuz\Api\Controller\AbstractResourceController;
@@ -30,8 +29,7 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Socialite\Exception\SocialiteException;
 use Discuz\Wechat\EasyWechatTrait;
-use EasyWeChat\Kernel\Exceptions\DecryptException;
-use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use Exception;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Events\Dispatcher as Events;
@@ -73,9 +71,8 @@ class WechatMiniProgramLoginController extends AbstractResourceController
     /**
      * @inheritDoc
      * @throws SocialiteException
-     * @throws InvalidConfigException
-     * @throws DecryptException
      * @throws PermissionDeniedException
+     * @throws Exception
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {

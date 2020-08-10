@@ -59,7 +59,7 @@ class AutoRegisterUser
         $request = app('request');
 
         $this->data['register_ip'] = ip($request->getServerParams());
-        $this->data['register_port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT');
+        $this->data['register_port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT', 0);
         //自动注册没有密码，后续用户可以设置密码
         $this->data['password'] = '';
 

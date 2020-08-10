@@ -90,7 +90,7 @@ class VerifyController extends AbstractResourceController
         $mobileCode->save();
 
         $data['ip'] = ip($request->getServerParams());
-        $data['port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT');
+        $data['port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT', 0);
 
         //各种类型验证通过后，返回相关数据
         return $this->bus->dispatch(new VerifyMobile($this, $mobileCode, $actor, $data));

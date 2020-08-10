@@ -16,32 +16,34 @@
  * limitations under the License.
  */
 
-use Discuz\Database\Migration;
-use Illuminate\Database\Schema\Blueprint;
+namespace App\Listeners\Setting;
 
-class AddPostsReplyPostIdIndex extends Migration
+use App\Events\Setting\Saved;
+use Discuz\Contracts\Setting\SettingsRepository;
+
+class ClearDisabledSettings
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * @var SettingsRepository
      */
-    public function up()
+    public $settings;
+
+    /**
+     * @param SettingsRepository $settings
+     */
+    public function __construct(SettingsRepository $settings)
     {
-        $this->schema()->table('posts', function (Blueprint $table) {
-            $table->index('reply_post_id', 'idx_reply_post_id');
-        });
+        $this->settings = $settings;
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * @param Saved $event
      */
-    public function down()
+    public function handle(Saved $event)
     {
-        $this->schema()->table('posts', function (Blueprint $table) {
-            $table->dropIndex('idx_reply_post_id');
-        });
+        // 关闭验证码时 关闭注册验证码
+        if (! $this->settings->get('qcloud_captcha', 'qcloud')) {
+            $this->settings->set('register_captcha', '0');
+        }
     }
 }
