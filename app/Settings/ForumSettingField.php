@@ -59,7 +59,8 @@ class ForumSettingField
                     ->disk('cos')
                     ->temporaryUrl($imgName, \Carbon\Carbon::now()->addDay());
             } else {
-                return $this->url->to('/storage/' . $imgName) . '?' . \Carbon\Carbon::now()->timestamp;
+                $fileTime = filemtime(public_path('storage/'.$imgName));
+                return $this->url->to('/storage/' . $imgName) . '?' . $fileTime ?: \Carbon\Carbon::now()->timestamp;
             }
         }
 

@@ -63,7 +63,7 @@ class CreateThreadController extends AbstractCreateController
     {
         $actor = $request->getAttribute('actor');
         $ip = ip($request->getServerParams());
-        $port = Arr::get($request->getServerParams(), 'REMOTE_PORT');
+        $port = Arr::get($request->getServerParams(), 'REMOTE_PORT', 0);
 
         return $this->bus->dispatch(
             new CreateThread($actor, $request->getParsedBody()->get('data', []), $ip, $port)

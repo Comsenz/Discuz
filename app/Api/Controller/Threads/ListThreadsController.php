@@ -23,9 +23,9 @@ use App\Models\Order;
 use App\Models\Post;
 use App\Models\PostUser;
 use App\Models\Thread;
-use App\Models\Topic;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
+use App\Repositories\TopicRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Contracts\Routing\UrlGenerator;
@@ -416,7 +416,7 @@ class ListThreadsController extends AbstractListController
         //话题文章
         if ($topicId = Arr::get($filter, 'topicId', '0')) {
             //更新话题阅读数、主题数
-            $topic = Topic::find($topicId);
+            $topic = app()->make(TopicRepository::class)->findOrFail($topicId);
             $topic->refreshTopicViewCount();
             $topic->refreshTopicThreadCount();
 

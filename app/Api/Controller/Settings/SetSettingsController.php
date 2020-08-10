@@ -89,7 +89,7 @@ class SetSettingsController implements RequestHandlerInterface
 
         /**
          * TODO: 将不同功能的设置放到监听器中验证，不要全写在 SetSettingValidator
-         * @example CheckWatermarkSetting::class
+         * @example ChangeSiteMode::class
          * @deprecated SetSettingValidator::class（建议整改后废弃）
          */
         $this->events->dispatch(new Saving($settings));

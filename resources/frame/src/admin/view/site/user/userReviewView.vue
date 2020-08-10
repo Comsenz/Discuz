@@ -52,8 +52,8 @@
             </template>
           </el-table-column>
         </el-table>
-
-        <tableNoList v-show="tableData.length < 1"></tableNoList>
+      <!-- 注释掉 暂无数据重复问题-->
+        <!-- <tableNoList v-show="tableData.length < 1"></tableNoList> -->
 
         <Page
           v-if="pageCount > 1"

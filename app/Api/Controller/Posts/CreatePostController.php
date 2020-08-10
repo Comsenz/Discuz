@@ -65,7 +65,7 @@ class CreatePostController extends AbstractCreateController
         $data = $request->getParsedBody()->get('data', []);
         $threadId = Arr::get($data, 'relationships.thread.data.id');
         $ip = ip($request->getServerParams());
-        $port = Arr::get($request->getServerParams(), 'REMOTE_PORT');
+        $port = Arr::get($request->getServerParams(), 'REMOTE_PORT', 0);
 
         $isComment = (bool) Arr::get($data, 'attributes.isComment');
 
