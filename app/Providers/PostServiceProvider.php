@@ -18,11 +18,7 @@
 
 namespace App\Providers;
 
-use App\Formatter\Formatter;
-use App\Formatter\MarkdownFormatter;
-use App\Listeners\Post\PostAttachment;
 use App\Listeners\Post\PostListener;
-use App\Models\Post;
 use App\Policies\PostPolicy;
 use Discuz\Foundation\AbstractServiceProvider;
 
@@ -51,6 +47,5 @@ class PostServiceProvider extends AbstractServiceProvider
         $events->subscribe(PostListener::class);
         $events->subscribe(PostPolicy::class);
 
-        $events->subscribe(PostAttachment::class);
     }
 }

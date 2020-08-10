@@ -185,7 +185,7 @@ trait PostNoticesTrait
      */
     public function getPostTitle(Post $post)
     {
-        return $post->thread->type === Thread::TYPE_OF_LONG ? $post->thread->title : $post->getTextFromContent();
+        return $post->thread->title ? $post->thread->title : $post->getTextFromContent();
     }
 
     /**

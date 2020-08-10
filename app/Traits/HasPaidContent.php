@@ -88,45 +88,6 @@ trait HasPaidContent
     }
 
     /**
-     * 付费长文帖未付费时不返回图片及附件
-     * 帖子的 images 与 attachments 不在序列化 Attachment 时处理，直接设为空
-     *
-     * @param Thread $thread
-     */
-    public function hideImagesAndAttachments(Thread $thread)
-    {
-        if (
-            $thread->type === Thread::TYPE_OF_LONG
-            && $thread->price > 0
-            && ! $thread->is_paid
-        ) {
-            $thread->firstPost->setRelation('images', collect());
-            $thread->firstPost->setRelation('attachments', collect());
-        }
-    }
-
-    /**
-     * 付费长文帖未付费时返回免费部分内容
-     *
-     * @param Post $post
-     */
-    public function summaryOfContent(Post $post)
-    {
-        if (
-            $post->is_first
-            && $post->thread
-            && $post->thread->type === Thread::TYPE_OF_LONG
-            && $this->cannotView($post->thread)
-        ) {
-            $content = Str::of($post->content);
-
-            if ($content->length() > $post->thread->free_words) {
-                $post->content = $content->substr(0, $post->thread->free_words)->finish(Post::SUMMARY_END_WITH);
-            }
-        }
-    }
-
-    /**
      * 付费图片帖未付费时返回模糊图
      *
      * @param Attachment $attachment
@@ -145,23 +106,6 @@ trait HasPaidContent
         }
     }
 
-    /**
-     * 付费视频帖未付费时不返回媒体 id 及地址
-     *
-     * @param ThreadVideo $threadVideo
-     */
-    public function hideMedia(ThreadVideo $threadVideo)
-    {
-        if (
-            $threadVideo->type === ThreadVideo::TYPE_OF_VIDEO
-            && $threadVideo->thread
-            && $threadVideo->thread->type === Thread::TYPE_OF_VIDEO
-            && $this->cannotView($threadVideo->thread)
-        ) {
-            $threadVideo->file_id = '';
-            $threadVideo->media_url = '';
-        }
-    }
 
     /**
      * 是否无权查看

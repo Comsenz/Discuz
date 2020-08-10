@@ -48,12 +48,12 @@ class DeleteThreadVideo
     public function handle(EventDispatcher $events, ThreadVideoRepository $threadVideos)
     {
         $this->events = $events;
-        if ($this->thread->type == 2) {
-            $threadVideo = $threadVideos->query()->where('thread_id', $this->thread->id)->first();
-            if ($threadVideo) {
-                $threadVideo->delete();
-                $this->deleteVodMedia($threadVideo->file_id);
-            }
+
+        $threadVideoList = $threadVideos->query()->where('thread_id', $this->thread->id)->get();
+
+        foreach ($threadVideoList as $threadVideo) {
+            $threadVideo->delete();
+            $this->deleteVodMedia($threadVideo->file_id);
         }
     }
 }
