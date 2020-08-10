@@ -136,6 +136,7 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
         // 查询主题内容
         $thread = $this->thread->findOrFail($threadId);
         // 获取内容
+        // @TODO 编辑器 修改内容获取方式，去掉$thread->type == 2
         $this->content = $thread->firstPost->formatContent();
 
         // 判断是否是视频贴
