@@ -12,7 +12,8 @@ export default {
       videoDisabled: false,       // 是否开启云点播
       captchaDisabled: false,     // 是否开启验证码
       realNameDisabled: false,    // 是否开启实名认证
-      bindPhoneDisabled: false,   // 是否开启短信验证
+      showScale: false,   // 是否开启推广下线
+      scale: 0, // 提成比例
     }
   },
   methods: {
@@ -36,6 +37,9 @@ export default {
           if (res.readdata._data.qcloud.qcloud_sms === false) {
             this.bindPhoneDisabled = true
           }
+          if (res.readdata._data.others.can_invite_user_scale === false) {
+            this.showScale = true
+          }
         }
       })
     },
@@ -45,6 +49,10 @@ export default {
 
 
     submitClick() {
+      if(!this.checkNum()){
+        return;
+      }
+      this.patchGroupScale();
       this.patchGroupPermission();
     },
 
@@ -68,6 +76,11 @@ export default {
           data.forEach((item) => {
             this.checked.push(item._data.permission)
           })
+          this.scale = res.data.attributes.scale;
+          if(this.checked.indexOf('other.canInviteUserScale')!=-1) {
+            this.showScale = true;
+          }
+          
         }
 
       }).catch(err => {
@@ -97,6 +110,43 @@ export default {
         }
       }).catch(err => {
       })
+    },
+
+    patchGroupScale() {
+      this.appFetch({
+        url: 'groups',
+        method: 'PATCH',
+        splice: '/' + this.$route.query.id,
+        data: {
+          data: {
+            "attributes": {
+              'name':this.$route.query.name,
+              "scale": this.scale,
+            }
+          }
+        }
+      }).then(res => {
+        if (res.errors) {
+          this.$message.error(res.errors[0].code);
+        }
+      }).catch(err => {
+      })
+    },
+
+    handlePromotionChange(value){
+      this.showScale = value;
+    },
+
+    checkNum(){
+      const reg = /^([0-9](\.\d)?|10)$/;
+      if(!reg.test(this.scale)){
+        this.$message({
+          message: "提成比例必须是0~10的整数或者一位小数",
+          type: "error"
+        });
+        return false;
+      }
+      return true;
     }
 
   },

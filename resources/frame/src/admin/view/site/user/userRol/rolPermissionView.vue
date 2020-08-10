@@ -305,6 +305,29 @@
       </CardRow>
     </Card>-->
 
+     <Card header="其他权限："></Card>
+     <Card>
+      <CardRow description="允许推广下线">
+        <el-checkbox
+          v-model="checked"
+          label="other.canInviteUserScale"
+          @change="handlePromotionChange"
+        >推广下线</el-checkbox>
+      </CardRow>
+      <CardRow description="下线主题打赏、付费等的分成比例设置，填1表示10%，不填或为0时为不分成，分成仅为下一级用户。" class="proportion-box" v-if="showScale">
+        <div>
+          <span>提成比例</span>
+          <el-input
+            class
+            placeholder="请输入0~10的整数或者一位小数"
+            type="number"
+            v-model="scale"
+            @blur="checkNum"
+          ></el-input>
+        </div>
+      </CardRow>
+    </Card>
+
     <Card class="footer-btn">
       <el-button type="primary" @click="submitClick" size="medium">提交</el-button>
     </Card>
