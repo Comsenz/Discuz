@@ -35,6 +35,8 @@ class UserWalletLogSerializer extends AbstractSerializer
     {
         return [
             'id' => $model->id,
+            'user_id'                   => $model->user_id,
+            'source_user_id'            => $model->source_user_id,
             'change_available_amount'   => $model->change_available_amount,
             'change_freeze_amount'      => $model->change_freeze_amount,
             'change_type'               => $model->change_type,
@@ -78,5 +80,14 @@ class UserWalletLogSerializer extends AbstractSerializer
     protected function order($log)
     {
         return $this->hasOne($log, OrderSerializer::class);
+    }
+
+    /**
+     * @param $log
+     * @return Relationship
+     */
+    protected function sourceUser($log)
+    {
+        return $this->hasOne($log, UserSerializer::class);
     }
 }

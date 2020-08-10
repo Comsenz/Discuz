@@ -186,6 +186,7 @@ return [
         'time'                  => '时间',
         'available'             => '可用的',
         'size'                  => '大小',
+        'scale'                 => '分成',
 
         // stop words
         'ugc'                   => '用户内容',
@@ -207,40 +208,36 @@ return [
         'horizontal_spacing'    => '水印水平边距',
         'vertical_spacing'      => '水印垂直边距',
 
-        // settings - wxpay
-
-
         // settings - qcloud
         'qcloud_captcha_app_id'         => '腾讯云验证码 AppId',
         'qcloud_captcha_secret_key'     => '腾讯云验证码 App Secret Key',
-
         'qcloud_cos_bucket_name'        => '腾讯云 COS 桶名',
         'qcloud_cos_bucket_area'        => '腾讯云 COS 地域',
 
         // sms
-        'sms_code'              => '验证码',
-        'sms_type' => '验证码类型',
+        'sms_code'  => '验证码',
+        'sms_type'  => '验证码类型',
 
         // user
-        'pay_password' => '支付密码',
+        'pay_password'              => '支付密码',
         'pay_password_confirmation' => '支付密码',
-        'groupId' => '用户组',
-        'username_prefix' => '网友',
-        'register_reason' => '注册原因',
+        'groupId'                   => '用户组',
+        'username_prefix'           => '网友',
+        'register_reason'           => '注册原因',
 
         // thread
-        'file_id' => '视频文件',
+        'file_id'   => '视频文件',
         'file_name' => '视频文件名称',
-        'price' => '价格',
-        'captcha' => '验证码',
-        'type' => '类型',
+        'price'     => '价格',
+        'captcha'   => '验证码',
+        'type'      => '类型',
 
-        //NotificationTpl
+        // NotificationTpl
         'template_id' => '模板ID',
 
-        //会话 会话消息
-        'dialog_id' => '会话',
-        'message_text' => '消息内容',
+        // 会话 会话消息
+        'dialog_id'     => '会话',
+        'message_text'  => '消息内容',
         'attachment_id' => '附件',
 
     ],

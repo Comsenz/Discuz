@@ -39,7 +39,7 @@ class Registered
 
     /**
      * @param User $user
-     * @param User $actor
+     * @param User|null $actor
      * @param array $data
      */
     public function __construct(User $user, User $actor = null, array $data = [])
