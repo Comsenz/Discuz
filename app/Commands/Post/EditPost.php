@@ -118,20 +118,20 @@ class EditPost
                 /** @var ThreadVideo $threadVideo */
                 $threadVideos = app()->make(ThreadVideoRepository::class);
                 $threadVideo = $threadVideos->findOrFailByThreadId($post->thread->id);
-                $blocksTypeList = $BlocksParser->BlocksValue('video');
+                $videoList = $BlocksParser->BlocksValue('video');
 
                 foreach ($threadVideo as $video) {
                     //未改变视频块
-                    if ($key = array_search($video->id, $blocksTypeList) !== false) {
-                        unset($blocksTypeList[$key]);
+                    if ($key = array_search($video->id, $videoList) !== false) {
+                        unset($videoList[$key]);
                     }
                     //已删除视频块
                     $threadVideo->thread_id = 0;
                     $threadVideo->save();
                 }
                 //新增视频块
-                if (!empty($blocksTypeList)) {
-                    foreach ($blocksTypeList as $newVideo) {
+                if (!empty($videoList)) {
+                    foreach ($videoList as $newVideo) {
                         // 创建新的视频记录 attributes.file_id
                         $data = [
                             'attributes' => [

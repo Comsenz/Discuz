@@ -50,11 +50,13 @@ class SaveVideoToDatabase
     {
         $thread = $event->thread;
         $actor = $event->actor;
-        $data = Arr::get($this->request->getParsedBody(), 'data', []);
-
-        $fileId = Arr::get($data, 'attributes.file_id', '');
-
-        if ($fileId && $thread->type === Thread::TYPE_OF_VIDEO) {
+        foreach ($thread->file_ids as $file_id) {
+            // 创建新的视频记录 attributes.file_id
+            $data = [
+                'attributes' => [
+                    'file_id'   => $file_id
+                ]
+            ];
             $video = $this->bus->dispatch(
                 new CreateThreadVideo($actor, $thread, $data)
             );

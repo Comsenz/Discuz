@@ -105,9 +105,13 @@ class CreateThread
         $blocksTypeList = $BlocksParser->BlocksTypeList();
 
         $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
-        if ($censor->isMod || in_array('video', $blocksTypeList)) {
+        if ($censor->isMod || $hasVideo = Arr::has($blocksTypeList, 'video')) {
             //存在审核敏感词/存在视频块时，将主题放入待审核
             $thread->is_approved = Thread::UNAPPROVED;
+            if ($hasVideo) {
+                //设置file_id供事件使用
+                $thread->file_ids = $BlocksParser->BlocksValue('video');
+            }
         }
         $thread->title = $title;
         $thread->user_id = $this->actor->id;
