@@ -39,9 +39,6 @@ export default {
           if (res.readdata._data.qcloud.qcloud_sms === false) {
             this.bindPhoneDisabled = true
           }
-          if (res.readdata._data.other.can_invite_user_scale) {
-            this.showScale = true
-          }
           if (res.readdata._data.paycenter.wxpay_close === false) {
              this.wechatPayment = true;
           }
