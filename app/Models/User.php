@@ -68,6 +68,7 @@ use Illuminate\Support\Str;
  * @property userFollow $follow
  * @property UserWallet $userWallet
  * @property UserWechat $wechat
+ * @property UserDistribution $userDistribution
  * @package App\Models
  * @method truncate()
  * @method hasAvatar()
@@ -598,6 +599,11 @@ class User extends Model
     public function postUser()
     {
         return $this->hasMany(PostUser::class);
+    }
+
+    public function userDistribution()
+    {
+        return $this->hasOne(UserDistribution::class);
     }
 
     /*

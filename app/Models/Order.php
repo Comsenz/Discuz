@@ -20,6 +20,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Closure;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,7 +32,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $payment_sn
  * @property float $amount
  * @property float $master_amount
- * @property float $actual_amount
+ * @property float $author_amount
+ * @property int $be_scale
  * @property int $user_id
  * @property int $payee_id
  * @property int $type
@@ -170,13 +172,48 @@ class Order extends Model
     }
 
     /**
-     * 获取实际金额
+     * 计算作者实际金额数
      *
-     * @return float
+     * @param int $bossAmount
+     * @return float|string
      */
-    public function getActualAmountAttribute()
+    public function calculateAuthorAmount(&$bossAmount = 0)
     {
-        return number_format($this->amount - $this->master_amount, 2, '.', '');
+        // 获取 站长->作者 分成
+        $actualAmount = $this->amount - $this->master_amount;
+
+        // 计算 作者->上级 分成
+        if ($this->be_scale) {
+            $beScale = $this->be_scale / 10;
+
+            // 上级实际分到金额
+            $bossAmount = number_format($actualAmount * $beScale, 2, '.', '');
+            // 去掉上级分成 作者实际得到金额
+            $actualAmount = number_format($actualAmount - $bossAmount, 2, '.', '');
+        }
+
+        return $actualAmount;
+    }
+
+    /**
+     * 计算站长和作者实际金额数
+     *
+     * @param int $bossAmount
+     */
+    public function calculateMasterAmount(&$bossAmount = 0)
+    {
+        $settings = app(SettingsRepository::class);
+
+        // 站长作者分成配置
+        $site_author_scale = $settings->get('site_author_scale');
+
+        $order_amount = $this->amount; // 订单金额
+        $author_ratio = $site_author_scale / 10;
+
+        $payee_amount = sprintf('%.2f', ($order_amount * $author_ratio));
+        $this->master_amount = $order_amount - $payee_amount; // 站长分成金额
+
+        $this->author_amount = $this->calculateAuthorAmount($bossAmount); // 作者实际分成金额
     }
 
     /**

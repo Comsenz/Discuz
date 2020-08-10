@@ -56,7 +56,7 @@ export default {
       url: [],
 
       searchData: {
-        topicContent: '0',         //话题内容
+        topicContent: '',         //话题内容
         pageSelect: '10',         //每页显示数
         topicAuthor: '',          //话题作者
         releaseTime: ['',''],     //创建时间范围
@@ -66,7 +66,10 @@ export default {
         numberOfHotMax: '',       //热度数结束值
       },
       subLoading:false,     //提交按钮状态
-      
+
+      recommentbtn: true,
+      recomment1: '推荐',
+      recomment2: '取消推荐',
     }
   },
   computed: mapState({
@@ -170,7 +173,7 @@ export default {
         } else {
           console.log(this.themeList,'列表');
           this.themeList = res.readdata;
-          this.total = res.meta.threadCount;
+          this.total = res.meta.total;
           this.pageCount = res.meta.pageCount;
 
           this.themeListAll = [];
@@ -182,14 +185,21 @@ export default {
       })
     },
     // 全部删除
-    deleteClick(id) {
+    deleteClick() {
+      const ids = this.checkedTheme.join(',');
       this.appFetch({
         url: 'deleteTopics',
         method: 'delete',
-        splice: '/' + id,
+        splice: '/' + ids,
         }).then(res => {
-            
+          this.$message.success("删除成功");
+          this.getThemeList();
         })
+    },
+
+    // 推荐
+    recommentBtn() {
+       this.recommentbtn = !this.recommentbtn;
     }
   },
 
@@ -212,7 +222,6 @@ export default {
   created() {
     this.currentPag = Number(webDb.getLItem('currentPag')) || 1;
     this.getThemeList(Number(webDb.getLItem('currentPag')) || 1);
-    this.getCategories();
   },
 
   components: {

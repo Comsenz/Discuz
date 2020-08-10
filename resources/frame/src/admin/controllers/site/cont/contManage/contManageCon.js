@@ -226,7 +226,7 @@ export default {
     formatDate(data) {
       return this.$dayjs(data).format('YYYY-MM-DD HH:mm')
     },
-
+    // 提交
     submitClick() {
       this.subLoading = true;
 
@@ -263,7 +263,6 @@ export default {
           )
         });
       }
-
       switch (this.operatingSelect) {
         case 'class':
           if (this.categoryId) {
@@ -307,6 +306,7 @@ export default {
           message: '操作主题列表为空，请选择主题',
           type: 'warning'
         });
+        this.subLoading = false;
       } else if (!selectStatus) {
         this.appFetch({
           url: 'threads',

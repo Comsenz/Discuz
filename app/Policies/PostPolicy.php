@@ -93,9 +93,13 @@ class PostPolicy extends AbstractPolicy
                             ->from('threads')
                             ->whereColumn('threads.id', 'posts.thread_id')
                             ->where(function ($query) use ($actor) {
-                                $this->events->dispatch(
-                                    new ScopeModelVisibility(Thread::query()->setQuery($query), $actor, 'hidePosts')
-                                );
+                                $query
+                                    ->whereRaw('1=0')
+                                    ->orWhere(function ($query) use ($actor) {
+                                        $this->events->dispatch(
+                                            new ScopeModelVisibility(Thread::query()->setQuery($query), $actor, 'hidePosts')
+                                        );
+                                    });
                             });
                     });
             });

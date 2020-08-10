@@ -114,6 +114,11 @@ class CreateOrder
 
                     $payeeId = $thread->user_id;
                     $amount = sprintf('%.2f', (float) $this->data->get('amount'));
+
+                    // 查询收款人是否有上级邀请
+                    if ($thread->user->userDistribution->exists()) {
+                        $be_scale = $thread->user->userDistribution->be_scale;
+                    }
                 } else {
                     throw new OrderException('order_post_not_found');
                 }
@@ -144,6 +149,11 @@ class CreateOrder
 
                     $payeeId = $thread->user_id;
                     $amount = $thread->price;
+
+                    // 查询收款人是否有上级邀请
+                    if ($thread->user->userDistribution->exists()) {
+                        $be_scale = $thread->user->userDistribution->be_scale;
+                    }
                 } else {
                     throw new OrderException('order_post_not_found');
                 }
@@ -214,6 +224,7 @@ class CreateOrder
         $order->payment_sn      = $payment_sn;
         $order->order_sn        = $this->getOrderSn();
         $order->amount          = $amount;
+        $order->be_scale        = $be_scale ?? 0;
         $order->user_id         = $this->actor->id;
         $order->type            = $orderType;
         $order->post_id         = isset($post) ? $post->id : null;

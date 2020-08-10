@@ -63,6 +63,7 @@
           <el-button size="small" type="primary" @click="searchClick">搜索</el-button>
         </div>
       </div>
+      
     </div>
 
     <div class="cont-manage-theme">
@@ -103,6 +104,9 @@
 
             <div class="cont-manage-theme__table-main" slot="main">
           </div>
+          <!-- <div class="cont-manage-theme__table-button" slot="longText">
+            <el-button size="small" type="primary" @click="recommentBtn">{{recommentbtn? recomment1 : recomment2}}</el-button>
+          </div> -->
         </ContArrange>
 
         <el-image-viewer v-if="showViewer" :on-close="closeViewer" :url-list="url" />

@@ -76,13 +76,16 @@ class CheckOffiaccount
                 'offiaccount_app_id' => 'required_if:offiaccount_close,1',
                 'offiaccount_app_secret' => 'required_if:offiaccount_close,1',
                 'offiaccount' => [
-                    function ($attribute, $value, $fail) {
+                    function ($attribute, $value, $fail) use ($settings) {
                         // 开启微信公众号时，获取一次 Access token 验证配置是否正确
-                        try {
-                            $this->offiaccount($value)->access_token->getToken();
-                        } catch (\EasyWeChat\Kernel\Exceptions\HttpException $e) {
-                            $fail(trans('setting.offiaccount_error') . ($e->formattedResponse['errcode'] ?? ''));
+                        if ((bool) Arr::get($settings, 'offiaccount_close')) {
+                            try {
+                                $this->offiaccount($value)->access_token->getToken();
+                            } catch (\EasyWeChat\Kernel\Exceptions\HttpException $e) {
+                                $fail(trans('setting.offiaccount_error') . ($e->formattedResponse['errcode'] ?? ''));
+                            }
                         }
+
                     },
                 ],
             ], [

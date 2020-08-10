@@ -7,7 +7,8 @@ import Card from '../../../view/site/common/card/card';
 export default {
   data:function () {
     return {
-      siteInfo:{}   //系统信息
+      siteInfo:{},   //系统信息
+      newVersion: false  // 新版本是否显示
     }
   },
 
