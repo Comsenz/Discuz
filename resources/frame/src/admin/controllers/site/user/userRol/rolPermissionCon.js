@@ -41,6 +41,7 @@ export default {
           }
           if (res.readdata._data.others.can_invite_user_scale === false) {
             this.showScale = true
+          }
           if (res.readdata._data.paycenter.wxpay_close === false) {
              this.wechatPayment = true;
           }
