@@ -329,7 +329,6 @@
           <span>提成比例</span>
           <el-input
             class
-            placeholder="请输入0~10的整数或者一位小数"
             type="number"
             v-model="scale"
             @blur="checkNum"
