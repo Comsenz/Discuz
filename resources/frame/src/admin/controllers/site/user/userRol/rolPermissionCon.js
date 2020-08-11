@@ -38,12 +38,12 @@ export default {
           name: 'manage'
         },
         {
-          title: '默认权限',
-          name: 'default'
-        },
-        {
           title: '其他权限',
           name: 'other'
+        },
+        {
+          title: '默认权限',
+          name: 'default'
         }
       ]
     }
