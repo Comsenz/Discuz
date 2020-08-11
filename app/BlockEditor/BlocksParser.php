@@ -205,10 +205,6 @@ class BlocksParser
                         "emoji": [{
                             "name": ":oooo:",
                             "url": "http://xxxx"
-                        }],
-                        "goods": [{
-                            "id": "1",
-                            "name": "$oooooopoo$"
                         }]
                     }
                 }]
@@ -223,10 +219,37 @@ class BlocksParser
         {
             "type": "image",
             "data": {
-                "style": "1",
-                "value": [
-                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-                ]
+                "value": [1]
+            }
+        },
+        {
+            "type": "attachment",
+            "data": {
+                "value": [1]
+            }
+        },
+        {
+            "type": "attachment",
+            "data": {
+                "value": [1]
+            }
+        },
+        {
+            "type": "audio",
+            "data": {
+                "value": [1]
+            }
+        },
+        {
+            "type": "video",
+            "data": {
+                "value": [1]
+            }
+        },
+        {
+            "type": "goods",
+            "data": {
+                "value": [1]
             }
         }
     ],
