@@ -222,7 +222,17 @@
   用户角色权限设置
 */
 .rol-permission-box{
+  position: relative;
 
+  .permission__title{
+    position: absolute;
+    left: 70PX;
+    top: -46PX;
+    line-height: 25PX;
+  }
+  .permission__title span{
+    margin-right: 20PX;
+  }
   .card-row-box {
 
     .card-row-rf {

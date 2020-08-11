@@ -16,6 +16,36 @@ export default {
       scale: 0, // 提成比例
       bindPhoneDisabled: false,   // 是否开启短信验证
       wechatPayment: false,       // 是否开启微信支付
+      activeTab:  {               //设置权限当前项
+        title: '内容发布权限',
+        name: 'publish'
+      },
+      menuData: [                //设置权限
+        {
+          title: '内容发布权限',
+          name: 'publish'
+        },
+        {
+          title: '安全设置',
+          name: 'security'
+        },
+        {
+          title: '前台操作权限',
+          name: 'operate'
+        },
+        {
+          title: '前台管理权限',
+          name: 'manage'
+        },
+        {
+          title: '其他权限',
+          name: 'other'
+        },
+        {
+          title: '默认权限',
+          name: 'default'
+        }
+      ]
     }
   },
   methods: {
