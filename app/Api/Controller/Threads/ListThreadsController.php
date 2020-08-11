@@ -456,12 +456,6 @@ class ListThreadsController extends AbstractListController
             ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function (Post $post) {
-                // 引用回复去除引用部分
-                if ($post->reply_post_id) {
-                    $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
-                    $post->content = preg_replace($pattern, '', $post->content);
-                }
-
                 // 截取内容
                 $post->content = Str::limit($post->content, 70);
 

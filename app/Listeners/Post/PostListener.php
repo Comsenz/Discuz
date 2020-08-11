@@ -45,6 +45,7 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class PostListener
 {
@@ -136,8 +137,8 @@ class PostListener
                 // 数据库通知
                 $post->replyUser->notify(new Replied($post, $actor, RepliedMessage::class));
 
-                // 去掉回复引用
-                $post->replyPost->filterPostContent(Post::NOTICE_LENGTH);
+                // 被回复内容
+                $post->replyPost->content = Str::of($post->replyPost->content)->substr(0, Post::NOTICE_LENGTH);
 
                 // 微信通知
                 $post->replyUser->notify(new Replied($post, $actor, WechatRepliedMessage::class, [

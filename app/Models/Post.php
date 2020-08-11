@@ -256,7 +256,7 @@ class Post extends Model
      */
     public function getSummaryContent($substr, $parse = false)
     {
-        $special = app()->make(SpecialCharServer::class);
+        $special = app(SpecialCharServer::class);
 
         $build = [
             'content' => '',
@@ -281,9 +281,6 @@ class Post extends Model
             if ($this->thread->type === Thread::TYPE_OF_LONG) {
                 $content = $this->thread->getContentByType(self::NOTICE_LENGTH, $parse);
             } else {
-                // 引用回复去除引用部分
-                $this->filterPostContent();
-
                 $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
                 if ($parse) {
                     // 原文
@@ -305,22 +302,6 @@ class Post extends Model
         $build['first_content'] = $firstContent ?? $special->purify($this->thread->getContentByType(Thread::CONTENT_LENGTH, $parse));
 
         return $build;
-    }
-
-    /**
-     * 引用回复去除引用部分
-     *
-     * @param int $substr
-     */
-    public function filterPostContent($substr = 0)
-    {
-        // 引用回复去除引用部分
-        $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
-        $this->content = preg_replace($pattern, '', $this->content);
-
-        if ($substr) {
-            $this->content = Str::of($this->content)->substr(0, $substr);
-        }
     }
 
     /**
