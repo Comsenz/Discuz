@@ -35,7 +35,6 @@ use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 
 class CreatePost
@@ -44,6 +43,8 @@ class CreatePost
     use EventsDispatchTrait;
 
     public $BlocksParser;
+
+    public $content;
 
     public $threadId;
 
@@ -91,15 +92,17 @@ class CreatePost
 
     /**
      * @param BlocksParser $BlocksParser
+     * @param $content
      * @param int $threadId
      * @param User $actor
      * @param array $data
      * @param string $ip
      * @param int $port
      */
-    public function __construct($BlocksParser, $threadId, User $actor, array $data, $ip, $port)
+    public function __construct($BlocksParser, $content, $threadId, User $actor, array $data, $ip, $port)
     {
         $this->BlocksParser = $BlocksParser;
+        $this->content = $content;
         $this->threadId = $threadId;
         $this->replyPostId = Arr::get($data, 'attributes.replyId', null);
         $this->actor = $actor;
@@ -129,10 +132,9 @@ class CreatePost
 
         $isComment = (bool) Arr::get($this->data, 'attributes.isComment');
         $audioList = $this->BlocksParser->BlocksValue('audio');
-        $content = $this->BlocksParser->parse();
 
         $isMod = false;
-        foreach ($content->get('blocks') as $block) {
+        foreach ($this->content->get('blocks') as $block) {
             if ($block['type'] == 'text' && isset($block['data']['isMod']) && $block['data']['isMod']) {
                 $isMod = $block['data']['isMod'];
                 break;
@@ -148,7 +150,7 @@ class CreatePost
                 // 不能只回复引用部分
                 $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
                 $replyContent = '';
-                foreach ($content->get('blocks') as $block) {
+                foreach ($this->content->get('blocks') as $block) {
                     if ($block['type'] == 'text' && $replyContent = preg_replace($pattern, '', $block['data']['value'])) {
                         break;
                     }
@@ -179,7 +181,7 @@ class CreatePost
 
         $post = $post->reply(
             $thread->id,
-            $content,
+            $this->content,
             $this->actor->id,
             $this->ip,
             $this->port,

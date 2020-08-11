@@ -21,6 +21,7 @@ namespace App\Api\Controller\Posts;
 use App\Api\Serializer\CommentPostSerializer;
 use App\Api\Serializer\PostSerializer;
 use App\BlockEditor\BlocksParser;
+use App\BlockEditor\Exception\BlockInvalidException;
 use App\Commands\Post\CreatePost;
 use App\Models\Post;
 use Discuz\Api\Controller\AbstractCreateController;
@@ -59,6 +60,7 @@ class CreatePostController extends AbstractCreateController
 
     /**
      * {@inheritdoc}
+     * @throws BlockInvalidException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -78,7 +80,7 @@ class CreatePostController extends AbstractCreateController
         }
 
         return $this->bus->dispatch(
-            new CreatePost($BlocksParser, $threadId, $actor, $data, $ip, $port)
+            new CreatePost($BlocksParser, $BlocksParser->parse(), $threadId, $actor, $data, $ip, $port)
         );
     }
 }
