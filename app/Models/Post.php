@@ -48,7 +48,7 @@ use Illuminate\Support\Str;
  * @property int $reply_user_id
  * @property string $summary
  * @property string $summary_text
- * @property string $content
+ * @property Collection $content
  * @property string $ip
  * @property int $port
  * @property int $reply_count

@@ -18,6 +18,7 @@
 
 namespace App\Listeners\Post;
 
+use App\BlockEditor\BlocksParser;
 use App\Events\Post\Created;
 use App\Events\Post\Deleted;
 use App\Events\Post\Hidden;
@@ -45,9 +46,6 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use s9e\TextFormatter\Utils;
-use Illuminate\Support\Str;
 
 class PostListener
 {
@@ -170,8 +168,8 @@ class PostListener
             if (! $post->wasRecentlyCreated) {
                 $this->assertCan($actor, 'edit', $post);
             }
-
-            $ids = array_column($attachments, 'id');
+            $BlocksParser = new BlocksParser($post->content, $post);
+            $ids = array_merge($BlocksParser->BlocksValue('attachment'), $BlocksParser->BlocksValue('image'));
 
             // 判断附件是否合法
             $bool = Attachment::approvedInExists($ids);
