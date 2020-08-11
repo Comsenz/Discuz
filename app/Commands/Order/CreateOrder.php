@@ -116,7 +116,7 @@ class CreateOrder
                     $amount = sprintf('%.2f', (float) $this->data->get('amount'));
 
                     // 查询收款人是否有上级邀请
-                    if ($thread->user->userDistribution->exists()) {
+                    if (!empty($thread->user->userDistribution)) {
                         $be_scale = $thread->user->userDistribution->be_scale;
                     }
                 } else {
@@ -151,7 +151,7 @@ class CreateOrder
                     $amount = $thread->price;
 
                     // 查询收款人是否有上级邀请
-                    if ($thread->user->userDistribution->exists()) {
+                    if (!empty($thread->user->userDistribution)) {
                         $be_scale = $thread->user->userDistribution->be_scale;
                     }
                 } else {
