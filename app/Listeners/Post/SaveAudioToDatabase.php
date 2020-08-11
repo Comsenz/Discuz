@@ -51,32 +51,21 @@ class SaveAudioToDatabase
         $post = $event->post;
         $actor = $event->actor;
 
-        foreach ($post->file_ids as $file_id) {
-            // 创建新的音频记录 attributes.file_id
-            $data = [
-                'attributes' => [
-                    'file_id'   => $file_id
-                ]
-            ];
+        if (isset($post->file_ids)) {
+            foreach ($post->file_ids as $file_id) {
+                // 创建新的音频记录 attributes.file_id
+                $data = [
+                    'attributes' => [
+                        'file_id'   => $file_id
+                    ]
+                ];
 
-            $video = $this->bus->dispatch(
-                new CreateThreadVideo($actor, $post, $data)
-            );
+                $video = $this->bus->dispatch(
+                    new CreateThreadVideo($actor, $post, $data)
+                );
 
-            $post->setRelation('postAudio', $video);
-        }
-
-
-        $data = Arr::get($this->request->getParsedBody(), 'data', []);
-
-        $fileId = Arr::get($data, 'attributes.file_id', '');
-
-        if ($fileId) {
-            $audio = $this->bus->dispatch(
-                new CreateThreadVideo($actor, $post, $data)
-            );
-
-            $post->setRelation('postAudio', $audio);
+                $post->setRelation('postAudio', $video);
+            }
         }
     }
 }

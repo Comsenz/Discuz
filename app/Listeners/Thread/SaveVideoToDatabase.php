@@ -50,18 +50,20 @@ class SaveVideoToDatabase
     {
         $thread = $event->thread;
         $actor = $event->actor;
-        foreach ($thread->file_ids as $file_id) {
-            // 创建新的视频记录 attributes.file_id
-            $data = [
-                'attributes' => [
-                    'file_id'   => $file_id
-                ]
-            ];
-            $video = $this->bus->dispatch(
-                new CreateThreadVideo($actor, $thread, $data)
-            );
+        if (isset($thread->file_ids)) {
+            foreach ($thread->file_ids as $file_id) {
+                // 创建新的视频记录 attributes.file_id
+                $data = [
+                    'attributes' => [
+                        'file_id'   => $file_id
+                    ]
+                ];
+                $video = $this->bus->dispatch(
+                    new CreateThreadVideo($actor, $thread, $data)
+                );
 
-            $thread->setRelation('threadVideo', $video);
+                $thread->setRelation('threadVideo', $video);
+            }
         }
     }
 }
