@@ -1,10 +1,12 @@
 <template>
   <div class="rol-permission-box">
+    <!-- 设置权限子菜单 -->
     <div class="index-main-con__main-title__class permission__title">
       <i></i>
       <span v-for="(item,index) in menuData" :key="index" :class="activeTab.name === item.name?'is-active':''"  @click="activeTab = item">{{item.title}}</span>
     </div>
     <Card :header="$router.history.current.query.name + activeTab.title"></Card>
+    <!-- 内容发布权限 -->
     <div v-show="activeTab.name === 'publish'">
       <Card>
         <CardRow description="允许发布文本">
@@ -96,6 +98,7 @@
         </CardRow>
       </Card>
     </div>
+    <!-- 安全设置 -->
     <div v-show="activeTab.name === 'security'">
       <Card>
         <CardRow description="启用验证码需先在腾讯云设置中开启验证码服务">
@@ -127,6 +130,7 @@
         </CardRow>
       </Card>
     </div>
+    <!-- 前台操作权限 -->
     <div v-show="activeTab.name === 'operate'">
         <Card>
         <CardRow description="查看主题列表页的权限">
@@ -191,6 +195,7 @@
       </Card>
 
     </div>
+    <!-- 前台管理权限 -->
     <div v-show="activeTab.name === 'manage'">
       <Card>
         <CardRow description="前台删除单个主题的权限">
@@ -282,6 +287,7 @@
         </CardRow>
       </Card>
     </div>
+    <!-- 默认权限 -->
     <div v-show="activeTab.name === 'default'">
         <Card>
         <CardRow description>
@@ -307,6 +313,7 @@
         </CardRow>
       </Card>
     </div>
+    <!-- 其他权限 -->
     <div v-show="activeTab.name === 'other'">
       <Card>
         <CardRow description="允许推广下线">
