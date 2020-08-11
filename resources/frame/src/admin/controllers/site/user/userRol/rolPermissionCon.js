@@ -27,7 +27,7 @@ export default {
         },
         {
           title: '安全设置',
-          name: 'manage'
+          name: 'security'
         },
         {
           title: '前台操作权限',
