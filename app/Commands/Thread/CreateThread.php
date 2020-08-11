@@ -30,7 +30,6 @@ use App\Models\User;
 use App\Validators\ThreadValidator;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Exception;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
