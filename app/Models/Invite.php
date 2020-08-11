@@ -90,6 +90,8 @@ class Invite extends Model
         'status',
     ];
 
+    public static $encrypt;
+
     /**
      * 模型的「启动」方法.
      *
@@ -98,6 +100,16 @@ class Invite extends Model
     public static function boot()
     {
         parent::boot();
+    }
+
+    /**
+     * Set the encrypt.
+     *
+     * @param $encrypt
+     */
+    public static function setEncrypt($encrypt)
+    {
+        self::$encrypt = $encrypt;
     }
 
     /**
@@ -116,6 +128,17 @@ class Invite extends Model
         $invite->raise(new Created($invite));
 
         return $invite;
+    }
+
+    public static function lengthByAdmin($code)
+    {
+        $len = mb_strlen($code, 'utf-8');
+        return $len == 32;
+    }
+
+    public static function decryptCode($code)
+    {
+        return self::$encrypt->decrypt($code, false);
     }
 
     /*

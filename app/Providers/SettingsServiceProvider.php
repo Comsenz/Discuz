@@ -21,6 +21,7 @@ namespace App\Providers;
 use App\Api\Serializer\AttachmentSerializer;
 use App\Commands\Attachment\AttachmentUploader;
 use App\Listeners\Setting\SettingListener;
+use App\Models\Invite;
 use App\Models\Setting;
 use App\Observer\UserWechatObserver;
 use App\Settings\SettingsRepository;
@@ -47,6 +48,7 @@ class SettingsServiceProvider extends ServiceProvider
     public function boot()
     {
         Setting::setEncrypt($this->app->make(Encrypter::class));
+        Invite::setEncrypt($this->app->make(Encrypter::class));
 
         // 必须设置完加解密函数之后才能调用
         if ($this->app->isInstall()) {
