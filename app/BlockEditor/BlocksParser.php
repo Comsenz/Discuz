@@ -169,7 +169,8 @@ class BlocksParser
                 $parser = GoodsBlock::getInstance();
                 break;
             default:
-                throw new BlockInvalidException('block_invalid');
+                //@TODO 编辑器 其他块处理
+//                throw new BlockInvalidException('block_invalid');
                 break;
         }
         return $parser;
