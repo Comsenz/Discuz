@@ -171,14 +171,16 @@ class PostListener
 
             $ids = array_column($attachments, 'id');
 
-            // 判断附件是否合法
-            $bool = Attachment::approvedInExists($ids);
-            if ($bool) {
-                // 如果是首贴，将主题设为待审核
-                if ($post->is_first) {
-                    $post->thread->is_approved = Thread::UNAPPROVED;
-                }
+            // 是否存在未审核的附件
+            $unapprovedAttachment = Attachment::query()
+                ->where('is_approved', Post::UNAPPROVED)
+                ->where('user_id', $actor->id)
+                ->whereIn('id', $ids)
+                ->exists();
+
+            if ($unapprovedAttachment) {
                 $post->is_approved = Post::UNAPPROVED;
+                $post->save();
             }
 
             Attachment::query()
