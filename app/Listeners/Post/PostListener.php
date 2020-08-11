@@ -47,6 +47,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use s9e\TextFormatter\Utils;
+use Illuminate\Support\Str;
 
 class PostListener
 {
