@@ -53,30 +53,7 @@ class ThreadVideoListener
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(Saving::class, [$this, 'whenThreadSaving']);
         $events->listen(Created::class, SaveVideoToDatabase::class);
     }
 
-    /**
-     * @param Saving $event
-     */
-    public function whenThreadSaving(Saving $event)
-    {
-        if (Arr::get($event->data, 'attributes.type') == Thread::TYPE_OF_VIDEO) {
-            $this->validator->make(
-                [
-                    'switch' => (bool) $this->settings->get('qcloud_vod', 'qcloud'),
-                    'file_id' => Arr::get($event->data, 'attributes.file_id', ''),
-                    'file_name' => Arr::get($event->data, 'attributes.file_id', ''),
-                ],
-                [
-                    'switch' => function ($attribute, $value, $fail) {
-                        $value ?: $fail(trans('validation.qcloud_vod'));
-                    },
-                    'file_id' => 'required',
-                    'file_name' => 'required',
-                ]
-            )->validate();
-        }
-    }
 }

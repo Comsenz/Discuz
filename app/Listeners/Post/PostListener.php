@@ -44,6 +44,7 @@ use App\Traits\PostNoticesTrait;
 use Discuz\Api\Events\Serializing;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 
@@ -106,6 +107,7 @@ class PostListener
      * 发送通知
      *
      * @param Created $event
+     * @throws BindingResolutionException
      */
     public function whenPostWasCreated(Created $event)
     {
