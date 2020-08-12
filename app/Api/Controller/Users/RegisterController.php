@@ -68,6 +68,7 @@ class RegisterController extends AbstractCreateController
     /**
      * {@inheritdoc}
      * @throws PermissionDeniedException
+     * @throws \Exception
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -82,7 +83,7 @@ class RegisterController extends AbstractCreateController
         );
 
         if ($token = Arr::get($attributes, 'token')) {
-            $this->bind->wechat($token, $user);
+            $this->bind->withToken($token, $user);
             // 判断是否开启了注册审核
             if (!(bool)$this->settings->get('register_validate')) {
                 // 在注册绑定微信后 发送注册微信通知

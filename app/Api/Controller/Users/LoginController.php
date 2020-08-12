@@ -86,7 +86,7 @@ class LoginController extends AbstractResourceController
 
             //绑定公众号信息
             if ($token = Arr::get($data, 'token')) {
-                $this->bind->wechat($token, $user);
+                $this->bind->withToken($token, $user);
             }
 
             //绑定小程序信息

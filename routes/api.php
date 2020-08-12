@@ -14,6 +14,7 @@ use App\Api\Controller as ApiController;
 */
 
 $route->get('/uc', 'uc', ApiController\Ucenter\UcenterController::class);
+$route->post('/uc/login', 'uc.login', ApiController\Ucenter\LoginController::class);
 
 /*
 |--------------------------------------------------------------------------
