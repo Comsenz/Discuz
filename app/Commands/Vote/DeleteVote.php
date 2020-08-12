@@ -37,7 +37,7 @@ class DeleteVote
 
         $this->assertCan($this->actor, 'vote.delete');
 
-        $vote = $votes->findOrFail($this->id);
+        $vote = $votes->findOrFail($this->id, $this->actor);
 
         $vote->delete();
 

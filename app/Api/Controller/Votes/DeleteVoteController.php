@@ -7,6 +7,7 @@
 
 namespace App\Api\Controller\Votes;
 
+use App\Commands\Vote\DeleteVote;
 use Discuz\Api\Controller\AbstractDeleteController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
