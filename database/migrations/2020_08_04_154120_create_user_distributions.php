@@ -17,7 +17,6 @@ class CreateUserDistributions extends Migration
 
             $table->unsignedBigInteger('pid')->nullable()->comment('父级id');
             $table->unsignedBigInteger('user_id')->nullable()->comment('用户ID');
-            $table->char('invites_code', 32)->default('')->comment('关联邀请码');
             $table->unsignedBigInteger('be_scale')->default(0)->comment('受邀时的分成比例');
             $table->tinyInteger('level')->default(1)->comment('当前用户所处深度');
 
