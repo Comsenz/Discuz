@@ -99,6 +99,11 @@ class ListUserWalletLogsController extends AbstractListController
     protected $total;
 
     /**
+     * @var int
+     */
+    protected $sumChangeAvailableAmount;
+
+    /**
      * @param Dispatcher $bus
      * @param UrlGenerator $url
      * @param UserWalletLogsRepository $walletLogs
@@ -142,6 +147,7 @@ class ListUserWalletLogsController extends AbstractListController
         $document->setMeta([
             'total' => $this->total,
             'pageCount' => ceil($this->total / $limit),
+            'sumChangeAvailableAmount' => $this->sumChangeAvailableAmount,
         ]);
 
         // 主题标题
@@ -181,6 +187,9 @@ class ListUserWalletLogsController extends AbstractListController
         $this->applyFilters($query, $filter, $actor);
 
         $this->total = $limit > 0 ? $query->count() : null;
+
+        // 求和变动可用金额
+        $this->sumChangeAvailableAmount = number_format($query->sum('change_available_amount'), 2);
 
         $query->skip($offset)->take($limit);
 
