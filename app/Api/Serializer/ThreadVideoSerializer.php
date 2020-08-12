@@ -56,7 +56,7 @@ class ThreadVideoSerializer extends AbstractSerializer
         $attributes = [
             'user_id'        => $model->user_id,
             'thread_id'      => $model->thread_id,
-            'post_id'      => $model->post_id,
+            'post_id'        => $model->post_id,
             'status'         => $model->status,
             'reason'         => $model->reason,
             'file_name'      => $model->file_name,

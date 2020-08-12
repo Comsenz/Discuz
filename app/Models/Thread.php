@@ -408,7 +408,7 @@ class Thread extends Model
 
     public function vote()
     {
-        return $this->belongsTo(Vote::class);
+        return $this->hasMany(Vote::class);
     }
 
     /**

@@ -38,6 +38,7 @@ use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\ThreadTopic;
 use App\Models\UserActionLogs;
+use App\Models\Vote;
 use App\Notifications\Replied;
 use App\Notifications\System;
 use App\Traits\PostNoticesTrait;
@@ -86,6 +87,9 @@ class PostListener
 
         // #话题#
         $events->listen(Saved::class, [$this, 'threadTopic']);
+
+        // 投票
+        $events->listen(Saved::class, [$this, 'threadVote']);
     }
 
     /**
@@ -326,4 +330,22 @@ class PostListener
     {
         ThreadTopic::setThreadTopic($event->post);
     }
+
+    /**
+     * 设置投票主题关联关系
+     * @param Saved $event
+     */
+    public function threadVote(Saved $event)
+    {
+        $BlocksParser = new BlocksParser($event->post->content, $event->post);
+        $voteList = $BlocksParser->BlocksValue('vote');
+        foreach ($voteList as $vote) {
+            /** @var Vote $vote */
+            $vote = Vote::query()->find($vote);
+            $vote->thread_id = $event->post->thread_id;
+            $vote->save();
+        }
+    }
+
+
 }

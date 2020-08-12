@@ -17,8 +17,9 @@ class VoteBlock extends BlockAbstract
     public function parse()
     {
         $actor = app('request')->getAttribute('actor');
-        $this->data['value'] = array_unique($this->data['value']);
+        $this->assertCan($actor, 'createVote');
 
+        $this->data['value'] = array_unique($this->data['value']);
         $result = Vote::query()
             ->whereIn('id', $this->data['value'])
             ->where('thread_id', 0)

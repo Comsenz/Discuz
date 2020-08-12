@@ -22,6 +22,7 @@ use App\BlockEditor\Blocks\AttachmentBlock;
 use App\BlockEditor\Blocks\AudioBlock;
 use App\BlockEditor\Blocks\GoodsBlock;
 use App\BlockEditor\Blocks\VideoBlock;
+use App\BlockEditor\Blocks\VoteBlock;
 use Illuminate\Support\Collection;
 use App\BlockEditor\Exception\BlockInvalidException;
 use App\BlockEditor\Blocks\BlockAbstract;
@@ -168,6 +169,9 @@ class BlocksParser
             case 'goods':
                 $parser = GoodsBlock::getInstance();
                 break;
+            case 'vote':
+                $parser = VoteBlock::getInstance();
+                break;
             default:
                 //@TODO 编辑器 其他块处理
 //                throw new BlockInvalidException('block_invalid');
@@ -249,6 +253,12 @@ class BlocksParser
         },
         {
             "type": "goods",
+            "data": {
+                "value": [1]
+            }
+        },
+        {
+            "type": "vote",
             "data": {
                 "value": [1]
             }
