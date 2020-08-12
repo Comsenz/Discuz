@@ -164,12 +164,12 @@ class PostListener
         $actor = $event->actor;
 
         // 绑定附件
-        if ($attachments = Arr::get($event->data, 'relationships.attachments.data')) {
+        $BlocksParser = new BlocksParser($post->content, $post);
+        $ids = array_merge($BlocksParser->BlocksValue('attachment'), $BlocksParser->BlocksValue('image'));
+        if ($ids) {
             if (! $post->wasRecentlyCreated) {
                 $this->assertCan($actor, 'edit', $post);
             }
-            $BlocksParser = new BlocksParser($post->content, $post);
-            $ids = array_merge($BlocksParser->BlocksValue('attachment'), $BlocksParser->BlocksValue('image'));
 
             // 是否存在未审核的附件
             $unapprovedAttachment = Attachment::query()

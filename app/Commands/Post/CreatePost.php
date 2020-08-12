@@ -135,8 +135,10 @@ class CreatePost
 
         $isMod = false;
         foreach ($this->content->get('blocks') as $block) {
+            //获取审核状态
             if ($block['type'] == 'text' && isset($block['data']['isMod']) && $block['data']['isMod']) {
                 $isMod = $block['data']['isMod'];
+                unset($block['data']['isMod']);
                 break;
             }
         }
