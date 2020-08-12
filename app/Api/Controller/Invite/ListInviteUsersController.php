@@ -157,6 +157,8 @@ class ListInviteUsersController extends AbstractListController
      */
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
+        $username = Arr::get($filter, 'username');
+
         if (Arr::has($filter, 'scale')) {
             $scale = (int)Arr::get($filter, 'scale', 0);
             if (empty($scale)) {
@@ -165,5 +167,12 @@ class ListInviteUsersController extends AbstractListController
                 $query->where('be_scale', '>', 0);
             }
         }
+
+        $query->when($username, function ($query, $username) {
+            $query->whereIn(
+                'user_id', // user_distributions.user_id
+                User::query()->where('username', 'like', "%{$username}%")->pluck('id')
+            );
+        });
     }
 }
