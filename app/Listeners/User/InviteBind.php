@@ -66,10 +66,8 @@ class InviteBind
             return;
         }
 
-        $len = mb_strlen($code, 'utf-8');
-
         // 邀请码 32位长度为管理员邀请
-        if ($len == 32) {
+        if ($this->InviteRepository->lengthByAdmin($code)) {
             // 验证code合法性
             $invite = $this->InviteRepository->verifyCode($code);
             if ($invite) {
@@ -87,7 +85,7 @@ class InviteBind
                 }
             }
         } else {
-            $user_id = $this->decrypt->decryptString($code);
+            $user_id = $this->InviteRepository->decryptCode($code);
 
             // 保持数据一致性
             $this->db->beginTransaction();
