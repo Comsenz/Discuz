@@ -169,10 +169,16 @@ class ListInviteUsersController extends AbstractListController
         }
 
         $query->when($username, function ($query, $username) {
-            $query->whereIn(
-                'user_id', // user_distributions.user_id
-                User::query()->where('username', 'like', "%{$username}%")->pluck('id')
-            );
+            // 用户名前后存在星号（*）则使用模糊查询
+            if (Str::startsWith($username, '*') || Str::endsWith($username, '*')) {
+                $username = Str::replaceLast('*', '%', Str::replaceFirst('*', '%', $username));
+                $userIds = User::query()->where('username', 'like', $username)->pluck('id');
+            } else {
+                $userIds = User::query()->where('username', $username)->pluck('id');
+            }
+
+            // user_distributions.user_id
+            $query->whereIn('user_id', $userIds);
         });
     }
 }
