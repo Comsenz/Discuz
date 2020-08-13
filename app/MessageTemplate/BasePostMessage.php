@@ -32,8 +32,6 @@ class BasePostMessage extends DatabaseMessage
 {
     protected $url;
 
-    protected $strWords = true;
-
     public function __construct(UrlGenerator $url)
     {
         $this->url = $url;
@@ -61,7 +59,7 @@ class BasePostMessage extends DatabaseMessage
 
         return [
             $this->notifiable->username,
-            $this->strWords ? $this->strWords($message) : $message,
+            $this->filterSpecialChar ? $this->strWords($message) : $message,
             Arr::get($data, 'refuse', '无')
         ];
     }

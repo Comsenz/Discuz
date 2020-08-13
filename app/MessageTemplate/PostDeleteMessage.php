@@ -29,8 +29,8 @@ class PostDeleteMessage extends BasePostMessage
     protected $tplId = 6;
 
     /**
-     * 不截取字符串
+     * 不过滤字符串
      * @var bool
      */
-    protected $strWords = false;
+    protected $filterSpecialChar = false;
 }
