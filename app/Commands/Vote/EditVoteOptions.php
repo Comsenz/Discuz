@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Vote;
 use App\Models\VoteOption;
 use App\Repositories\UserRepository;
+use App\Repositories\VoteOptionRepository;
 use App\Validators\VoteValidator;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
@@ -20,12 +21,14 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Bus\Dispatcher as DispatcherBus;
 use Illuminate\Support\Arr;
 
-class CreateVoteOptions
+class EditVoteOptions
 {
     use AssertPermissionTrait;
     use EventsDispatchTrait;
 
     public $vote_id;
+
+    public $option_id;
 
     public $content;
 
@@ -38,21 +41,32 @@ class CreateVoteOptions
 
     /**
      * @param User $actor
-     * @param $vote_id
-     * @param $content
+     * @param int $vote_id
+     * @param int $option_id
+     * @param string $content
      */
-    public function __construct(User $actor, $vote_id, $content)
+    public function __construct(User $actor, $vote_id, $option_id, $content)
     {
         $this->actor = $actor;
         $this->vote_id = $vote_id;
+        $this->option_id = $option_id;
         $this->content = $content;
     }
 
-    public function handle(Dispatcher $events)
+    /**
+     * @param Dispatcher $events
+     * @param VoteOptionRepository $voteOptions
+     * @return VoteOption
+     */
+    public function handle(Dispatcher $events, VoteOptionRepository $voteOptions)
     {
         $this->events = $events;
+        /** @var VoteOption $voteOption */
+        $voteOption = $voteOptions->findOrFail($this->vote_id, $this->option_id);
+        $voteOption->content = $this->content;
+        $voteOption->save();
 
-        return VoteOption::build(['vote_id' => $this->vote_id, 'content' => $this->content])->save();
+        return $voteOption;
 
     }
 }

@@ -67,10 +67,11 @@ class CreateVote
         $vote->save();
 
         if ($vote) {
-            $this->attributes['vote_id'] = $vote->id;
-            $bus->dispatchNow(
-                new CreateVoteOptions($this->actor, $this->attributes)
-            );
+            foreach (Arr::get($this->attributes, 'contents') as $content) {
+                $bus->dispatchNow(
+                    new CreateVoteOptions($this->actor, $vote->id, $content)
+                );
+            }
         }
         return $vote;
 

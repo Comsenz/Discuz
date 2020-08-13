@@ -26,7 +26,7 @@ class VoteValidator extends AbstractValidator
             'name'          => 'required|max:80',
             'start_at'      => 'filled|date',
             'end_at'        => 'required|date',
-            'content'       => [
+            'contents'       => [
                 'required',
                 'array',
                 'min:2',

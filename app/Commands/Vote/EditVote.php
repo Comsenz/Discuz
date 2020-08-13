@@ -75,17 +75,26 @@ class EditVote
 
         //投票
         $vote->name = Arr::get($this->attributes, 'name');
-        $vote->type = Arr::get($this->attributes, 'name');
-        $vote->start_at = Arr::get($this->attributes, 'name');
-        $vote->end_at = Arr::get($this->attributes, 'name');
+        $vote->type = Arr::get($this->attributes, 'type');
+        $vote->start_at = Arr::get($this->attributes, 'start_at');
+        $vote->end_at = Arr::get($this->attributes, 'end_at');
         $vote->save();
 
         //选项
-        if ($vote) {
-            $this->attributes['vote_id'] = $vote->id;
-            $bus->dispatchNow(
-                new CreateVoteOptions($this->actor, $this->attributes)
-            );
+        $contents = $this->attributes['contents'];
+        foreach ($contents as $content) {
+            $id = Arr::get($content, 'id');
+            if ($id) {
+                //更新
+                $bus->dispatchNow(
+                    new EditVoteOptions($this->actor, $vote->id, $id, $content)
+                );
+            } else {
+                //插入
+                $bus->dispatchNow(
+                    new CreateVoteOptions($this->actor, $vote->id, $content)
+                );
+            }
         }
         return $vote;
 

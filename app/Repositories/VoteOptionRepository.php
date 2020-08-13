@@ -22,8 +22,9 @@ use App\Models\User;
 use App\Models\Vote;
 use Discuz\Foundation\AbstractRepository;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
-class VoteRepository extends AbstractRepository
+class VoteOptionRepository extends AbstractRepository
 {
     /**
      * Get a new query builder for the topic table.
@@ -38,16 +39,15 @@ class VoteRepository extends AbstractRepository
     /**
      * Find a topic by ID
      *
-     * @param int $id
-     * @param User $actor
-     * @return Builder|\Illuminate\Database\Eloquent\Model
+     * @param $vote_id
+     * @param $option_id
+     * @return Builder|Model
      */
-    public function findOrFail($id, User $actor = null)
+    public function findOrFail($vote_id, $option_id)
     {
-        $query = $this->query()->where('id', $id);
-        if ($actor && !$actor->isAdmin()) {
-            $query->where('user_id', $actor->id);
-        }
-        return $query->firstOrFail();
+        return $this->query()
+            ->where('id', $option_id)
+            ->where('vote_id', $vote_id)
+            ->firstOrFail();
     }
 }
