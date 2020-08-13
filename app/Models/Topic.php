@@ -45,6 +45,11 @@ class Topic extends Model
         'created_at',
     ];
 
+    protected $casts = [
+        'thread_count' => 'integer',
+        'view_count' => 'integer',
+    ];
+
     /**
      * @var string[]
      */

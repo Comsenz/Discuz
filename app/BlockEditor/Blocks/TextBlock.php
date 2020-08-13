@@ -12,16 +12,21 @@ use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Topic;
 use App\Models\User;
+use Discuz\Auth\AssertPermissionTrait;
 use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Support\Arr;
 
 class TextBlock extends BlockAbstract
 {
+    use AssertPermissionTrait;
 
     public $type = 'text';
 
     public function parse()
     {
+        $actor = app('request')->getAttribute('actor');
+        $this->assertCan($actor, 'createThread');
+
         // 敏感词校验
         /** @var Censor $censor */
         $censor = app()->make(Censor::class);

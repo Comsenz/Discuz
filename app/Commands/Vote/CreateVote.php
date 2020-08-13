@@ -47,7 +47,7 @@ class CreateVote
         $this->attributes = $attributes;
     }
 
-    public function handle(UserRepository $user, Dispatcher $events, Censor $censor, DispatcherBus $bus, VoteValidator  $validation)
+    public function handle(Dispatcher $events, DispatcherBus $bus, VoteValidator  $validation)
     {
         $this->events = $events;
 
