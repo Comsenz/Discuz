@@ -69,7 +69,7 @@ class CreateVote
         if ($vote) {
             foreach (Arr::get($this->attributes, 'contents') as $content) {
                 $bus->dispatchNow(
-                    new CreateVoteOptions($this->actor, $vote->id, $content)
+                    new CreateVoteOptions($this->actor, $vote->id, Arr::get($content, 'content'))
                 );
             }
         }

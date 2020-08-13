@@ -87,12 +87,12 @@ class EditVote
             if ($id) {
                 //更新
                 $bus->dispatchNow(
-                    new EditVoteOptions($this->actor, $vote->id, $id, $content)
+                    new EditVoteOptions($this->actor, $vote->id, $id, Arr::get($content, 'content'))
                 );
             } else {
                 //插入
                 $bus->dispatchNow(
-                    new CreateVoteOptions($this->actor, $vote->id, $content)
+                    new CreateVoteOptions($this->actor, $vote->id, Arr::get($content, 'content'))
                 );
             }
         }
