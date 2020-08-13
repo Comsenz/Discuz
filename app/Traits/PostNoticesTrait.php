@@ -35,6 +35,7 @@ use App\Notifications\Related;
 use App\Notifications\Replied;
 use App\Notifications\System;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use s9e\TextFormatter\Utils;
 
 /**
@@ -111,13 +112,17 @@ trait PostNoticesTrait
      */
     private function postIsDeleted($post, $attach)
     {
+        $post->content = Str::of($post->content)->substr(0, Post::NOTICE_LENGTH);
+        $post->formatContent();
+
         $data = [
-            'message' => $this->getPostTitle($post),
+            'message' => $post->formatContent(), // 解析表情
             'refuse' => $attach['refuse'],
             'raw' => [
                 'thread_id' => $post->thread->id,
             ],
         ];
+
         $post->user->notify(new System(PostDeleteMessage::class, $data));
         $post->user->notify(new System(WechatPostDeleteMessage::class, $data));
     }
