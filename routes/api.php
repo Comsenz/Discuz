@@ -364,4 +364,5 @@ $route->get('/offiaccount/transform', 'offiaccount.threads.transform', ApiContro
 */
 $route->get('/votes/{id}', 'votes.resource', ApiController\Votes\ResourceVoteController::class);
 $route->post('/votes', 'votes.create', ApiController\Votes\CreateVoteController::class);
+$route->patch('/votes/{id}', 'votes.edit', ApiController\Votes\EditVoteController::class);
 $route->delete('/votes', 'votes.delete', ApiController\Votes\DeleteVoteController::class);
