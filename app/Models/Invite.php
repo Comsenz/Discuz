@@ -136,9 +136,21 @@ class Invite extends Model
         return $len == 32;
     }
 
+    /**
+     * 解密失败
+     *
+     * @param $code
+     * @return mixed
+     * @throws \Exception
+     */
     public static function decryptCode($code)
     {
-        return self::$encrypt->decrypt($code, false);
+        try {
+            return self::$encrypt->decrypt($code, false);
+        } catch (\Exception $e) {
+            throw new \Exception(trans('user.invite_decrypt_code_failed'));
+        }
+
     }
 
     /*
