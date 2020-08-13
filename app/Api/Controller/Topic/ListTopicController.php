@@ -62,7 +62,7 @@ class ListTopicController extends AbstractListController
      */
     public $users;
 
-    public $sortFields = ['threadCount', 'viewCount', 'createdAt'];
+    public $sortFields = ['threadCount', 'viewCount', 'createdAt', 'recommended', 'recommendedAt'];
 
     public $sort = ['createdAt' => 'desc'];
 
@@ -122,7 +122,8 @@ class ListTopicController extends AbstractListController
             $topics->load([
                 'lastThread' => function ($query) use ($threadIds) {
                     $query->whereIn('thread_id', $threadIds);
-                }]);
+                }
+            ]);
             $topics->each(function (Topic $topic) {
                 //话题包含多个 $threadIds 只保留最大的
                 if ($topic->getRelation('lastThread')->count() > 1) {
@@ -155,11 +156,11 @@ class ListTopicController extends AbstractListController
 
         if ($username = trim(Arr::get($filter, 'username'))) {
             $query->join('users', 'users.id', '=', 'topics.user_id')
-                ->where('users.username', 'like', '%'.$username.'%');
+                ->where('users.username', 'like', '%' . $username . '%');
         }
 
         if ($content = trim(Arr::get($filter, 'content'))) {
-            $query->where('topics.content', 'like', '%'.$content.'%');
+            $query->where('topics.content', 'like', '%' . $content . '%');
         }
 
         if ($createdAtBegin = Arr::get($filter, 'createdAtBegin')) {
