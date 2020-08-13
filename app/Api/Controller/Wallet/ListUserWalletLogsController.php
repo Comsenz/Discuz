@@ -214,7 +214,7 @@ class ListUserWalletLogsController extends AbstractListController
         $log_start_time = Arr::get($filter, 'start_time'); //变动时间范围：开始
         $log_end_time = Arr::get($filter, 'end_time'); //变动时间范围：结束
         $log_source_username = Arr::get($filter, 'source_username');
-        $log_source_user_id = Arr::get($filter, 'source_user_id', 0);
+        $log_source_user_id = Arr::get($filter, 'source_user_id');
 
         $query->when($log_user, function ($query) use ($log_user) {
             $query->where('user_id', $log_user);
