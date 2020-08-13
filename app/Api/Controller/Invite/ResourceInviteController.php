@@ -79,7 +79,9 @@ class ResourceInviteController extends AbstractResourceController
 
             // 查询站点默认用户组
             $groupQuery = Group::query()->where('default', 1);
-            $groupQuery->with('permission');
+            $groupQuery->with(['permission' => function ($query) {
+                $query->where('permission', 'not like', 'category%');
+            }]);
             $groupDefault = $groupQuery->first();
 
             $result->setRelation('group', $groupDefault);

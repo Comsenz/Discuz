@@ -20,7 +20,7 @@ namespace App\Listeners\User;
 
 use App\Events\Users\Registered;
 use App\Models\Group;
-use App\Models\Invite;
+use App\Models\User;
 use App\Models\UserDistribution;
 use App\Models\UserFollow;
 use App\Repositories\InviteRepository;
@@ -85,40 +85,31 @@ class InviteBind
                 }
             }
         } else {
-            $user_id = $this->InviteRepository->decryptCode($code);
+            $fromUserId = $this->InviteRepository->decryptCode($code);
+            $toUserId = $event->user->id;
 
             // 保持数据一致性
             $this->db->beginTransaction();
             try {
-
-                // 生成记录
-                $invite = Invite::creation([
-                    'group_id' => 0,
-                    'code' => $code,
-                    'user_id' => $user_id,
-                    'to_user_id' => $event->user->id,
-                    'created_at' => Carbon::now()->toDate(),
-                    'updated_at' => Carbon::now()->toDate(),
-                ]);
-
                 // 触发互相关注
                 UserFollow::query()->create([
-                    'from_user_id' => $invite->user_id,
-                    'to_user_id' => $invite->to_user_id,
+                    'from_user_id' => $fromUserId,
+                    'to_user_id' => $toUserId,
                     'is_mutual' => 1,
                 ]);
                 UserFollow::query()->create([
-                    'from_user_id' => $invite->to_user_id,
-                    'to_user_id' => $invite->user_id,
+                    'from_user_id' => $toUserId,
+                    'to_user_id' => $fromUserId,
                     'is_mutual' => 1,
                 ]);
+
+                $fromUser = User::query()->find($fromUserId);
 
                 // 建立上下级关系
                 UserDistribution::query()->create([
-                    'pid' => $invite->user_id,
-                    'user_id' => $event->user->id,
-                    'invites_code' => $code,
-                    'be_scale' => $invite->group->scale,
+                    'pid' => $fromUserId,
+                    'user_id' => $toUserId,
+                    'be_scale' => $fromUser->groups->first()->scale,
                     'level' => 1,
                 ]);
 

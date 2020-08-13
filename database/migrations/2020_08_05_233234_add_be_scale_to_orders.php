@@ -14,7 +14,7 @@ class AddBeScaleToOrders extends Migration
     {
         $this->schema()->table('orders', function (Blueprint $table) {
             $table->unsignedDecimal('author_amount', 10, 2)->default(0.00)->after('master_amount')->comment('作者分成金额');
-            $table->unsignedBigInteger('be_scale')->default(0)->after('author_amount')->comment('作者受邀时的分成比例');
+            $table->float('be_scale', 2, 1)->default(0)->after('author_amount')->comment('作者受邀时的分成比例');
         });
 
         // 添加钱包明细分成来源用户
