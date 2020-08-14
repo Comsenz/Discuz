@@ -327,7 +327,8 @@ $route->post('/topics', 'topics.create', ApiController\Topic\CreateTopicControll
 $route->get('/topics/{id}', 'topics.resource', ApiController\Topic\ResourceTopicController::class);
 $route->delete('/topics/{id}', 'topics.delete', ApiController\Topic\DeleteTopicController::class);
 $route->delete('/topics/batch/{ids}', 'topics.batchDelete', ApiController\Topic\BatchDeleteTopicController::class);
-
+$route->patch('/topics/{id}', 'topics.update', ApiController\Topic\UpdateTopicController::class);
+$route->patch('/topics/batch/{ids}', 'topics.batchUpdate', ApiController\Topic\BatchUpdateTopicController::class);
 /*
 |--------------------------------------------------------------------------
 | System
