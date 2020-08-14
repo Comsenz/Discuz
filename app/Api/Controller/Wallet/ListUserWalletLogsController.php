@@ -236,7 +236,7 @@ class ListUserWalletLogsController extends AbstractListController
             $query->whereIn('user_wallet_logs.user_id', User::where('users.username', $log_username)->select('id', 'username')->get());
         });
         $query->when($log_source_username, function ($query) use ($log_source_username) {
-            $query->whereIn('user_wallet_logs.source_user_id', User::where('users.username', 'like', '%' . $log_source_username . '%')->select('id', 'username')->get());
+            $query->whereIn('user_wallet_logs.source_user_id', User::query()->where('users.username', 'like', '%' . $log_source_username . '%')->pluck('id'));
         });
         $query->when($log_source_user_id, function ($query) use ($log_source_user_id) {
             $query->where('source_user_id', '=', $log_source_user_id);
