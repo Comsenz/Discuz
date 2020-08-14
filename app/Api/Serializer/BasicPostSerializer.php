@@ -187,7 +187,7 @@ class BasicPostSerializer extends AbstractSerializer
 
 
     /**
-     * @param $thread
+     * @param $post
      * @return Relationship
      */
     public function postVideo($post)
@@ -196,7 +196,7 @@ class BasicPostSerializer extends AbstractSerializer
     }
 
     /**
-     * @param $thread
+     * @param $post
      * @return Relationship
      */
     public function postAudio($post)
