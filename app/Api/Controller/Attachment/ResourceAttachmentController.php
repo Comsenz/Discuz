@@ -118,7 +118,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
             return null;
         }
 
-        // 主题是否收费
+        // 主题是否收费 @TODO 编辑器 付费附件块处理
         $thread = $post->thread;
         if ($thread->price > 0 && ! $actor->isAdmin()) {
             $order = Order::where('user_id', $actor->id)

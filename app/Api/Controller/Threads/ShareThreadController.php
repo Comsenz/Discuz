@@ -59,6 +59,7 @@ class ShareThreadController extends ResourceThreadController
 
         $thread->loadMissing($include);
 
+        //@TODO 编辑器 付费内容处理
         $thread->firstPost->content = $thread->price > 0
             ? ''
             : Str::of($thread->firstPost->content)->substr(0, Post::SUMMARY_LENGTH)->finish(Post::SUMMARY_END_WITH);

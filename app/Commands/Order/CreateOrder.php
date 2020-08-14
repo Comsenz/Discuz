@@ -123,41 +123,41 @@ class CreateOrder
                     throw new OrderException('order_post_not_found');
                 }
                 break;
-            // 付费主题订单
-            case Order::ORDER_TYPE_THREAD:
-                // 根据主题 id 查询非自己的付费主题
-                $thread = Thread::query()
-                    ->where('id', $this->data->get('thread_id'))
-                    ->where('user_id', '<>', $this->actor->id)
-                    ->where('price', '>', 0)
-                    ->where('is_approved', Thread::APPROVED)
-                    ->whereNull('deleted_at')
-                    ->first();
-
-                // 根据主题 id 查询是否已付过费
-                $order = Order::query()
-                    ->where('thread_id', $this->data->get('thread_id'))
-                    ->where('user_id', $this->actor->id)
-                    ->where('status', Order::ORDER_STATUS_PAID)
-                    ->where('type', Order::ORDER_TYPE_THREAD)
-                    ->exists();
-
-                // 主题存在且未付过费
-                if ($thread && ! $order) {
-                    // 判断该主题作者是否有 被付费的权限
-                    $this->assertCan($thread->user, 'createThreadPaid');
-
-                    $payeeId = $thread->user_id;
-                    $amount = $thread->price;
-
-                    // 查询收款人是否有上级邀请
-                    if (!empty($thread->user->userDistribution)) {
-                        $be_scale = $thread->user->userDistribution->be_scale;
-                    }
-                } else {
-                    throw new OrderException('order_post_not_found');
-                }
-                break;
+            // 付费主题订单 @TODO 编辑器 去掉付费主题
+//            case Order::ORDER_TYPE_THREAD:
+//                // 根据主题 id 查询非自己的付费主题
+//                $thread = Thread::query()
+//                    ->where('id', $this->data->get('thread_id'))
+//                    ->where('user_id', '<>', $this->actor->id)
+//                    ->where('price', '>', 0)
+//                    ->where('is_approved', Thread::APPROVED)
+//                    ->whereNull('deleted_at')
+//                    ->first();
+//
+//                // 根据主题 id 查询是否已付过费
+//                $order = Order::query()
+//                    ->where('thread_id', $this->data->get('thread_id'))
+//                    ->where('user_id', $this->actor->id)
+//                    ->where('status', Order::ORDER_STATUS_PAID)
+//                    ->where('type', Order::ORDER_TYPE_THREAD)
+//                    ->exists();
+//
+//                // 主题存在且未付过费
+//                if ($thread && ! $order) {
+//                    // 判断该主题作者是否有 被付费的权限
+//                    $this->assertCan($thread->user, 'createThreadPaid');
+//
+//                    $payeeId = $thread->user_id;
+//                    $amount = $thread->price;
+//
+//                    // 查询收款人是否有上级邀请
+//                    if (!empty($thread->user->userDistribution)) {
+//                        $be_scale = $thread->user->userDistribution->be_scale;
+//                    }
+//                } else {
+//                    throw new OrderException('order_post_not_found');
+//                }
+//                break;
             // 付费用户组
             case Order::ORDER_TYPE_GROUP:
                 $order_zero_amout_allowed = true;

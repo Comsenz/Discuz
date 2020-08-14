@@ -60,7 +60,6 @@ class ThreadSerializer extends AbstractSerializer
         $attributes = [
             'type'              => (int) $model->type,
             'title'             => $model->title,
-            'price'             => $model->price,
             'freeWords'         => (int) $model->free_words,
             'viewCount'         => (int) $model->view_count,
             'postCount'         => (int) $model->post_count,
@@ -86,11 +85,6 @@ class ThreadSerializer extends AbstractSerializer
             $attributes['deletedAt'] = $this->formatDate($model->deleted_at);
         } else {
             $attributes['isDeleted'] = false;
-        }
-
-        if ($model->price > 0) {
-            $attributes['paid'] = $model->is_paid;      // 向下兼容，建议改为 is_paid
-            $attributes['isPaid'] = $model->is_paid;
         }
 
         return $attributes;

@@ -53,7 +53,6 @@ use Illuminate\Support\Stringable;
  * @property Carbon $deleted_at
  * @property int $deleted_user_id
  * @property int $is_approved
- * @property bool|null $is_paid
  * @property bool $is_sticky
  * @property bool $is_essence
  * @property Post $firstPost
@@ -450,49 +449,4 @@ class Thread extends Model
         return $this->hasOne(ThreadUser::class)->where('user_id', $user ? $user->id : null);
     }
 
-    /**
-     * 主题对于某用户是否付费
-     *
-     * @return bool|null
-     */
-    public function getIsPaidAttribute()
-    {
-        $user = static::$stateUser;
-
-        // 必须有用户
-        if (! $user) {
-            throw new \RuntimeException('You must set the user with setStateUser()');
-        }
-
-        // 非付费主题返回 null
-        if ($this->price <= 0) {
-            return null;
-        }
-
-        // 用户不存在返回 false
-        if (! $user->exists) {
-            return false;
-        }
-
-        // 作者本人 或 管理员 返回 true
-        if ($this->user_id === $user->id || $user->isAdmin()) {
-            return true;
-        }
-
-        // 是否已缓存付费状态（为避免 N + 1 问题）
-        if (isset(static::$userHasPaidThreads[$user->id][$this->id])) {
-            return static::$userHasPaidThreads[$user->id][$this->id];
-        }
-
-        $isPaid = Order::query()
-            ->where('user_id', $user->id)
-            ->where('thread_id', $this->id)
-            ->where('status', Order::ORDER_STATUS_PAID)
-            ->where('type', Order::ORDER_TYPE_THREAD)
-            ->exists();
-
-        static::$userHasPaidThreads[$user->id][$this->id] = $isPaid;
-
-        return $isPaid;
-    }
 }

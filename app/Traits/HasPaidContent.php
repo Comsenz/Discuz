@@ -108,6 +108,7 @@ trait HasPaidContent
 
 
     /**
+     * @TODO 编辑器 付费主题处理
      * 是否无权查看
      *
      * @param Thread $thread
