@@ -175,8 +175,20 @@ trait NotifyTrait
     public function isCreateBossAmount($bossAmount)
     {
         if ($bossAmount > 0) {
-            // 上级人钱包增加金额分成
-            if (!empty($userDistribution = $this->orderInfo->payee->userDistribution)) {
+            /**
+             * 上级人钱包增加金额分成
+             *
+             * 判断如果是注册 就查付款人的上级
+             * 如果是打赏/付费帖子 就查收款人的上级
+             */
+            if ($this->orderInfo->type == Order::ORDER_TYPE_REGISTER) {
+                // 注册
+                $userDistribution = $this->orderInfo->user->userDistribution;
+            } else {
+                $userDistribution = $this->orderInfo->payee->userDistribution;
+            }
+
+            if (!empty($userDistribution)) {
                 $parentUserId = $userDistribution->pid; // 上级user_id
                 $user_wallet = UserWallet::query()->lockForUpdate()->find($parentUserId);
                 $user_wallet->available_amount = $user_wallet->available_amount + $bossAmount;
