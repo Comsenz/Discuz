@@ -26,6 +26,7 @@ use App\Models\UserFollow;
 use App\Repositories\InviteRepository;
 use Carbon\Carbon;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Exception;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Arr;
@@ -56,7 +57,7 @@ class InviteBind
 
     /**
      * @param Registered $event
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(Registered $event)
     {
@@ -126,9 +127,9 @@ class InviteBind
                 ]);
 
                 $this->db->commit();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->db->rollback();
-                throw new \Exception($e->getMessage());
+                throw new Exception($e->getMessage());
             }
         }
 
