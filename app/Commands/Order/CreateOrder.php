@@ -95,6 +95,11 @@ class CreateOrder
             case Order::ORDER_TYPE_REGISTER:
                 $payeeId = Order::REGISTER_PAYEE_ID;
                 $amount = sprintf('%.2f', (float) $setting->get('site_price'));
+
+                // 查询是否有上级邀请 -> 注册分成
+                if (!empty($this->actor->userDistribution)) {
+                    $be_scale = $this->actor->userDistribution->be_scale;
+                }
                 break;
 
             // 主题打赏订单

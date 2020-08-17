@@ -58,6 +58,8 @@ class UserWalletLog extends Model
 
     const TYPE_INCOME_REGISTER   = 30; //注册收入
 
+    const TYPE_INCOME_SCALE_REGISTER  = 34; //注册分成收入
+
     const TYPE_INCOME_REWARD     = 31; //打赏收入
 
     const TYPE_INCOME_ARTIFICIAL = 32; //人工收入

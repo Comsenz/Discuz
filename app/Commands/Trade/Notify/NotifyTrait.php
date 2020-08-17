@@ -59,8 +59,15 @@ trait NotifyTrait
 
             switch ($this->orderInfo->type) {
                 case Order::ORDER_TYPE_REGISTER:
+                    // 上级分成
+                    $this->orderInfo->calculateAuthorAmount($bossAmount);
+                    $this->orderInfo->save();
+                    // 是否创建上级金额分成
+                    $this->isCreateBossAmount($bossAmount);
+
                     // 注册时，返回支付成功。
                     return $this->orderInfo;
+
                 case Order::ORDER_TYPE_REWARD:
                 case Order::ORDER_TYPE_THREAD:
                     // 站长作者分成配置
@@ -83,30 +90,8 @@ trait NotifyTrait
                         $user_wallet->available_amount = $user_wallet->available_amount + $this->orderInfo->author_amount;
                         $user_wallet->save();
 
-                        if ($bossAmount > 0) {
-                            // 上级人钱包增加金额分成
-                            if (!empty($userDistribution = $this->orderInfo->payee->userDistribution)) {
-                                $parentUserId = $userDistribution->pid; // 上级user_id
-                                $user_wallet = UserWallet::query()->lockForUpdate()->find($parentUserId);
-                                $user_wallet->available_amount = $user_wallet->available_amount + $bossAmount;
-                                $user_wallet->save();
-
-                                // 添加分成钱包明细
-                                $scaleOrderDetail = $this->orderByDetailType(true);
-
-                                //添加钱包明细
-                                UserWalletLog::createWalletLog(
-                                    $parentUserId,              // 明细所属用户 id
-                                    $bossAmount,                // 变动可用金额
-                                    0,                          // 变动冻结金额
-                                    $scaleOrderDetail['change_type'],
-                                    trans($scaleOrderDetail['change_type_lang']),
-                                    null,                       // 关联提现ID
-                                    $this->orderInfo->id,       // 订单ID
-                                    $this->orderInfo->payee_id  // 分成来源用户 = 订单收款人
-                                );
-                            }
-                        }
+                        // 是否创建上级金额分成
+                        $this->isCreateBossAmount($bossAmount);
 
                         // 收款人钱包明细记录
                         $payeeOrderDetail = $this->orderByDetailType();
@@ -142,13 +127,13 @@ trait NotifyTrait
     /**
      * 获取对应订单明细类型
      *
-     * @param false $scale
+     * @param false $scale 是否是分成状态
      * @return array
      */
     public function orderByDetailType($scale = false)
     {
         switch ($this->orderInfo->type) {
-            case Order::ORDER_TYPE_REWARD:
+            case Order::ORDER_TYPE_REWARD: // 打赏
                 if ($scale) {
                     // 分成的类型
                     $change_type = UserWalletLog::TYPE_INCOME_SCALE_REWARD;
@@ -158,7 +143,7 @@ trait NotifyTrait
                     $change_type_lang = 'wallet.income_reward';
                 }
                 break;
-            case Order::ORDER_TYPE_THREAD:
+            case Order::ORDER_TYPE_THREAD: // 付费主题
                 if ($scale) {
                     $change_type = UserWalletLog::TYPE_INCOME_SCALE_THREAD;
                     $change_type_lang = 'wallet.income_scale_thread';
@@ -167,11 +152,51 @@ trait NotifyTrait
                     $change_type_lang = 'wallet.income_thread';
                 }
                 break;
+            case Order::ORDER_TYPE_REGISTER:
+                // 注册分成收入
+                if ($scale) {
+                    $change_type = UserWalletLog::TYPE_INCOME_SCALE_REGISTER;
+                    $change_type_lang = 'wallet.income_scale_register';
+                }
+                break;
             default:
                 $change_type = $this->orderInfo->type;
                 $change_type_lang = '';
         }
 
         return ['change_type' => $change_type, 'change_type_lang' => $change_type_lang];
+    }
+
+    /**
+     * 上级人钱包增加金额分成
+     *
+     * @param $bossAmount
+     */
+    public function isCreateBossAmount($bossAmount)
+    {
+        if ($bossAmount > 0) {
+            // 上级人钱包增加金额分成
+            if (!empty($userDistribution = $this->orderInfo->payee->userDistribution)) {
+                $parentUserId = $userDistribution->pid; // 上级user_id
+                $user_wallet = UserWallet::query()->lockForUpdate()->find($parentUserId);
+                $user_wallet->available_amount = $user_wallet->available_amount + $bossAmount;
+                $user_wallet->save();
+
+                // 添加分成钱包明细
+                $scaleOrderDetail = $this->orderByDetailType(true);
+
+                // 添加钱包明细
+                UserWalletLog::createWalletLog(
+                    $parentUserId,              // 明细所属用户 id
+                    $bossAmount,                // 变动可用金额
+                    0,                          // 变动冻结金额
+                    $scaleOrderDetail['change_type'],
+                    trans($scaleOrderDetail['change_type_lang']),
+                    null,                       // 关联提现ID
+                    $this->orderInfo->id,       // 订单ID
+                    $this->orderInfo->payee_id  // 分成来源用户 = 订单收款人
+                );
+            }
+        }
     }
 }
