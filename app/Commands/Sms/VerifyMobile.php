@@ -115,10 +115,10 @@ class VerifyMobile
         }
 
         //小程序绑定
-        if ($js_code = Arr::get($this->params, 'js_code') &&
-            $iv = Arr::has($this->params, 'iv') &&
-            $encryptedData = Arr::has($this->params, 'encryptedData')
-        ) {
+        $js_code = Arr::get($this->params, 'js_code');
+        $iv = Arr::get($this->params, 'iv');
+        $encryptedData = Arr::get($this->params, 'encryptedData');
+        if ($js_code && $iv && $encryptedData) {
             $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $this->mobileCode->user);
         }
 

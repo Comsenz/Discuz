@@ -93,9 +93,10 @@ class RegisterController extends AbstractCreateController
         }
 
         //绑定小程序信息
-        if ($js_code = Arr::get($attributes, 'js_code') &&
-            $iv = Arr::has($attributes, 'iv') &&
-            $encryptedData = Arr::has($attributes, 'encryptedData')) {
+        $js_code = Arr::get($attributes, 'js_code');
+        $iv = Arr::get($attributes, 'iv');
+        $encryptedData = Arr::get($attributes, 'encryptedData');
+        if ($js_code && $iv  && $encryptedData) {
             $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $user);
         }
 
