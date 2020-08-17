@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\User;
-
 /**
  * Copyright (C) 2020 Tencent Cloud.
  *
