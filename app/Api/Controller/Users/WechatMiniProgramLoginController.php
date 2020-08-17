@@ -22,6 +22,7 @@ use App\Api\Serializer\TokenSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\AutoRegisterUser;
 use App\Events\Users\Logind;
+use App\Exceptions\NoUserException;
 use App\Settings\SettingsRepository;
 use App\User\Bind;
 use Discuz\Api\Controller\AbstractResourceController;
@@ -87,7 +88,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
         )->validate();
 
         $wechatUser = $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $actor);
-
+        $this->settings->get('');
         if ($wechatUser->user_id) {
             //已绑定的用户登陆
             $user = $wechatUser->user;
@@ -97,21 +98,26 @@ class WechatMiniProgramLoginController extends AbstractResourceController
                 throw new \Exception('bind_error');
             }
         } else {
-            //未绑定的用户注册
-            $this->assertPermission((bool)$this->settings->get('register_close'));
+            //无感模式自动注册
+            if ($this->settings->get('register_type') == 2) {
+                //未绑定的用户注册
+                $this->assertPermission((bool)$this->settings->get('register_close'));
 
-            //注册邀请码
-            $data['code'] = Arr::get($attributes, 'code');
-            $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
-            $data['register_reason'] = trans('user.register_by_wechat_miniprogram');
-            $user = $this->bus->dispatch(
-                new AutoRegisterUser($request->getAttribute('actor'), $data)
-            );
-            $wechatUser->user_id = $user->id;
-            $wechatUser->setRelation('user', $user);
+                //注册邀请码
+                $data['code'] = Arr::get($attributes, 'code');
+                $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
+                $data['register_reason'] = trans('user.register_by_wechat_miniprogram');
+                $user = $this->bus->dispatch(
+                    new AutoRegisterUser($request->getAttribute('actor'), $data)
+                );
+                $wechatUser->user_id = $user->id;
+                $wechatUser->save();
+
+                $wechatUser->setRelation('user', $user);
+            } else {
+                throw new NoUserException();
+            }
         }
-
-        $wechatUser->save();
 
         //创建 token
         $params = [
