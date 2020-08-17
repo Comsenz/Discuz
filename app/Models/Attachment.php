@@ -133,19 +133,6 @@ class Attachment extends Model
     }
 
     /**
-     * 检测是否存在有不合法的附件
-     *
-     * @param $ids
-     * @return bool
-     */
-    public static function approvedInExists($ids)
-    {
-        $self = new static;
-
-        return $self->whereIn('id', $ids)->pluck('is_approved')->contains(0);
-    }
-
-    /**
      * 获取替换缩略图名称
      *
      * @param $imgPath

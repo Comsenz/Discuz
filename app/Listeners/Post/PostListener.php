@@ -45,6 +45,7 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class PostListener
 {
@@ -136,8 +137,8 @@ class PostListener
                 // 数据库通知
                 $post->replyUser->notify(new Replied($post, $actor, RepliedMessage::class));
 
-                // 去掉回复引用
-                $post->replyPost->filterPostContent(Post::NOTICE_LENGTH);
+                // 被回复内容
+                $post->replyPost->content = Str::of($post->replyPost->content)->substr(0, Post::NOTICE_LENGTH);
 
                 // 微信通知
                 $post->replyUser->notify(new Replied($post, $actor, WechatRepliedMessage::class, [
@@ -170,14 +171,16 @@ class PostListener
 
             $ids = array_column($attachments, 'id');
 
-            // 判断附件是否合法
-            $bool = Attachment::approvedInExists($ids);
-            if ($bool) {
-                // 如果是首贴，将主题设为待审核
-                if ($post->is_first) {
-                    $post->thread->is_approved = Thread::UNAPPROVED;
-                }
+            // 是否存在未审核的附件
+            $unapprovedAttachment = Attachment::query()
+                ->where('is_approved', Post::UNAPPROVED)
+                ->where('user_id', $actor->id)
+                ->whereIn('id', $ids)
+                ->exists();
+
+            if ($unapprovedAttachment) {
                 $post->is_approved = Post::UNAPPROVED;
+                $post->save();
             }
 
             Attachment::query()

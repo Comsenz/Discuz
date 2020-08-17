@@ -19,11 +19,13 @@
 namespace App\User;
 
 use App\Models\SessionToken;
+use App\Models\UserUcenter;
 use App\Models\UserWechat;
 use App\Repositories\MobileCodeRepository;
 use Discuz\Foundation\Application;
 use Discuz\Socialite\Exception\SocialiteException;
 use Discuz\Wechat\EasyWechatTrait;
+use Exception;
 use Illuminate\Support\Arr;
 
 class Bind
@@ -46,24 +48,23 @@ class Bind
     }
 
     /**
-     * 绑定微信公众号
      * @param $token
      * @param $user
-     * @throws \Exception
+     * @throws Exception
      */
-    public function wechat($token, $user)
+    public function withToken($token, $user)
     {
         $session = SessionToken::get($token);
         $scope = Arr::get($session, 'scope');
-        $openid = Arr::get($session, 'payload.openid');
         if (in_array($scope, ['wechat', 'wechatweb'])) {
+            $openid = Arr::get($session, 'payload.openid');
             $wechatUser = UserWechat::where('user_id', $user->id)->first();
             if (!$wechatUser) {
                 $wechat = UserWechat::where($this->platform[$scope], $openid)->first();
             }
             // 已经存在绑定，抛出异常
             if ($wechatUser || !$wechat || $wechat->user_id) {
-                throw new \Exception('account_has_been_bound');
+                throw new Exception('account_has_been_bound');
             }
 
             $wechat->user_id = $user->id;
@@ -73,6 +74,18 @@ class Bind
              */
             $wechat->save();
         }
+        if($scope === 'ucenter') {
+            $payload = Arr::get($session, 'payload');
+            $user_ucenter = UserUcenter::where('user_id', $user->id)->first();
+            if(!is_null($user_ucenter)) {
+                throw new Exception('account_has_been_bound');
+            }
+            $user_ucenter = new UserUcenter();
+            $user_ucenter->user_id = $user->id;
+            $user_ucenter->ucenter_id = $payload[0];
+            $user_ucenter->save();
+        }
+
     }
 
     /**
@@ -81,6 +94,7 @@ class Bind
      * @param $iv
      * @param $encryptedData
      * @param $user
+     * @return UserWechat
      * @throws SocialiteException
      */
     public function bindMiniprogram($js_code, $iv, $encryptedData, $user)

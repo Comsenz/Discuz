@@ -79,8 +79,15 @@ class RegisterUser
 
         // check invite code
         if (Arr::has($this->data, 'code')) {
-            if (!$exists = Invite::query()->where('code', Arr::get($this->data, 'code'))->exists()) {
-                throw new DecryptException(trans('user.register_decrypt_code_failed'));
+            $code = Arr::get($this->data, 'code');
+            if (Invite::lengthByAdmin($code)) {
+                if (!$exists = Invite::query()->where('code', Arr::get($this->data, 'code'))->exists()) {
+                    throw new DecryptException(trans('user.register_decrypt_code_failed'));
+                }
+            } else {
+                if (!$exists = User::query()->find(Invite::decryptCode($code))->exists()) {
+                    throw new DecryptException(trans('user.register_decrypt_code_failed'));
+                }
             }
         }
 

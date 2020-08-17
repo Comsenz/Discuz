@@ -59,7 +59,7 @@ class BasePostMessage extends DatabaseMessage
 
         return [
             $this->notifiable->username,
-            $this->strWords($message),
+            $this->filterSpecialChar ? $this->strWords($message) : $message,
             Arr::get($data, 'refuse', '无')
         ];
     }

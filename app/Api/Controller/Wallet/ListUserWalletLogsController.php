@@ -99,6 +99,11 @@ class ListUserWalletLogsController extends AbstractListController
     protected $total;
 
     /**
+     * @var int
+     */
+    protected $sumChangeAvailableAmount;
+
+    /**
      * @param Dispatcher $bus
      * @param UrlGenerator $url
      * @param UserWalletLogsRepository $walletLogs
@@ -142,6 +147,7 @@ class ListUserWalletLogsController extends AbstractListController
         $document->setMeta([
             'total' => $this->total,
             'pageCount' => ceil($this->total / $limit),
+            'sumChangeAvailableAmount' => $this->sumChangeAvailableAmount,
         ]);
 
         // 主题标题
@@ -182,6 +188,9 @@ class ListUserWalletLogsController extends AbstractListController
 
         $this->total = $limit > 0 ? $query->count() : null;
 
+        // 求和变动可用金额
+        $this->sumChangeAvailableAmount = number_format($query->sum('change_available_amount'), 2);
+
         $query->skip($offset)->take($limit);
 
         foreach ((array)$sort as $field => $order) {
@@ -204,7 +213,7 @@ class ListUserWalletLogsController extends AbstractListController
         $log_username = Arr::get($filter, 'username'); //变动钱包所属人
         $log_start_time = Arr::get($filter, 'start_time'); //变动时间范围：开始
         $log_end_time = Arr::get($filter, 'end_time'); //变动时间范围：结束
-        $log_source_username = Arr::get($filter, 'source_username');
+        $log_source_user_id = Arr::get($filter, 'source_user_id');
 
         $query->when($log_user, function ($query) use ($log_user) {
             $query->where('user_id', $log_user);
@@ -225,8 +234,12 @@ class ListUserWalletLogsController extends AbstractListController
         $query->when($log_username, function ($query) use ($log_username) {
             $query->whereIn('user_wallet_logs.user_id', User::where('users.username', $log_username)->select('id', 'username')->get());
         });
-        $query->when($log_source_username, function ($query) use ($log_source_username) {
-            $query->whereIn('user_wallet_logs.source_user_id', User::where('users.username', 'like', '%' . $log_source_username . '%')->select('id', 'username')->get());
+        if (Arr::has($filter, 'source_username')) { // 有搜索 "0" 的情况
+            $log_source_username = Arr::get($filter, 'source_username');
+            $query->whereIn('user_wallet_logs.source_user_id', User::query()->where('users.username', 'like', '%' . $log_source_username . '%')->pluck('id'));
+        }
+        $query->when($log_source_user_id, function ($query) use ($log_source_user_id) {
+            $query->where('source_user_id', '=', $log_source_user_id);
         });
     }
 }
