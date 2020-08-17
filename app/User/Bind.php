@@ -22,9 +22,12 @@ use App\Models\SessionToken;
 use App\Models\UserUcenter;
 use App\Models\UserWechat;
 use App\Repositories\MobileCodeRepository;
+use App\Settings\SettingsRepository;
 use Discuz\Foundation\Application;
 use Discuz\Socialite\Exception\SocialiteException;
 use Discuz\Wechat\EasyWechatTrait;
+use EasyWeChat\Kernel\Exceptions\DecryptException;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
 use Exception;
 use Illuminate\Support\Arr;
 
@@ -36,15 +39,18 @@ class Bind
 
     protected $mobileCode;
 
+    protected $settings;
+
     protected $platform = [
         'wechat' => 'mp_openid',
         'wechatweb' => 'dev_openid',
     ];
 
-    public function __construct(Application $app, MobileCodeRepository $mobileCode)
+    public function __construct(Application $app, MobileCodeRepository $mobileCode, SettingsRepository $settings)
     {
         $this->app = $app;
         $this->mobileCode = $mobileCode;
+        $this->settings = $settings;
     }
 
     /**
@@ -96,6 +102,8 @@ class Bind
      * @param $user
      * @return UserWechat
      * @throws SocialiteException
+     * @throws DecryptException
+     * @throws InvalidConfigException
      */
     public function bindMiniprogram($js_code, $iv, $encryptedData, $user)
     {
@@ -115,12 +123,20 @@ class Bind
             return $query->where('unionid', $unionid);
         })->orWhere('min_openid', $openid)->first();
 
+        // 非无感模式，用户已经存在绑定关系，抛出异常
+        if ($this->settings->get('register_type') != 2) {
+            if (!is_null($user->wechat) || $wechatUser->user_id) {
+                throw new Exception('account_has_been_bound');
+            }
+        }
+
         if (!$wechatUser) {
             $wechatUser = UserWechat::build([]);
         }
 
         //解密获取数据，更新/插入wechatUser
         if (!$wechatUser->user_id) {
+            //注册并绑定、登陆并绑定、手机号登陆注册并绑定时设置关联关系
             $wechatUser->user_id = $user->id ?: null;
         }
         $wechatUser->unionid = $unionid;

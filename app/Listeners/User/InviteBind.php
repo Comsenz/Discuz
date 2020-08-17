@@ -26,6 +26,7 @@ use App\Models\UserFollow;
 use App\Repositories\InviteRepository;
 use Carbon\Carbon;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Exception;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Arr;
@@ -56,7 +57,7 @@ class InviteBind
 
     /**
      * @param Registered $event
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(Registered $event)
     {
@@ -85,8 +86,8 @@ class InviteBind
                 }
             }
         } else {
-            $fromUserId = $this->InviteRepository->decryptCode($code);
-            $toUserId = $event->user->id;
+            $fromUserId = $this->InviteRepository->decryptCode($code); // 邀请人
+            $toUserId = $event->user->id; // 受邀人
 
             // 保持数据一致性
             $this->db->beginTransaction();
@@ -103,7 +104,19 @@ class InviteBind
                     'is_mutual' => 1,
                 ]);
 
+                /**
+                 * 刷新关注数和粉丝数
+                 */
+                /** @var User $fromUser */
                 $fromUser = User::query()->find($fromUserId);
+                $fromUser->refreshUserFollow();
+                $fromUser->refreshUserFans();
+                $fromUser->save();
+                /** @var User $toUser */
+                $toUser = User::query()->find($toUserId);
+                $toUser->refreshUserFollow();
+                $toUser->refreshUserFans();
+                $toUser->save();
 
                 // 建立上下级关系
                 UserDistribution::query()->create([
@@ -114,9 +127,9 @@ class InviteBind
                 ]);
 
                 $this->db->commit();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->db->rollback();
-                throw new \Exception($e->getMessage());
+                throw new Exception($e->getMessage());
             }
         }
 
