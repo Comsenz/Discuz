@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+
 /**
  * Copyright (C) 2020 Tencent Cloud.
  *
@@ -85,8 +87,8 @@ class InviteBind
                 }
             }
         } else {
-            $fromUserId = $this->InviteRepository->decryptCode($code);
-            $toUserId = $event->user->id;
+            $fromUserId = $this->InviteRepository->decryptCode($code); // 邀请人
+            $toUserId = $event->user->id; // 受邀人
 
             // 保持数据一致性
             $this->db->beginTransaction();
@@ -103,7 +105,19 @@ class InviteBind
                     'is_mutual' => 1,
                 ]);
 
+                /**
+                 * 刷新关注数和粉丝数
+                 */
+                /** @var User $fromUser */
                 $fromUser = User::query()->find($fromUserId);
+                $fromUser->refreshUserFollow();
+                $fromUser->refreshUserFans();
+                $fromUser->save();
+                /** @var User $toUser */
+                $toUser = User::query()->find($toUserId);
+                $toUser->refreshUserFollow();
+                $toUser->refreshUserFans();
+                $toUser->save();
 
                 // 建立上下级关系
                 UserDistribution::query()->create([
