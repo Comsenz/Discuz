@@ -23,6 +23,7 @@ use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\AutoRegisterUser;
 use App\Events\Users\Logind;
 use App\Exceptions\NoUserException;
+use App\Models\User;
 use App\Settings\SettingsRepository;
 use App\User\Bind;
 use Discuz\Api\Controller\AbstractResourceController;
@@ -78,7 +79,6 @@ class WechatMiniProgramLoginController extends AbstractResourceController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
-        $actor = $request->getAttribute('actor');
         $js_code = Arr::get($attributes, 'js_code');
         $iv = Arr::get($attributes, 'iv');
         $encryptedData =Arr::get($attributes, 'encryptedData');
@@ -87,7 +87,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             ['js_code' => 'required','iv' => 'required','encryptedData' => 'required']
         )->validate();
 
-        $wechatUser = $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $actor);
+        $wechatUser = $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, new User());
         $this->settings->get('');
         if ($wechatUser->user_id) {
             //已绑定的用户登陆
