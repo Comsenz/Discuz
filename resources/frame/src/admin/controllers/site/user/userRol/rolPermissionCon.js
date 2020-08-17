@@ -140,6 +140,9 @@ export default {
     },
 
     checkNum(){
+      if(!this.scale){
+        return true;
+      }
       const reg = /^([0-9](\.\d)?|10)$/;
       if(!reg.test(this.scale)){
         this.$message({
