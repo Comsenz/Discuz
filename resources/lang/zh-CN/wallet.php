@@ -17,6 +17,7 @@ return [
     // 分割线
 
     'income_register'           => '注册收入',
+    'income_scale_register'     => '注册分成收入',
     'income_artificial'         => '人工收入',
     'income_reward'             => '打赏主题收入',
     'income_scale_reward'       => '分成打赏主题收入',
