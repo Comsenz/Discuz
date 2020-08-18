@@ -100,12 +100,13 @@ class Bind
      * @param $iv
      * @param $encryptedData
      * @param $user
+     * @param bool $isMiniProgramLogin 小程序调取时传true，可以正常更新userwechat数据并返回供绑定用户无感登陆使用
      * @return UserWechat
-     * @throws SocialiteException
      * @throws DecryptException
      * @throws InvalidConfigException
+     * @throws SocialiteException
      */
-    public function bindMiniprogram($js_code, $iv, $encryptedData, $user)
+    public function bindMiniprogram($js_code, $iv, $encryptedData, $user, $isMiniProgramLogin = false)
     {
         $app = $this->miniProgram();
         //获取小程序登陆session key
@@ -123,9 +124,9 @@ class Bind
             return $query->where('unionid', $unionid);
         })->orWhere('min_openid', $openid)->first();
 
-        // 非无感模式，用户已经存在绑定关系，抛出异常
-        if ($this->settings->get('register_type') != 2) {
-            if (!is_null($user->wechat) || $wechatUser->user_id) {
+        // 非无感模式，用户、微信已经存在绑定关系，抛出异常
+        if ($this->settings->get('register_type') != 2 && $isMiniProgramLogin) {
+            if (!is_null($user->wechat) || ($wechatUser && $wechatUser->user_id)) {
                 throw new Exception('account_has_been_bound');
             }
         }
