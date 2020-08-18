@@ -163,13 +163,13 @@
           <el-checkbox v-model="checked" label="attachment.view.1">查看图片</el-checkbox>
         </CardRow>
       </Card>-->
-
+    <!-- $router.history.current.query.id === '7' -->
       <Card>
         <CardRow description="查看站点成员列表、搜索成员的权限">
           <el-checkbox
             v-model="checked"
             label="viewUserList"
-            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+            :disabled="$router.history.current.query.id === '1'"
           >站点会员列表</el-checkbox>
         </CardRow>
       </Card>
