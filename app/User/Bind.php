@@ -123,9 +123,9 @@ class Bind
             return $query->where('unionid', $unionid);
         })->orWhere('min_openid', $openid)->first();
 
-        // 非无感模式，用户已经存在绑定关系，抛出异常
+        // 非无感模式，用户、微信已经存在绑定关系，抛出异常
         if ($this->settings->get('register_type') != 2) {
-            if (!is_null($user->wechat) || $wechatUser->user_id) {
+            if (!is_null($user->wechat) || ($wechatUser && $wechatUser->user_id)) {
                 throw new Exception('account_has_been_bound');
             }
         }
