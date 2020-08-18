@@ -53,6 +53,7 @@ class BasicPostSerializer extends AbstractSerializer
      */
     protected function getDefaultAttributes($model)
     {
+        //过滤块内容、设置块付费状态等
         $this->paidContent($model);
 
         $gate = $this->gate->forUser($this->actor);

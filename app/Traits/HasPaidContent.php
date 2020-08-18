@@ -57,6 +57,7 @@ trait HasPaidContent
         // 作者本人 或 管理员 不处理（新增类型时请保证 $model->user_id 存在）
         if ($this->actor->id === $model->user_id || $this->actor->isAdmin()) {
             if ($model instanceof Post) {
+                // 过滤块，处理未付费可见内容
                 $model->content = PostFormater::pure($model);
             }
             return;
