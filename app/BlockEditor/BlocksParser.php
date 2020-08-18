@@ -124,6 +124,9 @@ class BlocksParser
             foreach ($blocks as $key => &$value) {
                 $type = Arr::get($value, 'type');
                 $parser = $this->getBlockInstance($type);
+                if (!$parser) {
+                    return $blocks;
+                }
                 if (!isset($value['data']['value']) && $type != 'pay') {
                     throw new BlockInvalidException('block_invalid_key_not_exist');
                 }
@@ -145,7 +148,7 @@ class BlocksParser
         return $blocks;
     }
 
-    private function getBlockInstance($type): BlockAbstract
+    private function getBlockInstance($type)
     {
         switch ($type) {
             case 'text':
@@ -174,6 +177,7 @@ class BlocksParser
                 break;
             default:
                 //@TODO 编辑器 其他块处理
+                $parser = null;
 //                throw new BlockInvalidException('block_invalid');
                 break;
         }
