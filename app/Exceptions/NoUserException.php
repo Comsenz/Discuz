@@ -34,7 +34,7 @@ class NoUserException extends Exception
 
     public function getToken()
     {
-        return $this->token->token;
+        return $this->token->token ?? '';
     }
 
     public function setUser($user)
