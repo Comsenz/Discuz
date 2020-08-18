@@ -125,7 +125,7 @@ class BlocksParser
                 $type = Arr::get($value, 'type');
                 $parser = $this->getBlockInstance($type);
                 if (!$parser) {
-                    return $blocks;
+                    continue;
                 }
                 if (!isset($value['data']['value']) && $type != 'pay') {
                     throw new BlockInvalidException('block_invalid_key_not_exist');
