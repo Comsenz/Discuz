@@ -30,4 +30,6 @@ return [
 
     'register_decrypt_code_failed' => '解密邀请码失败',
     'invite_decrypt_code_failed' => '邀请码格式不正确', // The payload is invalid.
+
+    'unable_to_get_location' => '无法获取地理位置',
 ];

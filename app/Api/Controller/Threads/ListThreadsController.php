@@ -268,6 +268,7 @@ class ListThreadsController extends AbstractListController
      * @param Builder $query
      * @param array $filter
      * @param User $actor
+     * @throws \Exception
      */
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
@@ -430,10 +431,15 @@ class ListThreadsController extends AbstractListController
         }
 
         // 附近的帖
-        if ($location = explode(',', Arr::get($filter, 'location'))) {
+        if ($location = Arr::get($filter, 'location')) {
+            $location = explode(',', $location, 3);
             $longitude = (float) ($location[0] ?? 0);       // 经度
             $latitude = (float) ($location[1] ?? 0);        // 纬度
             $distance = (int) ($location[2] ?? 5);          // 距离
+
+            if (! ($longitude && $latitude && $distance)) {
+                throw new \Exception('unable_to_get_location', 404);
+            }
 
             // 地球平均半径 6371km
             $raw = Str::replaceArray('?', [$latitude, $longitude, $latitude], '6371 * acos(
