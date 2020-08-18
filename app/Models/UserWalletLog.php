@@ -167,6 +167,5 @@ class UserWalletLog extends Model
     public function sourceUser()
     {
         return $this->belongsTo(User::class, 'source_user_id', 'id');
-        // return $this->belongsTo(User::class, 'id', 'source_user_id');
     }
 }
