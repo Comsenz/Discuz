@@ -184,8 +184,10 @@ trait NotifyTrait
             if ($this->orderInfo->type == Order::ORDER_TYPE_REGISTER) {
                 // 注册
                 $userDistribution = $this->orderInfo->user->userDistribution;
+                $sourceUserId = $this->orderInfo->user_id; // 注册的用户 = 金额来源用户
             } else {
                 $userDistribution = $this->orderInfo->payee->userDistribution;
+                $sourceUserId = $this->orderInfo->payee_id;
             }
 
             if (!empty($userDistribution)) {
@@ -206,7 +208,7 @@ trait NotifyTrait
                     trans($scaleOrderDetail['change_type_lang']),
                     null,                       // 关联提现ID
                     $this->orderInfo->id,       // 订单ID
-                    $this->orderInfo->payee_id  // 分成来源用户 = 订单收款人
+                    $sourceUserId               // 分成来源用户
                 );
             }
         }
