@@ -79,7 +79,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
-        $isReg = Arr::get($attributes, 'isReg', 0);
+        $isReg = Arr::get($attributes, 'register', 0);
         $js_code = Arr::get($attributes, 'js_code');
         $iv = Arr::get($attributes, 'iv');
         $encryptedData =Arr::get($attributes, 'encryptedData');
