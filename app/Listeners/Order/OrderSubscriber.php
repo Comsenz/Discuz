@@ -69,7 +69,7 @@ class OrderSubscriber
                 'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
                 'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
                     'actor_username' => $order->user->username,    // 发送人姓名
-                    'actual_amount' => $order->calculateAuthorAmount(),      // 获取实际金额
+                    'actual_amount' => $order->calculateAuthorAmount(true),      // 获取实际金额
                 ]),
             ]));
 
@@ -82,7 +82,7 @@ class OrderSubscriber
                         'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
                         'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
                             'actor_username' => $order->user->username,               // 发送人姓名
-                            'actual_amount' => $order->calculateAuthorAmount(),      // 获取实际金额
+                            'boss_amount' => $order->calculateAuthorAmount(),      // 获取实际金额
                         ]),
                     ]));
                 }
@@ -100,7 +100,7 @@ class OrderSubscriber
                 'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
                 'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
                     'actor_username' => $order->user->username,    // 发送人姓名
-                    'actual_amount' => $order->calculateAuthorAmount()       // 获取实际金额
+                    'actual_amount' => $order->calculateAuthorAmount(true)       // 获取实际金额
                 ]),
             ]));
 
