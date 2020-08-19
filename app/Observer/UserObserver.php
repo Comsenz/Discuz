@@ -45,7 +45,7 @@ class UserObserver
      */
     public function created(User $user)
     {
-        $this->settings->set('user_count', User::where('status', 0)->count());
+        $this->settings->set('user_count', User::query()->count());
     }
 
     /**
