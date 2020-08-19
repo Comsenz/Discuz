@@ -23,9 +23,8 @@ use Illuminate\Contracts\Routing\UrlGenerator;
 
 /**
  * 内容支付通知
- * (包含: 打赏帖子/支付付费贴)
+ * (包含: 注册分成/打赏分成帖子/付费贴分成)
  *
- * Class RewardedMessage
  * @package App\MessageTemplate\Wechat
  */
 class RewardedScaleMessage extends DatabaseMessage
@@ -46,7 +45,6 @@ class RewardedScaleMessage extends DatabaseMessage
 
     protected function contentReplaceVars($data)
     {
-        // dd($data);
         return $data;
     }
 }

@@ -26,9 +26,8 @@ use Illuminate\Support\Arr;
 
 /**
  * 内容支付通知 - 微信
- * (包含: 打赏帖子/支付付费贴)
+ * (包含: 注册分成/打赏分成帖子/付费贴分成)
  *
- * Class WechatLikedMessage
  * @package App\MessageTemplate\Wechat
  */
 class WechatRewardedScaleMessage extends DatabaseMessage

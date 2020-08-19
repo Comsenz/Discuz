@@ -73,10 +73,10 @@ class OrderSubscriber
                 ]),
             ]));
 
+            // 发送分成收入通知
             if ($order->isScale()) {
-                if ($order->payee->userDistribution) {
-                    $parentUser = $order->payee->userDistribution->parentUser;
-
+                if (!empty($userDistribution = $order->payee->userDistribution)) {
+                    $parentUser = $userDistribution->parentUser;
                     $parentUser->notify(new Rewarded($order, $order->user, RewardedScaleMessage::class));
                     $parentUser->notify(new Rewarded($order, $order->user, WechatRewardedScaleMessage::class, [
                         'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),

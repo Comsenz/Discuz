@@ -60,10 +60,10 @@ trait NotifyTrait
             switch ($this->orderInfo->type) {
                 case Order::ORDER_TYPE_REGISTER:
                     // 上级分成
-                    $this->orderInfo->calculateAuthorAmount($bossAmount);
+                    $this->orderInfo->calculateAuthorAmount();
                     $this->orderInfo->save();
                     // 是否创建上级金额分成
-                    $this->isCreateBossAmount($bossAmount);
+                    $this->isCreateBossAmount();
 
                     // 注册时，返回支付成功。
                     return $this->orderInfo;
@@ -75,10 +75,10 @@ trait NotifyTrait
                     $site_master_scale = $setting->get('site_master_scale');
 
                     if ($site_author_scale > 0 && $site_master_scale > 0 && ($site_author_scale + $site_master_scale) == 10) {
-                        $this->orderInfo->calculateMasterAmount($bossAmount);
+                        $this->orderInfo->calculateMasterAmount();
                     } else {
                         // 未设置或设置错误时站长分成为0，被打赏人检测是否有上级然后分成
-                        $this->orderInfo->author_amount = $this->orderInfo->calculateAuthorAmount($bossAmount);
+                        $this->orderInfo->author_amount = $this->orderInfo->calculateAuthorAmount();
                     }
 
                     $this->orderInfo->save();
@@ -91,7 +91,7 @@ trait NotifyTrait
                         $user_wallet->save();
 
                         // 是否创建上级金额分成
-                        $this->isCreateBossAmount($bossAmount);
+                        $this->isCreateBossAmount();
 
                         // 收款人钱包明细记录
                         $payeeOrderDetail = $this->orderByDetailType();
@@ -169,12 +169,10 @@ trait NotifyTrait
 
     /**
      * 上级人钱包增加金额分成
-     *
-     * @param $bossAmount
      */
-    public function isCreateBossAmount($bossAmount)
+    public function isCreateBossAmount()
     {
-        if ($bossAmount > 0) {
+        if ($this->orderInfo->boss_amount > 0) {
             /**
              * 上级人钱包增加金额分成
              *
@@ -193,7 +191,7 @@ trait NotifyTrait
             if (!empty($userDistribution)) {
                 $parentUserId = $userDistribution->pid; // 上级user_id
                 $user_wallet = UserWallet::query()->lockForUpdate()->find($parentUserId);
-                $user_wallet->available_amount = $user_wallet->available_amount + $bossAmount;
+                $user_wallet->available_amount = $user_wallet->available_amount + $this->orderInfo->boss_amount;
                 $user_wallet->save();
 
                 // 添加分成钱包明细
@@ -201,9 +199,9 @@ trait NotifyTrait
 
                 // 添加钱包明细
                 UserWalletLog::createWalletLog(
-                    $parentUserId,              // 明细所属用户 id
-                    $bossAmount,                // 变动可用金额
-                    0,                          // 变动冻结金额
+                    $parentUserId,                  // 明细所属用户 id
+                    $this->orderInfo->boss_amount,  // 变动可用金额
+                    0,                              // 变动冻结金额
                     $scaleOrderDetail['change_type'],
                     trans($scaleOrderDetail['change_type_lang']),
                     null,                       // 关联提现ID

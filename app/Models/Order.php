@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property float $amount
  * @property float $master_amount
  * @property float $author_amount
+ * @property float $boss_amount
  * @property int $be_scale
  * @property int $user_id
  * @property int $payee_id
@@ -180,10 +181,9 @@ class Order extends Model
     /**
      * 计算去掉站长、上级的作者实际金额数
      *
-     * @param int $bossAmount
      * @return float|string
      */
-    public function calculateAuthorAmount(&$bossAmount = 0)
+    public function calculateAuthorAmount()
     {
         /**
          * 获取 站长->作者 分成
@@ -191,6 +191,7 @@ class Order extends Model
          */
         $actualAmount = $this->amount - $this->master_amount;
 
+        $bossAmount = 0;
         // 计算 作者->上级 分成
         if ($this->be_scale) {
             $beScale = $this->be_scale / 10;
@@ -201,15 +202,15 @@ class Order extends Model
             $actualAmount = number_format($actualAmount - $bossAmount, 2, '.', '');
         }
 
+        $this->boss_amount = $bossAmount;
+
         return $actualAmount;
     }
 
     /**
      * 计算站长和作者实际金额数
-     *
-     * @param int $bossAmount
      */
-    public function calculateMasterAmount(&$bossAmount = 0)
+    public function calculateMasterAmount()
     {
         $settings = app(SettingsRepository::class);
 
@@ -222,7 +223,7 @@ class Order extends Model
         $payee_amount = sprintf('%.2f', ($order_amount * $author_ratio));
         $this->master_amount = $order_amount - $payee_amount; // 站长分成金额
 
-        $this->author_amount = $this->calculateAuthorAmount($bossAmount); // 作者实际分成金额
+        $this->author_amount = $this->calculateAuthorAmount(); // 作者实际分成金额
     }
 
     /**
