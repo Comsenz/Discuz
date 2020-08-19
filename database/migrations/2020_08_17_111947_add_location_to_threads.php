@@ -29,8 +29,14 @@ class AddLocationToThreads extends Migration
     public function up()
     {
         $this->schema()->table('threads', function (Blueprint $table) {
-            $table->unsignedDecimal('longitude', 10, 7)->default(0)->after('paid_count')->comment('经度');
-            $table->unsignedDecimal('latitude', 10, 7)->default(0)->after('longitude')->comment('纬度');
+            $table->decimal('longitude', 10, 7)->default(0)->after('paid_count')->comment('经度');
+            $table->decimal('latitude', 10, 7)->default(0)->after('longitude')->comment('纬度');
+            $table->string('location', 100)->after('latitude')->comment('位置');
+        });
+
+        $this->schema()->table('posts', function (Blueprint $table) {
+            $table->dropColumn('longitude');
+            $table->dropColumn('latitude');
         });
     }
 
@@ -44,6 +50,12 @@ class AddLocationToThreads extends Migration
         $this->schema()->table('threads', function (Blueprint $table) {
             $table->dropColumn('longitude');
             $table->dropColumn('latitude');
+            $table->dropColumn('location');
+        });
+
+        $this->schema()->table('posts', function (Blueprint $table) {
+            $table->decimal('longitude', 10, 7)->default(0)->after('like_count')->comment('经度');
+            $table->decimal('latitude', 10, 7)->default(0)->after('longitude')->comment('纬度');
         });
     }
 }

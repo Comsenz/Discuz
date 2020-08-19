@@ -98,8 +98,8 @@ class WechatMiniProgramLoginController extends AbstractResourceController
                 throw new \Exception('bind_error');
             }
         } else {
-            //无感模式自动注册
-            if ($this->settings->get('register_type') == 2) {
+            //自动注册
+            if (Arr::get($attributes, 'register', 0)) {
                 //未绑定的用户注册
                 $this->assertPermission((bool)$this->settings->get('register_close'));
 

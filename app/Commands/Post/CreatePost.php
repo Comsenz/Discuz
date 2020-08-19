@@ -190,9 +190,7 @@ class CreatePost
             $this->replyPostId,
             $this->replyUserId,
             $isFirst,
-            $isComment,
-            Arr::get($this->data, 'attributes.latitude', 0),
-            Arr::get($this->data, 'attributes.longitude', 0)
+            $isComment
         );
 
         // 存在审核敏感词时，将回复内容放入待审核

@@ -67,6 +67,7 @@ class ThreadSerializer extends AbstractSerializer
             'rewardedCount'     => (int) $model->rewarded_count,
             'longitude'         => $model->longitude,
             'latitude'          => $model->latitude,
+            'location'          => $model->location,
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
             'isApproved'        => (int) $model->is_approved,

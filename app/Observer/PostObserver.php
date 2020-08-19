@@ -43,13 +43,6 @@ class PostObserver
      */
     public function created(Post $post)
     {
-        if ($post->is_first) {
-            $post->thread->longitude = $post->longitude;
-            $post->thread->latitude = $post->latitude;
-
-            $post->thread->save();
-        }
-
         $this->refreshSitePostCount();
     }
 
