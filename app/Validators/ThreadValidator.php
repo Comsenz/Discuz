@@ -30,6 +30,7 @@ class ThreadValidator extends AbstractValidator
     {
         return [
             'title' => 'required|max:80',
+            'location' => 'max:100',
             'price' => [
                 'sometimes',
                 'regex:/^(0|[1-9]\d{0,5})(\.\d{1,2})?$/',   // decimal 10,2

@@ -49,6 +49,7 @@ use Illuminate\Support\Stringable;
  * @property int $rewarded_count
  * @property float $longitude
  * @property float $latitude
+ * @property string $location
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon $deleted_at

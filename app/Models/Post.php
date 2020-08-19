@@ -49,8 +49,6 @@ use Illuminate\Support\Str;
  * @property int $port
  * @property int $reply_count
  * @property int $like_count
- * @property float $longitude
- * @property float $latitude
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon $deleted_at
@@ -316,11 +314,9 @@ class Post extends Model
      * @param int $replyUserId
      * @param int $isFirst
      * @param int $isComment
-     * @param float $latitude
-     * @param float $longitude
      * @return static
      */
-    public static function reply($threadId, $content, $userId, $ip, $port, $replyPostId, $replyUserId, $isFirst, $isComment, $latitude, $longitude)
+    public static function reply($threadId, $content, $userId, $ip, $port, $replyPostId, $replyUserId, $isFirst, $isComment)
     {
         $post = new static;
 
@@ -333,8 +329,6 @@ class Post extends Model
         $post->reply_user_id = $replyUserId;
         $post->is_first = $isFirst;
         $post->is_comment = $isComment;
-        $post->latitude = $latitude;
-        $post->longitude = $longitude;
 
         // Set content last, as the parsing may rely on other post attributes.
         $post->content = $content;
