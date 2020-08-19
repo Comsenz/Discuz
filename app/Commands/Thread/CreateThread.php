@@ -147,9 +147,9 @@ class CreateThread
         }
 
         // 经纬度及地理位置
-        $thread->longitude = Arr::get($this->data, 'attributes.longitude');
-        $thread->latitude = Arr::get($this->data, 'attributes.latitude');
-        $thread->location = Arr::get($this->data, 'attributes.location');
+        $thread->longitude = Arr::get($this->data, 'attributes.longitude', 0);
+        $thread->latitude = Arr::get($this->data, 'attributes.latitude', 0);
+        $thread->location = Arr::get($this->data, 'attributes.location', '');
 
         $thread->setRelation('user', $this->actor);
 
