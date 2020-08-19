@@ -168,14 +168,31 @@ class Order extends Model
     }
 
     /**
-     * 计算作者实际金额数
+     * 判断是否是分成的订单
+     *
+     * @return bool
+     */
+    public function isScale()
+    {
+        if ($this->be_scale > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 计算去掉站长、上级的作者实际金额数
      *
      * @param int $bossAmount
      * @return float|string
      */
     public function calculateAuthorAmount(&$bossAmount = 0)
     {
-        // 获取 站长->作者 分成
+        /**
+         * 获取 站长->作者 分成
+         * ( 注册付费站点时 master_amount 是0 )
+         */
         $actualAmount = $this->amount - $this->master_amount;
 
         // 计算 作者->上级 分成

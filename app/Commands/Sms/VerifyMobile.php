@@ -107,7 +107,7 @@ class VerifyMobile
 
         //公众号绑定
         if ($token = Arr::get($this->params, 'token')) {
-            $this->bind->wechat($token, $this->mobileCode->user);
+            $this->bind->withToken($token, $this->mobileCode->user);
             if (!(bool)$this->settings->get('register_validate')) {
                 // 在注册绑定微信后 发送注册微信通知
                 $this->mobileCode->user->notify(new System(WechatRegisterMessage::class));
@@ -115,10 +115,10 @@ class VerifyMobile
         }
 
         //小程序绑定
-        if ($js_code = Arr::get($this->params, 'js_code') &&
-            $iv = Arr::has($this->params, 'iv') &&
-            $encryptedData = Arr::has($this->params, 'encryptedData')
-        ) {
+        $js_code = Arr::get($this->params, 'js_code');
+        $iv = Arr::get($this->params, 'iv');
+        $encryptedData = Arr::get($this->params, 'encryptedData');
+        if ($js_code && $iv && $encryptedData) {
             $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $this->mobileCode->user);
         }
 

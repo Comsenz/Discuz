@@ -47,7 +47,9 @@ use Illuminate\Support\Stringable;
  * @property int $view_count
  * @property int $paid_count
  * @property int $rewarded_count
- * @property int $favorite_count
+ * @property float $longitude
+ * @property float $latitude
+ * @property string $location
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon $deleted_at

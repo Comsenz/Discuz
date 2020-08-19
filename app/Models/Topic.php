@@ -28,8 +28,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $content
  * @property int $thread_count
  * @property int $view_count
+ * @property int $recommended
  * @property Carbon $updated_at
  * @property Carbon $created_at
+ * @property Carbon $recommended_at
  * @package App\Models
  * @method static find($id)
  * @method static where($column, $fields)
@@ -43,6 +45,7 @@ class Topic extends Model
     protected $dates = [
         'updated_at',
         'created_at',
+        'recommended_at',
     ];
 
     /**

@@ -16,31 +16,34 @@
  * limitations under the License.
  */
 
-namespace App\Events\Category;
+namespace App\Api\Serializer;
 
-use App\Models\Category;
+use App\Models\User;
+use Discuz\Api\Serializer\AbstractSerializer;
 
-class CategoryRefreshCount
+class UserInviteSerializer extends AbstractSerializer
 {
     /**
-     * @var Category
+     * {@inheritdoc}
      */
-    public $category;
+    protected $type = 'user_invite';
 
     /**
-     * 原分类id
+     * {@inheritdoc}
      *
-     * @var
+     * @param User $model
      */
-    public $original_id;
-
-    /**
-     * @param $original_id
-     * @param Category $category
-     */
-    public function __construct(Category $category, string $original_id)
+    public function getDefaultAttributes($model)
     {
-        $this->category = $category;
-        $this->original_id = $original_id;
+        return [
+            'id'        => (int) $model->id,
+            'username'  => $model->username,
+        ];
     }
+
+    public function group($model)
+    {
+        return $this->hasOne($model, GroupSerializer::class);
+    }
+
 }

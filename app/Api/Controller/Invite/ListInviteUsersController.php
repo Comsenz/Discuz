@@ -157,6 +157,8 @@ class ListInviteUsersController extends AbstractListController
      */
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
+        $username = Arr::get($filter, 'username');
+
         if (Arr::has($filter, 'scale')) {
             $scale = (int)Arr::get($filter, 'scale', 0);
             if (empty($scale)) {
@@ -165,5 +167,18 @@ class ListInviteUsersController extends AbstractListController
                 $query->where('be_scale', '>', 0);
             }
         }
+
+        $query->when($username, function ($query, $username) {
+            // 用户名前后存在星号（*）则使用模糊查询
+            if (Str::startsWith($username, '*') || Str::endsWith($username, '*')) {
+                $username = Str::replaceLast('*', '%', Str::replaceFirst('*', '%', $username));
+                $userIds = User::query()->where('username', 'like', $username)->pluck('id');
+            } else {
+                $userIds = User::query()->where('username', $username)->pluck('id');
+            }
+
+            // user_distributions.user_id
+            $query->whereIn('user_id', $userIds);
+        });
     }
 }

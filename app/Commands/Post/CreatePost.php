@@ -137,17 +137,9 @@ class CreatePost
                 $this->assertCan($this->actor, 'createAudio');
             }
 
-            // 引用回复
+            // 回复他人
             if (! empty($this->replyPostId)) {
-                // 不能只回复引用部分
-                $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
-                $replyContent = preg_replace($pattern, '', Arr::get($this->data, 'attributes.content'));
-
-                if (! $replyContent) {
-                    throw new Exception('reply_content_cannot_null');
-                }
-
-                // 检查是否在同一主题下的
+                // 被回复人，确保回复在同一主题下
                 $this->replyUserId = $post->newQuery()
                     ->where('id', $this->replyPostId)
                     ->where('thread_id', $thread->id)
@@ -172,9 +164,7 @@ class CreatePost
             $this->replyPostId,
             $this->replyUserId,
             $isFirst,
-            $isComment,
-            Arr::get($this->data, 'attributes.latitude', 0),
-            Arr::get($this->data, 'attributes.longitude', 0)
+            $isComment
         );
 
         // 存在审核敏感词时，将回复内容放入待审核
