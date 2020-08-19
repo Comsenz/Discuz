@@ -80,10 +80,10 @@ class Bind
              */
             $wechat->save();
         }
-        if($scope === 'ucenter') {
+        if ($scope === 'ucenter') {
             $payload = Arr::get($session, 'payload');
             $user_ucenter = UserUcenter::where('user_id', $user->id)->first();
-            if(!is_null($user_ucenter)) {
+            if (!is_null($user_ucenter)) {
                 throw new Exception('account_has_been_bound');
             }
             $user_ucenter = new UserUcenter();
@@ -91,7 +91,6 @@ class Bind
             $user_ucenter->ucenter_id = $payload[0];
             $user_ucenter->save();
         }
-
     }
 
     /**
