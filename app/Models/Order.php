@@ -168,6 +168,20 @@ class Order extends Model
     }
 
     /**
+     * 判断是否是分成的订单
+     *
+     * @return bool
+     */
+    public function isScale()
+    {
+        if ($this->be_scale > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 计算去掉站长、上级的作者实际金额数
      *
      * @param int $bossAmount
