@@ -20,7 +20,9 @@ namespace App\Listeners\Order;
 
 use App\Events\Order\Updated;
 use App\MessageTemplate\RewardedMessage;
+use App\MessageTemplate\RewardedScaleMessage;
 use App\MessageTemplate\Wechat\WechatRewardedMessage;
+use App\MessageTemplate\Wechat\WechatRewardedScaleMessage;
 use App\Models\Thread;
 use Carbon\Carbon;
 use Discuz\Contracts\Setting\SettingsRepository;
@@ -70,6 +72,21 @@ class OrderSubscriber
                     'actual_amount' => $order->calculateAuthorAmount(),      // 获取实际金额
                 ]),
             ]));
+
+            if ($order->isScale()) {
+                if ($order->payee->userDistribution) {
+                    $parentUser = $order->payee->userDistribution->parentUser;
+
+                    $parentUser->notify(new Rewarded($order, $order->user, RewardedScaleMessage::class));
+                    $parentUser->notify(new Rewarded($order, $order->user, WechatRewardedScaleMessage::class, [
+                        'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
+                        'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
+                            'actor_username' => $order->user->username,               // 发送人姓名
+                            'actual_amount' => $order->calculateAuthorAmount(),      // 获取实际金额
+                        ]),
+                    ]));
+                }
+            }
 
             // 更新主题打赏数
             $order->thread->refreshRewardedCount()->save();

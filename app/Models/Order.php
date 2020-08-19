@@ -174,11 +174,7 @@ class Order extends Model
      */
     public function isScale()
     {
-        if ($this->be_scale > 0) {
-            return true;
-        }
-
-        return false;
+        return $this->be_scale > 0;
     }
 
     /**
