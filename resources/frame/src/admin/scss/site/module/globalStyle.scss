@@ -69,9 +69,12 @@
       margin-right: 0 !important;
     }
     .section-title-right {
-      width: 170PX;
+      width: 300PX;
       a {
-        color: $titleColor;
+        color: #FF0000;
+      }
+      span {
+        margin: 0;
       }
     }
     .pending-p {
