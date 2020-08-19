@@ -103,8 +103,8 @@ abstract class AbstractWechatUserController extends AbstractResourceController
             //站点关闭
             $this->assertPermission((bool)$this->settings->get('register_close'));
 
-            //如果开启无感登陆，自动注册用户
-            if ($this->settings->get('register_type') == 2) {
+            //自动注册
+            if (Arr::get($request->getQueryParams(), 'register', 0)) {
                 if (!$wechatUser) {
                     $wechatUser = new UserWechat();
                 }

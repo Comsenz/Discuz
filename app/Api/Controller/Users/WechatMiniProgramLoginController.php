@@ -79,7 +79,6 @@ class WechatMiniProgramLoginController extends AbstractResourceController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
-        $isReg = Arr::get($attributes, 'register', 0);
         $js_code = Arr::get($attributes, 'js_code');
         $iv = Arr::get($attributes, 'iv');
         $encryptedData =Arr::get($attributes, 'encryptedData');
@@ -100,7 +99,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             }
         } else {
             //自动注册
-            if ($isReg) {
+            if (Arr::get($attributes, 'register', 0)) {
                 //未绑定的用户注册
                 $this->assertPermission((bool)$this->settings->get('register_close'));
 
