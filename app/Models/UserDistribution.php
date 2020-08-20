@@ -33,6 +33,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $be_scale
  * @property int $level
  * @property string $invites_code
+ * @property int $is_subordinate
+ * @property int $is_commission
  * @property Carbon updated_at
  * @property Carbon created_at
  * @property User $parentUser
@@ -48,6 +50,8 @@ class UserDistribution extends Model
         'invites_code',
         'be_scale',
         'level',
+        'is_subordinate',
+        'is_commission',
     ];
 
     /**

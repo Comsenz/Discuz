@@ -59,6 +59,9 @@ class OrderSubscriber
             $order->expired_at = $day ? Carbon::now()->addDays($day) : null;
             $order->user->save();
             $order->save();
+
+            // 发送分成通知
+            $this->sendScaleNotice($order, 'user');
         }
 
         // 打赏主题的订单，支付成功后通知主题作者
@@ -73,20 +76,8 @@ class OrderSubscriber
                 ]),
             ]));
 
-            // 发送分成收入通知
-            if ($order->isScale()) {
-                if (!empty($userDistribution = $order->payee->userDistribution)) {
-                    $parentUser = $userDistribution->parentUser;
-                    $parentUser->notify(new Rewarded($order, $order->user, RewardedScaleMessage::class));
-                    $parentUser->notify(new Rewarded($order, $order->user, WechatRewardedScaleMessage::class, [
-                        'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
-                        'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
-                            'actor_username' => $order->user->username,               // 发送人姓名
-                            'boss_amount' => $order->calculateAuthorAmount(),      // 获取实际金额
-                        ]),
-                    ]));
-                }
-            }
+            // 发送分成通知
+            $this->sendScaleNotice($order, 'payee');
 
             // 更新主题打赏数
             $order->thread->refreshRewardedCount()->save();
@@ -104,7 +95,36 @@ class OrderSubscriber
                 ]),
             ]));
 
+            // 发送分成通知
+            $this->sendScaleNotice($order, 'payee');
+
             $order->thread->refreshPaidCount()->save();
+        }
+    }
+
+    /**
+     * 发送分成通知
+     *
+     * @param $order
+     * @param bool $type payee 打赏/付费  user 注册
+     */
+    public function sendScaleNotice($order, $type)
+    {
+        // 发送分成收入通知
+        if ($order->isScale()) {
+            // 判断是发给 收款人/付款人 的上级
+            $userDistribution = $type == 'payee' ? $order->payee->userDistribution : $order->user->userDistribution ;
+            if (!empty($userDistribution)) {
+                $parentUser = $userDistribution->parentUser;
+                $parentUser->notify(new Rewarded($order, $order->user, RewardedScaleMessage::class));
+                $parentUser->notify(new Rewarded($order, $order->user, WechatRewardedScaleMessage::class, [
+                    'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
+                    'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
+                        'actor_username' => $order->user->username,        // 发送人姓名
+                        'boss_amount' => $order->calculateAuthorAmount(),  // 获取实际金额
+                    ]),
+                ]));
+            }
         }
     }
 }
