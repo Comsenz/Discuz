@@ -48,9 +48,9 @@ class TextBlock extends BlockAbstract
         $this->data['value'] = $special->purify($this->data['value'], 'textBlockConfig');
 
         //解析@
-        if (isset($this->data['userMentions'])) {
+        if (isset($this->data['userMention'])) {
             $userIds = [];
-            foreach ($this->data['userMentions'] as $user) {
+            foreach ($this->data['userMention'] as $user) {
                 $userIds[] = Arr::get($user, 'id');
             }
 
@@ -61,9 +61,9 @@ class TextBlock extends BlockAbstract
         }
 
         //解析#
-        if (isset($this->data['topics'])) {
+        if (isset($this->data['topic'])) {
             $topicIds = [];
-            foreach ($this->data['topics'] as $topic) {
+            foreach ($this->data['topic'] as $topic) {
                 $topicIds[] = Arr::get($topic, 'id');
             }
 

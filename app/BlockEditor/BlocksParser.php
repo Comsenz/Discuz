@@ -197,14 +197,14 @@ class BlocksParser
                     "type": "text",
                     "data": {
                         "value": "ooo  @yyyy #xxx# :oooo:  $oooooopoo$",
-                        "userMentions": [{
+                        "userMention": [{
                             "id": "1",
                             "name": "@yyyy"
                         },{
                             "id": "2",
                             "name": "@xxx"
                         }],
-                        "topics": [{
+                        "topic": [{
                             "id": "1",
                             "name": "#xxx#"
                         },{

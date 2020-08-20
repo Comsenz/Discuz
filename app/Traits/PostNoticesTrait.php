@@ -82,12 +82,12 @@ trait PostNoticesTrait
     public function sendRelated(Post $post, User $actor)
     {
 
-        //获取所有的话题ID
+        //获取所有的@用户ID
         $blocks = $post->content->get('blocks');
         $mentioned = [];
         foreach ($blocks as $block) {
-            if ($block['type'] == 'text' && isset($block['data']['userMentions'])) {
-                foreach ($block['data']['userMentions'] as $userMention) {
+            if ($block['type'] == 'text' && isset($block['data']['userMention'])) {
+                foreach ($block['data']['userMention'] as $userMention) {
                     $mentioned[] = Arr::get($userMention, 'id');
                 }
             }

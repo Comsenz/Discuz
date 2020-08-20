@@ -48,8 +48,8 @@ class ThreadTopic extends Pivot
         $blocks = $post->content->get('blocks');
         $topicIds = [];
         foreach ($blocks as $block) {
-            if ($block['type'] == 'text' && isset($block['data']['topics'])) {
-                foreach ($block['data']['topics'] as $topic) {
+            if ($block['type'] == 'text' && isset($block['data']['topic'])) {
+                foreach ($block['data']['topic'] as $topic) {
                     $topicIds[] = Arr::get($topic, 'id');
                 }
             }
