@@ -109,7 +109,7 @@ export default {
             this.checked.push(item._data.permission)
           })
           this.scale = res.data.attributes.scale;
-          if(this.checked.indexOf('other.canInviteUserScale')!=-1) {
+          if(this.checked.indexOf('other.canInviteUserScale')!=-1 || this.checked.indexOf('other.canUserCommissionScale')!=-1) {
             this.showScale = true;
           }
           
@@ -165,8 +165,12 @@ export default {
       })
     },
 
-    handlePromotionChange(value){
-      this.showScale = value;
+    handlePromotionChange(){
+      if(this.checked.indexOf('other.canInviteUserScale')!=-1 || this.checked.indexOf('other.canUserCommissionScale')!=-1) {
+        this.showScale = true;
+      }else{
+        this.showScale = false;
+      }
     },
 
     checkNum(){

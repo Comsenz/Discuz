@@ -316,14 +316,21 @@
     <!-- 其他权限 -->
     <div v-show="activeTab.name === 'other'">
       <Card>
-        <CardRow description="允许推广下线">
+        <CardRow description="允许推广下线以及下线的收入是否能提成">
           <el-checkbox
             v-model="checked"
             label="other.canInviteUserScale"
             @change="handlePromotionChange"
+            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
           >推广下线</el-checkbox>
+          <el-checkbox
+            v-model="checked"
+            label="other.canUserCommissionScale"
+            @change="handlePromotionChange"
+            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+          >收入提成</el-checkbox>
         </CardRow>
-        <CardRow description="下线主题打赏、付费等的分成比例设置，填1表示10%，不填或为0时为不分成，分成仅为下一级用户。" class="proportion-box" v-if="showScale">
+        <CardRow description="站点开启付费模式时下线付费加入、主题被打赏、被付费等的分成比例设置，填1表示10%，不填或为0时为不分成，分成仅为下一级用户" class="proportion-box" v-if="showScale">
           <div>
             <span>提成比例</span>
             <el-input
