@@ -493,22 +493,24 @@ class User extends Model
      * @param int $type 1推广下线 2/3收入提成
      * @return bool
      */
-    public function isAllowScale($type)
+    public function isAllowScale($type = 0)
     {
-        switch ($type) {
-            case Order::ORDER_TYPE_REGISTER:
-                // 注册分成查询付款人的上级
-                if (!empty($userDistribution = $this->userDistribution)) {
-                    return (bool) $userDistribution->is_subordinate;
-                }
-                break;
-            case Order::ORDER_TYPE_REWARD:
-            case Order::ORDER_TYPE_THREAD:
-                // 打赏/付费分成查询收款人的上级
-                if (!empty($userDistribution = $this->userDistribution)) {
-                    return (bool) $userDistribution->is_commission;
-                }
-                break;
+        if ($this->can('other.canInviteUserScale')) {
+            switch ($type) {
+                case Order::ORDER_TYPE_REGISTER:
+                    // 注册分成查询付款人的上级
+                    if (!empty($userDistribution = $this->userDistribution)) {
+                        return (bool) $userDistribution->is_subordinate;
+                    }
+                    break;
+                case Order::ORDER_TYPE_REWARD:
+                case Order::ORDER_TYPE_THREAD:
+                    // 打赏/付费分成查询收款人的上级
+                    if (!empty($userDistribution = $this->userDistribution)) {
+                        return (bool) $userDistribution->is_commission;
+                    }
+                    break;
+            }
         }
 
         return false;
