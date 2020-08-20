@@ -21,8 +21,6 @@ namespace App\Models;
 use App\Events\Post\Hidden;
 use App\Events\Post\Restored;
 use App\Events\Post\Revised;
-use App\Formatter\Formatter;
-use App\Formatter\MarkdownFormatter;
 use Carbon\Carbon;
 use DateTime;
 use Discuz\Database\ScopeVisibilityTrait;
@@ -61,6 +59,7 @@ use Illuminate\Support\Str;
  * @property bool $is_comment
  * @property bool $is_approved
  * @property Collection $images
+ * @property Collection $attachments
  * @property Thread $thread
  * @property User $user
  * @property User $replyUser
@@ -68,6 +67,7 @@ use Illuminate\Support\Str;
  * @property PostMod $stopWords
  * @property Post replyPost
  * @property string parsedContent
+ * @property User|Collection $mentionUsers
  * @package App\Models
  */
 class Post extends Model
