@@ -100,12 +100,27 @@ class Group extends Model
     protected $casts = [
         'default' => 'boolean',
         'is_display' => 'boolean',
+        'is_subordinate' => 'boolean',
+        'is_commission' => 'boolean',
     ];
 
     /**
      * {@inheritdoc}
      */
-    protected $fillable = ['id', 'name', 'type', 'color', 'icon', 'default', 'is_paid', 'fee', 'days'];
+    protected $fillable = [
+        'id',
+        'name',
+        'type',
+        'color',
+        'icon',
+        'default',
+        'is_paid',
+        'fee',
+        'days',
+        'scale',
+        'is_subordinate',
+        'is_commission',
+    ];
 
     /**
      * {@inheritdoc}
