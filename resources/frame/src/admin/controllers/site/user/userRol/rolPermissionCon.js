@@ -118,6 +118,10 @@ export default {
       })
     },
     patchGroupPermission() {
+      let checked = this.checked;
+      if(this.is_commission || this.is_subordinate){
+        checked.push('other.canInviteUserScale');
+      }
       this.appFetch({
         url: 'groupPermission',
         method: 'post',
@@ -125,7 +129,7 @@ export default {
           data: {
             "attributes": {
               "groupId": this.$route.query.id,
-              "permissions": this.checked
+              "permissions": checked
             }
           }
         }
