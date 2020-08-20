@@ -38,6 +38,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property float fee
  * @property int days
  * @property int scale
+ * @property int $is_subordinate
+ * @property int $is_commission
  * @property Collection $users
  * @property Collection $permissions
  * @method truncate()
