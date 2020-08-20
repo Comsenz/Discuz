@@ -41,7 +41,7 @@
         <span>{{siteInfo.version}}</span>
         <span v-if="newVersion" class="section-title section-title-right">
           <span>[</span>
-          <a href="https://discuz.com/docs/release_notes.html" target="_blank">新版本：Discuz! Q Beta {{versionNumber}}</a>
+          <a href="https://discuz.com/docs/release_notes.html" target="_blank">新版本： {{versionNumber}}</a>
           <span>]</span>
         </span>
       </p>
