@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $invites_code
  * @property Carbon updated_at
  * @property Carbon created_at
+ * @property User $parentUser
  */
 class UserDistribution extends Model
 {
@@ -72,5 +73,13 @@ class UserDistribution extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function parentUser()
+    {
+        return $this->belongsTo(User::class, 'pid', 'id');
     }
 }

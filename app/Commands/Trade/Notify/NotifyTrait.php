@@ -60,7 +60,7 @@ trait NotifyTrait
             switch ($this->orderInfo->type) {
                 case Order::ORDER_TYPE_REGISTER:
                     // 上级分成
-                    $this->orderInfo->calculateAuthorAmount($bossAmount);
+                    $bossAmount = $this->orderInfo->calculateAuthorAmount();
                     $this->orderInfo->save();
                     // 是否创建上级金额分成
                     $this->isCreateBossAmount($bossAmount);
@@ -76,10 +76,10 @@ trait NotifyTrait
                     $site_master_scale = $setting->get('site_master_scale');
 
                     if ($site_author_scale > 0 && $site_master_scale > 0 && ($site_author_scale + $site_master_scale) == 10) {
-                        $this->orderInfo->calculateMasterAmount($bossAmount);
+                        $bossAmount = $this->orderInfo->calculateMasterAmount();
                     } else {
                         // 未设置或设置错误时站长分成为0，被打赏人检测是否有上级然后分成
-                        $this->orderInfo->author_amount = $this->orderInfo->calculateAuthorAmount($bossAmount);
+                        $bossAmount = $this->orderInfo->calculateAuthorAmount();
                     }
 
                     $this->orderInfo->save();
@@ -176,7 +176,7 @@ trait NotifyTrait
     /**
      * 上级人钱包增加金额分成
      *
-     * @param $bossAmount
+     * @param float $bossAmount 上级实际分成金额数
      */
     public function isCreateBossAmount($bossAmount)
     {

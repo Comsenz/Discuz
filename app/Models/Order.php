@@ -172,12 +172,22 @@ class Order extends Model
     }
 
     /**
+     * 判断是否是分成的订单
+     *
+     * @return bool
+     */
+    public function isScale()
+    {
+        return $this->be_scale > 0;
+    }
+
+    /**
      * 计算去掉站长、上级的作者实际金额数
      *
-     * @param int $bossAmount
-     * @return float|string
+     * @param bool $getAuthorAmount 获取作者金额数
+     * @return float $bossAmount 上级实际分成金额数
      */
-    public function calculateAuthorAmount(&$bossAmount = 0)
+    public function calculateAuthorAmount($getAuthorAmount = false)
     {
         /**
          * 获取 站长->作者 分成
@@ -185,6 +195,7 @@ class Order extends Model
          */
         $actualAmount = $this->amount - $this->master_amount;
 
+        $bossAmount = 0;
         // 计算 作者->上级 分成
         if ($this->be_scale) {
             $beScale = $this->be_scale / 10;
@@ -195,15 +206,17 @@ class Order extends Model
             $actualAmount = number_format($actualAmount - $bossAmount, 2, '.', '');
         }
 
-        return $actualAmount;
+        $this->author_amount = $actualAmount;
+
+        return $getAuthorAmount ?  $this->author_amount : $bossAmount ;
     }
 
     /**
      * 计算站长和作者实际金额数
      *
-     * @param int $bossAmount
+     * @return float $bossAmount 上级实际分成金额数
      */
-    public function calculateMasterAmount(&$bossAmount = 0)
+    public function calculateMasterAmount()
     {
         $settings = app(SettingsRepository::class);
 
@@ -216,7 +229,7 @@ class Order extends Model
         $payee_amount = sprintf('%.2f', ($order_amount * $author_ratio));
         $this->master_amount = $order_amount - $payee_amount; // 站长分成金额
 
-        $this->author_amount = $this->calculateAuthorAmount($bossAmount); // 作者实际分成金额
+        return $bossAmount = $this->calculateAuthorAmount(); // 作者实际分成金额
     }
 
     /**
