@@ -100,7 +100,7 @@ class CreateOrder
                 $amount = sprintf('%.2f', (float) $setting->get('site_price'));
 
                 // 查询是否有上级邀请 -> 注册分成
-                if (!empty($this->actor->isAllowScale(Order::ORDER_TYPE_REGISTER))) {
+                if ($this->actor->isAllowScale(Order::ORDER_TYPE_REGISTER)) {
                     $be_scale = $this->actor->userDistribution->be_scale;
                 }
                 break;
@@ -123,13 +123,14 @@ class CreateOrder
                     $amount = sprintf('%.2f', (float) $this->data->get('amount'));
 
                     // 查询收款人是否有上级邀请
-                    if (!empty($thread->user->isAllowScale(Order::ORDER_TYPE_REWARD))) {
+                    if ($thread->user->can('other.canInviteUserScale') && $thread->user->isAllowScale(Order::ORDER_TYPE_REWARD)) {
                         $be_scale = $thread->user->userDistribution->be_scale;
                     }
                 } else {
                     throw new OrderException('order_post_not_found');
                 }
                 break;
+
             // 付费主题订单 @TODO 编辑器 去掉付费主题
 //            case Order::ORDER_TYPE_THREAD:
 //                // 根据主题 id 查询非自己的付费主题
@@ -159,7 +160,7 @@ class CreateOrder
 //                    $amount = $thread->price;
 //
 //                    // 查询收款人是否有上级邀请
-//                    if (!empty($thread->user->isAllowScale(Order::ORDER_TYPE_THREAD))) {
+//                    if ($thread->user->can('other.canInviteUserScale') && $thread->user->isAllowScale(Order::ORDER_TYPE_THREAD)) {
 //                        $be_scale = $thread->user->userDistribution->be_scale;
 //                    }
 //                } else {

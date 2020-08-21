@@ -106,21 +106,28 @@ export default {
         } else {
           let data = res.readdata.permission;
           this.checked = [];
-          data.forEach((item) => {
-            this.checked.push(item._data.permission)
-          })
           this.scale = res.data.attributes.scale;
           this.is_subordinate = res.data.attributes.is_subordinate;
-          this.is_commission = res.data.attributes.is_commission;      
+          this.is_commission = res.data.attributes.is_commission; 
+          data.forEach((item) => {
+            this.checked.push(item._data.permission)
+          })     
         }
-
       }).catch(err => {
       })
     },
     patchGroupPermission() {
       let checked = this.checked;
       if(this.is_commission || this.is_subordinate){
-        checked.push('other.canInviteUserScale');
+        if(checked.indexOf('other.canInviteUserScale')=== -1) {
+          checked.push('other.canInviteUserScale');
+        }  
+      }else {
+        checked.forEach((item,index) => {
+           if(item==='other.canInviteUserScale') {
+             checked.splice(index,1);
+           }
+        }) 
       }
       this.appFetch({
         url: 'groupPermission',
