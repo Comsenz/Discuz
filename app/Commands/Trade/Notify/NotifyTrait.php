@@ -85,8 +85,8 @@ trait NotifyTrait
                     $this->orderInfo->save();
 
                     if ($this->orderInfo->author_amount > 0) {
-                        //收款人钱包可用金额增加
-                        $payee_id = $this->orderInfo->payee_id; //收款人
+                        // 收款人钱包可用金额增加
+                        $payee_id = $this->orderInfo->payee_id; // 收款人
                         $user_wallet = UserWallet::query()->lockForUpdate()->find($payee_id);
                         $user_wallet->available_amount = $user_wallet->available_amount + $this->orderInfo->author_amount;
                         $user_wallet->save();

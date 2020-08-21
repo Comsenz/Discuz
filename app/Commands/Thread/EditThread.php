@@ -111,6 +111,14 @@ class EditThread
             $thread->timestamps = false;
         }
 
+        if (isset($attributes['longitude']) && isset($attributes['latitude'])) {
+            $this->assertCan($this->actor, 'edit', $thread);
+
+            $thread->longitude = Arr::get($this->data, 'attributes.longitude', 0);
+            $thread->latitude = Arr::get($this->data, 'attributes.latitude', 0);
+            $thread->location = Arr::get($this->data, 'attributes.location', '');
+        }
+
         if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
             $this->assertCan($this->actor, 'approve', $thread);
 

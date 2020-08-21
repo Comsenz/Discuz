@@ -38,14 +38,19 @@ class ExportUserController implements RequestHandlerInterface
     use UserTrait;
 
     /**
-     * 命令集调用工具类.
-     *
      * @var Dispatcher
      */
     protected $bus;
 
+    /**
+     * @var Application
+     */
     protected $app;
 
+    /**
+     * @param BusDispatcher $bus
+     * @param Application $app
+     */
     public function __construct(BusDispatcher $bus, Application $app)
     {
         $this->bus = $bus;
@@ -79,6 +84,10 @@ class ExportUserController implements RequestHandlerInterface
         return DiscuzResponseFactory::FileResponse($filename);
     }
 
+    /**
+     * @param $filters
+     * @return array
+     */
     private function data($filters)
     {
         $userField = [
@@ -105,7 +114,7 @@ class ExportUserController implements RequestHandlerInterface
         $columnMap = [
             'id',
             'username',
-            'mobile',
+            'originalMobile',
             'status',
             'sex',
             'groups',
@@ -132,16 +141,13 @@ class ExportUserController implements RequestHandlerInterface
         }])->get($userField);
 
         $sex = ['', '男', '女'];
+        $status = ['正常', '禁用', '审核中', '审核拒绝', '审核忽略'];
 
-        return $users->map(function (User $user) use ($columnMap, $sex) {
+        return $users->map(function (User $user) use ($columnMap, $sex, $status) {
+            // 前面加空格，避免科学计数法
+            $user->originalMobile = ' ' . $user->getRawOriginal('mobile');
             $user->sex = $sex[$user->wechat ? $user->wechat->sex : 0];
-            if ($user->status == 0) {
-                $user->status = '正常';
-            } elseif ($user->status == 1) {
-                $user->status = '禁用';
-            } else {
-                $user->status = '审核';
-            }
+            $user->status = $status[$user->status] ?? '';
             if (!is_null($user->groups)) {
                 $user->groups = $user->groups->pluck('name')->implode(',');
             }

@@ -12,7 +12,8 @@ export default {
       videoDisabled: false,       // 是否开启云点播
       captchaDisabled: false,     // 是否开启验证码
       realNameDisabled: false,    // 是否开启实名认证
-      showScale: false,   // 是否开启推广下线
+      is_subordinate: false,   // 是否开启推广下线
+      is_commission: false,   // 是否开启分成
       scale: 0, // 提成比例
       bindPhoneDisabled: false,   // 是否开启短信验证
       wechatPayment: false,       // 是否开启微信支付
@@ -109,16 +110,18 @@ export default {
             this.checked.push(item._data.permission)
           })
           this.scale = res.data.attributes.scale;
-          if(this.checked.indexOf('other.canInviteUserScale')!=-1) {
-            this.showScale = true;
-          }
-          
+          this.is_subordinate = res.data.attributes.is_subordinate;
+          this.is_commission = res.data.attributes.is_commission;      
         }
 
       }).catch(err => {
       })
     },
     patchGroupPermission() {
+      let checked = this.checked;
+      if(this.is_commission || this.is_subordinate){
+        checked.push('other.canInviteUserScale');
+      }
       this.appFetch({
         url: 'groupPermission',
         method: 'post',
@@ -126,7 +129,7 @@ export default {
           data: {
             "attributes": {
               "groupId": this.$route.query.id,
-              "permissions": this.checked
+              "permissions": checked
             }
           }
         }
@@ -154,6 +157,8 @@ export default {
             "attributes": {
               'name':this.$route.query.name,
               "scale": this.scale,
+              "is_subordinate" : this.is_subordinate,
+              "is_commission" : this.is_commission,
             }
           }
         }
@@ -166,9 +171,11 @@ export default {
     },
 
     handlePromotionChange(value){
-      this.showScale = value;
+       this.is_subordinate = value;
     },
-
+    handlescaleChange(value) {
+       this.is_commission = value;
+    },
     checkNum(){
       if(!this.scale){
         return true;

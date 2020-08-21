@@ -197,7 +197,7 @@ class Order extends Model
 
         $bossAmount = 0;
         // 计算 作者->上级 分成
-        if ($this->be_scale) {
+        if ($this->isScale()) {
             $beScale = $this->be_scale / 10;
 
             // 上级实际分到金额

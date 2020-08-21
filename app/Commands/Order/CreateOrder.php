@@ -100,12 +100,14 @@ class CreateOrder
                 $amount = sprintf('%.2f', (float) $setting->get('site_price'));
 
                 // 查询是否有上级邀请 -> 注册分成
-                if (!empty($this->actor->userDistribution)) {
+                if (!empty($this->actor->isAllowScale(Order::ORDER_TYPE_REGISTER))) {
                     $be_scale = $this->actor->userDistribution->be_scale;
                 }
                 break;
+
             // 主题打赏订单
             case Order::ORDER_TYPE_REWARD:
+                /** @var Thread $thread */
                 $thread = Thread::query()
                     ->where('id', $this->data->get('thread_id'))
                     ->where('price', 0)                             // 免费主题才可以打赏
@@ -121,7 +123,7 @@ class CreateOrder
                     $amount = sprintf('%.2f', (float) $this->data->get('amount'));
 
                     // 查询收款人是否有上级邀请
-                    if (!empty($thread->user->userDistribution)) {
+                    if (!empty($thread->user->isAllowScale(Order::ORDER_TYPE_REWARD))) {
                         $be_scale = $thread->user->userDistribution->be_scale;
                     }
                 } else {
@@ -131,6 +133,7 @@ class CreateOrder
             // 付费主题订单 @TODO 编辑器 去掉付费主题
 //            case Order::ORDER_TYPE_THREAD:
 //                // 根据主题 id 查询非自己的付费主题
+//                /** @var Thread $thread */
 //                $thread = Thread::query()
 //                    ->where('id', $this->data->get('thread_id'))
 //                    ->where('user_id', '<>', $this->actor->id)
@@ -156,7 +159,7 @@ class CreateOrder
 //                    $amount = $thread->price;
 //
 //                    // 查询收款人是否有上级邀请
-//                    if (!empty($thread->user->userDistribution)) {
+//                    if (!empty($thread->user->isAllowScale(Order::ORDER_TYPE_THREAD))) {
 //                        $be_scale = $thread->user->userDistribution->be_scale;
 //                    }
 //                } else {

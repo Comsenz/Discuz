@@ -6,6 +6,7 @@
 /node_modules
 .php_cs.cache
 /public/static
+/public/static-admin
 /public/admin.html
 /public/index.html
 /public/s9e.js
