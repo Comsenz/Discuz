@@ -110,13 +110,7 @@ export default {
           this.is_subordinate = res.data.attributes.is_subordinate;
           this.is_commission = res.data.attributes.is_commission; 
           data.forEach((item) => {
-            if (item._data.permission==='other.canInviteUserScale') {
-               if (this.is_subordinate || this.is_commission) {
-                 this.checked.push(item._data.permission)
-               }
-            } else {
-              this.checked.push(item._data.permission)
-            }
+            this.checked.push(item._data.permission)
           })     
         }
       }).catch(err => {
@@ -125,7 +119,15 @@ export default {
     patchGroupPermission() {
       let checked = this.checked;
       if(this.is_commission || this.is_subordinate){
-        checked.push('other.canInviteUserScale');
+        if(checked.indexOf('other.canInviteUserScale')=== -1) {
+          checked.push('other.canInviteUserScale');
+        }  
+      }else {
+        checked.forEach((item,index) => {
+           if(item==='other.canInviteUserScale') {
+             checked.splice(index,1);
+           }
+        }) 
       }
       this.appFetch({
         url: 'groupPermission',
