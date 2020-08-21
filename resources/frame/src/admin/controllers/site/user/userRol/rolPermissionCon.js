@@ -106,14 +106,19 @@ export default {
         } else {
           let data = res.readdata.permission;
           this.checked = [];
-          data.forEach((item) => {
-            this.checked.push(item._data.permission)
-          })
           this.scale = res.data.attributes.scale;
           this.is_subordinate = res.data.attributes.is_subordinate;
-          this.is_commission = res.data.attributes.is_commission;      
+          this.is_commission = res.data.attributes.is_commission; 
+          data.forEach((item) => {
+            if (item._data.permission==='other.canInviteUserScale') {
+               if (this.is_subordinate || this.is_commission) {
+                 this.checked.push(item._data.permission)
+               }
+            } else {
+              this.checked.push(item._data.permission)
+            }
+          })     
         }
-
       }).catch(err => {
       })
     },
