@@ -11,7 +11,7 @@ export default {
     return {
       tableData: [],
       alternateLength:0,    //数据长度备份
-      radio:'',
+      radio:'',             //设为加入站点的默认级别
       alternateRadio:'',    //默认级别选中备份
       radioName:'',         //默认级别名称
       radioIndex:'',        //默认级别序号
@@ -121,17 +121,15 @@ export default {
         }
 
         this.postGroups(singleData);
-
-      }else if(this.radio !== this.alternateRadio) {
-        this.singlePatchGroup(this.radio,this.radioName);
       } else {
         let data = [];
         this.tableData.forEach((item)=>{
           data.push({
             "attributes": {
               "name": item._data.name,
-              'id':item._data.id,
-              'isDisplay':item._data.isDisplay,
+              'id': item._data.id,
+              'isDisplay': item._data.isDisplay,
+              'default': item._data.id == this.radio,
             },
           })
         });
