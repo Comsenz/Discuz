@@ -19,8 +19,12 @@
 namespace App\Api\Controller\Invite;
 
 use App\Api\Serializer\InviteSerializer;
+use App\Api\Serializer\UserInviteSerializer;
+use App\Models\Group;
+use App\Models\User;
 use App\Repositories\InviteRepository;
 use Discuz\Api\Controller\AbstractResourceController;
+use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -43,6 +47,11 @@ class ResourceInviteController extends AbstractResourceController
     protected $invite;
 
     /**
+     * @var Encrypter
+     */
+    protected $decrypt;
+
+    /**
      * @param InviteRepository $invite
      */
     public function __construct(InviteRepository $invite)
@@ -57,11 +66,29 @@ class ResourceInviteController extends AbstractResourceController
     {
         $code = Arr::get($request->getQueryParams(), 'code');
 
-        return $this->invite->query()
-            ->with(['group.permission' => function ($query) {
+        if ($this->invite->lengthByAdmin($code)) {
+            $result = $this->invite->query()
+                ->with(['group.permission' => function ($query) {
+                    $query->where('permission', 'not like', 'category%');
+                }])
+                ->where('code', $code)
+                ->firstOrFail();
+        } else {
+            $user_id = $this->invite->decryptCode($code);
+            $result = User::query()->find($user_id);
+
+            // 查询站点默认用户组
+            $groupQuery = Group::query()->where('default', 1);
+            $groupQuery->with(['permission' => function ($query) {
                 $query->where('permission', 'not like', 'category%');
-            }])
-            ->where('code', $code)
-            ->firstOrFail();
+            }]);
+            $groupDefault = $groupQuery->first();
+
+            $result->setRelation('group', $groupDefault);
+
+            $this->serializer = UserInviteSerializer::class;
+        }
+
+        return $result;
     }
 }

@@ -18,9 +18,7 @@
 
 namespace App\Listeners\Category;
 
-use App\Events\Category\CategoryRefreshCount;
 use App\Events\Category\Created;
-use App\Models\Category;
 use App\Models\Group;
 use App\Models\Permission;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -31,9 +29,6 @@ class CategoryListener
     {
         // 添加分类时，设置分类下的权限
         $events->listen(Created::class, [$this, 'whenCategoryCreated']);
-
-        // 刷新分类数
-        $events->listen(CategoryRefreshCount::class, [$this, 'refreshCount']);
     }
 
     /**
@@ -68,20 +63,5 @@ class CategoryListener
         ]);
 
         Permission::query()->insert($permissions);
-    }
-
-    /**
-     * @param CategoryRefreshCount $event
-     */
-    public function refreshCount(CategoryRefreshCount $event)
-    {
-        if ($event->original_id != $event->category->id) {
-            $originalCate = Category::where('id', $event->original_id)->first();
-            $originalCate->refreshThreadCount();
-            $originalCate->save();
-        }
-
-        $event->category->refreshThreadCount();
-        $event->category->save();
     }
 }

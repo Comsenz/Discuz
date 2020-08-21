@@ -20,13 +20,15 @@ namespace App\Listeners\User;
 
 use App\Events\Users\Registered;
 use App\Models\Group;
+use App\Models\Invite;
 use Illuminate\Support\Arr;
 
 class AddDefaultGroup
 {
     public function handle(Registered $event)
     {
-        if (!Arr::get($event->data, 'code')) {
+        if (!Arr::has($event->data, 'code') || !Invite::lengthByAdmin(Arr::get($event->data, 'code'))) {
+            // 设置默认用户组
             $defaultGroup = Group::where('default', true)->first();
             $event->user->groups()->sync($defaultGroup->id);
         }

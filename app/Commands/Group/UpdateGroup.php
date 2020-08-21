@@ -73,7 +73,9 @@ class UpdateGroup
         $group->is_paid = (bool) Arr::get($this->data, 'attributes.is_paid');
         $group->fee = (float) Arr::get($this->data, 'attributes.fee');
         $group->days = (int) Arr::get($this->data, 'attributes.days');
-        $group->scale = (int) Arr::get($this->data, 'attributes.scale');
+        $group->scale = (float) Arr::get($this->data, 'attributes.scale');
+        $group->is_subordinate = (bool) Arr::get($this->data, 'attributes.is_subordinate');
+        $group->is_commission = (bool) Arr::get($this->data, 'attributes.is_commission');
 
         $this->validator->valid($group->getDirty());
 

@@ -67,6 +67,9 @@ export default {
       },
       subLoading:false,     //提交按钮状态
       
+      recommentbtn: true,
+      recomment1: '推荐',
+      recomment2: '取消推荐',
     }
   },
   computed: mapState({
@@ -193,6 +196,11 @@ export default {
           this.getThemeList();
         })
     },
+    
+    // 推荐
+    recommentBtn() {
+       this.recommentbtn = !this.recommentbtn;
+    }
   },
 
   beforeDestroy() {

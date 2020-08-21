@@ -60,4 +60,24 @@ class InviteRepository extends AbstractRepository
             ['status', '=', '1']
         ])->first();
     }
+
+    /**
+     * 是否是管理员长度
+     *
+     * @param $code
+     * @return bool
+     */
+    public function lengthByAdmin($code)
+    {
+        return Invite::lengthByAdmin($code);
+    }
+
+    /**
+     * @param $code
+     * @return mixed
+     */
+    public function decryptCode($code)
+    {
+        return Invite::decryptCode($code);
+    }
 }

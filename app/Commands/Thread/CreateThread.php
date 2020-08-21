@@ -106,7 +106,7 @@ class CreateThread
         $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
         $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
 
-        // 视频帖、图片帖不传内容是设置默认内容
+        // 视频帖、图片帖不传内容时设置默认内容
         if (! $content) {
             switch ($thread->type) {
                 case Thread::TYPE_OF_VIDEO:
@@ -145,6 +145,11 @@ class CreateThread
                 $thread->free_words = (int) Arr::get($this->data, 'attributes.free_words', 0);
             }
         }
+
+        // 经纬度及地理位置
+        $thread->longitude = Arr::get($this->data, 'attributes.longitude', 0);
+        $thread->latitude = Arr::get($this->data, 'attributes.latitude', 0);
+        $thread->location = Arr::get($this->data, 'attributes.location', '');
 
         $thread->setRelation('user', $this->actor);
 

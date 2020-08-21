@@ -90,6 +90,8 @@ class Invite extends Model
         'status',
     ];
 
+    public static $encrypt;
+
     /**
      * 模型的「启动」方法.
      *
@@ -98,6 +100,16 @@ class Invite extends Model
     public static function boot()
     {
         parent::boot();
+    }
+
+    /**
+     * Set the encrypt.
+     *
+     * @param $encrypt
+     */
+    public static function setEncrypt($encrypt)
+    {
+        self::$encrypt = $encrypt;
     }
 
     /**
@@ -116,6 +128,35 @@ class Invite extends Model
         $invite->raise(new Created($invite));
 
         return $invite;
+    }
+
+    /**
+     * 判断是否是32位 上下级邀请类型
+     *
+     * @param $code
+     * @return bool
+     */
+    public static function lengthByAdmin($code)
+    {
+        $len = mb_strlen($code, 'utf-8');
+        return $len == 32;
+    }
+
+    /**
+     * 解密失败
+     *
+     * @param $code
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function decryptCode($code)
+    {
+        try {
+            return self::$encrypt->decrypt($code, false);
+        } catch (\Exception $e) {
+            throw new \Exception(trans('user.invite_decrypt_code_failed'));
+        }
+
     }
 
     /*

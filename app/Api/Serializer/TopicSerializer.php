@@ -42,8 +42,10 @@ class TopicSerializer extends AbstractSerializer
             'content'          => $model->content,
             'thread_count'     => $model->thread_count,
             'view_count'       => $model->view_count,
+            'recommended'      => $model->recommended,
             'updated_at'       => $this->formatDate($model->updated_at),
             'created_at'       => $this->formatDate($model->created_at),
+            'recommended_at'   => $this->formatDate($model->recommended_at),
         ];
     }
 

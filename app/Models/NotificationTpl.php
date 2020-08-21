@@ -304,6 +304,36 @@ class NotificationTpl extends Model
                     '{redirecturl}' => '跳转地址',
                 ])
             ],
+            37 => [
+                'status' => 1,
+                'type' => 0,
+                'type_name' => '分成收入通知',
+                'title' => '内容通知',
+                'content' => '',
+                'vars' => '',
+            ],
+            38 => [
+                'status' => 0,
+                'type' => 1,
+                'type_name' => '分成收入通知',
+                'title' => '微信内容通知',
+                'content' => self::getWechatFormat([
+                    'first' => '你收到了{username}的分成{money}',
+                    'keyword1' => '{content}',
+                    'keyword2' => '{ordertype}',
+                    'keyword3' => '{dateline}',
+                    'remark' => '点击查看',
+                    'redirect_url' => '{redirecturl}',
+                ]),
+                'vars' => serialize([
+                    '{username}' => '支付用户名',
+                    '{money}' => '分成金额',
+                    '{content}' => '内容',
+                    '{ordertype}' => '支付类型',
+                    '{dateline}' => '通知时间',
+                    '{redirecturl}' => '跳转地址',
+                ])
+            ],
         ];
     }
 }

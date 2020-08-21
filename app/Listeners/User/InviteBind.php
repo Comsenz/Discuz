@@ -20,12 +20,13 @@ namespace App\Listeners\User;
 
 use App\Events\Users\Registered;
 use App\Models\Group;
-use App\Models\Invite;
+use App\Models\User;
 use App\Models\UserDistribution;
 use App\Models\UserFollow;
 use App\Repositories\InviteRepository;
 use Carbon\Carbon;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Exception;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Arr;
@@ -56,7 +57,7 @@ class InviteBind
 
     /**
      * @param Registered $event
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(Registered $event)
     {
@@ -66,10 +67,8 @@ class InviteBind
             return;
         }
 
-        $len = mb_strlen($code, 'utf-8');
-
         // 邀请码 32位长度为管理员邀请
-        if ($len == 32) {
+        if ($this->InviteRepository->lengthByAdmin($code)) {
             // 验证code合法性
             $invite = $this->InviteRepository->verifyCode($code);
             if ($invite) {
@@ -87,47 +86,53 @@ class InviteBind
                 }
             }
         } else {
-            $user_id = $this->decrypt->decryptString($code);
+            $fromUserId = $this->InviteRepository->decryptCode($code); // 邀请人
+            $toUserId = $event->user->id; // 受邀人
 
             // 保持数据一致性
             $this->db->beginTransaction();
             try {
-
-                // 生成记录
-                $invite = Invite::creation([
-                    'group_id' => 0,
-                    'code' => $code,
-                    'user_id' => $user_id,
-                    'to_user_id' => $event->user->id,
-                    'created_at' => Carbon::now()->toDate(),
-                    'updated_at' => Carbon::now()->toDate(),
-                ]);
-
                 // 触发互相关注
                 UserFollow::query()->create([
-                    'from_user_id' => $invite->user_id,
-                    'to_user_id' => $invite->to_user_id,
+                    'from_user_id' => $fromUserId,
+                    'to_user_id' => $toUserId,
                     'is_mutual' => 1,
                 ]);
                 UserFollow::query()->create([
-                    'from_user_id' => $invite->to_user_id,
-                    'to_user_id' => $invite->user_id,
+                    'from_user_id' => $toUserId,
+                    'to_user_id' => $fromUserId,
                     'is_mutual' => 1,
                 ]);
 
+                /**
+                 * 刷新关注数和粉丝数
+                 */
+                /** @var User $fromUser */
+                $fromUser = User::query()->find($fromUserId);
+                $fromUser->refreshUserFollow();
+                $fromUser->refreshUserFans();
+                $fromUser->save();
+                /** @var User $toUser */
+                $toUser = User::query()->find($toUserId);
+                $toUser->refreshUserFollow();
+                $toUser->refreshUserFans();
+                $toUser->save();
+
+                $bossGroup = $fromUser->groups->first();
                 // 建立上下级关系
                 UserDistribution::query()->create([
-                    'pid' => $invite->user_id,
-                    'user_id' => $event->user->id,
-                    'invites_code' => $code,
-                    'be_scale' => $invite->group->scale,
-                    'level' => 1,
+                    'pid' => $fromUserId,
+                    'user_id' => $toUserId,
+                    'be_scale' => $bossGroup->scale,
+                    'level' => 1, // Tag 暂时1级分销
+                    'is_subordinate' => $bossGroup->is_subordinate,
+                    'is_commission' => $bossGroup->is_commission,
                 ]);
 
                 $this->db->commit();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->db->rollback();
-                throw new \Exception($e->getMessage());
+                throw new Exception($e->getMessage());
             }
         }
 

@@ -116,9 +116,19 @@
     </Card>
 
     <Card header="网站备案信息：">
-      <CardRow description="你的Discuz!Q 站点的 ICP 备案编号">
-        <el-input v-model="siteRecord"></el-input>
-      </CardRow>
+      <div class="record-top">
+        <CardRow description="你的Discuz!Q 站点的 ICP 备案编号">
+          <el-input v-model="siteRecord"></el-input>
+        </CardRow>
+      </div>
+    </Card>
+
+    <Card header="公安备案信息：">
+      <div class="record-bottom">
+        <CardRow description="你的Discuz!Q 站点的 公安备案编号">
+          <el-input v-model="recodeNumber"></el-input>
+        </CardRow>
+      </div>
     </Card>
 
     <Card header="第三方统计：">

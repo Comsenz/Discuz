@@ -67,8 +67,6 @@ class BasicPostSerializer extends AbstractSerializer
             'contentHtml'       => $model->formatContent(),
             'replyCount'        => (int) $model->reply_count,
             'likeCount'         => (int) $model->like_count,
-            'longitude'         => $model->longitude,
-            'latitude'          => $model->latitude,
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
             'isApproved'        => (int) $model->is_approved,

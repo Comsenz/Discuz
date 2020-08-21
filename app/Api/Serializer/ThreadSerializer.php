@@ -66,6 +66,9 @@ class ThreadSerializer extends AbstractSerializer
             'postCount'         => (int) $model->post_count,
             'paidCount'         => (int) $model->paid_count,
             'rewardedCount'     => (int) $model->rewarded_count,
+            'longitude'         => $model->longitude,
+            'latitude'          => $model->latitude,
+            'location'          => $model->location,
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
             'isApproved'        => (int) $model->is_approved,
@@ -89,7 +92,7 @@ class ThreadSerializer extends AbstractSerializer
         }
 
         if ($model->price > 0) {
-            $attributes['paid'] = $model->is_paid;      // 向下兼容，建议改为 is_paid
+            $attributes['paid'] = $model->is_paid;      // 向下兼容，建议改为 isPaid
             $attributes['isPaid'] = $model->is_paid;
         }
 

@@ -16,31 +16,35 @@
  * limitations under the License.
  */
 
-namespace App\Events\Category;
+namespace App\MessageTemplate;
 
-use App\Models\Category;
+use Discuz\Notifications\Messages\DatabaseMessage;
+use Illuminate\Contracts\Routing\UrlGenerator;
 
-class CategoryRefreshCount
+/**
+ * 内容支付通知
+ * (包含: 注册分成/打赏分成帖子/付费贴分成)
+ *
+ * @package App\MessageTemplate\Wechat
+ */
+class RewardedScaleMessage extends DatabaseMessage
 {
-    /**
-     * @var Category
-     */
-    public $category;
+    protected $tplId = 37;
 
-    /**
-     * 原分类id
-     *
-     * @var
-     */
-    public $original_id;
+    protected $url;
 
-    /**
-     * @param $original_id
-     * @param Category $category
-     */
-    public function __construct(Category $category, string $original_id)
+    public function __construct(UrlGenerator $url)
     {
-        $this->category = $category;
-        $this->original_id = $original_id;
+        $this->url = $url;
+    }
+
+    protected function titleReplaceVars()
+    {
+        return [];
+    }
+
+    protected function contentReplaceVars($data)
+    {
+        return $data;
     }
 }

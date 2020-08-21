@@ -39,6 +39,11 @@
       <p class="section">
         <span class="section-title">Discuz!程序版本：</span>
         <span>{{siteInfo.version}}</span>
+        <span v-if="newVersion" class="section-title section-title-right">
+          <span>[</span>
+          <a href="https://discuz.com/docs/release_notes.html" target="_blank">新版本： {{versionNumber}}</a>
+          <span>]</span>
+        </span>
       </p>
       <p class="section">
         <span class="section-title">服务器系统及PHP：</span>
@@ -77,6 +82,6 @@ import "../../../scss/site/module/globalStyle.scss";
 import homeCon from "../../../controllers/site/home/homeCon";
 export default {
   name: "home-view",
-  ...homeCon
+  ...homeCon,
 };
 </script>

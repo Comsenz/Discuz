@@ -241,11 +241,16 @@ class ListThreadsController extends AbstractListController
      */
     public function search($actor, $filter, $sort, $limit = null, $offset = 0)
     {
+        /** @var Builder $query */
         $query = $this->threads->query()->select('threads.*')->whereVisibleTo($actor);
 
         $this->applyFilters($query, $filter, $actor);
 
-        $this->threadCount = $limit > 0 ? $query->count() : null;
+        if (Arr::get($filter, 'location')) {
+            $this->threadCount = $limit > 0 ? Thread::query()->fromSub($query, 'count')->count() : null;
+        } else {
+            $this->threadCount = $limit > 0 ? $query->count() : null;
+        }
 
         $query->skip($offset)->take($limit);
 
@@ -263,6 +268,7 @@ class ListThreadsController extends AbstractListController
      * @param Builder $query
      * @param array $filter
      * @param User $actor
+     * @throws \Exception
      */
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
@@ -406,22 +412,69 @@ class ListThreadsController extends AbstractListController
                 });
         }
 
-        //关注的人的文章
+        // 关注的人的文章
         $fromUserId = Arr::get($filter, 'fromUserId');
         if ($fromUserId && $fromUserId == $actor->id) {
             $query->join('user_follow', 'threads.user_id', '=', 'user_follow.to_user_id')
                 ->where('user_follow.from_user_id', $fromUserId);
         }
 
-        //话题文章
+        // 话题文章
         if ($topicId = Arr::get($filter, 'topicId', '0')) {
-            //更新话题阅读数、主题数
-            $topic = app()->make(TopicRepository::class)->findOrFail($topicId);
+            // 更新话题阅读数、主题数
+            $topic = app(TopicRepository::class)->findOrFail($topicId);
             $topic->refreshTopicViewCount();
             $topic->refreshTopicThreadCount();
 
             $query->join('thread_topic', 'threads.id', '=', 'thread_topic.thread_id')
                 ->where('thread_topic.topic_id', $topicId);
+        }
+
+        // 附近的帖
+        if ($location = Arr::get($filter, 'location')) {
+            $location = explode(',', $location, 3);
+            $longitude = (float) Arr::get($location, 0, 0);     // 经度
+            $latitude = (float) Arr::get($location, 1, 0);      // 纬度
+            $distance = abs(Arr::get($location, 2, 5));         // 距离
+
+            // 距离不能超过 100km
+            $distance = $distance > 100 ? 5 : $distance;
+
+            if (! ($longitude && $latitude && $distance)) {
+                throw new \Exception('unable_to_get_location', 404);
+            }
+
+            // 地球平均半径 6371km
+            $raw = Str::replaceArray('?', [$latitude, $longitude, $latitude], '6371 * acos(
+                    cos( radians( ? ) )
+                    * cos( radians( `latitude` ) )
+                    * cos( radians( `longitude` ) - radians( ? ) )
+                    + sin( radians( ? ) )
+                    * sin( radians( `latitude` ) )
+                )');
+
+            // 地球平均周长 6371km
+            $PI = 3.14159265;
+            $degree = 40075016 / 360;
+
+            // 经度范围
+            $mpdLng = $degree * cos($latitude * ($PI / 180));
+            $radiusLng = $distance * 1000 / $mpdLng;
+            $minLng = $longitude - $radiusLng;
+            $maxLng = $longitude + $radiusLng;
+
+            // 纬度范围
+            $radiusLat = $distance * 1000 / $degree;
+            $minLat = $latitude - $radiusLat;
+            $maxLat = $latitude + $radiusLat;
+
+            $query->selectSub($raw, 'distance')
+                ->where('longitude', '<>', 0)
+                ->where('latitude', '<>', 0)
+                ->whereBetween('longitude', [$minLng, $maxLng])
+                ->whereBetween('latitude', [$minLat, $maxLat])
+                ->having('distance', '<', $distance)
+                ->orderBy('distance');
         }
     }
 
@@ -456,12 +509,6 @@ class ListThreadsController extends AbstractListController
             ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function (Post $post) {
-                // 引用回复去除引用部分
-                if ($post->reply_post_id) {
-                    $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
-                    $post->content = preg_replace($pattern, '', $post->content);
-                }
-
                 // 截取内容
                 $post->content = Str::limit($post->content, 70);
 

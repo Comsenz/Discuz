@@ -27,6 +27,7 @@ use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -64,7 +65,7 @@ use Illuminate\Support\Str;
  * @property Carbon $updated_at
  * @property string $identity
  * @property string $realname
- * @property Group $groups
+ * @property Collection $groups
  * @property userFollow $follow
  * @property UserWallet $userWallet
  * @property UserWechat $wechat
@@ -330,6 +331,11 @@ class User extends Model
         $this->attributes['pay_password'] = $value ? static::$hasher->make($value) : '';
     }
 
+    /**
+     * @param $value
+     * @return string
+     * @throws \Exception
+     */
     public function getAvatarAttribute($value)
     {
         if ($value) {
@@ -467,18 +473,45 @@ class User extends Model
     }
 
     /**
-     * 注册用创建一个随即用户名
-     * getNewUsername
+     * 注册用户创建一个随机用户名
+     *
      * @return string
      */
     public static function getNewUsername()
     {
         $username = trans('validation.attributes.username_prefix') . Str::random(6);
-        $user = User::where('username', $username)->first();
+        $user = User::query()->where('username', $username)->first();
         if ($user) {
             return self::getNewUsername();
         }
         return $username;
+    }
+
+    /**
+     * 判断是否有上级 & 上级是否可以推广下线分成
+     *
+     * @param int $type 1推广下线 2/3收入提成
+     * @return bool
+     */
+    public function isAllowScale($type)
+    {
+        switch ($type) {
+            case Order::ORDER_TYPE_REGISTER:
+                // 注册分成查询付款人的上级
+                if (!empty($userDistribution = $this->userDistribution)) {
+                    return (bool) $userDistribution->is_subordinate;
+                }
+                break;
+            case Order::ORDER_TYPE_REWARD:
+            case Order::ORDER_TYPE_THREAD:
+                // 打赏/付费分成查询收款人的上级
+                if (!empty($userDistribution = $this->userDistribution)) {
+                    return (bool) $userDistribution->is_commission;
+                }
+                break;
+        }
+
+        return false;
     }
 
     /*
@@ -622,7 +655,7 @@ class User extends Model
     {
         $groupIds = (Arr::get($this->getRelations(), 'groups') ?? $this->groups)->pluck('id')->all();
 
-        return Permission::whereIn('group_id', $groupIds);
+        return Permission::query()->whereIn('group_id', $groupIds);
     }
 
     /**

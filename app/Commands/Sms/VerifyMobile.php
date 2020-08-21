@@ -24,6 +24,7 @@ use App\Api\Serializer\UserSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\RegisterPhoneUser;
 use App\Events\Users\Logind;
+use App\Exceptions\TranslatorException;
 use App\MessageTemplate\Wechat\WechatRegisterMessage;
 use App\Models\MobileCode;
 use App\Models\User;
@@ -33,7 +34,6 @@ use App\Repositories\MobileCodeRepository;
 use App\User\Bind;
 use App\Validators\UserValidator;
 use Discuz\Api\Client;
-use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -107,7 +107,7 @@ class VerifyMobile
 
         //公众号绑定
         if ($token = Arr::get($this->params, 'token')) {
-            $this->bind->wechat($token, $this->mobileCode->user);
+            $this->bind->withToken($token, $this->mobileCode->user);
             if (!(bool)$this->settings->get('register_validate')) {
                 // 在注册绑定微信后 发送注册微信通知
                 $this->mobileCode->user->notify(new System(WechatRegisterMessage::class));
@@ -115,10 +115,10 @@ class VerifyMobile
         }
 
         //小程序绑定
-        if ($js_code = Arr::get($this->params, 'js_code') &&
-            $iv = Arr::has($this->params, 'iv') &&
-            $encryptedData = Arr::has($this->params, 'encryptedData')
-        ) {
+        $js_code = Arr::get($this->params, 'js_code');
+        $iv = Arr::get($this->params, 'iv');
+        $encryptedData = Arr::get($this->params, 'encryptedData');
+        if ($js_code && $iv && $encryptedData) {
             $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $this->mobileCode->user);
         }
 
@@ -178,6 +178,10 @@ class VerifyMobile
         return $this->mobileCode->user;
     }
 
+    /**
+     * @return mixed
+     * @throws TranslatorException
+     */
     protected function resetPwd()
     {
         $this->controller->serializer = UserSerializer::class;
@@ -185,12 +189,22 @@ class VerifyMobile
             $this->validator->valid([
                 'password' => $this->params['password']
             ]);
+
+            // 验证新密码与原密码不能相同
+            if ($this->mobileCode->user->checkPassword($this->params['password'])) {
+                throw new TranslatorException('user_update_error', ['cannot_use_the_same_password']);
+            }
+
             $this->mobileCode->user->changePassword($this->params['password']);
             $this->mobileCode->user->save();
         }
         return $this->mobileCode->user;
     }
 
+    /**
+     * @return mixed
+     * @throws TranslatorException
+     */
     protected function resetPayPwd()
     {
         $this->controller->serializer = UserSerializer::class;
@@ -199,6 +213,12 @@ class VerifyMobile
                 'pay_password' => $this->params['pay_password'],
                 'pay_password_confirmation' => $this->params['pay_password_confirmation'],
             ]);
+
+            // 验证新密码与原密码不能相同
+            if ($this->mobileCode->user->checkWalletPayPassword($this->params['pay_password'])) {
+                throw new TranslatorException('user_update_error', ['cannot_use_the_same_password']);
+            }
+
             $this->mobileCode->user->changePayPassword($this->params['pay_password']);
             $this->mobileCode->user->save();
 

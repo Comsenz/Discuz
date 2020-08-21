@@ -16,34 +16,34 @@
  * limitations under the License.
  */
 
-namespace App\Exceptions;
+namespace App\Api\Serializer;
 
-use Exception;
+use App\Models\User;
+use Discuz\Api\Serializer\AbstractSerializer;
 
-class NoUserException extends Exception
+class UserInviteSerializer extends AbstractSerializer
 {
-    protected $token;
+    /**
+     * {@inheritdoc}
+     */
+    protected $type = 'user_invite';
 
-    protected $user;
-
-    public function setToken($token)
+    /**
+     * {@inheritdoc}
+     *
+     * @param User $model
+     */
+    public function getDefaultAttributes($model)
     {
-        $this->token = $token;
-        return $this;
+        return [
+            'id'        => (int) $model->id,
+            'username'  => $model->username,
+        ];
     }
 
-    public function getToken()
+    public function group($model)
     {
-        return $this->token->token ?? '';
+        return $this->hasOne($model, GroupSerializer::class);
     }
 
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    public function getUser()
-    {
-        return $this->user;
-    }
 }

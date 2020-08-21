@@ -13,7 +13,7 @@ class ChangeScaleToGroups extends Migration
     public function up()
     {
         $this->schema()->table('groups', function (Blueprint $table) {
-            $table->unsignedBigInteger('scale')->default(0)->comment('分成比例');
+            $table->float('scale', 3, 1)->default(0)->comment('分成比例');
         });
     }
 

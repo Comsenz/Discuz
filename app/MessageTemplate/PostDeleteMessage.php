@@ -27,4 +27,10 @@ namespace App\MessageTemplate;
 class PostDeleteMessage extends BasePostMessage
 {
     protected $tplId = 6;
+
+    /**
+     * 不过滤字符串
+     * @var bool
+     */
+    protected $filterSpecialChar = false;
 }

@@ -21,6 +21,7 @@ export default {
       siteLogoFile: [],
       siteMasterId: "",
       siteRecord: "",
+      recodeNumber: "",
       siteStat: "",
       siteCloseMsg: "",
       dialogImageUrl: "",
@@ -136,6 +137,7 @@ export default {
               data.readdata._data.set_site.site_master_scale;
             // this.siteLogoFile = data.readdata._data.siteLogoFile;
             this.siteRecord = data.readdata._data.set_site.site_record;
+            this.recodeNumber = data.readdata._data.set_site.site_record_code;
             this.siteStat = data.readdata._data.set_site.site_stat;
             this.siteClose = data.readdata._data.set_site.site_close;
             this.siteMasterId = data.readdata._data.set_site.site_author.id;
@@ -376,6 +378,13 @@ export default {
               attributes: {
                 key: "site_record",
                 value: this.siteRecord,
+                tag: "default"
+              }
+            },
+            {
+              attributes: {
+                key: "site_record_code",
+                value: this.recodeNumber,
                 tag: "default"
               }
             },

@@ -68,6 +68,15 @@
       width: 150PX;
       margin-right: 0 !important;
     }
+    .section-title-right {
+      width: 300PX;
+      a {
+        color: #FF0000;
+      }
+      span {
+        margin: 0;
+      }
+    }
     .pending-p {
       display: inline-block;
       margin-right: 20PX;
@@ -449,7 +458,9 @@
     }
   }*/
 }
-
+// .record-bottom {
+//   margin-top: 30PX;
+// }
 /*
   角色管理-权限编辑
 */
