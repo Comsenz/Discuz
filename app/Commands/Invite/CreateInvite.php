@@ -19,6 +19,7 @@
 namespace App\Commands\Invite;
 
 use App\Events\Invite\Saving;
+use App\Models\Group;
 use App\Models\Invite;
 use App\Models\User;
 use Carbon\Carbon;
@@ -68,6 +69,11 @@ class CreateInvite
         $this->events = $events;
 
         $this->assertCan($this->actor, 'createInvite');
+
+        //只有管理员用户组可以邀请管理员
+        if (!$this->actor->isAdmin() && Arr::get($this->data, 'attributes.group_id') == Group::ADMINISTRATOR_ID) {
+            throw new PermissionDeniedException();
+        }
 
         $invite = Invite::creation([
             'group_id' => Arr::get($this->data, 'attributes.group_id'),

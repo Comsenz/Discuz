@@ -183,7 +183,7 @@ return [
             'Access-Control-Allow-Origin' => [
                 //设置允许跨域，默认包含本站site_url
             ],
-            'Access-Control-Allow-Headers' => 'Origin, Content-Type, Cookie, X-CSRF-TOKEN, Accept, Authorization, X-XSRF-TOKEN',
+            'Access-Control-Allow-Headers' => 'Origin, Content-Type, Cookie, X-CSRF-TOKEN, Accept, Authorization, X-XSRF-TOKEN, X-HTTP-Method-Override',
             'Access-Control-Expose-Headers' => 'Authorization, authenticated',
             'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
             'Access-Control-Allow-Credentials' => 'true'
