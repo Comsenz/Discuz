@@ -72,7 +72,7 @@ class RegisterController extends AbstractCreateController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        if ((bool)$this->settings->get('register_close')) {
+        if (!(bool)$this->settings->get('register_close')) {
             throw new PermissionDeniedException('register_close');
         }
 

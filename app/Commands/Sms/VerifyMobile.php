@@ -98,7 +98,7 @@ class VerifyMobile
         //register new user
         if (is_null($this->mobileCode->user)) {
 
-            if ((bool)$this->settings->get('register_close')) {
+            if (!(bool)$this->settings->get('register_close')) {
                 throw new PermissionDeniedException('register_close');
             }
 

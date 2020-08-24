@@ -101,7 +101,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             //自动注册
             if (Arr::get($attributes, 'register', 0)) {
                 //未绑定的用户注册
-                if ((bool)$this->settings->get('register_close')) {
+                if (!(bool)$this->settings->get('register_close')) {
                     throw new PermissionDeniedException('register_close');
                 }
 
