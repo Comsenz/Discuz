@@ -164,6 +164,7 @@ class ListReportsController extends AbstractListController
         $startTime = Arr::get($filter, 'start_time', '');
         $endTime = Arr::get($filter, 'end_time', '');
         $username = Arr::get($filter, 'username', '');
+        $status = Arr::get($filter, 'status');
 
         $query->when($startTime, function ($query, $startTime) {
             $query->where('created_at', '>', $startTime);
@@ -175,6 +176,10 @@ class ListReportsController extends AbstractListController
 
         $query->when($username, function ($query, $username) {
             $query->whereIn('user_id', User::query()->where('username', 'like', "%{$username}%")->pluck('id'));
+        });
+
+        $query->when($status, function ($query, $status) {
+            $query->where('status', $status);
         });
     }
 }
