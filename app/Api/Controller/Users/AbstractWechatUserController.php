@@ -24,8 +24,10 @@ use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\AutoRegisterUser;
 use App\Events\Users\Logind;
 use App\Exceptions\NoUserException;
+use App\MessageTemplate\Wechat\WechatRegisterMessage;
 use App\Models\SessionToken;
 use App\Models\UserWechat;
+use App\Notifications\System;
 use App\Settings\SettingsRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
@@ -119,6 +121,12 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                 $wechatUser->user_id = $user->id;
                 $wechatUser->save();
                 $wechatUser->setRelation('user', $user);
+
+                // 判断是否开启了注册审核
+                if (!(bool)$this->settings->get('register_validate')) {
+                    // 在注册绑定微信后 发送注册微信通知
+                    $user->notify(new System(WechatRegisterMessage::class));
+                }
             }
         }
 
