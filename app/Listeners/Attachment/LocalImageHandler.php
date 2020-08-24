@@ -33,34 +33,48 @@ class LocalImageHandler
     public $data;
 
     /**
-     * @param ServerRequestInterface $request
+     * @var ImageManager
      */
-    public function __construct(ServerRequestInterface $request)
+    public $image;
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ImageManager $image
+     */
+    public function __construct(ServerRequestInterface $request, ImageManager $image)
     {
         $this->data = $request->getParsedBody();
+        $this->image = $image;
     }
 
+    /**
+     * @param Uploaded $event
+     */
     public function handle(Uploaded $event)
     {
         $uploader = $event->uploader;
 
-        // 帖子图片处理
-        if ((int) Arr::get($this->data, 'type') === Attachment::TYPE_OF_IMAGE && !$uploader->isRemote()) {
-            $image = (new ImageManager)->make(
-                storage_path('app/' . $uploader->file->hashName($uploader->getPath()))
-            );
-
-            $thumbPath = Str::replaceLast($image->filename, $image->filename . '_thumb', $image->basePath());
-            $blurPath = Str::replaceLast($image->filename, md5($image->filename) . '_blur', $image->basePath());
-
-            // 生成缩略图
-            $image->resize(Attachment::FIX_WIDTH, null, function ($constraint) {
-                $constraint->aspectRatio();     // 保持纵横比
-                $constraint->upsize();          // 避免文件变大
-            })->save($thumbPath);
-
-            // 生成模糊图
-            $image->blur(80)->save($blurPath);
+        // 非帖子图片 或 远程图片 不处理
+        if ((int) Arr::get($this->data, 'type') !== Attachment::TYPE_OF_IMAGE || $uploader->isRemote()) {
+            return;
         }
+
+        // 原图
+        $image = $this->image->make(
+            storage_path('app/' . $uploader->file->hashName($uploader->getPath()))
+        );
+
+        // 缩略图及高斯模糊图存储路径
+        $thumbPath = Str::replaceLast($image->filename, $image->filename . '_thumb', $image->basePath());
+        $blurPath = Str::replaceLast($image->filename, md5($image->filename) . '_blur', $image->basePath());
+
+        // 生成缩略图
+        $image->resize(Attachment::FIX_WIDTH, null, function ($constraint) {
+            $constraint->aspectRatio();     // 保持纵横比
+            $constraint->upsize();          // 避免文件变大
+        })->save($thumbPath);
+
+        // 生成模糊图
+        $image->blur(80)->save($blurPath);
     }
 }

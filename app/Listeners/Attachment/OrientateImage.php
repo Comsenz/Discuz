@@ -32,18 +32,28 @@ class OrientateImage
     public $data;
 
     /**
-     * @param ServerRequestInterface $request
+     * @var ImageManager
      */
-    public function __construct(ServerRequestInterface $request)
+    public $image;
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ImageManager $image
+     */
+    public function __construct(ServerRequestInterface $request, ImageManager $image)
     {
         $this->data = $request->getParsedBody();
+        $this->image = $image;
     }
 
+    /**
+     * @param Uploading $event
+     */
     public function handle(Uploading $event)
     {
-        // 帖子图片处理
+        // 帖子图片自适应旋转
         if ((int) Arr::get($this->data, 'type') === Attachment::TYPE_OF_IMAGE && extension_loaded('exif')) {
-            (new ImageManager)->make($event->file)->orientate()->save();
+            $this->image->make($event->file)->orientate()->save();
         }
     }
 }

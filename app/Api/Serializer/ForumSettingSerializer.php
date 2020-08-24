@@ -21,7 +21,6 @@ namespace App\Api\Serializer;
 use App\Models\Category;
 use App\Models\User;
 use App\Settings\ForumSettingField;
-use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Http\UrlGenerator;
@@ -69,7 +68,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_background_image' => $backgroundImage ?: '',
                 'site_url' => $siteUrl,
                 'site_stat' => $this->settings->get('site_stat') ?: '',
-                'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username', 'avatar']),
+                'site_author' => User::query()->where('id', $this->settings->get('site_author'))->first(['id', 'username', 'avatar']),
                 'site_install' => $this->settings->get('site_install'), // 安装时间
                 'site_record' => $this->settings->get('site_record'),
                 'site_cover' => $this->settings->get('site_cover') ?: '',

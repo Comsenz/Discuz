@@ -22,12 +22,16 @@ use App\Events\Attachment\Uploading;
 use App\Models\Attachment;
 use App\Settings\SettingsRepository;
 use Illuminate\Support\Arr;
-use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 use Psr\Http\Message\ServerRequestInterface;
 
 class AddWatermarkToImage
 {
+    /**
+     * 水印图占原图的比例（默认 25%）
+     */
+    const RATIO = 0.25;
+
     /**
      * @var array
      */
@@ -37,6 +41,11 @@ class AddWatermarkToImage
      * @var SettingsRepository
      */
     public $settings;
+
+    /**
+     * @var ImageManager
+     */
+    public $image;
 
     /**
      * @var array
@@ -56,37 +65,30 @@ class AddWatermarkToImage
     /**
      * @param ServerRequestInterface $request
      * @param SettingsRepository $settings
+     * @param ImageManager $image
      */
-    public function __construct(ServerRequestInterface $request, SettingsRepository $settings)
+    public function __construct(ServerRequestInterface $request, SettingsRepository $settings, ImageManager $image)
     {
         $this->data = $request->getParsedBody();
         $this->settings = $settings;
-    }
-
-    public function handle(Uploading $event)
-    {
-        $file = $event->file;
-
-        // 帖子图片处理
-        if ((int) Arr::get($this->data, 'type') === Attachment::TYPE_OF_IMAGE) {
-            $image = (new ImageManager)->make($file);
-
-            $image = $this->watermark($image);
-
-            $image->save();
-        }
+        $this->image = $image;
     }
 
     /**
-     * 水印
-     *
-     * @param Image $image
-     * @return Image
+     * @param Uploading $event
      */
-    public function watermark(Image $image)
+    public function handle(Uploading $event)
     {
-        // 水印开关
-        $watermark = (bool) $this->settings->get('watermark', 'watermark');
+        // 非帖子图片 或 未开启水印 不处理
+        if (
+            (int) Arr::get($this->data, 'type') !== Attachment::TYPE_OF_IMAGE
+            || ! (bool) $this->settings->get('watermark', 'watermark')
+        ) {
+            return;
+        }
+
+        // 原图
+        $image = $this->image->make($event->file);
 
         // 自定义水印图
         $watermarkImage = storage_path(
@@ -96,21 +98,31 @@ class AddWatermarkToImage
         // 默认水印图
         if (! is_file($watermarkImage)) {
             $watermarkImage = resource_path('images/watermark.png');
+
+            // 默认水印图丢失 不处理
+            if (! is_file($watermarkImage)) {
+                return;
+            }
         }
 
-        if ($watermark) {
-            // 水印位置
-            $position = (int) $this->settings->get('position', 'watermark', 1);
+        // 水印图按原图百分比缩放
+        $watermarkImage = $this->image->make($watermarkImage)
+            ->resize($image->getWidth() * self::RATIO, $image->getHeight() * self::RATIO, function ($constraint) {
+                $constraint->aspectRatio();     // 保持纵横比
+                $constraint->upsize();          // 避免文件变大
+            });
 
-            // the watermark image on x-axis of the current image.
-            $x = (int) $this->settings->get('horizontal_spacing', 'watermark');
+        // 水印位置
+        $position = (int) $this->settings->get('position', 'watermark', 1);
 
-            // the watermark image on y-axis of the current image.
-            $y = (int) $this->settings->get('vertical_spacing', 'watermark');
+        // the watermark image on x-axis of the current image.
+        $x = (int) $this->settings->get('horizontal_spacing', 'watermark');
 
-            $image->insert($watermarkImage, $this->positions[$position], $x, $y);
-        }
+        // the watermark image on y-axis of the current image.
+        $y = (int) $this->settings->get('vertical_spacing', 'watermark');
 
-        return $image;
+        $image->insert($watermarkImage, $this->positions[$position], $x, $y);
+
+        $image->save();
     }
 }
