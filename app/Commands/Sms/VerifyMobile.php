@@ -34,6 +34,7 @@ use App\Repositories\MobileCodeRepository;
 use App\User\Bind;
 use App\Validators\UserValidator;
 use Discuz\Api\Client;
+use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -45,6 +46,7 @@ use Illuminate\Support\Str;
 class VerifyMobile
 {
     use EventsDispatchTrait;
+    use AssertPermissionTrait;
 
     protected $controller;
 
@@ -95,6 +97,8 @@ class VerifyMobile
     {
         //register new user
         if (is_null($this->mobileCode->user)) {
+            $this->assertPermission((bool)$this->settings->get('register_close'));
+
             $data['register_ip'] = Arr::get($this->params, 'ip');
             $data['register_port'] = Arr::get($this->params, 'port');
             $data['mobile'] = $this->mobileCode->mobile;
