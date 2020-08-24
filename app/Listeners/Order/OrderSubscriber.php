@@ -118,7 +118,7 @@ class OrderSubscriber
                 $parentUser = $userDistribution->parentUser;
                 $parentUser->notify(new Rewarded($order, $order->user, RewardedScaleMessage::class));
                 $parentUser->notify(new Rewarded($order, $order->user, WechatRewardedScaleMessage::class, [
-                    'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
+                    'message' => $type == 'payee' ? $order->thread->getContentByType(Thread::CONTENT_LENGTH, true) : '注册站点',
                     'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
                         'actor_username' => $order->user->username,        // 发送人姓名
                         'boss_amount' => $order->calculateAuthorAmount(),  // 获取实际金额
