@@ -18,6 +18,7 @@
 
 namespace App\Settings;
 
+use Carbon\Carbon;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Encryption\Encrypter;
@@ -54,13 +55,14 @@ class ForumSettingField
     public function siteUrlSplicing($imgName)
     {
         if ($imgName) {
-            if ($this->settings->get('qcloud_cos', 'qcloud')) {
-                return app(Filesystem::class)
-                    ->disk('cos')
-                    ->temporaryUrl($imgName, \Carbon\Carbon::now()->addDay());
+            if ((bool) $this->settings->get('qcloud_cos', 'qcloud')) {
+                return $this->settings->get('qcloud_cos_sign_url', 'qcloud', true)
+                    ? app(Filesystem::class)->disk('cos')->temporaryUrl($imgName, Carbon::now()->addDay())
+                    : app(Filesystem::class)->disk('cos')->url($imgName);
             } else {
-                $fileTime = filemtime(public_path('storage/'.$imgName));
-                return $this->url->to('/storage/' . $imgName) . '?' . $fileTime ?: \Carbon\Carbon::now()->timestamp;
+                $fileTime = @filemtime(public_path('storage/' . $imgName));
+
+                return $this->url->to('/storage/' . $imgName) . '?' . $fileTime ?: Carbon::now()->timestamp;
             }
         }
 
@@ -150,9 +152,9 @@ class ForumSettingField
             'qcloud_token' => $this->settings->get('qcloud_token', 'qcloud'),
             'qcloud_captcha_app_id' => $this->settings->get('qcloud_captcha_app_id', 'qcloud'),
             'qcloud_captcha_secret_key' => $this->settings->get('qcloud_captcha_secret_key', 'qcloud'),
-            'qcloud_cms_image' => (bool)$this->settings->get('qcloud_cms_image', 'qcloud'),
-            'qcloud_cms_text' => (bool)$this->settings->get('qcloud_cms_text', 'qcloud'),
-            'qcloud_faceid_region' => (bool)$this->settings->get('qcloud_faceid_region', 'qcloud'),
+            'qcloud_cms_image' => (bool) $this->settings->get('qcloud_cms_image', 'qcloud'),
+            'qcloud_cms_text' => (bool) $this->settings->get('qcloud_cms_text', 'qcloud'),
+            'qcloud_faceid_region' => (bool) $this->settings->get('qcloud_faceid_region', 'qcloud'),
             'qcloud_sms_app_id' => $this->settings->get('qcloud_sms_app_id', 'qcloud'),
             'qcloud_sms_app_key' => $this->settings->get('qcloud_sms_app_key', 'qcloud'),
             'qcloud_sms_template_id' => $this->settings->get('qcloud_sms_template_id', 'qcloud'),
@@ -160,6 +162,7 @@ class ForumSettingField
             'qcloud_cos_bucket_name' => $this->settings->get('qcloud_cos_bucket_name', 'qcloud'),
             'qcloud_cos_bucket_area' => $this->settings->get('qcloud_cos_bucket_area', 'qcloud'),
             'qcloud_cos_cdn_url' => $this->settings->get('qcloud_cos_cdn_url', 'qcloud'),
+            'qcloud_cos_sign_url' => (bool) $this->settings->get('qcloud_cos_sign_url', 'qcloud', true),
             'qcloud_vod_transcode' => $this->settings->get('qcloud_vod_transcode', 'qcloud'),
             'qcloud_vod_cover_template' => $this->settings->get('qcloud_vod_cover_template', 'qcloud'),
             'qcloud_vod_url_key' => $this->settings->get('qcloud_vod_url_key', 'qcloud'),

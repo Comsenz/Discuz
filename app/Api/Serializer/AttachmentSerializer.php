@@ -22,6 +22,7 @@ use App\Models\Attachment;
 use App\Traits\HasPaidContent;
 use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use Illuminate\Support\Str;
 use Tobscure\JsonApi\Relationship;
@@ -41,11 +42,18 @@ class AttachmentSerializer extends AbstractSerializer
     protected $filesystem;
 
     /**
-     * @param Filesystem $filesystem
+     * @var SettingsRepository
      */
-    public function __construct(Filesystem $filesystem)
+    protected $settings;
+
+    /**
+     * @param Filesystem $filesystem
+     * @param SettingsRepository $settings
+     */
+    public function __construct(Filesystem $filesystem, SettingsRepository $settings)
     {
         $this->filesystem = $filesystem;
+        $this->settings = $settings;
     }
 
     /**
@@ -58,7 +66,9 @@ class AttachmentSerializer extends AbstractSerializer
         $this->paidContent($model);
         $path = Str::finish($model->file_path, '/') . $model->attachment;
         if ($model->is_remote) {
-            $url = $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addMinutes(5));
+            $url = $this->settings->get('qcloud_cos_sign_url', 'qcloud', true)
+                ? $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addMinutes(5))
+                : $this->filesystem->disk('attachment_cos')->url($path);
         } else {
             $url = $this->filesystem->disk('attachment')->url($path);
         }
