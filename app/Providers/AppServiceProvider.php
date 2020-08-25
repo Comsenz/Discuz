@@ -28,6 +28,7 @@ use Discuz\Foundation\AbstractServiceProvider;
 use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Contracts\Validation\Factory as Validator;
+use Intervention\Image\ImageManager;
 
 class AppServiceProvider extends AbstractServiceProvider implements DeferrableProvider
 {
@@ -40,6 +41,14 @@ class AppServiceProvider extends AbstractServiceProvider implements DeferrablePr
     {
         $this->app->singleton(SpecialCharServer::class, function ($app) {
             return new SpecialChar($app);
+        });
+
+        $this->app->singleton(ImageManager::class, function ($app) {
+            if (extension_loaded('imagick')) {
+                return new ImageManager(['driver' => 'imagick']);
+            } else {
+                return new ImageManager();
+            }
         });
     }
 

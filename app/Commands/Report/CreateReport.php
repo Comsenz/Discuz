@@ -64,7 +64,6 @@ class CreateReport
      * @param ReportValidator $validator
      * @return Report
      * @throws NotAuthenticatedException
-     * @throws PermissionDeniedException
      * @throws ValidationException
      */
     public function handle(Dispatcher $events, ReportValidator $validator)
@@ -73,7 +72,6 @@ class CreateReport
         $data = $this->data;
 
         $this->assertRegistered($this->actor);
-        $this->assertCan($this->actor, 'createCategory');
 
         $userId = Arr::get($data, 'attributes.user_id');
         $threadId = Arr::get($data, 'attributes.thread_id', 0);

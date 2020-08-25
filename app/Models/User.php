@@ -19,7 +19,9 @@
 namespace App\Models;
 
 use App\Traits\Notifiable;
+use Carbon\Carbon;
 use Discuz\Auth\Guest;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Http\UrlGenerator;
@@ -33,7 +35,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 /**
@@ -341,14 +342,16 @@ class User extends Model
         if ($value) {
             if (strpos($value, '://') === false) {
                 $value = app(UrlGenerator::class)->to('/storage/avatars/' . $value)
-                    . '?' . \Carbon\Carbon::parse($this->avatar_at)->timestamp;
+                    . '?' . Carbon::parse($this->avatar_at)->timestamp;
             } else {
-                $value = app(Filesystem::class)
-                    ->disk('avatar_cos')
-                    ->temporaryUrl(
-                        'public/avatar/' . Str::after($value, '://'),
-                        \Carbon\Carbon::now()->addHour()
-                    );
+                /** @var SettingsRepository $settings */
+                $settings = app(SettingsRepository::class);
+
+                $path = 'public/avatar/' . Str::after($value, '://');
+
+                $value = (bool) $settings->get('qcloud_cos_sign_url', 'qcloud', true)
+                    ? app(Filesystem::class)->disk('avatar_cos')->temporaryUrl($path, Carbon::now()->addHour())
+                    : app(Filesystem::class)->disk('avatar_cos')->url($path);
             }
         }
 

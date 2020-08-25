@@ -20,6 +20,7 @@ namespace App\Commands\Attachment;
 
 use App\Models\Attachment;
 use Carbon\Carbon;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Filesystem\CosAdapter;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
@@ -30,6 +31,11 @@ class AttachmentUploader
      * @var \League\Flysystem\Filesystem
      */
     protected $filesystem;
+
+    /**
+     * @var SettingsRepository
+     */
+    protected $settings;
 
     /**
      * @var UploadedFile
@@ -60,10 +66,12 @@ class AttachmentUploader
 
     /**
      * @param Filesystem $filesystem
+     * @param SettingsRepository $settings
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct(Filesystem $filesystem, SettingsRepository $settings)
     {
         $this->filesystem = $filesystem;
+        $this->settings = $settings;
 
         $this->path = $this->path . date('/Y/m/d/');
     }
@@ -146,7 +154,7 @@ class AttachmentUploader
 
         $fullPath = $this->file->hashName($this->getPath());
 
-        return $this->isRemote()
+        return $this->isRemote() && (bool) $this->settings->get('qcloud_cos_sign_url', 'qcloud', true)
             ? $this->filesystem->temporaryUrl($fullPath, Carbon::now()->addMinutes(15))
             : $this->filesystem->url($fullPath);
     }
