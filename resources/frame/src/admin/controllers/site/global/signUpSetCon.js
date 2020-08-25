@@ -53,7 +53,7 @@ export default {
 
             this.qcloud_sms = false
           }
-          if(res.readdata._data.passport.offiaccount_close == true) {
+          if(res.readdata._data.passport.offiaccount_close == true || res.readdata._data.passport.miniprogram_close == true) {
             this.qcloud_wx = false
           }
           if(res.readdata._data.qcloud.qcloud_captcha == true){
