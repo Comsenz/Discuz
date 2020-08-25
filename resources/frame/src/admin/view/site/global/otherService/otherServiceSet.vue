@@ -10,7 +10,7 @@
         >
           <template slot-scope="scope">
             <div class="pother-service-set-type-box">
-              <i class="iconfont icontengxunweizhi table-icon"></i>
+              <i class="iconfont iconweizhi1 table-icon"></i>
               <div class="table-con-box">
                 <p>{{scope.row.name }}</p>
                 <p>{{scope.row.description }}</p>

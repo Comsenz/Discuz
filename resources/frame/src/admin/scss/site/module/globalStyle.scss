@@ -43,8 +43,16 @@
     }
   }
 }
-.other-service-set-box .el-table__body{
-  width:100%;
+.other-service-set-box {
+  .el-table__body {
+    width:100%;
+  }
+  .iconweizhi1 {
+    background-color: $blue;
+    color: #fff;
+    border-radius: 50%;
+  }
+ 
 }
 
 .icon-add {
