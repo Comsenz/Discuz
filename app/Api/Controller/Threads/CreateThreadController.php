@@ -40,6 +40,7 @@ class CreateThreadController extends AbstractCreateController
         'user',
         'firstPost',
         'threadVideo',
+        'firstPost.images',
     ];
 
     /**
