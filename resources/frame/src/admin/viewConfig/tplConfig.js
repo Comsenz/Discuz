@@ -131,6 +131,30 @@ export default {
               alias: "微信通知"
             }
           },
+          "other-service-set": {
+            comLoad: function (resolve) {
+              require([
+                "../view/site/global/otherService/otherServiceSet"
+              ], resolve);
+            },
+            metaInfo: {
+              title: "其它服务设置",
+              name: "otherServiceSet",
+              attribution: "全局",
+            }
+          },
+          "other-service-set-key": {
+            comLoad: function (resolve) {
+              require([
+                "../view/site/global/otherService/otherServiceKeySet"
+              ], resolve);
+            },
+            metaInfo: {
+              title: "其它服务设置",
+              name: "otherServiceSet",
+              attribution: "全局",
+            }
+          },
           "system-notice": {
             comLoad: function (resolve) {
               require([

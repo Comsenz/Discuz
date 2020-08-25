@@ -97,6 +97,12 @@ export default {
                 }
               ]
             },
+            {
+              id: 9,
+              title: "其它服务设置",
+              name: "otherServiceSet",
+              icon: "iconqitafuwushezhi"
+            },
 
             // {
             //   id:7,
@@ -442,6 +448,9 @@ export default {
           break;
         case "financialStatistics":
           this.$router.push({ path: "/admin/financial-statistics" });
+          break;
+        case "otherServiceSet":
+          this.$router.push({ path: "/admin/other-service-set" });
           break;
       }
     },
