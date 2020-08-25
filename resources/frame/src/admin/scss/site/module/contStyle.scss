@@ -1165,3 +1165,98 @@
     }
   }
 }
+
+/*
+  举报管理
+*/
+.report-manage-box {
+  color: $titleColor;
+
+  .report-manage-header {
+    display: flex;
+    padding: 15PX 0;
+
+    &__section {
+      display: flex;
+      align-items: center;
+      margin-right: 20PX;
+      flex: 1;
+
+      &-title {
+        min-width: 70PX;
+        line-height: 36PX;
+      }
+  
+      .time-title{
+        min-width: 100PX;
+      }
+  
+      &:last-of-type {
+        flex: 0;
+        margin-right: 0;
+      }
+    }
+
+   
+  }
+
+  .report-manage-content {
+    &__header {
+      width: 100%;
+      height: 53PX;
+      background-color: $tableHeaderColor;
+      display: flex;
+      align-items: center;
+      padding-left: 17PX;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      border-bottom: 1PX solid $tableBorderColor;
+
+      &-title {
+        margin-left: 30PX;
+        color: $commentColor;
+      }
+    }
+
+    &__table-side{
+      .el-checkbox__label{
+        display: none;
+      }
+      .el-radio-group {
+        display: flex;
+        flex-direction: column;
+
+        .el-radio {
+          margin-right: 0;
+          margin-bottom: 12PX;
+        }
+      }
+    }
+
+    &__table-footer {
+      display: flex;
+      align-items: center;
+
+      i {
+        height: 16PX;
+        width: 1PX;
+        display: inline-block;
+        background-color: #dcdfe6;
+        margin: 0 14PX;
+      }
+    }
+  }
+
+  .report-manage-footer {
+    padding: 15PX 0;
+    
+    .el-button--primary{
+      margin-right: 40PX;
+    }
+
+    .el-button--text{
+      margin-right: 20PX;
+    }
+  }
+}
