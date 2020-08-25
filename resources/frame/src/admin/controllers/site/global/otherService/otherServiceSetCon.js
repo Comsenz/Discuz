@@ -7,11 +7,10 @@ export default {
     return {
       settingStatus:[{
           name: '腾讯位置服务',
-          type: 'wxpay_close',
+          type: 'lbs_close',
           description: '配置KEY后，才可使用腾讯位置的WebServiceAPI服务',
-          tag:'wxpay',
+          tag:'lbs',
           status:'',
-          siteMode: '', // 站点模式
         }]
     }
   },
@@ -30,47 +29,44 @@ export default {
         if (data.errors){
           this.$message.error(data.errors[0].code);
         }else {
-          this.siteMode = data.readdata._data.set_site.site_mode;
-          if (data.readdata._data.paycenter.wxpay_close == '0') {
-            this.settingStatus[0].status = false;
-          } else {
+          const lbsData = data.data.attributes.lbs;
+          if (lbsData.lbs) {
             this.settingStatus[0].status = true;
+          } else {
+            this.settingStatus[0].status = false;
           }
         }
       })
     },
-    statusSetting(typeVal,statusVal,TagVal,Tips){
+    statusSetting(statusVal){
       //状态修改
-    //   this.appFetch({
-    //     url:'settings',
-    //     method:'post',
-    //     data:{
-    //       "data":[
-    //         {
-    //          "attributes":{
-    //           "key":typeVal,
-    //           "value":statusVal,
-    //           "tag": TagVal
-    //          }
-    //         }
-    //        ]
-
-    //     }
-    //   }).then(data=>{
-    //     if (data.errors){
-    //       this.$message.error(data.errors[0].code);
-    //     }else {
-    //       if (Tips == 'true') {
-    //         this.$message({
-    //           message: '修改成功',
-    //           type: 'success'
-    //         });
-    //       }
-    //       this.loadStatus();
-    //     }
-    //   }).catch(error=>{
-    //     cthis.$message.error('修改失败');
-    //   })
+      this.appFetch({
+        url:'settings',
+        method:'post',
+        data:{
+         "data":[
+            {
+             "attributes":{
+                "key":"lbs",
+                "value":statusVal,
+                "tag": 'lbs'
+             }
+            },
+         ]
+        }
+      }).then(data=>{
+        if (data.errors){
+          this.$message.error(data.errors[0].code);
+        }else {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          });
+          this.loadStatus();
+        }
+      }).catch(error=>{
+        this.$message.error('修改失败');
+      })
     },
     configClick(type){
       this.$router.push({

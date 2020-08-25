@@ -4,7 +4,7 @@
 
     <Card header="key：">
       <CardRow description="腾讯位置服务账号 - key与配额 - key管理的key">
-        <el-input v-model="appId"></el-input>
+        <el-input v-model="key"></el-input>
       </CardRow>
     </Card>
 

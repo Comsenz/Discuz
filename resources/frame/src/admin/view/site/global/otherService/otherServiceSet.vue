@@ -38,16 +38,17 @@
               <el-button
                 size="mini"
                 @click="configClick(scope.row.tag)"
+                v-if="scope.row.status"
               >配置</el-button>
               <el-button
                 v-if="scope.row.status"
                 size="mini"
-                @click.native.prevent="statusSetting(scope.$index,scope.row.type,'0')"
+                @click.native.prevent="statusSetting(false)"
               >关闭</el-button>
             <el-button
               v-else
               size="mini"
-              @click.native.prevent="statusSetting(scope.$index,scope.row.type,'1')"
+              @click.native.prevent="statusSetting(true)"
             >开启</el-button>
             </div>
 

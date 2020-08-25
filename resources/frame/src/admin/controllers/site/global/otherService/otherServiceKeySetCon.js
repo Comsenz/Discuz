@@ -25,37 +25,35 @@ export default {
         if (data.errors){
           this.$message.error(data.errors[0].code);
         }else {
-          this.key = data.readdata._data.paycenter.app_id;
+          this.key = data.data.attributes.lbs.qq_lbs_key;
         }
-      }).catch(error=>{
       })
     },
     submitConfiguration(){
-
-      // this.appFetch({
-      //   url:'settings',
-      //   method:'post',
-      //   data:{
-      //     "data":[
-      //       {
-      //          "attributes":{
-      //           "key":"app_id",
-      //           "value":this.appId,
-      //           "tag": this.type
-      //          }
-      //       },
-      //      ]
-      //   }
-      // }).then(data=>{
-      //   if (data.errors){
-      //     this.$message.error(data.errors[0].code);
-      //   }else {
-      //     this.$message({
-      //       message: '提交成功',
-      //       type: 'success'
-      //     });
-      //   }
-      // })
+      this.appFetch({
+        url:'settings',
+        method:'post',
+        data:{
+          "data":[
+            {
+               "attributes":{
+                "key":"qq_lbs_key",
+                "value":this.key,
+                "tag": 'lbs'
+               }
+            },
+           ]
+        }
+      }).then(data=>{
+        if (data.errors){
+          this.$message.error(data.errors[0].code);
+        }else {
+          this.$message({
+            message: '提交成功',
+            type: 'success'
+          });
+        }
+      })
     }
   },
   components:{
