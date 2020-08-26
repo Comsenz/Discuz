@@ -14,7 +14,7 @@ class AlterAddBlockOrderType extends Migration
     {
         $this->schema()->table('orders', function (Blueprint $table) {
             $table->unsignedInteger('post_id')->nullable()->after('type')->comment('post id');
-            $table->unsignedInteger('block_payid')->nullable()->after('thread_id')->comment('付费块id');
+            $table->char('block_payid', 32)->nullable()->after('thread_id')->comment('付费块id');
             $table->unsignedInteger('type')->unsigned()->default(0)->comment('交易类型：1注册、2打赏、3付费主题、4付费用户组、5块付费')->change();
         });
 
