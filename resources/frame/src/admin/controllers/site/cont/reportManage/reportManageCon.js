@@ -36,7 +36,7 @@ export default {
         pageSize: 10,          // 每页显示数
         pageCount: 1,         // 总页数
         pageNumber: 1,        //当前页
-        pageTotal: 1,         // 举报列表总条数
+        pageTotal: 0,         // 举报列表总条数
       },
       subLoading:false,       // 提交按钮状态
     }
