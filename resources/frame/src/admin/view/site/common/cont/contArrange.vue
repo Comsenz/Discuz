@@ -73,7 +73,10 @@
               <span>热度数：</span>
               <span>{{$attrs.heatNumber}}</span>
             </div>
-
+            <div v-if="$attrs.type" class="cont-arrange__rt-main-header__release-time rt-box">
+              <span>类型：</span>
+              <span>{{$attrs.type}}</span>
+            </div>
             <slot name="header"></slot>
           </div>
           <div class="cont-arrange__rt-main-long-text" v-if="$slots.longText">

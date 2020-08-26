@@ -65,15 +65,49 @@ class UpdateGroup
 
         $this->assertCan($this->actor, 'edit', $group);
 
-        $group->name = Arr::get($this->data, 'attributes.name', '');
-        $group->type = Arr::get($this->data, 'attributes.type', '');
-        $group->color = Arr::get($this->data, 'attributes.color', '');
-        $group->icon = Arr::get($this->data, 'attributes.icon', '');
-        $group->is_display = (bool) Arr::get($this->data, 'attributes.isDisplay');
-        $group->is_paid = (bool) Arr::get($this->data, 'attributes.is_paid');
-        $group->fee = (float) Arr::get($this->data, 'attributes.fee');
-        $group->days = (int) Arr::get($this->data, 'attributes.days');
-        $group->scale = (float) Arr::get($this->data, 'attributes.scale');
+        if (Arr::has($this->data, 'attributes.name')) {
+            $group->name = Arr::get($this->data, 'attributes.name', '');
+        }
+
+        if (Arr::has($this->data, 'attributes.type')) {
+            $group->type = Arr::get($this->data, 'attributes.type', '');
+        }
+
+        if (Arr::has($this->data, 'attributes.color')) {
+            $group->color = Arr::get($this->data, 'attributes.color', '');
+        }
+
+        if (Arr::has($this->data, 'attributes.icon')) {
+            $group->icon = Arr::get($this->data, 'attributes.icon', '');
+        }
+
+        if (Arr::has($this->data, 'attributes.isDisplay')) {
+            $group->is_display = (bool) Arr::get($this->data, 'attributes.isDisplay');
+        }
+
+        if (Arr::has($this->data, 'attributes.is_paid')) {
+            $group->is_paid = (bool) Arr::get($this->data, 'attributes.is_paid');
+        }
+
+        if (Arr::has($this->data, 'attributes.fee')) {
+            $group->fee = (float) Arr::get($this->data, 'attributes.fee');
+        }
+
+        if (Arr::has($this->data, 'attributes.days')) {
+            $group->days = (int) Arr::get($this->data, 'attributes.days');
+        }
+
+        if (Arr::has($this->data, 'attributes.scale')) {
+            $group->scale = (float) Arr::get($this->data, 'attributes.scale');
+        }
+
+        if (Arr::has($this->data, 'attributes.is_subordinate')) {
+            $group->is_subordinate = (bool) Arr::get($this->data, 'attributes.is_subordinate');
+        }
+
+        if (Arr::has($this->data, 'attributes.is_commission')) {
+            $group->is_commission = (bool) Arr::get($this->data, 'attributes.is_commission');
+        }
 
         $this->validator->valid($group->getDirty());
 

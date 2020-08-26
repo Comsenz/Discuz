@@ -72,7 +72,9 @@ class RegisterController extends AbstractCreateController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $this->assertPermission((bool)$this->settings->get('register_close'));
+        if (!(bool)$this->settings->get('register_close')) {
+            throw new PermissionDeniedException('register_close');
+        }
 
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
         $attributes['register_ip'] = ip($request->getServerParams());

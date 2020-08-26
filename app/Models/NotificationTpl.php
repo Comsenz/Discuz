@@ -307,7 +307,7 @@ class NotificationTpl extends Model
             37 => [
                 'status' => 1,
                 'type' => 0,
-                'type_name' => '内容支付分成通知',
+                'type_name' => '分成收入通知',
                 'title' => '内容通知',
                 'content' => '',
                 'vars' => '',
@@ -315,7 +315,7 @@ class NotificationTpl extends Model
             38 => [
                 'status' => 0,
                 'type' => 1,
-                'type_name' => '内容支付分成通知',
+                'type_name' => '分成收入通知',
                 'title' => '微信内容通知',
                 'content' => self::getWechatFormat([
                     'first' => '你收到了{username}的分成{money}',

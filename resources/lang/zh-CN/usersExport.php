@@ -3,6 +3,7 @@
         'id' => '用户ID',
         'username' => '用户名',
         'mobile' => '手机号',
+        'originalMobile' => '手机号',
         'status' => '帐号状态',
         'sex' => '性别',
         'groups' => '用户组名',

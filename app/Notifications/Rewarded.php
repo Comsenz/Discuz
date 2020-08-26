@@ -40,6 +40,11 @@ class Rewarded extends System
     public $channel;
 
     /**
+     * @var bool 是否是分成通知类
+     */
+    public $isScaleClass;
+
+    /**
      * Rewarded constructor.
      *
      * @param Order $order
@@ -65,22 +70,40 @@ class Rewarded extends System
      */
     public function toDatabase($notifiable)
     {
-        $build = [
-            'user_id' => $this->order->user->id,  // 付款人ID
-            'order_id' => $this->order->id,
-            'thread_id' => $this->order->thread->id,   // 必传
-            'thread_username' => $this->order->thread->user->username, // 必传主题用户名
-            'thread_title' => $this->order->thread->title,
-            'content' => '',  // 兼容原数据
-            'thread_created_at' => $this->order->thread->formatDate('created_at'),
-            'amount' => $this->order->isScale() ? $this->order->calculateAuthorAmount() : $this->order->calculateAuthorAmount(true), // 支付金额 - 分成金额 (string精度问题)
-            'order_type' => $this->order->type,  // 1：注册，2：打赏，3：付费主题，4：付费用户组
-        ];
+        /**
+         * 判断是否是分成通知，上级金额/自己收款金额 不同
+         */
+        if ($this->isScaleClass) {
+            // 分成通知数据
+            $build = [
+                'user_id' => $this->order->user->id,
+                'order_id' => $this->order->id,
+                'thread_id' => 0,       // 无主题关联
+                'thread_username' => 0,
+                'thread_title' => 0,
+                'content' => '',
+                'thread_created_at' => '',
+                'amount' => $this->order->calculateAuthorAmount(), // 获取上级的实际分成金额数
+                'order_type' => $this->order->type,  // 1：注册，2：打赏，3：付费主题，4：付费用户组
+            ];
+        } else {
+            $build = [
+                'user_id' => $this->order->user->id,  // 付款人ID
+                'order_id' => $this->order->id,
+                'thread_id' => $this->order->thread->id,   // 必传
+                'thread_username' => $this->order->thread->user->username, // 必传主题用户名
+                'thread_title' => $this->order->thread->title,
+                'content' => '',  // 兼容原数据
+                'thread_created_at' => $this->order->thread->formatDate('created_at'),
+                'amount' => $this->order->calculateAuthorAmount(true), // 支付金额 - 分成金额 (string精度问题)
+                'order_type' => $this->order->type,  // 1：注册，2：打赏，3：付费主题，4：付费用户组
+            ];
+
+            $this->build($build);
+        }
 
         // 是否是分成金额
         $build = array_merge($build, ['isScale' => $this->order->isScale()]);
-
-        $this->build($build);
 
         return $build;
     }
@@ -96,7 +119,7 @@ class Rewarded extends System
     }
 
     /**
-     * 设置驱动名称
+     * 设置驱动名称&属性
      *
      * @param $strClass
      */
@@ -105,10 +128,20 @@ class Rewarded extends System
         switch ($strClass) {
             case 'App\MessageTemplate\Wechat\WechatRewardedMessage':
                 $this->channel = 'wechat';
+                $this->isScaleClass = false;
+                break;
+            case 'App\MessageTemplate\Wechat\WechatRewardedScaleMessage':
+                $this->channel = 'wechat';
+                $this->isScaleClass = true;
                 break;
             case 'App\MessageTemplate\RewardedMessage':
             default:
                 $this->channel = 'database';
+                $this->isScaleClass = false;
+                break;
+            case 'App\MessageTemplate\RewardedScaleMessage':
+                $this->channel = 'database';
+                $this->isScaleClass = true;
                 break;
         }
     }

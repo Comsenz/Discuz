@@ -189,11 +189,11 @@ class Order extends Model
          * 获取 站长->作者 分成
          * ( 注册付费站点时 master_amount 是0 )
          */
-        $actualAmount = $this->amount - $this->master_amount;
+        $actualAmount = number_format($this->amount - $this->master_amount, 2, '.', '');
 
         $bossAmount = 0;
         // 计算 作者->上级 分成
-        if ($this->be_scale) {
+        if ($this->isScale()) {
             $beScale = $this->be_scale / 10;
 
             // 上级实际分到金额

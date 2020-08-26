@@ -130,6 +130,12 @@ class Invite extends Model
         return $invite;
     }
 
+    /**
+     * 判断是否是32位 上下级邀请类型
+     *
+     * @param $code
+     * @return bool
+     */
     public static function lengthByAdmin($code)
     {
         $len = mb_strlen($code, 'utf-8');

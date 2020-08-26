@@ -24,6 +24,7 @@ use App\Api\Serializer\UserSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\RegisterPhoneUser;
 use App\Events\Users\Logind;
+use App\Exceptions\TranslatorException;
 use App\MessageTemplate\Wechat\WechatRegisterMessage;
 use App\Models\MobileCode;
 use App\Models\User;
@@ -33,6 +34,7 @@ use App\Repositories\MobileCodeRepository;
 use App\User\Bind;
 use App\Validators\UserValidator;
 use Discuz\Api\Client;
+use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\EventsDispatchTrait;
@@ -95,6 +97,11 @@ class VerifyMobile
     {
         //register new user
         if (is_null($this->mobileCode->user)) {
+
+            if (!(bool)$this->settings->get('register_close')) {
+                throw new PermissionDeniedException('register_close');
+            }
+
             $data['register_ip'] = Arr::get($this->params, 'ip');
             $data['register_port'] = Arr::get($this->params, 'port');
             $data['mobile'] = $this->mobileCode->mobile;
@@ -178,6 +185,10 @@ class VerifyMobile
         return $this->mobileCode->user;
     }
 
+    /**
+     * @return mixed
+     * @throws TranslatorException
+     */
     protected function resetPwd()
     {
         $this->controller->serializer = UserSerializer::class;
@@ -185,12 +196,22 @@ class VerifyMobile
             $this->validator->valid([
                 'password' => $this->params['password']
             ]);
+
+            // 验证新密码与原密码不能相同
+            if ($this->mobileCode->user->checkPassword($this->params['password'])) {
+                throw new TranslatorException('user_update_error', ['cannot_use_the_same_password']);
+            }
+
             $this->mobileCode->user->changePassword($this->params['password']);
             $this->mobileCode->user->save();
         }
         return $this->mobileCode->user;
     }
 
+    /**
+     * @return mixed
+     * @throws TranslatorException
+     */
     protected function resetPayPwd()
     {
         $this->controller->serializer = UserSerializer::class;
@@ -199,6 +220,12 @@ class VerifyMobile
                 'pay_password' => $this->params['pay_password'],
                 'pay_password_confirmation' => $this->params['pay_password_confirmation'],
             ]);
+
+            // 验证新密码与原密码不能相同
+            if ($this->mobileCode->user->checkWalletPayPassword($this->params['pay_password'])) {
+                throw new TranslatorException('user_update_error', ['cannot_use_the_same_password']);
+            }
+
             $this->mobileCode->user->changePayPassword($this->params['pay_password']);
             $this->mobileCode->user->save();
 

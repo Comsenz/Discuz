@@ -28,7 +28,7 @@ export default {
           label: '每页显示30条'
         }
       ],
-      pageSelect:10,              //每页显示数选择值选中
+      pageSelect:2,              //每页显示数选择值选中
       searchReview:[
         {
           value:0,

@@ -118,12 +118,15 @@ class InviteBind
                 $toUser->refreshUserFans();
                 $toUser->save();
 
+                $bossGroup = $fromUser->groups->first();
                 // 建立上下级关系
                 UserDistribution::query()->create([
                     'pid' => $fromUserId,
                     'user_id' => $toUserId,
-                    'be_scale' => $fromUser->groups->first()->scale,
-                    'level' => 1,
+                    'be_scale' => $bossGroup->scale,
+                    'level' => 1, // Tag 暂时1级分销
+                    'is_subordinate' => $bossGroup->is_subordinate,
+                    'is_commission' => $bossGroup->is_commission,
                 ]);
 
                 $this->db->commit();

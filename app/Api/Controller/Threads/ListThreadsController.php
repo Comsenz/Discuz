@@ -433,9 +433,12 @@ class ListThreadsController extends AbstractListController
         // 附近的帖
         if ($location = Arr::get($filter, 'location')) {
             $location = explode(',', $location, 3);
-            $longitude = (float) ($location[0] ?? 0);       // 经度
-            $latitude = (float) ($location[1] ?? 0);        // 纬度
-            $distance = (int) ($location[2] ?? 5);          // 距离
+            $longitude = (float) Arr::get($location, 0, 0);     // 经度
+            $latitude = (float) Arr::get($location, 1, 0);      // 纬度
+            $distance = abs(Arr::get($location, 2, 5));         // 距离
+
+            // 距离不能超过 100km
+            $distance = $distance > 100 ? 5 : $distance;
 
             if (! ($longitude && $latitude && $distance)) {
                 throw new \Exception('unable_to_get_location', 404);
@@ -450,9 +453,26 @@ class ListThreadsController extends AbstractListController
                     * sin( radians( `latitude` ) )
                 )');
 
+            // 地球平均周长 6371km
+            $PI = 3.14159265;
+            $degree = 40075016 / 360;
+
+            // 经度范围
+            $mpdLng = $degree * cos($latitude * ($PI / 180));
+            $radiusLng = $distance * 1000 / $mpdLng;
+            $minLng = $longitude - $radiusLng;
+            $maxLng = $longitude + $radiusLng;
+
+            // 纬度范围
+            $radiusLat = $distance * 1000 / $degree;
+            $minLat = $latitude - $radiusLat;
+            $maxLat = $latitude + $radiusLat;
+
             $query->selectSub($raw, 'distance')
-                ->where('longitude', '>', 0)
-                ->where('latitude', '>', 0)
+                ->where('longitude', '<>', 0)
+                ->where('latitude', '<>', 0)
+                ->whereBetween('longitude', [$minLng, $maxLng])
+                ->whereBetween('latitude', [$minLat, $maxLat])
                 ->having('distance', '<', $distance)
                 ->orderBy('distance');
         }

@@ -97,6 +97,12 @@ export default {
                 }
               ]
             },
+            {
+              id: 9,
+              title: "其它服务设置",
+              name: "otherServiceSet",
+              icon: "iconqitafuwushezhi"
+            },
 
             // {
             //   id:7,
@@ -202,18 +208,38 @@ export default {
             },
             {
               id: 4,
+              title: "举报管理",
+              name: "reportManage",
+              icon: "iconjubaoguanli",
+              submenu: [
+                {
+                  id: 41,
+                  title: "最新举报",
+                  name: "reportManage",
+                  icon: "iconjubaoguanli"
+                },
+                {
+                  id: 42,
+                  title: "已处理记录",
+                  name: "reportManage",
+                  icon: "iconjubaoguanli"
+                }
+              ]
+            },
+            {
+              id: 5,
               title: "回收站",
               name: "recycleBin",
               icon: "iconhuishouzhan",
               submenu: [
                 {
-                  id: 41,
+                  id: 51,
                   title: "主题",
                   name: "recycleBin",
                   icon: "iconhuishouzhan"
                 },
                 {
-                  id: 42,
+                  id: 52,
                   title: "回复",
                   name: "recycleBin",
                   icon: "iconhuishouzhan"
@@ -428,7 +454,11 @@ export default {
         case "topicManagement":
           this.$router.push({ path: "/admin/topic-management" });
           break;
-
+        case "reportManage": //举报管理
+          this.sideSubmenu = this.navList[3].submenu[4].submenu;
+          this.sideSubmenuSelect = this.navList[3].submenu[4].submenu[0].title;
+          this.$router.push({ path: "/admin/report-manage" });
+          break;
         case "fundDetails":
           this.$router.push({ path: "/admin/fund-details" });
           break;
@@ -442,6 +472,9 @@ export default {
           break;
         case "financialStatistics":
           this.$router.push({ path: "/admin/financial-statistics" });
+          break;
+        case "otherServiceSet":
+          this.$router.push({ path: "/admin/other-service-set" });
           break;
       }
     },
@@ -492,6 +525,14 @@ export default {
         case "回复审核":
           this.sideSubmenuSelect = title;
           this.$router.push({ path: "/admin/reply-review" });
+          break;
+        case "最新举报": // 举报管理-最新举报
+          this.sideSubmenuSelect = title;
+          this.$router.push({ path: "/admin/report-manage" });
+          break;
+        case "已处理记录": // 举报管理-已处理记录
+          this.sideSubmenuSelect = title;
+          this.$router.push({ path: "/admin/report-processed" });
           break;
         case "主题":
           this.sideSubmenuSelect = title;
@@ -603,13 +644,21 @@ export default {
             this.sideSubmenu = this.navList[3].submenu[2].submenu;
             this.sideSubmenuSelect = this.navList[3].submenu[2].submenu[1].title;
             break;
-          case "主题":
+          case "最新举报": // 举报管理-最新举报
             this.sideSubmenu = this.navList[3].submenu[4].submenu;
             this.sideSubmenuSelect = this.navList[3].submenu[4].submenu[0].title;
             break;
-          case "回复":
+          case "已处理记录": // 举报管理-已处理记录
             this.sideSubmenu = this.navList[3].submenu[4].submenu;
             this.sideSubmenuSelect = this.navList[3].submenu[4].submenu[1].title;
+            break;
+          case "主题":
+            this.sideSubmenu = this.navList[3].submenu[5].submenu;
+            this.sideSubmenuSelect = this.navList[3].submenu[5].submenu[0].title;
+            break;
+          case "回复":
+            this.sideSubmenu = this.navList[3].submenu[5].submenu;
+            this.sideSubmenuSelect = this.navList[3].submenu[5].submenu[1].title;
             break;
           case "提现申请":
             this.sideSubmenu = this.navList[4].submenu[2].submenu;
