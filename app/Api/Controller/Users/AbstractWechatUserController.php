@@ -119,8 +119,9 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                     new AutoRegisterUser($request->getAttribute('actor'), $data)
                 );
                 $wechatUser->user_id = $user->id;
-                $wechatUser->save();
+                // 先设置关系，为了同步微信头像
                 $wechatUser->setRelation('user', $user);
+                $wechatUser->save();
 
                 // 判断是否开启了注册审核
                 if (!(bool)$this->settings->get('register_validate')) {
