@@ -88,7 +88,7 @@ export default {
       searchData: {
         topicTypeId: '0',         //主题类型
         categoryId: 0,            //主题分类ID
-        pageSelect: '2',         //每页显示数
+        pageSelect: '10',         //每页显示数
         themeAuthor: '',          //主题作者
         themeKeyWords: '',        //主题关键词
         dataValue: ['', ''],      //发表时间范围
