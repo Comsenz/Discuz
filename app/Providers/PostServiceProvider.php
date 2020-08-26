@@ -29,17 +29,13 @@ use Discuz\Foundation\AbstractServiceProvider;
 class PostServiceProvider extends AbstractServiceProvider
 {
     /**
-     * 注册服务.
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function register()
     {
     }
 
     /**
-     * 引导服务.
-     *
      * @return void
      */
     public function boot()
@@ -47,13 +43,10 @@ class PostServiceProvider extends AbstractServiceProvider
         Post::setFormatter($this->app->make(Formatter::class));
         Post::setMarkdownFormatter($this->app->make(MarkdownFormatter::class));
 
-        // 事件处理类
         $events = $this->app->make('events');
 
-        // 订阅事件
         $events->subscribe(PostListener::class);
         $events->subscribe(PostPolicy::class);
-
         $events->subscribe(PostAttachment::class);
     }
 }
