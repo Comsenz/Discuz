@@ -60,6 +60,18 @@
             v-model="searchData.numberOfHotMax"
             clearable
           ></el-input>
+        </div>
+        
+        <div class="cont-manage-header_condition">
+          <span class="cont-manage-header_condition-titles condttions-titles" style="padding-left: 20px">推荐：</span>
+          <el-select v-model="value" @change="obtainValue" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
           <el-button size="small" type="primary" @click="searchClick">搜索</el-button>
         </div>
       </div>
@@ -69,11 +81,11 @@
     <div class="cont-manage-theme">
       <div class="cont-manage-theme__table">
         <div class="cont-manage-theme__table-header">
-          <el-checkbox
+          <!-- <el-checkbox
             :indeterminate="isIndeterminate"
             v-model="checkAll"
             @change="handleCheckAllChange"
-          ></el-checkbox>
+          ></el-checkbox> -->
           <p class="cont-manage-theme__table-header__title">主题列表</p>
         </div>
 
@@ -86,11 +98,16 @@
           :key="items._data.id"
         >
           <div class="cont-manage-theme__table-side" slot="side">
-            <el-checkbox
+            <!-- <el-checkbox
               v-model="checkedTheme"
               :label="items._data.id"
               @change="handleCheckedCitiesChange()"
-            ></el-checkbox>
+            ></el-checkbox> -->
+            <el-radio-group v-model="radio[index]"  @change="themidpost($event,items._data.id)">
+              <el-radio :label="1">推荐</el-radio>
+              <el-radio :label="2">取消</el-radio>
+              <el-radio :label="3">删除</el-radio>
+            </el-radio-group>
           </div>
 
           <p
@@ -102,7 +119,15 @@
             {{`#${items._data.content}#`}}
           </p>
 
-            <div class="cont-manage-theme__table-main" slot="main">
+          <div class="cont-manage-theme__table-main tables-main" slot="main">
+            <div class="cont-manage-theme__table-main-bigbox">
+              <span
+                class="cont-manage-theme__table-main-bigbox-box"
+                @click="btnrecomment(items._data.id, items._data.recommended)"
+              >{{items._data.recommended ? recomment1 : recomment2}}</span>
+              <span class="cont-manage-theme__table-main-bigbox-span"></span>
+              <span class="cont-manage-theme__table-main-bigbox-box" @click="deteleTopic(items._data.id)">删除</span>
+            </div>
           </div>
           <!-- <div class="cont-manage-theme__table-button" slot="longText">
             <el-button size="small" type="primary" @click="recommentBtn">{{recommentbtn? recomment1 : recomment2}}</el-button>
@@ -126,7 +151,11 @@
 
     <div class="cont-manage-operating">
       <Card class="footer-btn">
-        <el-button @click="deleteClick" :loading="subLoading" type="primary">全部删除</el-button>
+        <el-button :loading="subLoading" type="primary"  @click="btnSubmit">提交</el-button>
+        <span class="cont-manage-operating-all operating-alls" @click="allRecomment(0,themeListAll, 1)">全部推荐</span>
+        <span class="cont-manage-operating-all" @click="allRecomment(1,themeListAll, 1)">全部取消推荐</span>
+        <span class="cont-manage-operating-all" @click="deleteClick(themeListAll, 1)">全部删除</span>
+        <!-- <el-button @click="deleteClick" :loading="subLoading" type="primary">全部删除</el-button> -->
       </Card>
     </div>
   </div>

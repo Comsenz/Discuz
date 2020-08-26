@@ -19,7 +19,7 @@
   vertical-align: middle;
   margin-right: 10PX;
 }
-.pay-set-type-box {
+.pay-set-type-box,.other-service-set-box {
   display: flex;
   align-items: center;
   .table-con-box {
@@ -42,6 +42,17 @@
       margin-top: 7PX;
     }
   }
+}
+.other-service-set-box {
+  .el-table__body {
+    width:100%;
+  }
+  .iconweizhi1 {
+    background-color: $blue;
+    color: #fff;
+    border-radius: 50%;
+  }
+ 
 }
 
 .icon-add {

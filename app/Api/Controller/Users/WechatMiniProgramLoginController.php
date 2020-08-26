@@ -113,9 +113,9 @@ class WechatMiniProgramLoginController extends AbstractResourceController
                     new AutoRegisterUser($request->getAttribute('actor'), $data)
                 );
                 $wechatUser->user_id = $user->id;
-                $wechatUser->save();
-
+                // 先设置关系再save，为了同步微信头像
                 $wechatUser->setRelation('user', $user);
+                $wechatUser->save();
             } else {
                 throw new NoUserException();
             }

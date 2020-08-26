@@ -131,6 +131,30 @@ export default {
               alias: "微信通知"
             }
           },
+          "other-service-set": {
+            comLoad: function (resolve) {
+              require([
+                "../view/site/global/otherService/otherServiceSet"
+              ], resolve);
+            },
+            metaInfo: {
+              title: "其它服务设置",
+              name: "otherServiceSet",
+              attribution: "全局",
+            }
+          },
+          "other-service-set-key": {
+            comLoad: function (resolve) {
+              require([
+                "../view/site/global/otherService/otherServiceKeySet"
+              ], resolve);
+            },
+            metaInfo: {
+              title: "其它服务设置",
+              name: "otherServiceSet",
+              attribution: "全局",
+            }
+          },
           "system-notice": {
             comLoad: function (resolve) {
               require([
@@ -413,7 +437,31 @@ export default {
                 attribution: "内容"
                 }
           },
-
+          // 举报管理
+          "report-manage": {
+            comLoad: function (resolve) {
+              require(["../view/site/cont/reportManage/reportManageView"], resolve);
+            },
+            metaInfo: {
+              title: "举报管理",
+              name: "reportManage",
+              attribution: "内容",
+              alias: "最新举报"
+            }
+          },
+          "report-processed": {
+            comLoad: function (resolve) {
+              require([
+                "../view/site/cont/reportManage/reportProcessedView"
+              ], resolve);
+            },
+            metaInfo: {
+              title: "举报管理",
+              name: "reportManage",
+              attribution: "内容",
+              alias: "已处理记录"
+            }
+          },
           "recycle-bin": {
             comLoad: function (resolve) {
               require(["../view/site/cont/recycleBin/recycleBinView"], resolve);
@@ -423,17 +471,6 @@ export default {
               name: "recycleBin",
               attribution: "内容",
               alias: "主题"
-            }
-          },
-          //话题管理
-          "topic-management": {
-            comLoad: function(resolve) {
-              require(["../view/site/cont/topicManagement/topicManagementView"], resolve);
-            },
-            metaInfo: {
-              title: "话题管理",
-              name: "topicManagement",
-              attribution: "内容"
             }
           },
           "recycle-bin-reply": {

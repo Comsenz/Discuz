@@ -73,7 +73,10 @@
               <span>热度数：</span>
               <span>{{$attrs.heatNumber}}</span>
             </div>
-
+            <div v-if="$attrs.type" class="cont-arrange__rt-main-header__release-time rt-box">
+              <span>类型：</span>
+              <span>{{$attrs.type}}</span>
+            </div>
             <slot name="header"></slot>
           </div>
           <div class="cont-arrange__rt-main-long-text" v-if="$slots.longText">
@@ -81,7 +84,7 @@
           </div>
           <div class="cont-arrange__rt-main-box" ref="contMain" v-bind:style="{'height':showContStatus? mainHeight + 30 + 'px':mainHeight>78?'78PX':''}"
           ><!--三元运算方法意思：高度不超过78PX也就是三行，不设置高度，高度自适应。如果超过78PX，则设置高度为78PX，显示'显示内容'组件。-->
-            <slot  name="main"></slot>
+            <slot  name="main"></slot>           
           </div>
           <div ref="contControl" v-show="mainHeight > 78" class="cont-block-control" :class="showBottomStatus?'is-bottom-out':''" @click="showCont" >
             <p>

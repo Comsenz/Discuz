@@ -150,6 +150,11 @@ class ForumSettingSerializer extends AbstractSerializer
                 'initialized_pay_password' => (bool)$this->actor->pay_password,  // 是否初始化支付密码
                 'can_invite_user_scale' => $this->actor->can('other.canInviteUserScale'),
             ],
+
+            'lbs' => [
+                'lbs' => (bool) $this->settings->get('lbs', 'lbs'),         // 位置服务开关
+                'qq_lbs_key' => $this->settings->get('qq_lbs_key', 'lbs'),  // 腾讯位置服务 key
+            ]
         ];
 
         // 站点开关 - 满足条件返回
