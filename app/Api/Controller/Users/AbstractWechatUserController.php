@@ -20,8 +20,8 @@ namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\TokenSerializer;
 use App\Api\Serializer\UserProfileSerializer;
-use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\AutoRegisterUser;
+use App\Commands\Users\GenJwtToken;
 use App\Events\Users\Logind;
 use App\Exceptions\NoUserException;
 use App\MessageTemplate\Wechat\WechatRegisterMessage;
@@ -31,15 +31,15 @@ use App\Notifications\System;
 use App\Settings\SettingsRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Contracts\Socialite\Factory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Contracts\Events\Dispatcher as Events;
+use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Discuz\Contracts\Socialite\Factory;
-use Illuminate\Contracts\Validation\Factory as ValidationFactory;
-use Illuminate\Contracts\Events\Dispatcher as Events;
 
 abstract class AbstractWechatUserController extends AbstractResourceController
 {
@@ -149,6 +149,20 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
             if ($response->getStatusCode() === 200) {
                 $this->events->dispatch(new Logind($wechatUser->user));
+            }
+
+            $accessToken = json_decode($response->getBody());
+            if (Arr::has($request->getQueryParams(), 'session_token')) {
+                $sessionToken = Arr::get($request->getQueryParams(), 'session_token');
+                $token = SessionToken::query()->where('token', $sessionToken)->first();
+                if (!empty($token)) {
+                    /** @var SessionToken $token */
+                    $token->payload = $accessToken;
+                    $token->save();
+                    $accessToken->pc_login = true;
+                } else {
+                    $accessToken->pc_login = false;
+                }
             }
 
             return json_decode($response->getBody());
