@@ -33,7 +33,7 @@ export default {
       reportList: [],         // 举报列表数据
       submitForm:[],          // 操作表单
       pageData: {
-        pageSize: 2,          // 每页显示数
+        pageSize: 10,          // 每页显示数
         pageCount: 1,         // 总页数
         pageNumber: 1,        //当前页
         pageTotal: 1,         // 举报列表总条数
