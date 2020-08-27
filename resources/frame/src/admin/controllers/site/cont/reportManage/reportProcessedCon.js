@@ -28,10 +28,10 @@ export default {
         status: 0,             //是否已处理 0 否 1 是
       },
       reportTypeData: [ 
-        {
-          name: '个人主页',
-          id: 0
-        },
+        // {
+        //   name: '个人主页',
+        //   id: 0
+        // },
         {
           name: '主题',
           id: 1
