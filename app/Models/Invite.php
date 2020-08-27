@@ -19,6 +19,7 @@
 namespace App\Models;
 
 use App\Events\Invite\Created;
+use App\Hashids\Hashids;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -50,6 +51,9 @@ class Invite extends Model
     const STATUS_UNUSED = 1;    // 未使用
     const STATUS_USED = 2;      // 已使用
     const STATUS_EXPIRED = 3;   // 已过期
+
+    const INVITE_GROUP_LENGTH = 32; // 邀请指定用户组code码长度
+    const INVITE_SCALE_LENGTH = 16; // 邀请下线code码长度
 
     /**
      * 与模型关联的数据表.
@@ -90,8 +94,6 @@ class Invite extends Model
         'status',
     ];
 
-    public static $encrypt;
-
     /**
      * 模型的「启动」方法.
      *
@@ -100,16 +102,6 @@ class Invite extends Model
     public static function boot()
     {
         parent::boot();
-    }
-
-    /**
-     * Set the encrypt.
-     *
-     * @param $encrypt
-     */
-    public static function setEncrypt($encrypt)
-    {
-        self::$encrypt = $encrypt;
     }
 
     /**
@@ -139,11 +131,12 @@ class Invite extends Model
     public static function lengthByAdmin($code)
     {
         $len = mb_strlen($code, 'utf-8');
-        return $len == 32;
+
+        return $len == self::INVITE_GROUP_LENGTH;
     }
 
     /**
-     * 解密失败
+     * 解密
      *
      * @param $code
      * @return mixed
@@ -152,11 +145,13 @@ class Invite extends Model
     public static function decryptCode($code)
     {
         try {
-            return self::$encrypt->decrypt($code, false);
+            $hashids = new Hashids();
+
+            return $hashids->decrypt($code);
+
         } catch (\Exception $e) {
             throw new \Exception(trans('user.invite_decrypt_code_failed'));
         }
-
     }
 
     /*
