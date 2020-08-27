@@ -140,15 +140,16 @@ class Invite extends Model
      * 解密
      *
      * @param $code
+     * @param $length
      * @return mixed
      * @throws Exception
      */
-    public static function decryptCode($code)
+    public static function decryptCode($code, $length)
     {
         try {
             $hashids = new Hashids();
 
-            return $hashids->decrypt($code);
+            return $hashids->decrypt($code, $length);
 
         } catch (Exception $e) {
             throw new Exception(trans('user.invite_decrypt_code_failed'));

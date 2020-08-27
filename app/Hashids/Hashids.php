@@ -59,11 +59,12 @@ class Hashids extends HashidsClass
      * 解密单个
      *
      * @param $string
+     * @param null $length
      * @return mixed
      */
-    public function decrypt($string)
+    public function decrypt($string, $length = null)
     {
-        $codeArr = self::getInstance()->decode($string);
+        $codeArr = self::getInstance($length)->decode($string);
 
         return array_shift($codeArr);
     }

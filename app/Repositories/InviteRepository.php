@@ -74,10 +74,11 @@ class InviteRepository extends AbstractRepository
 
     /**
      * @param $code
+     * @param null $length
      * @return mixed
      */
-    public function decryptCode($code)
+    public function decryptCode($code, $length = null)
     {
-        return Invite::decryptCode($code);
+        return Invite::decryptCode($code, $length);
     }
 }
