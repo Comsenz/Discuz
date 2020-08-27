@@ -33,7 +33,7 @@ class ClearSessionMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         // 清除过期 session_token
-        SessionToken::where('expired_at', '<', Carbon::now())->delete();
+        SessionToken::query()->where('expired_at', '<', Carbon::now())->delete();
 
         return $handler->handle($request);
     }

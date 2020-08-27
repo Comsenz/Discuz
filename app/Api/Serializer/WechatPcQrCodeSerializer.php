@@ -16,24 +16,29 @@
  * limitations under the License.
  */
 
-namespace App\Events\Users;
+namespace App\Api\Serializer;
 
-use App\Models\User;
+use Discuz\Api\Serializer\AbstractSerializer;
 
-class UserRefreshCount
+class WechatPcQrCodeSerializer extends AbstractSerializer
 {
     /**
-     * The user that will be saved.
-     *
-     * @var User
+     * {@inheritdoc}
      */
-    public $user;
+    protected $type = 'wechat_pc_code';
 
     /**
-     * @param User $user The user that will be saved.
+     * {@inheritdoc}
      */
-    public function __construct(User $user)
+    protected function getDefaultAttributes($model)
     {
-        $this->user = $user;
+        return [
+            'base64_img' => $model['base64_img'],
+        ];
+    }
+
+    public function getId($model)
+    {
+        return 1;
     }
 }

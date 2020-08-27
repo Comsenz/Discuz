@@ -92,6 +92,8 @@ $route->get('/oauth/wechat/qy', 'wechat.qy.login', ApiController\Users\WechatQyL
 $route->get('/oauth/wechat/qy/user', 'wechat.qy.user', ApiController\Users\WechatQyUserController::class);
 $route->get('/oauth/qq', 'qq.login', ApiController\Users\QQLoginController::class);
 $route->get('/oauth/qq/user', 'qq.user', ApiController\Users\QQUserController::class);
+$route->get('/oauth/wechat/pc/qrcode', 'wechat.pc.qrcode', ApiController\Users\WechatPcQrCodeController::class);
+$route->get('/oauth/wechat/pc/login/{session_token}', 'wechat.pc.login', ApiController\Users\WechatPcLoginController::class);
 
 /*
 |--------------------------------------------------------------------------

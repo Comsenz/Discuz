@@ -32,7 +32,6 @@ use App\MessageTemplate\PostMessage;
 use App\MessageTemplate\RepliedMessage;
 use App\MessageTemplate\Wechat\WechatPostMessage;
 use App\MessageTemplate\Wechat\WechatRepliedMessage;
-use App\Models\Attachment;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
@@ -48,6 +47,7 @@ use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class PostListener
 {
@@ -159,42 +159,11 @@ class PostListener
     }
 
     /**
-     * 绑定附件 & 刷新被回复数
-     *
      * @param Saved $event
-     * @throws PermissionDeniedException
      */
     public function whenPostWasSaved(Saved $event)
     {
         $post = $event->post;
-        $actor = $event->actor;
-
-        // 绑定附件
-        $BlocksParser = new BlocksParser($post->content, $post);
-        $ids = array_merge($BlocksParser->BlocksValue('attachment'), $BlocksParser->BlocksValue('image'));
-        if ($ids) {
-            if (! $post->wasRecentlyCreated) {
-                $this->assertCan($actor, 'edit', $post);
-            }
-
-            // 是否存在未审核的附件
-            $unapprovedAttachment = Attachment::query()
-                ->where('is_approved', Post::UNAPPROVED)
-                ->where('user_id', $actor->id)
-                ->whereIn('id', $ids)
-                ->exists();
-
-            if ($unapprovedAttachment) {
-                $post->is_approved = Post::UNAPPROVED;
-                $post->save();
-            }
-
-            Attachment::query()
-                ->where('user_id', $actor->id)
-                ->where('type_id', 0)
-                ->whereIn('id', $ids)
-                ->update(['type_id' => $post->id]);
-        }
 
         // 刷新主题回复数、最后一条回复
         $thread = $post->thread;

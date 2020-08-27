@@ -52,6 +52,9 @@ class UserRepository implements UserRepositoryInterface
      */
     public function getUserEntityByUserCredentials($username, $password, $grantType, ClientEntityInterface $clientEntity)
     {
+        // 将名字中的空白字符替换为空
+        $username = preg_replace('/\s/ui', '', $username);
+
         $user = $this->users->findByIdentification(compact('username'));
 
         if (! $user && ! $user = $this->users->findByIdentification(['mobile'=>$username])) {

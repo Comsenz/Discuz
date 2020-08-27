@@ -16,30 +16,32 @@
  * limitations under the License.
  */
 
-namespace App\Providers;
+use Discuz\Database\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-use App\Listeners\Post\PostListener;
-use App\Policies\PostPolicy;
-use Discuz\Foundation\AbstractServiceProvider;
-
-class PostServiceProvider extends AbstractServiceProvider
+class AddAddressToThreads extends Migration
 {
     /**
-     * {@inheritdoc}
+     * Run the migrations.
+     *
+     * @return void
      */
-    public function register()
+    public function up()
     {
+        $this->schema()->table('threads', function (Blueprint $table) {
+            $table->string('address', 100)->after('latitude')->comment('地址');
+        });
     }
 
     /**
+     * Reverse the migrations.
+     *
      * @return void
      */
-    public function boot()
+    public function down()
     {
-        $events = $this->app->make('events');
-
-        $events->subscribe(PostListener::class);
-        $events->subscribe(PostPolicy::class);
-        $events->subscribe(PostAttachment::class);
+        $this->schema()->table('threads', function (Blueprint $table) {
+            $table->dropColumn('address');
+        });
     }
 }

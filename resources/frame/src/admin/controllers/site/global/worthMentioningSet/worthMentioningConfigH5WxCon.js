@@ -13,7 +13,7 @@ export default {
       closeVideo: false,
       typeCopywriting: {
         wx_offiaccount: {
-          title: '公众号接口配置',
+          title: '公众号配置',
           appIdDescription: '填写申请公众号后，你获得的APPID ',
           appSecretDescription: '填写申请公众号后，你获得的App secret',
           serverUrl:'服务器地址URL',

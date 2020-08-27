@@ -49,6 +49,7 @@ use Illuminate\Support\Stringable;
  * @property int $rewarded_count
  * @property float $longitude
  * @property float $latitude
+ * @property string $address
  * @property string $location
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -176,11 +177,11 @@ class Thread extends Model
      *
      * @param int $substr
      * @return Stringable|string
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function getContentByType($substr = 0)
     {
-        $special = app()->make(SpecialCharServer::class);
+        $special = app(SpecialCharServer::class);
+
         //存在标题取标题
         if ($this->title) {
             $content = $substr ? Str::of($this->title)->substr(0, $substr) : $this->title;
@@ -416,7 +417,7 @@ class Thread extends Model
      * Set the user for which the state relationship should be loaded.
      *
      * @param User $user
-     * @param Collection $threads
+     * @param Collection|null $threads
      */
     public static function setStateUser(User $user, Collection $threads = null)
     {
