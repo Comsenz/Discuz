@@ -9,12 +9,12 @@
     <!-- 内容发布权限 -->
     <div v-show="activeTab.name === 'publish'">
       <Card>
-        <CardRow description="允许发布文本">
+        <CardRow description="允许发布文字">
           <el-checkbox
             v-model="checked"
             label="createThread"
             :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
-          >发布文本</el-checkbox>
+          >发布文字</el-checkbox>
         </CardRow>
       </Card>
 
@@ -29,16 +29,6 @@
       </Card>
 
       <Card>
-        <CardRow description="允许发布视频">
-          <el-checkbox
-            v-model="checked"
-            label="createThreadVideo"
-            :disabled="videoDisabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
-          >发布视频</el-checkbox>
-        </CardRow>
-      </Card>
-
-      <Card>
         <CardRow description="允许发布图片">
           <el-checkbox
             v-model="checked"
@@ -48,6 +38,16 @@
         </CardRow>
       </Card>
 
+
+      <Card>
+        <CardRow description="允许发布视频">
+          <el-checkbox
+            v-model="checked"
+            label="createThreadVideo"
+            :disabled="videoDisabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+          >发布视频</el-checkbox>
+        </CardRow>
+      </Card>
       <Card>
         <CardRow description="允许发布私信">
           <el-checkbox
