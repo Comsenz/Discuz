@@ -28,7 +28,7 @@ class Hashids extends HashidsClass
 {
     private static $instance = null;
 
-    public static function getInstance($length = null)
+    public static function getInstance($length = 0)
     {
         if (is_null(self::$instance)) {
             // 用 app.key 作为加密盐
@@ -36,7 +36,7 @@ class Hashids extends HashidsClass
         }
 
         // 验证长度是否改变，重新实例
-        if (!is_null($length) && self::$instance->minHashLength != $length) {
+        if (!$length && self::$instance->minHashLength != $length) {
             self::$instance = new self(config('app.key'), $length);
         }
 
@@ -47,10 +47,10 @@ class Hashids extends HashidsClass
      * 加密单个
      *
      * @param $string
-     * @param null $length
+     * @param int $length
      * @return mixed
      */
-    public function encrypt($string, $length = null)
+    public function encrypt($string, $length = 0)
     {
         return self::getInstance($length)->encode($string);
     }
@@ -59,10 +59,10 @@ class Hashids extends HashidsClass
      * 解密单个
      *
      * @param $string
-     * @param null $length
+     * @param int $length
      * @return mixed
      */
-    public function decrypt($string, $length = null)
+    public function decrypt($string, $length = 0)
     {
         $codeArr = self::getInstance($length)->decode($string);
 

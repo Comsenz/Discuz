@@ -140,11 +140,11 @@ class Invite extends Model
      * 解密
      *
      * @param $code
-     * @param $length
+     * @param int $length
      * @return mixed
      * @throws Exception
      */
-    public static function decryptCode($code, $length)
+    public static function decryptCode($code, $length = 0)
     {
         try {
             $hashids = new Hashids();
