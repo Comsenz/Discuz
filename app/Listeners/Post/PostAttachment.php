@@ -18,6 +18,7 @@
 
 namespace App\Listeners\Post;
 
+use App\BlockEditor\BlocksParser;
 use App\Commands\Attachment\DeleteAttachment;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
@@ -105,47 +106,11 @@ class PostAttachment
     public function whenPostWasSaved(Saved $event)
     {
         $post = $event->post;
-
         $actor = $event->actor;
-
-        // 绑定附件
-        $BlocksParser = new BlocksParser($post->content, $post);
-        $ids = array_merge($BlocksParser->BlocksValue('attachment'), $BlocksParser->BlocksValue('image'));
-        if ($ids) {
-            if (! $post->wasRecentlyCreated) {
-                $this->assertCan($actor, 'edit', $post);
-            }
-
-            // 是否存在未审核的附件
-            $unapprovedAttachment = Attachment::query()
-                ->where('is_approved', Post::UNAPPROVED)
-                ->where('user_id', $actor->id)
-                ->whereIn('id', $ids)
-                ->exists();
-
-            if ($unapprovedAttachment) {
-                $post->is_approved = Post::UNAPPROVED;
-                $post->save();
-            }
-
-            Attachment::query()
-                ->where('user_id', $actor->id)
-                ->where('type_id', 0)
-                ->whereIn('id', $ids)
-                ->update(['type_id' => $post->id]);
-        }
-
-
-        》》》》》》》》》》
-        $actor = $event->actor;
-
-        // 请求中未传附件不处理
-        if (! Arr::has($event->data, 'relationships.attachments.data')) {
-            return;
-        }
 
         // 请求中的附件，修改帖子附件时，传要保留的附件及新的附件，未保留的将被删除
-        $ids = array_column(Arr::get($event->data, 'relationships.attachments.data'), 'id');
+        $BlocksParser = new BlocksParser($post->content, $post);
+        $ids = array_merge($BlocksParser->BlocksValue('attachment'), $BlocksParser->BlocksValue('image'));
 
         if ($post->wasRecentlyCreated) {
             // 未绑定的的附件
