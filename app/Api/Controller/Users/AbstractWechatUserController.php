@@ -165,7 +165,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                 }
             }
 
-            return json_decode($response->getBody());
+            return $accessToken;
         }
 
         $this->error($wxuser, $actor, $wechatUser);
