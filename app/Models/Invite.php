@@ -24,6 +24,7 @@ use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Exception;
 
 /**
  * @property int $id
@@ -140,7 +141,7 @@ class Invite extends Model
      *
      * @param $code
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public static function decryptCode($code)
     {
@@ -149,8 +150,8 @@ class Invite extends Model
 
             return $hashids->decrypt($code);
 
-        } catch (\Exception $e) {
-            throw new \Exception(trans('user.invite_decrypt_code_failed'));
+        } catch (Exception $e) {
+            throw new Exception(trans('user.invite_decrypt_code_failed'));
         }
     }
 
