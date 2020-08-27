@@ -29,6 +29,7 @@ use App\Models\Group;
 use App\Models\GroupPaidUser;
 use App\Models\UserActionLogs;
 use App\Models\User;
+use App\Models\UserWechat;
 use App\Notifications\System;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
@@ -167,6 +168,11 @@ class UpdateUser
             $this->assertCan($this->actor, 'edit.status', $user);
             $status = Arr::get($attributes, 'status');
             $user->changeStatus($status);
+
+            // 禁用、拒审时清理微信绑定关系
+            if ($status == 1 || $status == 3) {
+                UserWechat::query()->where('user_id', $user->id)->delete();
+            }
 
             // 记录用户状态操作日志
             $logMsg = Arr::get($attributes, 'refuse_message', ''); // 拒绝原因
