@@ -87,7 +87,7 @@ class InviteBind
                 }
             }
         } else {
-            $fromUserId = $this->InviteRepository->decryptCode($code, Invite::INVITE_SCALE_LENGTH); // 邀请人
+            $fromUserId = $code; // 邀请人userID
             $toUserId = $event->user->id; // 受邀人
 
             // 保持数据一致性

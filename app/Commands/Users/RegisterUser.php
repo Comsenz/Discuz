@@ -85,7 +85,7 @@ class RegisterUser
                     throw new DecryptException(trans('user.register_decrypt_code_failed'));
                 }
             } else {
-                if (!$exists = User::query()->find(Invite::decryptCode($code, Invite::INVITE_SCALE_LENGTH))->exists()) {
+                if (!$exists = User::query()->find($code)->exists()) {
                     throw new DecryptException(trans('user.register_decrypt_code_failed'));
                 }
             }

@@ -21,7 +21,6 @@ namespace App\Api\Controller\Invite;
 use App\Api\Serializer\InviteSerializer;
 use App\Api\Serializer\UserInviteSerializer;
 use App\Models\Group;
-use App\Models\Invite;
 use App\Models\User;
 use App\Repositories\InviteRepository;
 use Discuz\Api\Controller\AbstractResourceController;
@@ -75,8 +74,7 @@ class ResourceInviteController extends AbstractResourceController
                 ->where('code', $code)
                 ->firstOrFail();
         } else {
-            $user_id = $this->inviteRepository->decryptCode($code, Invite::INVITE_SCALE_LENGTH);
-            $result = User::query()->find($user_id);
+            $result = User::query()->find($code);
 
             // 查询站点默认用户组
             $groupQuery = Group::query()->where('default', 1);

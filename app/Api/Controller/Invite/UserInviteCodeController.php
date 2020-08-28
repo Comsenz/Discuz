@@ -19,8 +19,6 @@
 namespace App\Api\Controller\Invite;
 
 use App\Exceptions\NoUserException;
-use App\Hashids\Hashids;
-use App\Models\Invite;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Http\DiscuzResponseFactory;
 use Psr\Http\Message\ServerRequestInterface;
@@ -30,16 +28,6 @@ use Psr\Http\Message\ResponseInterface;
 class UserInviteCodeController implements RequestHandlerInterface
 {
     use AssertPermissionTrait;
-
-    /**
-     * @var Hashids
-     */
-    protected $hashids;
-
-    public function __construct(Hashids $hashids)
-    {
-        $this->hashids = $hashids;
-    }
 
     /**
      * @param ServerRequestInterface $request
@@ -56,12 +44,10 @@ class UserInviteCodeController implements RequestHandlerInterface
             throw new NoUserException();
         }
 
-        $code = $this->hashids->encrypt($actor->id, Invite::INVITE_SCALE_LENGTH);
-
         $data = [
             'data' => [
                 'type' => 'invite',
-                'code' => $code
+                'code' => $actor->id
             ],
         ];
 

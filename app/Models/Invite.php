@@ -19,12 +19,10 @@
 namespace App\Models;
 
 use App\Events\Invite\Created;
-use App\Hashids\Hashids;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Exception;
 
 /**
  * @property int $id
@@ -54,7 +52,6 @@ class Invite extends Model
     const STATUS_EXPIRED = 3;   // 已过期
 
     const INVITE_GROUP_LENGTH = 32; // 邀请指定用户组code码长度
-    const INVITE_SCALE_LENGTH = 16; // 邀请下线code码长度
 
     /**
      * 与模型关联的数据表.
@@ -134,26 +131,6 @@ class Invite extends Model
         $len = mb_strlen($code, 'utf-8');
 
         return $len == self::INVITE_GROUP_LENGTH;
-    }
-
-    /**
-     * 解密
-     *
-     * @param $code
-     * @param int $length
-     * @return mixed
-     * @throws Exception
-     */
-    public static function decryptCode($code, $length = 0)
-    {
-        try {
-            $hashids = new Hashids();
-
-            return $hashids->decrypt($code, $length);
-
-        } catch (Exception $e) {
-            throw new Exception(trans('user.invite_decrypt_code_failed'));
-        }
     }
 
     /*
