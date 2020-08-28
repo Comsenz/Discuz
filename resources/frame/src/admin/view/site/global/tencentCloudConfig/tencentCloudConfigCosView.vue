@@ -20,7 +20,7 @@
         </CardRow>
       </Card>
       <Card header="启用签名：">
-        <CardRow description="开启后，附件将使用签名加密方式，每次生成的链接仅5分钟有效">
+        <CardRow description="开启后，请将存储桶访问权限改为私有读写，此时附件将使用签名加密方式，每次生成的链接仅5分钟有效">
           <el-switch
             v-model="cosSignUrl"
             active-color="#336699"
