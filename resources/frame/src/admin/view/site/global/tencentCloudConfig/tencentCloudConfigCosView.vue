@@ -19,6 +19,15 @@
           <el-input v-model="cosDomainName" clearable></el-input>
         </CardRow>
       </Card>
+      <Card header="启用签名证书：">
+        <CardRow description="开启后，附件将使用签名加密方式，每次生成的链接仅5分钟有效">
+          <el-switch
+            v-model="cosSignUrl"
+            active-color="#336699"
+            inactive-color="#bbbbbb"
+          ></el-switch>
+        </CardRow>
+      </Card>
       <Card class="footer-btn">
         <el-button type="primary" size="medium" @click="submission">提交</el-button>
       </Card>
