@@ -19,7 +19,7 @@
           <el-input v-model="cosDomainName" clearable></el-input>
         </CardRow>
       </Card>
-      <Card header="启用签名证书：">
+      <Card header="启用签名：">
         <CardRow description="开启后，附件将使用签名加密方式，每次生成的链接仅5分钟有效">
           <el-switch
             v-model="cosSignUrl"
