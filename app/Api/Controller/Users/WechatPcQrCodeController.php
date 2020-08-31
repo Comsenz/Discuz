@@ -68,6 +68,7 @@ class WechatPcQrCodeController extends AbstractResourceController
         $baseImg = 'data:image/png;base64,' . base64_encode($binary);
 
         return [
+            'session_token' => $token->token,
             'base64_img' => $baseImg,
         ];
     }

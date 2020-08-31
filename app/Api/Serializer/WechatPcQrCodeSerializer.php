@@ -33,6 +33,7 @@ class WechatPcQrCodeSerializer extends AbstractSerializer
     protected function getDefaultAttributes($model)
     {
         return [
+            'session_token' => $model['session_token'],
             'base64_img' => $model['base64_img'],
         ];
     }

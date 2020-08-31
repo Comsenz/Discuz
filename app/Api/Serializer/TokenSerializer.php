@@ -51,7 +51,7 @@ class TokenSerializer extends AbstractSerializer
             'refresh_token' => $model->refresh_token,
         ];
 
-        if (array_key_exists('pc_login', $model)) {
+        if (property_exists($model, 'pc_login')) {
             $build += ['pc_login' => $model->pc_login];
         }
 
@@ -60,30 +60,11 @@ class TokenSerializer extends AbstractSerializer
 
     public function getId($model)
     {
-        if (array_key_exists('login_get_id', $model)) {
-            if ($model) {
-                return 1;
-            }
+        if (property_exists($model, 'pc_login')) {
+            return 1;
         }
 
         return static::$user->id;
-    }
-
-    public function existsPcLogin($model, $getId = null)
-    {
-        if (array_key_exists('pc_login', $model)) {
-            if (is_null($getId)) {
-                return true;
-            } elseif ($getId === true) {
-
-            } else {
-
-            }
-
-            return true;
-        }
-
-        return false;
     }
 
     public function users($model)
