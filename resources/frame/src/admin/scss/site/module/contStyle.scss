@@ -47,7 +47,7 @@
 
   .cont-manage-header {
     margin-top: 15PX;
-
+    
     &_condition {
       // flex: 1;
       display: flex;
@@ -61,6 +61,7 @@
       }
       .el-input {
         flex: 1;
+        height: 36PX;
       }
       .el-select {
         flex: 1;
@@ -70,6 +71,13 @@
       }
       .el-button {
         margin-left: 15PX;
+      }
+      .el-input__inner {
+        height: 36PX;
+      }
+      .condttions-titles {
+        width: 42PX;
+        margin-right: 8PX;
       }
     }
 
@@ -85,12 +93,13 @@
     }
 
     .cont-manage-header_condition-mid {
-      margin-right: 30PX;
+      // margin-right: 30PX;
     }
 
     .condition-box {
       display: flex;
       margin-bottom: 15PX;
+      justify-content: space-between;
     }
 
     &_middle {
@@ -126,7 +135,6 @@
         border-bottom: 1PX solid $tableBorderColor;
 
         &__title {
-          margin-left: 30PX;
           color: $commentColor;
         }
       }
@@ -141,6 +149,14 @@
         .el-checkbox__label {
           display: none;
         }
+        .el-radio-group {
+          min-width: 30PX;
+          display: flex;
+          flex-direction: column;
+          .el-radio {
+            margin: 12PX 0 0 0;
+          }
+        }
       }
 
       &-long-text {
@@ -149,8 +165,7 @@
       }
 
       &-main {
-        line-height: 20PX;
-
+        line-height: 36PX;
         &__cont-text {
           width: 100%;
           color: $titleColor;
@@ -172,10 +187,30 @@
         &__cont-annex {
           margin-top: 10PX;
         }
+        &-bigbox {
+          line-height: 36PX;
+          display: flex;
+          &-box {
+            display: block;
+            font-size:14PX;
+            font-weight:400;
+            color: #336699; 
+            cursor: pointer;         
+          }
+          &-span {
+            display: block;
+            width: 1PX;
+            height: 16PX;
+            background: #DCDFE6;
+            margin: 10PX 14PX 0 14PX;
+          }
+        }
       }
     }
   }
-
+  // .tables-main {
+  //   height: 66PX;
+  // }
   .cont-manage-operating {
     p {
       padding: 25PX 0 15PX 0;
@@ -194,6 +229,34 @@
       .el-radio__label {
         padding-left: 10PX;
       }
+    }
+    .card-box__main {
+      display: flex;
+    }
+    .cont-manage-operating-all {
+      display: block;
+      line-height: 40PX;
+      font-size:14PX;
+      font-weight:400;
+      color: #336699;
+      margin-left: 20PX;
+      cursor: pointer; 
+    }
+    .operating-alls {
+      margin-left: 40PX;
+    }
+    .cont-manage-operating-box {     
+      display: flex;
+      margin-left: 20PX;
+      .el-checkbox__inner {
+        margin: 13PX 10PX 0 0;
+      }
+      &-sun {
+        font-size: 14PX;
+        color: #303133;
+        font-weight:400;
+        line-height: 40PX;
+      }    
     }
   }
 }
@@ -1162,6 +1225,101 @@
 
     .el-checkbox {
       margin-left: 20PX;
+    }
+  }
+}
+
+/*
+  举报管理
+*/
+.report-manage-box {
+  color: $titleColor;
+
+  .report-manage-header {
+    display: flex;
+    padding: 15PX 0;
+
+    &__section {
+      display: flex;
+      align-items: center;
+      margin-right: 20PX;
+      flex: 1;
+
+      &-title {
+        min-width: 70PX;
+        line-height: 36PX;
+      }
+  
+      .time-title{
+        min-width: 100PX;
+      }
+  
+      &:last-of-type {
+        flex: 0;
+        margin-right: 0;
+      }
+    }
+
+   
+  }
+
+  .report-manage-content {
+    &__header {
+      width: 100%;
+      height: 53PX;
+      background-color: $tableHeaderColor;
+      display: flex;
+      align-items: center;
+      padding-left: 17PX;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      border-bottom: 1PX solid $tableBorderColor;
+
+      &-title {
+        margin-left: 30PX;
+        color: $commentColor;
+      }
+    }
+
+    &__table-side{
+      .el-checkbox__label{
+        display: none;
+      }
+      .el-radio-group {
+        display: flex;
+        flex-direction: column;
+
+        .el-radio {
+          margin-right: 0;
+          margin-bottom: 12PX;
+        }
+      }
+    }
+
+    &__table-footer {
+      display: flex;
+      align-items: center;
+
+      i {
+        height: 16PX;
+        width: 1PX;
+        display: inline-block;
+        background-color: #dcdfe6;
+        margin: 0 14PX;
+      }
+    }
+  }
+
+  .report-manage-footer {
+    padding: 15PX 0;
+    
+    .el-button--primary{
+      margin-right: 40PX;
+    }
+
+    .el-button--text{
+      margin-right: 20PX;
     }
   }
 }

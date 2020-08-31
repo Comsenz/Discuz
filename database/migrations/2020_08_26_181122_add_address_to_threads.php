@@ -16,25 +16,32 @@
  * limitations under the License.
  */
 
-namespace App\Api\Middleware;
+use Discuz\Database\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-use App\Models\SessionToken;
-use Carbon\Carbon;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-
-class ClearSessionMiddleware implements MiddlewareInterface
+class AddAddressToThreads extends Migration
 {
     /**
-     * @inheritDoc
+     * Run the migrations.
+     *
+     * @return void
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    public function up()
     {
-        // 清除过期 session_token
-        SessionToken::query()->where('expired_at', '<', Carbon::now())->delete();
+        $this->schema()->table('threads', function (Blueprint $table) {
+            $table->string('address', 100)->after('latitude')->comment('地址');
+        });
+    }
 
-        return $handler->handle($request);
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        $this->schema()->table('threads', function (Blueprint $table) {
+            $table->dropColumn('address');
+        });
     }
 }

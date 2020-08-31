@@ -18,15 +18,15 @@
 
 namespace App\Api\Controller\Wallet;
 
-use Illuminate\Contracts\Bus\Dispatcher;
 use App\Api\Serializer\UserWalletSerializer;
 use App\Commands\Wallet\UpdateUserWallet;
-use Discuz\Api\Controller\AbstractCreateController;
+use Discuz\Api\Controller\AbstractResourceController;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class UpdateUserWalletController extends AbstractCreateController
+class UpdateUserWalletController extends AbstractResourceController
 {
     /**
      * {@inheritdoc}
@@ -52,19 +52,18 @@ class UpdateUserWalletController extends AbstractCreateController
     {
         $this->bus = $bus;
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // TODO: User $actor 用户模型
         $actor = $request->getAttribute('actor');
 
-        //钱包ID
-        $user_id = (int)Arr::get($request->getQueryParams(), 'user_id');
+        $userId = (int) Arr::get($request->getQueryParams(), 'user_id');
+
         return $this->bus->dispatch(
-            new UpdateUserWallet($user_id, $actor, $request->getParsedBody())
+            new UpdateUserWallet($userId, $actor, $request->getParsedBody())
         );
     }
 }

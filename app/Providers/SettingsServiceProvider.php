@@ -48,7 +48,6 @@ class SettingsServiceProvider extends ServiceProvider
     public function boot()
     {
         Setting::setEncrypt($this->app->make(Encrypter::class));
-        Invite::setEncrypt($this->app->make(Encrypter::class));
 
         // 必须设置完加解密函数之后才能调用
         if ($this->app->isInstall()) {

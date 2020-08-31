@@ -71,13 +71,4 @@ class InviteRepository extends AbstractRepository
     {
         return Invite::lengthByAdmin($code);
     }
-
-    /**
-     * @param $code
-     * @return mixed
-     */
-    public function decryptCode($code)
-    {
-        return Invite::decryptCode($code);
-    }
 }

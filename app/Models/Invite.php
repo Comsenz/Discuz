@@ -51,6 +51,8 @@ class Invite extends Model
     const STATUS_USED = 2;      // 已使用
     const STATUS_EXPIRED = 3;   // 已过期
 
+    const INVITE_GROUP_LENGTH = 32; // 邀请指定用户组code码长度
+
     /**
      * 与模型关联的数据表.
      *
@@ -90,8 +92,6 @@ class Invite extends Model
         'status',
     ];
 
-    public static $encrypt;
-
     /**
      * 模型的「启动」方法.
      *
@@ -100,16 +100,6 @@ class Invite extends Model
     public static function boot()
     {
         parent::boot();
-    }
-
-    /**
-     * Set the encrypt.
-     *
-     * @param $encrypt
-     */
-    public static function setEncrypt($encrypt)
-    {
-        self::$encrypt = $encrypt;
     }
 
     /**
@@ -139,24 +129,8 @@ class Invite extends Model
     public static function lengthByAdmin($code)
     {
         $len = mb_strlen($code, 'utf-8');
-        return $len == 32;
-    }
 
-    /**
-     * 解密失败
-     *
-     * @param $code
-     * @return mixed
-     * @throws \Exception
-     */
-    public static function decryptCode($code)
-    {
-        try {
-            return self::$encrypt->decrypt($code, false);
-        } catch (\Exception $e) {
-            throw new \Exception(trans('user.invite_decrypt_code_failed'));
-        }
-
+        return $len == self::INVITE_GROUP_LENGTH;
     }
 
     /*

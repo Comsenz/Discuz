@@ -162,6 +162,10 @@ class User extends Model
         $user->joined_at = Carbon::now();
         $user->login_at = Carbon::now();
         $user->setPasswordAttribute($user->password);
+
+        // 将名字中的空白字符替换为空
+        $user->username = preg_replace('/\s/ui', '', $user->username);
+
         return $user;
     }
 

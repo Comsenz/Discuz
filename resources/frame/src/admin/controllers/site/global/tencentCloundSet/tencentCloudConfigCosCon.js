@@ -11,7 +11,8 @@ export default {
     return {
       cosName:'',
       cosArea:'',
-      cosDomainName:''
+      cosDomainName:'',
+      cosSignUrl: '',
     }
   },
   methods:{
@@ -41,6 +42,13 @@ export default {
                 "value":this.cosDomainName,
                 "tag": "qcloud",
               }
+            },
+            {
+              "attributes":{
+                "key":'qcloud_cos_sign_url',
+                "value":this.cosSignUrl,
+                "tag": "qcloud",
+              }
             }
           ]
         }
@@ -66,6 +74,7 @@ export default {
           this.cosName = res.readdata._data.qcloud.qcloud_cos_bucket_name;
           this.cosArea = res.readdata._data.qcloud.qcloud_cos_bucket_area;
           this.cosDomainName = res.readdata._data.qcloud.qcloud_cos_cdn_url;
+          this.cosSignUrl = res.readdata._data.qcloud.qcloud_cos_sign_url;
         }
       })
     },
