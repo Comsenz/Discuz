@@ -18,6 +18,7 @@
 
 namespace App\Providers;
 
+use App\Listeners\Post\PostAttachment;
 use App\Listeners\Post\PostListener;
 use App\Policies\PostPolicy;
 use Discuz\Foundation\AbstractServiceProvider;
