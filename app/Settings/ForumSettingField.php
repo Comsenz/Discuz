@@ -240,4 +240,17 @@ class ForumSettingField
             'vertical_spacing' => (int) $this->settings->get('vertical_spacing', 'watermark'),
         ];
     }
+
+    /**
+     * UCenter设置
+     *
+     * @return array
+     */
+    public function getUCenterSettings()
+    {
+        return [
+            'ucenter_url' => $this->settings->get('ucenter_url', 'ucenter'),
+            'uccenter_key' => $this->settings->get('ucenter_key', 'ucenter'),
+        ];
+    }
 }
