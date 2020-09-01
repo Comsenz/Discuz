@@ -20,6 +20,7 @@ namespace App\Listeners\User;
 
 use App\Events\Users\Registered;
 use App\Models\Group;
+use App\Models\Invite;
 use App\Models\User;
 use App\Models\UserDistribution;
 use App\Models\UserFollow;
@@ -86,7 +87,7 @@ class InviteBind
                 }
             }
         } else {
-            $fromUserId = $this->InviteRepository->decryptCode($code); // 邀请人
+            $fromUserId = $code; // 邀请人userID
             $toUserId = $event->user->id; // 受邀人
 
             // 保持数据一致性

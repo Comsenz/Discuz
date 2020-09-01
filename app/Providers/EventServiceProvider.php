@@ -52,7 +52,7 @@ use App\Policies\UserWalletCashPolicy;
 use App\Policies\UserWalletLogsPolicy;
 use App\Policies\UserWalletPolicy;
 use Discuz\Api\Events\ConfigMiddleware;
-use Discuz\Foundation\Suppor\Providers\EventServiceProvider as BaseEventServiceProvider;
+use Discuz\Foundation\Support\Providers\EventServiceProvider as BaseEventServiceProvider;
 use App\Events\DenyUsers\Saved as DenyUserSaved;
 
 class EventServiceProvider extends BaseEventServiceProvider

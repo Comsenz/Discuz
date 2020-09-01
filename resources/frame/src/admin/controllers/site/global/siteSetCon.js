@@ -300,8 +300,8 @@ export default {
           } else {
             this.numberimg[index].imageUrl = data.readdata._data.default.logo;
             this.getScaleImgSize(this.numberimg[index].imageUrl, {
-              width: 120,
-              height: 120
+              width: 140,
+              height: 140
             }).then(res => {
               this.numberimg[index].imgWidht = res.width;
               this.numberimg[index].imgHeight = res.height;

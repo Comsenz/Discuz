@@ -21,21 +21,35 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @method static create(array $array)
- * @method static updateOrCreate(array $array)
- * @method truncate()
- * @method insert(array $array)
+ * @property string $key
+ * @property string $value
+ * @property string $tag
  */
 class Setting extends Model
 {
+    /**
+     * {@inheritdoc}
+     */
     protected $fillable = ['key', 'value', 'tag'];
 
+    /**
+     * {@inheritdoc}
+     */
     protected $primaryKey = ['key', 'tag'];
 
+    /**
+     * {@inheritdoc}
+     */
     protected $keyType = 'string';
 
+    /**
+     * {@inheritdoc}
+     */
     public $incrementing = false;
 
+    /**
+     * {@inheritdoc}
+     */
     public $timestamps = false;
 
     public static $encrypt;
@@ -65,6 +79,7 @@ class Setting extends Model
         'qcloud_captcha_secret_key',
         'qcloud_vod_url_key',
         'offiaccount_server_config_token',
+        'uc_center_key',
     ];
 
     /**
@@ -92,7 +107,6 @@ class Setting extends Model
      *
      * @param $value
      * @return mixed
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function getValueAttribute($value)
     {
@@ -109,7 +123,6 @@ class Setting extends Model
      *
      * @param $key
      * @param $value
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public static function setValue($key, &$value)
     {

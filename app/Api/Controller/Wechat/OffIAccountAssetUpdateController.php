@@ -20,7 +20,7 @@ namespace App\Api\Controller\Wechat;
 
 use App\Api\Serializer\OffIAccountAssetSerializer;
 use App\Validators\OffIAccountAssetUpdateValidator;
-use Discuz\Api\Controller\AbstractCreateController;
+use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Wechat\EasyWechatTrait;
@@ -33,7 +33,7 @@ use Tobscure\JsonApi\Document;
 /**
  * @package App\Api\Controller\Wechat
  */
-class OffIAccountAssetUpdateController extends AbstractCreateController
+class OffIAccountAssetUpdateController extends AbstractResourceController
 {
     use AssertPermissionTrait;
     use EasyWechatTrait;

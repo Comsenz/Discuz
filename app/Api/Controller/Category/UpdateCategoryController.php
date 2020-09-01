@@ -20,13 +20,13 @@ namespace App\Api\Controller\Category;
 
 use App\Api\Serializer\CategorySerializer;
 use App\Commands\Category\EditCategory;
-use Discuz\Api\Controller\AbstractCreateController;
+use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class UpdateCategoryController extends AbstractCreateController
+class UpdateCategoryController extends AbstractResourceController
 {
     /**
      * {@inheritdoc}

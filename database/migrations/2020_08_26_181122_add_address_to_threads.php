@@ -16,27 +16,32 @@
  * limitations under the License.
  */
 
-namespace App\Events\Users;
+use Discuz\Database\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-use App\Models\User;
-
-class UserFollowCount
+class AddAddressToThreads extends Migration
 {
     /**
-     * @var User
+     * Run the migrations.
+     *
+     * @return void
      */
-    public $fromUser;
-
-    public $toUser;
+    public function up()
+    {
+        $this->schema()->table('threads', function (Blueprint $table) {
+            $table->string('address', 100)->after('latitude')->comment('地址');
+        });
+    }
 
     /**
+     * Reverse the migrations.
      *
-     * @param User $fromUser
-     * @param User $toUser
+     * @return void
      */
-    public function __construct(User $fromUser, User $toUser)
+    public function down()
     {
-        $this->fromUser = $fromUser;
-        $this->toUser = $toUser;
+        $this->schema()->table('threads', function (Blueprint $table) {
+            $table->dropColumn('address');
+        });
     }
 }

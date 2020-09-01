@@ -70,7 +70,7 @@ class CreateInvite
 
         $this->assertCan($this->actor, 'createInvite');
 
-        //只有管理员用户组可以邀请管理员
+        // 只有管理员用户组可以邀请管理员
         if (!$this->actor->isAdmin() && Arr::get($this->data, 'attributes.group_id') == Group::ADMINISTRATOR_ID) {
             throw new PermissionDeniedException();
         }
@@ -78,7 +78,7 @@ class CreateInvite
         $invite = Invite::creation([
             'group_id' => Arr::get($this->data, 'attributes.group_id'),
             'type' => Invite::TYPE_ADMIN,
-            'code' => Str::random(32),
+            'code' => Str::random(Invite::INVITE_GROUP_LENGTH),
             'dateline' => Carbon::now()->timestamp,
             'endtime' => Carbon::now()->addDays(7)->timestamp,
             'user_id' => $this->actor->id
