@@ -25,12 +25,19 @@ use Illuminate\Support\Arr;
 
 class AddDefaultGroup
 {
+    /**
+     * 设置默认用户组
+     *
+     * @param Registered $event
+     */
     public function handle(Registered $event)
     {
-        if (!Arr::has($event->data, 'code') || !Invite::lengthByAdmin(Arr::get($event->data, 'code'))) {
-            // 设置默认用户组
-            $defaultGroup = Group::where('default', true)->first();
-            $event->user->groups()->sync($defaultGroup->id);
+        $code = Arr::get($event->data, 'code');
+
+        if (! $code || ! Invite::lengthByAdmin($code)) {
+            $event->user->groups()->sync(
+                Group::query()->where('default', true)->first()
+            );
         }
     }
 }
