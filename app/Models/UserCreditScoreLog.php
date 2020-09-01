@@ -5,6 +5,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property $uid
+ * @property $rid
+ * @method static where($key, $val)
+ * @method static create(array $array)
+ * @method truncate()
+ * Class UserCreditScoreLog
+ * @package App\Models
+ */
 class UserCreditScoreLog extends Model
 {
     /**
@@ -28,14 +37,13 @@ class UserCreditScoreLog extends Model
         'rid'
     ];
 
-    public static function build(array $data)
+    public static function build($uid, $rid)
     {
         $log = new static;
-        $log->attributes = $data;
+        $log->uid = $uid;
+        $log->rid = $rid;
         return $log;
     }
-
-
 
 
 

@@ -30,7 +30,7 @@ $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
 $route->get('/check', 'check', ApiController\CheckController::class);
 $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsController::class);
 
-/*
+/*users
 |--------------------------------------------------------------------------
 | Passport Settings
 |--------------------------------------------------------------------------

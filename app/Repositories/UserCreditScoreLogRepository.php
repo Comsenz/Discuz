@@ -5,33 +5,39 @@ namespace App\Repositories;
 
 use App\Models\UserCreditScoreLog;
 use Discuz\Foundation\AbstractRepository;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserCreditScoreLogRepository extends AbstractRepository
 {
+
+    protected $table;
+
+    public function __construct(UserCreditScoreLog $log)
+    {
+        $this->table = $log;
+    }
+
     /**
-     * Get a new query builder for the posts table.
+     * Get a new query builder for the users table.
      *
-     * @return Model|\Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
-    public static function query()
+    public function query()
     {
         return UserCreditScoreLog::query();
     }
 
-    public static function build(array $data)
+    public function insert($uid, $rid)
     {
-        $log = new static;
-        $log->attributes = $data;
-        return $log;
+        $this->table->uid = $uid;
+        $this->table->rid = $rid;
+        $this->table->saveOrFail();
     }
 
-    public function user()
+    public function save($data)
     {
-        return $this->belongsTo(User::class);
+
     }
-
-
 
 
 }

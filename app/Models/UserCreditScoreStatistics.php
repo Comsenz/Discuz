@@ -3,6 +3,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -38,10 +39,14 @@ class UserCreditScoreStatistics extends Model
         'sum_score'
     ];
 
-    public static function build(array $data)
+    /**
+     * 写入统计数据
+     * @param $uid
+     * @param $sumScore
+     */
+    public static function statics($uid, $sumScore)
     {
         $stat = new static;
-        $stat->attributes = $data;
-        return $stat;
+
     }
 }

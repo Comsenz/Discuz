@@ -18,6 +18,7 @@
 
 namespace App\Providers;
 
+use App\Events\Credit\IncreaseCreditScore;
 use App\Events\Group\Created as GroupCreated;
 use App\Events\Group\Saving as GroupSaving;
 use App\Events\Group\Deleted as GroupDeleted;
@@ -28,6 +29,7 @@ use App\Events\Users\RefreshTokend;
 use App\Events\Users\Registered;
 use App\Events\Users\RegisteredCheck;
 use App\Listeners\AddApiMiddleware;
+use App\Listeners\Credit\IncreaseCreditScoreListener;
 use App\Listeners\DenyUser\DeleteFollow;
 use App\Listeners\Group\ChangeDefaultGroup;
 use App\Listeners\Group\ResetDefaultGroup;
@@ -100,6 +102,9 @@ class EventServiceProvider extends BaseEventServiceProvider
         ],
         PaidGroup::class => [
             PaidGroupOrder::class
+        ],
+        IncreaseCreditScore::class => [
+            IncreaseCreditScoreListener::class
         ]
     ];
 
