@@ -26,8 +26,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @package App\Models
- *
  * @property int $id
  * @property string $name
  * @property string $description
@@ -38,8 +36,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string ip
  * @property Carbon updated_at
  * @property Carbon created_at
- * @method truncate()
- * @method insert(array $array)
  */
 class Category extends Model
 {
