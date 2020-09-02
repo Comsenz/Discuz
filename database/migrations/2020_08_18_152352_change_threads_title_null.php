@@ -24,7 +24,7 @@ class ChangeThreadsTitleNull extends Migration
      */
     public function down()
     {
-        $this->schema()->table('user_wechats', function (Blueprint $table) {
+        $this->schema()->table('threads', function (Blueprint $table) {
             $table->string('title')->default('')->comment('标题')->change();
         });
     }
