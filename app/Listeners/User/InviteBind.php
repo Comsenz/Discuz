@@ -134,7 +134,6 @@ class InviteBind
                 $this->db->commit();
             } catch (Exception $e) {
                 $this->db->rollback();
-                throw new Exception($e->getMessage());
             }
         }
 

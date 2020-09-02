@@ -23,8 +23,10 @@ use App\Commands\Users\GenJwtToken;
 use App\Events\Users\Logind;
 use App\Passport\Repositories\UserRepository;
 use App\User\Bind;
+use App\User\Bound;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Foundation\Application;
+use Exception;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Events\Dispatcher as Events;
 use Illuminate\Support\Arr;
@@ -45,13 +47,24 @@ class LoginController extends AbstractResourceController
 
     protected $validator;
 
+    /**
+     * @var Events
+     */
     protected $events;
 
+    /**
+     * @var Bind $bind
+     */
     protected $bind;
+
+    /**
+     * @var Bound
+     */
+    protected $bound;
 
     public $include = ['users'];
 
-    public function __construct(UserRepository $users, Dispatcher $bus, Application $app, Validator $validator, Events $events, Bind $bind)
+    public function __construct(UserRepository $users, Dispatcher $bus, Application $app, Validator $validator, Events $events, Bind $bind, Bound $bound)
     {
         $this->users = $users;
         $this->bus = $bus;
@@ -59,6 +72,7 @@ class LoginController extends AbstractResourceController
         $this->validator = $validator;
         $this->events = $events;
         $this->bind = $bind;
+        $this->bound = $bound;
     }
 
     /**
@@ -81,15 +95,23 @@ class LoginController extends AbstractResourceController
             new GenJwtToken($data)
         );
 
+        $accessToken = json_decode($response->getBody());
+
         if ($response->getStatusCode() === 200) {
             $user = $this->app->make(UserRepository::class)->getUser();
 
-            //绑定公众号信息
+            // 绑定公众号信息
             if ($token = Arr::get($data, 'token')) {
                 $this->bind->withToken($token, $user);
+
+                // bound
+                if (Arr::has($request->getQueryParams(), 'session_token')) {
+                    $sessionToken = Arr::get($request->getQueryParams(), 'session_token');
+                    $accessToken = $this->bound->pcLogin($sessionToken, $accessToken);
+                }
             }
 
-            //绑定小程序信息
+            // 绑定小程序信息
             $js_code = Arr::get($data, 'js_code');
             $iv = Arr::get($data, 'iv');
             $encryptedData = Arr::get($data, 'encryptedData');
@@ -99,6 +121,7 @@ class LoginController extends AbstractResourceController
 
             $this->events->dispatch(new Logind($user));
         }
-        return json_decode($response->getBody());
+
+        return $accessToken;
     }
 }
