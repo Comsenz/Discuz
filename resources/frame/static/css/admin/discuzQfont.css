@@ -148,6 +148,10 @@
   content: "\e610";
 }
 
+.fuwuhao:before {
+  content: "\e632";
+}
+
 .iconzhifushezhi:before {
   content: "\e611";
 }

@@ -20,7 +20,7 @@ namespace App\Events\Users;
 
 use App\Models\User;
 
-class UserFollowCount
+class UserFollowCreated
 {
     /**
      * @var User

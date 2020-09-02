@@ -13,7 +13,7 @@ export default {
         tag: 'wx_offiaccount',
         description: '用户在微信内使用微信授权登录，需配置服务号',
         status:'',
-        icon:'iconH'
+        icon:'fuwuhao'
       }, {
         name: '小程序配置',
         type:'miniprogram_close',

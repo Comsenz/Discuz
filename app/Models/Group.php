@@ -42,12 +42,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $is_commission
  * @property Collection $users
  * @property Collection $permissions
- * @method truncate()
- * @method first()
- * @method create(array $array)
- * @method insert(array $array)
- * @method static find(mixed $GUEST_ID)
- * @method static where(string $string, int $id)
  */
 class Group extends Model
 {
@@ -165,7 +159,7 @@ class Group extends Model
      * @param string $permission
      * @return bool
      */
-    public function hasPermission($permission)
+    public function hasPermission(string $permission)
     {
         if ($this->id == self::ADMINISTRATOR_ID) {
             return true;

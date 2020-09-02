@@ -7,6 +7,14 @@
       </CardRow>
     </Card>
 
+    <Card header="注册模式：">
+      <CardRow description="开启无感模式后，微信下将自动注册。开启手机号模式后，将优先以手机号的方式注册登录。开启用户名模式后，将优先以用户名的方式注册登录。">
+        <el-radio v-model="register_type" :label="0"> 用户名优先 </el-radio>
+        <el-radio v-model="register_type" :label="1" :disabled="qcloud_sms">手机号优先</el-radio>
+        <el-radio v-model="register_type" :label="2" :disabled="qcloud_wx">无感模式</el-radio>
+      </CardRow>
+    </Card>
+
     <Card header="新用户审核：">
       <CardRow description="设置新注册的用户是否需要审核">
         <el-checkbox v-model="register_validate">新用户注册审核</el-checkbox>
@@ -50,14 +58,14 @@
       </CardRow>
     </Card>
 
-    <Card v-show="register === '1'" v-bind:class="{ fullScreen: registerFull }"> 
+    <Card v-show="register === '1'" v-bind:class="{ fullScreen: registerFull }">
       <CardRow description="用户协议的详细内容 双击输入框可扩大/缩小">
         <el-input
           type="textarea"
           :autosize="{ minRows: 4, maxRows: 4}"
           placeholder="用户协议"
           v-model="register_content"
-          @dblclick.native="changeSize('registerFull')" 
+          @dblclick.native="changeSize('registerFull')"
         ></el-input>
       </CardRow>
     </Card>
@@ -76,7 +84,7 @@
           :autosize="{ minRows: 4, maxRows: 4}"
           placeholder="隐私政策"
           v-model="privacy_content"
-          @dblclick.native="changeSize('privacyFull')" 
+          @dblclick.native="changeSize('privacyFull')"
         ></el-input>
       </CardRow>
     </Card>

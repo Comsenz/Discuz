@@ -105,7 +105,7 @@ class RegisterController extends AbstractCreateController
         if ($mobile = Arr::get($attributes, 'mobile')) {
             $this->bind->mobile($mobile, $user);
         }
-
+        // 注册后的登录检查
         $this->events->dispatch(new RegisteredCheck($user));
 
         $response = $this->bus->dispatch(

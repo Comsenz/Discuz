@@ -18,7 +18,7 @@
 
 namespace App\Commands\Users;
 
-use App\Events\Users\UserFollowCount;
+use App\Events\Users\UserFollowCreated;
 use App\Models\User;
 use App\Models\UserFollow;
 use App\Repositories\UserFollowRepository;
@@ -96,7 +96,7 @@ class DeleteUserFollow
         }
 
         $this->events->dispatch(
-            new UserFollowCount($fromUser, $toUser)
+            new UserFollowCreated($fromUser, $toUser)
         );
 
         return $deleteRes;
