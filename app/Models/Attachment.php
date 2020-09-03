@@ -19,26 +19,30 @@
 namespace App\Models;
 
 use App\Events\Attachment\Created;
-use Discuz\Foundation\EventGeneratorTrait;
+use Carbon\Carbon;
 use Discuz\Database\ScopeVisibilityTrait;
+use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 /**
+ * @property int $id
  * @property string $uuid
  * @property int $user_id
  * @property int $type_id
  * @property int $order
  * @property int $type
- * @property int $is_approved
  * @property int $is_remote
+ * @property int $is_approved
  * @property string $attachment
  * @property string $file_path
  * @property string $file_name
  * @property int $file_size
  * @property string $file_type
  * @property string $ip
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property User $user
  * @property Post $post
  */

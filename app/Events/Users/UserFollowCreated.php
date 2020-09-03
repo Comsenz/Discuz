@@ -16,26 +16,27 @@
  * limitations under the License.
  */
 
-use Illuminate\Database\Seeder;
-use App\Models\Category;
+namespace App\Events\Users;
 
-class CategoriesTableSeeder extends Seeder
+use App\Models\User;
+
+class UserFollowCreated
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * @var User
      */
-    public function run()
+    public $fromUser;
+
+    public $toUser;
+
+    /**
+     *
+     * @param User $fromUser
+     * @param User $toUser
+     */
+    public function __construct(User $fromUser, User $toUser)
     {
-        $category = new Category;
-
-        $category->newQuery()->truncate();
-
-        $category->name = '默认分类';
-        $category->description = '默认分类';
-        $category->ip = '127.0.0.1';
-
-        $category->save();
+        $this->fromUser = $fromUser;
+        $this->toUser = $toUser;
     }
 }

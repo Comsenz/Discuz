@@ -115,6 +115,9 @@ class ListTopicController extends AbstractListController
             $topicIds = $topics->pluck('id');
             $threadTopic = ThreadTopic::query()
                 ->selectRaw(' `topic_id`, MAX(`thread_id`) as thread_id')
+                ->join('threads', 'id', '=', 'thread_id')
+                ->whereNull('deleted_at')
+                ->whereNotNull('threads.user_id')
                 ->whereIn('topic_id', $topicIds)
                 ->groupBy('topic_id')
                 ->get();

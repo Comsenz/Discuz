@@ -44,7 +44,7 @@ class ResourceInviteController extends AbstractResourceController
     /**
      * @var InviteRepository
      */
-    protected $invite;
+    protected $inviteRepository;
 
     /**
      * @var Encrypter
@@ -52,11 +52,11 @@ class ResourceInviteController extends AbstractResourceController
     protected $decrypt;
 
     /**
-     * @param InviteRepository $invite
+     * @param InviteRepository $inviteRepository
      */
-    public function __construct(InviteRepository $invite)
+    public function __construct(InviteRepository $inviteRepository)
     {
-        $this->invite = $invite;
+        $this->inviteRepository = $inviteRepository;
     }
 
     /**
@@ -66,16 +66,15 @@ class ResourceInviteController extends AbstractResourceController
     {
         $code = Arr::get($request->getQueryParams(), 'code');
 
-        if ($this->invite->lengthByAdmin($code)) {
-            $result = $this->invite->query()
+        if ($this->inviteRepository->lengthByAdmin($code)) {
+            $result = $this->inviteRepository->query()
                 ->with(['group.permission' => function ($query) {
                     $query->where('permission', 'not like', 'category%');
                 }])
                 ->where('code', $code)
                 ->firstOrFail();
         } else {
-            $user_id = $this->invite->decryptCode($code);
-            $result = User::query()->find($user_id);
+            $result = User::query()->findOrFail($code);
 
             // 查询站点默认用户组
             $groupQuery = Group::query()->where('default', 1);

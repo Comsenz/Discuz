@@ -19,7 +19,7 @@ export default {
         pageSize: 10,           // 每页显示数
         pageCount: 1,          // 总页数
         pageNumber: 1,         //当前页
-        pageTotal: 1,          // 举报列表总条数
+        pageTotal: 0,          // 举报列表总条数
       },
       searchData: {
         userName: '',          // 举报人用户名
@@ -28,10 +28,10 @@ export default {
         status: 0,             //是否已处理 0 否 1 是
       },
       reportTypeData: [ 
-        {
-          name: '个人主页',
-          id: 0
-        },
+        // {
+        //   name: '个人主页',
+        //   id: 0
+        // },
         {
           name: '主题',
           id: 1

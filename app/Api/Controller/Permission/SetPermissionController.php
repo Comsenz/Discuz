@@ -20,6 +20,7 @@ namespace App\Api\Controller\Permission;
 
 use App\Models\Permission;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
@@ -31,8 +32,9 @@ class SetPermissionController implements RequestHandlerInterface
     use AssertPermissionTrait;
 
     /**
-     * {@inheritdoc}
-     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @throws PermissionDeniedException
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
@@ -42,9 +44,9 @@ class SetPermissionController implements RequestHandlerInterface
         $permission = Arr::get($body, 'permission');
         $groupIds = Arr::get($body, 'groupIds', []);
 
-        Permission::where('permission', $permission)->delete();
+        Permission::query()->where('permission', $permission)->delete();
 
-        Permission::insert(array_map(function ($groupId) use ($permission) {
+        Permission::query()->insert(array_map(function ($groupId) use ($permission) {
             return [
                 'permission' => $permission,
                 'group_id' => $groupId

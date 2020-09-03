@@ -69,13 +69,11 @@ class AttachmentSerializer extends AbstractSerializer
 
         if ($model->is_remote) {
             $url = $this->settings->get('qcloud_cos_sign_url', 'qcloud', true)
-                ? $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addMinutes(5))
+                ? $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addHour())
                 : $this->filesystem->disk('attachment_cos')->url($path);
         } else {
             $url = $this->filesystem->disk('attachment')->url($path);
         }
-
-        $fixWidth = Attachment::FIX_WIDTH;
 
         $attributes = [
             'order'             => $model->order,
@@ -97,9 +95,12 @@ class AttachmentSerializer extends AbstractSerializer
             if ($model->getAttribute('blur')) {
                 $attributes['thumbUrl'] = $url;
             } else {
-                $attributes['thumbUrl'] = $model->is_remote
-                    ? $url . '&imageMogr2/thumbnail/' . $fixWidth . 'x' . $fixWidth
-                    : Str::replaceLast('.', '_thumb.', $url);
+                if ($model->is_remote) {
+                    $attributes['thumbUrl'] = $url . (strpos($url, '?') === false ? '?' : '&')
+                        . 'imageMogr2/thumbnail/' . Attachment::FIX_WIDTH . 'x' . Attachment::FIX_WIDTH;
+                } else {
+                    $attributes['thumbUrl'] = Str::replaceLast('.', '_thumb.', $url);
+                }
             }
         }
 

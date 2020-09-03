@@ -20,13 +20,13 @@ namespace App\Api\Controller\StopWords;
 
 use App\Api\Serializer\StopWordSerializer;
 use App\Commands\StopWord\EditStopWord;
-use Discuz\Api\Controller\AbstractCreateController;
+use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class UpdateStopWordController extends AbstractCreateController
+class UpdateStopWordController extends AbstractResourceController
 {
     /**
      * {@inheritdoc}

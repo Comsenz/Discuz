@@ -20,7 +20,7 @@ namespace App\Commands\Users;
 
 use App\Models\User;
 use App\Models\UserFollow;
-use App\Events\Users\UserFollowCount;
+use App\Events\Users\UserFollowCreated;
 use App\Repositories\UserRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
@@ -85,7 +85,7 @@ class CreateUserFollow
 
 
         $this->events->dispatch(
-            new UserFollowCount($this->actor, $toUser)
+            new UserFollowCreated($this->actor, $toUser)
         );
 
 

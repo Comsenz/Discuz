@@ -44,12 +44,10 @@ class UserInviteCodeController implements RequestHandlerInterface
             throw new NoUserException();
         }
 
-        $encrypter = app('encrypter');
-        $code = $encrypter->encryptString($actor->id);
         $data = [
             'data' => [
                 'type' => 'invite',
-                'code' => $code
+                'code' => $actor->id
             ],
         ];
 

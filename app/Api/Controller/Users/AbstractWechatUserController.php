@@ -20,8 +20,8 @@ namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\TokenSerializer;
 use App\Api\Serializer\UserProfileSerializer;
-use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\AutoRegisterUser;
+use App\Commands\Users\GenJwtToken;
 use App\Events\Users\Logind;
 use App\Exceptions\NoUserException;
 use App\MessageTemplate\Wechat\WechatRegisterMessage;
@@ -29,17 +29,18 @@ use App\Models\SessionToken;
 use App\Models\UserWechat;
 use App\Notifications\System;
 use App\Settings\SettingsRepository;
+use App\User\Bound;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Contracts\Socialite\Factory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Contracts\Events\Dispatcher as Events;
+use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Discuz\Contracts\Socialite\Factory;
-use Illuminate\Contracts\Validation\Factory as ValidationFactory;
-use Illuminate\Contracts\Events\Dispatcher as Events;
 
 abstract class AbstractWechatUserController extends AbstractResourceController
 {
@@ -57,9 +58,11 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
     protected $settings;
 
+    protected $bound;
+
     public $serializer = TokenSerializer::class;
 
-    public function __construct(Factory $socialite, Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events, SettingsRepository $settings)
+    public function __construct(Factory $socialite, Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events, SettingsRepository $settings, Bound $bound)
     {
         $this->socialite = $socialite;
         $this->bus = $bus;
@@ -67,6 +70,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
         $this->validation = $validation;
         $this->events = $events;
         $this->settings = $settings;
+        $this->bound = $bound;
     }
 
     /**
@@ -102,10 +106,10 @@ abstract class AbstractWechatUserController extends AbstractResourceController
         $wechatUser = UserWechat::where($this->getType(), $wxuser->getId())->orWhere('unionid', Arr::get($wxuser->getRaw(), 'unionid'))->first();
 
         if (!$wechatUser || !$wechatUser->user) {
-            //站点关闭
+            // 站点关闭
             $this->assertPermission((bool)$this->settings->get('register_close'));
 
-            //自动注册
+            // 自动注册
             if (Arr::get($request->getQueryParams(), 'register', 0)) {
                 if (!$wechatUser) {
                     $wechatUser = new UserWechat();
@@ -119,8 +123,9 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                     new AutoRegisterUser($request->getAttribute('actor'), $data)
                 );
                 $wechatUser->user_id = $user->id;
-                $wechatUser->save();
+                // 先设置关系，为了同步微信头像
                 $wechatUser->setRelation('user', $user);
+                $wechatUser->save();
 
                 // 判断是否开启了注册审核
                 if (!(bool)$this->settings->get('register_validate')) {
@@ -131,7 +136,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
         }
 
         if ($wechatUser && $wechatUser->user) {
-            //创建 token
+            // 创建 token
             $params = [
                 'username' => $wechatUser->user->username,
                 'password' => ''
@@ -150,7 +155,15 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                 $this->events->dispatch(new Logind($wechatUser->user));
             }
 
-            return json_decode($response->getBody());
+            $accessToken = json_decode($response->getBody());
+
+            // bound
+            if (Arr::has($request->getQueryParams(), 'session_token')) {
+                $sessionToken = Arr::get($request->getQueryParams(), 'session_token');
+                $accessToken = $this->bound->pcLogin($sessionToken, $accessToken);
+            }
+
+            return $accessToken;
         }
 
         $this->error($wxuser, $actor, $wechatUser);

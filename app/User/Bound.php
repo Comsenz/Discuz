@@ -16,25 +16,41 @@
  * limitations under the License.
  */
 
-namespace App\Api\Middleware;
+namespace App\User;
 
 use App\Models\SessionToken;
-use Carbon\Carbon;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
-class ClearSessionMiddleware implements MiddlewareInterface
+/**
+ * 用户绑定后
+ *
+ * Class Bound
+ * @package App\User
+ */
+class Bound
 {
-    /**
-     * @inheritDoc
-     */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    public function __construct()
     {
-        // 清除过期 session_token
-        SessionToken::query()->where('expired_at', '<', Carbon::now())->delete();
+        //
+    }
 
-        return $handler->handle($request);
+    /**
+     * @param $sessionToken
+     * @param $accessToken
+     * @return mixed
+     */
+    public function pcLogin($sessionToken, $accessToken)
+    {
+        $token = SessionToken::query()->where('token', $sessionToken)->first();
+
+        if (!empty($token)) {
+            /** @var SessionToken $token */
+            $token->payload = $accessToken;
+            $token->save();
+            $accessToken->pc_login = true;
+        } else {
+            $accessToken->pc_login = false;
+        }
+
+        return $accessToken;
     }
 }

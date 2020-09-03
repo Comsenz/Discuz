@@ -8,12 +8,12 @@ export default {
       forums: '', // forum数据
       loginStatus:'default',   //default h5 applets pc
       settingStatus: [{
-        name: '公众号接口配置',
+        name: '公众号配置',
         type: 'offiaccount_close',
         tag: 'wx_offiaccount',
         description: '用户在微信内使用微信授权登录，需配置服务号',
         status:'',
-        icon:'iconH'
+        icon:'fuwuhao'
       }, {
         name: '小程序配置',
         type:'miniprogram_close',

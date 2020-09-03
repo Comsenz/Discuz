@@ -263,7 +263,7 @@ class InstallController implements RequestHandlerInterface
         //生成钱包
         UserWallet::createUserWallet($user->id);
 
-        $user->groups()->sync(Group::ADMINISTRATOR_ID);
+        $user->groups()->sync([Group::ADMINISTRATOR_ID]);
     }
 
     private function installAutoLogin($input)

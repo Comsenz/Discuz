@@ -54,13 +54,6 @@ class AttachmentValidator extends AbstractValidator
             ->explode(',')
             ->unique();
         $mimes = $mimes->each(function ($value, $key) use ($mimes) {
-            if ($value == 'mp3') {
-                $mimes[$key] = 'mpga';
-            }
-            if ($value == 'm4a') {
-                $mimes[] = 'mp4';
-                $mimes[] = 'x-m4a';
-            }
             // 无论如何禁止上传 php 文件
             if ($value == 'php') {
                 unset($mimes[$key]);

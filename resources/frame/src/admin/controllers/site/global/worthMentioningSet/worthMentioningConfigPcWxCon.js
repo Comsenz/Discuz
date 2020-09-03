@@ -7,11 +7,11 @@ export default {
     return {
       loginStatus:'default',   //default h5 applets pc
       tableData: [{
-        name: '公众号接口配置',
+        name: '公众号配置',
         type: 'h5',
         description: '用户在微信内使用微信授权登录，需配置服务号',
         status:true,
-        icon:'iconH'
+        icon:'fuwuhao'
       }, {
         name: '小程序微信授权登录',
         type:'applets',
