@@ -33,11 +33,17 @@ class CategoryPolicy extends AbstractPolicy
     /**
      * @param User $actor
      * @param string $ability
+     * @param Category $category
      * @return bool|null
      */
-    public function can(User $actor, $ability)
+    public function can(User $actor, $ability, Category $category)
     {
-        if ($actor->hasPermission('category.' . $ability)) {
+        $permission = [
+            'category.' . $ability,
+            'category' . $category->id . '.' . $ability,
+        ];
+
+        if ($actor->hasPermission($permission, false)) {
             return true;
         }
     }

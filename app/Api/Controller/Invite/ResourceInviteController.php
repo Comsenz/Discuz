@@ -74,7 +74,7 @@ class ResourceInviteController extends AbstractResourceController
                 ->where('code', $code)
                 ->firstOrFail();
         } else {
-            $result = User::query()->find($code);
+            $result = User::query()->findOrFail($code);
 
             // 查询站点默认用户组
             $groupQuery = Group::query()->where('default', 1);

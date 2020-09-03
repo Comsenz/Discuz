@@ -77,8 +77,9 @@ class InviteBind
                 $invite->status = 2;
                 $invite->save();
                 // 同步用户组
-                $defaultGroup = Group::find($invite->group_id);
-                $event->user->groups()->sync($defaultGroup->id);
+                $event->user->groups()->sync(
+                    Group::query()->find($invite->group_id)
+                );
 
                 // 修改付费状态
                 if ($this->settings->get('site_mode') == 'pay') {
@@ -133,7 +134,6 @@ class InviteBind
                 $this->db->commit();
             } catch (Exception $e) {
                 $this->db->rollback();
-                throw new Exception($e->getMessage());
             }
         }
 

@@ -50,20 +50,25 @@ class CreateOrder
     public $data;
 
     /**
-     * @param User $actor 执行操作的用户.
-     * @param Collection $data 请求的数据.
+     * @var Dispatcher
      */
-    public function __construct($actor, Collection $data)
+    public $events;
+
+    /**
+     * @param User $actor
+     * @param Collection $data
+     */
+    public function __construct(User $actor, Collection $data)
     {
         $this->actor = $actor;
         $this->data  = $data;
     }
 
     /**
-     * 执行命令
      * @param Validator $validator
      * @param ConnectionInterface $db
      * @param SettingsRepository $setting
+     * @param Dispatcher $events
      * @return order
      * @throws OrderException
      * @throws ValidationException
@@ -89,7 +94,7 @@ class CreateOrder
         }
 
         $orderType = (int) $this->data->get('type');
-        $order_zero_amout_allowed = false;//是否允许金额为0
+        $order_zero_amount_allowed = false;//是否允许金额为0
         switch ($orderType) {
             // 注册订单
             case Order::ORDER_TYPE_REGISTER:
@@ -166,12 +171,13 @@ class CreateOrder
                 break;
             // 付费用户组
             case Order::ORDER_TYPE_GROUP:
-                $order_zero_amout_allowed = true;
+                $order_zero_amount_allowed = true;
                 $group_id = $this->data->get('group_id');
                 if (in_array($group_id, Group::PRESET_GROUPS)) {
                     throw new OrderException('order_group_forbidden');
                 }
-                $group = Group::find($group_id);
+                /** @var Group $group */
+                $group = Group::query()->find($group_id);
                 if (
                     isset($group->days)
                     && $group->days > 0
@@ -186,10 +192,9 @@ class CreateOrder
                 break;
             default:
                 throw new OrderException('order_type_error');
-                break;
         }
         // 订单金额需检查
-        if (($amount == 0 && !$order_zero_amout_allowed) || $amount < 0) {
+        if (($amount == 0 && ! $order_zero_amount_allowed) || $amount < 0) {
             throw new OrderException('order_amount_error');
         }
 
@@ -221,7 +226,7 @@ class CreateOrder
         // 开始事务
         $db->beginTransaction();
         try {
-            if ($amount == 0 && $order_zero_amout_allowed) {
+            if ($amount == 0 && $order_zero_amount_allowed) {
                 //用户组0付费
                 $order->status = 1;
             }
