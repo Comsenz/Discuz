@@ -250,7 +250,7 @@ class ForumSettingField
     {
         return [
             'ucenter_url' => $this->settings->get('ucenter_url', 'ucenter'),
-            'uccenter_key' => $this->settings->get('ucenter_key', 'ucenter'),
+            'ucenter_key' => $this->settings->get('ucenter_key', 'ucenter'),
         ];
     }
 }
