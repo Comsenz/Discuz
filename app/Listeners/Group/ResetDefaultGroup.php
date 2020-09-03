@@ -27,7 +27,8 @@ class ResetDefaultGroup
     {
         // 如果被删除的是默认用户组，将默认用户组还原为 member group
         if ($event->group->default) {
-            $group = Group::find(Group::MEMBER_ID);
+            /** @var Group $group */
+            $group = Group::query()->find(Group::MEMBER_ID);
 
             $group->default = true;
 

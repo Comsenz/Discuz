@@ -29,6 +29,7 @@ use App\Models\SessionToken;
 use App\Models\UserWechat;
 use App\Notifications\System;
 use App\Settings\SettingsRepository;
+use App\User\Bound;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Contracts\Socialite\Factory;
@@ -57,9 +58,11 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
     protected $settings;
 
+    protected $bound;
+
     public $serializer = TokenSerializer::class;
 
-    public function __construct(Factory $socialite, Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events, SettingsRepository $settings)
+    public function __construct(Factory $socialite, Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events, SettingsRepository $settings, Bound $bound)
     {
         $this->socialite = $socialite;
         $this->bus = $bus;
@@ -67,6 +70,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
         $this->validation = $validation;
         $this->events = $events;
         $this->settings = $settings;
+        $this->bound = $bound;
     }
 
     /**
@@ -102,10 +106,10 @@ abstract class AbstractWechatUserController extends AbstractResourceController
         $wechatUser = UserWechat::where($this->getType(), $wxuser->getId())->orWhere('unionid', Arr::get($wxuser->getRaw(), 'unionid'))->first();
 
         if (!$wechatUser || !$wechatUser->user) {
-            //站点关闭
+            // 站点关闭
             $this->assertPermission((bool)$this->settings->get('register_close'));
 
-            //自动注册
+            // 自动注册
             if (Arr::get($request->getQueryParams(), 'register', 0)) {
                 if (!$wechatUser) {
                     $wechatUser = new UserWechat();
@@ -132,7 +136,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
         }
 
         if ($wechatUser && $wechatUser->user) {
-            //创建 token
+            // 创建 token
             $params = [
                 'username' => $wechatUser->user->username,
                 'password' => ''
@@ -152,17 +156,11 @@ abstract class AbstractWechatUserController extends AbstractResourceController
             }
 
             $accessToken = json_decode($response->getBody());
+
+            // bound
             if (Arr::has($request->getQueryParams(), 'session_token')) {
                 $sessionToken = Arr::get($request->getQueryParams(), 'session_token');
-                $token = SessionToken::query()->where('token', $sessionToken)->first();
-                if (!empty($token)) {
-                    /** @var SessionToken $token */
-                    $token->payload = $accessToken;
-                    $token->save();
-                    $accessToken->pc_login = true;
-                } else {
-                    $accessToken->pc_login = false;
-                }
+                $accessToken = $this->bound->pcLogin($sessionToken, $accessToken);
             }
 
             return $accessToken;

@@ -162,12 +162,6 @@ export default {
       this.getThemeList(1);
     },
 
-    /**
-     * 是否选择推荐
-    */
-   obtainValue(){
-     console.log(this.value);
-   },
 
     /*
     * 请求接口
@@ -202,7 +196,6 @@ export default {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
-          console.log(res,'列表');
           this.themeList = res.readdata;
           this.total = res.meta.total;
           this.pageCount = res.meta.pageCount;
@@ -254,13 +247,11 @@ export default {
      * 推荐事件
     */
     btnrecomment(id,comment){
-      console.log(id, comment, '主题id');
       if(comment) {
         this.recommentNumber = 0;
       } else {
         this.recommentNumber = 1;
       }
-      console.log(this.recommentNumber);
       this.appFetch({
         url: `topics`,
         splice: '/' + id,
@@ -275,7 +266,6 @@ export default {
         }
       })
       .then((res) => {
-        console.log(res);
         if(res.data.attributes.recommended === 0) {
           this.$message.success("推荐成功");
         } else {
@@ -290,7 +280,6 @@ export default {
      */
     allRecomment(num,isds, nums) {
       const whole = isds.join(',');
-      console.log(isds,num);
       this.appFetch({
         url: 'deleteTopics',
         method: "patch",
@@ -321,7 +310,6 @@ export default {
      * 全部选中
     */
     btninformation(res) {
-      console.log(res);
       this.checkedAll = res;
     },
     /**
@@ -330,18 +318,15 @@ export default {
     themidpost(e,res) {
       // console.log(e,res);
       const obj = {type: e, themid: res};
-      console.log(e,res)
       if(this.themeOperations.indexOf(res) === -1) {
         this.themeOperations.push(res);
         this.themeOperation.push({type: e, themid: res});
-        console.log(this.themeOperations,this.themeOperation, '获取的帖子id');
       } else {
         this.themeOperation.forEach((value,index) => {
           if(value.themid == res) {
             this.themeOperation[index].type = e;       
           }
         })
-        console.log(this.themeOperation);
       }
     },
 

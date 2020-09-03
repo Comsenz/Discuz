@@ -20,7 +20,7 @@ namespace App\Listeners\User;
 
 use App\Events\Users\ChangeUserStatus;
 use App\Events\Users\PayPasswordChanged;
-use App\Events\Users\UserFollowCount;
+use App\Events\Users\UserFollowCreated;
 use App\MessageTemplate\StatusMessage;
 use App\MessageTemplate\Wechat\WechatStatusMessage;
 use App\Models\SessionToken;
@@ -32,7 +32,7 @@ class UserListener
     public function subscribe(Dispatcher $events)
     {
         // 刷新用户关注数粉丝数
-        $events->listen(UserFollowCount::class, [$this, 'refreshFollowCount']);
+        $events->listen(UserFollowCreated::class, [$this, 'refreshFollowCount']);
 
         // 通知
         $events->listen(ChangeUserStatus::class, [$this, 'notifications']);
@@ -41,7 +41,7 @@ class UserListener
         $events->listen(PayPasswordChanged::class, [$this, 'payPasswordChanged']);
     }
 
-    public function refreshFollowCount(UserFollowCount $event)
+    public function refreshFollowCount(UserFollowCreated $event)
     {
         //关注人的 关注数
         $event->fromUser->refreshUserFollow();

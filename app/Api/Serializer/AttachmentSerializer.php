@@ -69,7 +69,7 @@ class AttachmentSerializer extends AbstractSerializer
 
         if ($model->is_remote) {
             $url = $this->settings->get('qcloud_cos_sign_url', 'qcloud', true)
-                ? $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addMinutes(5))
+                ? $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addHour())
                 : $this->filesystem->disk('attachment_cos')->url($path);
         } else {
             $url = $this->filesystem->disk('attachment')->url($path);

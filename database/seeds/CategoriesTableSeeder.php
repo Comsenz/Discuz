@@ -28,11 +28,14 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        $category = new Category();
-        $category->truncate();
+        $category = new Category;
+
+        $category->newQuery()->truncate();
+
         $category->name = '默认分类';
         $category->description = '默认分类';
         $category->ip = '127.0.0.1';
+
         $category->save();
     }
 }

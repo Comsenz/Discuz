@@ -43,7 +43,7 @@ export default {
             },
             {
               id: 2,
-              title: "微信设置",
+              title: "第三方登录设置",
               name: "worthMentioningSet",
               icon: "icondisanfangdenglushezhi"
             },

@@ -97,7 +97,7 @@
             v-model="checkAll"
             @change="handleCheckAllChange"
           ></el-checkbox>
-          <p class="cont-manage-theme__table-header__title">{{ topic ? `话题 #${topic.content}#` : ''}} 主题列表</p>
+          <p class="cont-manage-theme__table-header__title" style=" margin-left: 30PX;">{{ topic ? `话题 #${topic.content}#` : ''}} 主题列表</p>
         </div>
 
         <ContArrange
