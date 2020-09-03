@@ -28,7 +28,14 @@ export default {
         description: '用户在PC的网页使用微信扫码登录',
         status:'',
         icon:'iconweixin'
-        }]
+      }, {
+        name: 'UCenter',
+        type: 'ucenter_close',
+        description: '配置UCenter地址以及通信密钥',
+        tag:'ucenter',
+        status: true,
+        icon: 'iconucenter',
+      }]
       // settingStatus:{}
     }
   },
@@ -71,10 +78,17 @@ export default {
     },
 
     configClick(type){
-      this.$router.push({
-        path:'/admin/worth-mentioning-config/h5wx',
-        query: {type:type}
-      });
+      if (type === 'ucenter') {
+        this.$router.push({
+          path:'/admin/worth-mentioning-config/ucenter',
+          query: {type:type}
+        });
+      } else {
+        this.$router.push({
+          path:'/admin/worth-mentioning-config/h5wx',
+          query: {type:type}
+        });
+      }
     },
     //修改配置状态
     loginSetting(index,type,status){
