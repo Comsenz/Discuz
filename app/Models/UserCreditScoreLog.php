@@ -4,10 +4,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property $uid
  * @property $rid
+ * @property $cycle_type
+ * @property $interval_time
+ * @property $reward_num
  * @method static where($key, $val)
  * @method static create(array $array)
  * @method truncate()
@@ -34,17 +38,22 @@ class UserCreditScoreLog extends Model
      */
     protected $fillable = [
         'uid',
-        'rid'
+        'rid',
+        'cycle_type',
+        'interval_time',
+        'reward_num',
+        'score'
     ];
 
-    public static function build($uid, $rid)
+    /**
+     * Define the relationship with the order's owner.
+     *
+     * @return belongsTo
+     */
+    public function rule()
     {
-        $log = new static;
-        $log->uid = $uid;
-        $log->rid = $rid;
-        return $log;
+        return $this->belongsTo(CreditScoreRule::class, 'rid');
     }
-
 
 
 }

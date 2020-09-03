@@ -18,7 +18,7 @@ class CreateUserCreditScoreStatistics extends  Migration
     {
         $this->schema()->create('user_credit_score_statistics', function (Blueprint $table) {
             $table->id()->comment('自增id');
-            $table->unsignedInteger('uid')->default(0)->comment('关联用户id');
+            $table->unsignedInteger('uid')->default(0)->unique()->comment('关联用户id');
             $table->unsignedInteger('sum_score')->default(0)->comment('用户总积分');
             $table->dateTime('created_at')->comment('创建时间');
             $table->dateTime('updated_at')->comment('更新时间');

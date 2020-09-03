@@ -20,6 +20,7 @@ namespace App\Commands\Thread;
 
 use App\Censor\Censor;
 use App\Commands\Post\CreatePost;
+use App\Events\Credit\IncreaseCreditScore;
 use App\Events\Thread\Created;
 use App\Events\Thread\Saving;
 use App\Models\PostMod;
@@ -198,6 +199,10 @@ class CreateThread
         $this->dispatchEventsFor($thread, $this->actor);
 
         $thread->save();
+        /**发帖加积分**/
+        $this->events->dispatch(
+            new IncreaseCreditScore('NEW_TOPIC', $this->actor)
+        );
 
         return $thread;
     }

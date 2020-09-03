@@ -22,7 +22,7 @@ class UserCreditScoreController extends AbstractResourceController
         //当前登录用户信息
         $actor = $request->getAttribute('actor');
 
-        return UserCreditScoreStatistics::where('uid', $actor->id)->first();
+        return UserCreditScoreStatistics::where('uid', 1)->first();
     }
 
 }

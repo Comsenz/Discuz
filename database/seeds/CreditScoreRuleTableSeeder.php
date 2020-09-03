@@ -5,7 +5,7 @@ use Illuminate\Database\Seeder;
 use App\Models\CreditScoreRule;
 use Carbon\Carbon;
 
-class CreditScoreRuleSeeder extends Seeder
+class CreditScoreRuleTableSeeder extends Seeder
 {
 
     /**
