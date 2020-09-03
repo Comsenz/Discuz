@@ -30,6 +30,13 @@ export default {
       })
     },
     submitConfiguration(){
+      if(!this.key) {
+        this.$message({
+          message: 'key不能为空',
+          type: 'error'
+        });
+        return;
+      }
       this.appFetch({
         url:'settings',
         method:'post',
