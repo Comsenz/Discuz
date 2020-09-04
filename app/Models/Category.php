@@ -32,10 +32,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $icon
  * @property int $sort
  * @property int $property
- * @property int thread_count
- * @property string ip
- * @property Carbon updated_at
- * @property Carbon created_at
+ * @property int $thread_count
+ * @property string $moderators
+ * @property string $ip
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class Category extends Model
 {

@@ -6,7 +6,7 @@
           style="width: 100%">
           <el-table-column
             prop="date"
-            label="微信设置类型"
+            label="第三方登录设置类型"
           >
             <template slot-scope="scope">
               <div class="pay-set-type-box">

@@ -1,11 +1,11 @@
-
 import Card from '../../../../view/site/common/card/card';
 import CardRow from '../../../../view/site/common/card/cardRow';
 
 export default {
   data:function () {
     return {
-      key:'',
+      valueKey: '',
+      valueUrl: '',
     }
   },
 
@@ -22,21 +22,16 @@ export default {
         method:'get',
         data:{}
       }).then(data=>{
+        console.log(data);
         if (data.errors){
           this.$message.error(data.errors[0].code);
         }else {
-          this.key = data.data.attributes.lbs.qq_lbs_key;
+          this.valueKey = data.data.attributes.ucenter.ucenter_key;
+          this.valueUrl = data.data.attributes.ucenter.ucenter_url;
         }
       })
     },
     submitConfiguration(){
-      if(!this.key) {
-        this.$message({
-          message: 'key不能为空',
-          type: 'error'
-        });
-        return;
-      }
       this.appFetch({
         url:'settings',
         method:'post',
@@ -44,14 +39,22 @@ export default {
           "data":[
             {
                "attributes":{
-                "key":"qq_lbs_key",
-                "value":this.key,
-                "tag": 'lbs'
+                "key":"ucenter_key",
+                "value":this.valueKey,
+                "tag": 'ucenter'
                }
             },
-           ]
+            {
+              "attributes":{
+               "key":"ucenter_url",
+               "value":this.valueUrl,
+               "tag": 'ucenter'
+              }
+            },
+          ]
         }
       }).then(data=>{
+        console.log(data);
         if (data.errors){
           this.$message.error(data.errors[0].code);
         }else {

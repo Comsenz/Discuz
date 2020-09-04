@@ -38,12 +38,14 @@ class CategoryPolicy extends AbstractPolicy
      */
     public function can(User $actor, $ability, Category $category)
     {
-        $permission = [
-            'category.' . $ability,
-            'category' . $category->id . '.' . $ability,
-        ];
+        if ($actor->hasPermission('category.' . $ability)) {
+            return true;
+        }
 
-        if ($actor->hasPermission($permission, false)) {
+        if (
+            in_array($actor->id, explode(',', $category->moderators))
+            && $actor->hasPermission('category' . $category->id . '.' . $ability)
+        ) {
             return true;
         }
     }
