@@ -114,6 +114,14 @@ class BatchEditCategories
                 if (isset($attributes['property'])) {
                     $category->property = $attributes['property'];
                 }
+
+                if (isset($attributes['moderators'])) {
+                    $category->moderators = User::query()
+                        ->where('status', 0)
+                        ->whereIn('moderators', (array) $attributes['moderators'])
+                        ->pluck('id')
+                        ->join(',');
+                }
             } else {
                 $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
                 continue;
