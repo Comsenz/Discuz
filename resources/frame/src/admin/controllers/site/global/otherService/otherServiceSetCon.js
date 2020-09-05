@@ -6,12 +6,13 @@ export default {
   data:function () {
     return {
       settingStatus:[{
-          name: '腾讯位置服务',
-          type: 'lbs_close',
-          description: '配置KEY后，才可使用腾讯位置的WebServiceAPI服务',
-          tag:'lbs',
-          status:'',
-        }]
+        name: '腾讯位置服务',
+        type: 'lbs_close',
+        description: '配置KEY后，才可使用腾讯位置的WebServiceAPI服务',
+        tag:'lbs',
+        status:'',
+      }],
+      key: '',
     }
   },
   created:function(){
@@ -19,7 +20,6 @@ export default {
   },
   methods:{
     loadStatus(){
-      //初始化登录设置状态
       this.appFetch({
         url:'forum',
         method:'get',
@@ -30,6 +30,7 @@ export default {
           this.$message.error(data.errors[0].code);
         }else {
           const lbsData = data.data.attributes.lbs;
+          this.key = data.data.attributes.lbs.qq_lbs_key;
           if (lbsData.lbs) {
             this.settingStatus[0].status = true;
           } else {
@@ -39,6 +40,10 @@ export default {
       })
     },
     statusSetting(statusVal){
+      if(statusVal && !this.key) {
+        this.$message.error('请先配置key');
+        return;
+      }
       //状态修改
       this.appFetch({
         url:'settings',
