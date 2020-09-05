@@ -37,6 +37,18 @@
                        v-model="scope.row.replyThread"
                        :disabled="!scope.row.viewThreads"></el-checkbox>
         </el-table-column>
+
+        <el-table-column label="编辑内容">
+          <el-checkbox slot-scope="scope"
+                       v-model="scope.row.editThread"
+                       :disabled="!scope.row.viewThreads || scope.row.id =='7'"></el-checkbox>
+        </el-table-column>
+
+        <el-table-column label="删除内容">
+          <el-checkbox slot-scope="scope"
+                       v-model="scope.row.hideThread"
+                       :disabled="!scope.row.viewThreads || scope.row.id =='7'"></el-checkbox>
+        </el-table-column>
       </el-table>
       <Card class="footer-btn">
         <el-button type="primary"

@@ -16,35 +16,32 @@
  * limitations under the License.
  */
 
-namespace App\Providers;
+use Discuz\Database\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-use App\Formatter\Formatter;
-use App\Listeners\Post\PostAttachment;
-use App\Listeners\Post\PostListener;
-use App\Models\Post;
-use App\Policies\PostPolicy;
-use Discuz\Foundation\AbstractServiceProvider;
-
-class PostServiceProvider extends AbstractServiceProvider
+class AddModeratorsToCategories extends Migration
 {
     /**
-     * {@inheritdoc}
+     * Run the migrations.
+     *
+     * @return void
      */
-    public function register()
+    public function up()
     {
+        $this->schema()->table('categories', function (Blueprint $table) {
+            $table->string('moderators', 100)->after('thread_count')->comment('分类版主');
+        });
     }
 
     /**
+     * Reverse the migrations.
+     *
      * @return void
      */
-    public function boot()
+    public function down()
     {
-        Post::setFormatter($this->app->make(Formatter::class));
-
-        $events = $this->app->make('events');
-
-        $events->subscribe(PostListener::class);
-        $events->subscribe(PostPolicy::class);
-        $events->subscribe(PostAttachment::class);
+        $this->schema()->table('categories', function (Blueprint $table) {
+            $table->dropColumn('moderators');
+        });
     }
 }

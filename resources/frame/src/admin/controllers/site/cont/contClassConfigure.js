@@ -54,7 +54,13 @@ export default {
               const replyThread =
                 allPermissions.indexOf(`category${categoryId}.replyThread`) !==
                 -1;
-              const checkAll = viewThreads && createThread && replyThread;
+              const editThread =
+                allPermissions.indexOf(`category${categoryId}.thread.edit`) !==
+                -1;
+              const hideThread =
+                allPermissions.indexOf(`category${categoryId}.thread.hide`) !==
+                -1;
+              const checkAll = viewThreads && createThread && replyThread && editThread && hideThread;
               const isIndeterminate = !checkAll;
 
               this.groupsList.push({
@@ -63,6 +69,8 @@ export default {
                 viewThreads: viewThreads,
                 createThread: createThread,
                 replyThread: replyThread,
+                editThread: editThread,
+                hideThread: hideThread,
                 checkAll: checkAll,
                 isIndeterminate: isIndeterminate
               });
@@ -73,22 +81,26 @@ export default {
     },
     handleCheckAllChange(scope) {
       const flag = scope.row.checkAll;
-      console.log(flag, "flag");
       scope.row.viewThreads = flag;
       scope.row.createThread = flag;
       scope.row.replyThread = flag;
-      console.log(scope);
+      scope.row.editThread = flag;
+      scope.row.hideThread = flag;
     },
     submitClick() {
       const viewThreads = [];
       const createThread = [];
       const replyThread = [];
+      const editThread = [];
+      const hideThread = [];
       const categoryId = this.query.id;
       let error = "";
       this.groupsList.map(item => {
         item.viewThreads && viewThreads.push(item.id);
         item.createThread && createThread.push(item.id);
         item.replyThread && replyThread.push(item.id);
+        item.editThread && editThread.push(item.id);
+        item.hideThread && hideThread.push(item.id);
       });
       console.log(viewThreads, createThread, replyThread);
       this.appFetch({
@@ -121,6 +133,30 @@ export default {
         data: {
           permission: `category${categoryId}.replyThread`,
           groupIds: replyThread
+        }
+      }).then(res => {
+        if (res.errors) {
+          error = res.errors[0].code;
+        }
+      });
+      this.appFetch({
+        url: "setPermission",
+        method: "post",
+        data: {
+          permission: `category${categoryId}.thread.edit`,
+          groupIds: editThread
+        }
+      }).then(res => {
+        if (res.errors) {
+          error = res.errors[0].code;
+        }
+      });
+      this.appFetch({
+        url: "setPermission",
+        method: "post",
+        data: {
+          permission: `category${categoryId}.thread.hide`,
+          groupIds: hideThread
         }
       }).then(res => {
         if (res.errors) {
