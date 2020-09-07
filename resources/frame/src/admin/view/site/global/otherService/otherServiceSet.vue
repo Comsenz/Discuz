@@ -38,7 +38,6 @@
               <el-button
                 size="mini"
                 @click="configClick(scope.row.tag)"
-                v-if="scope.row.status"
               >配置</el-button>
               <el-button
                 v-if="scope.row.status"

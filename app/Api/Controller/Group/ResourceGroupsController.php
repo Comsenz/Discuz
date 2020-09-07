@@ -23,6 +23,7 @@ use App\Repositories\GroupRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class ResourceGroupsController extends AbstractResourceController
 {
@@ -34,10 +35,15 @@ class ResourceGroupsController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
-    public $optionalInclude = ['permission'];
+    public $optionalInclude = [
+        'permission',
+        'categoryPermissions',
+    ];
 
     /**
      * {@inheritdoc}
+     *
+     * @throws InvalidParameterException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -47,9 +53,14 @@ class ResourceGroupsController extends AbstractResourceController
         $query = GroupRepository::query();
 
         if (in_array('permission', $include)) {
-            $query->with(['permission' => function ($query) {
-                $query->where('permission', 'not like', 'category%');
-            }]);
+            // 是否包含分类权限
+            if (in_array('categoryPermissions', $include)) {
+                $query->with(['permission']);
+            } else {
+                $query->with(['permission' => function ($query) {
+                    $query->where('permission', 'not like', 'category%');
+                }]);
+            }
         }
 
         return $query->where('id', $inputs['id'])->first();
