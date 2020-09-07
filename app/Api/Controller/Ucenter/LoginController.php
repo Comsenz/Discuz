@@ -92,7 +92,7 @@ class LoginController extends AbstractResourceController
 
         }
 
-        $ucResult[0] = isset($ucResult[0]) ? $ucResult[0] : '-999';
+        $ucResult[0] = $ucResult ? $ucResult[0] : '-999';
 
         throw new Exception($this->errors[$ucResult[0]]);
     }
