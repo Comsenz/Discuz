@@ -79,6 +79,8 @@ class Thread extends Model
 
     const TYPE_OF_IMAGE = 3;
 
+    const TYPE_OF_AUDIO = 4;
+
     const UNAPPROVED = 0;
 
     const APPROVED = 1;

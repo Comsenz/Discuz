@@ -87,6 +87,7 @@ class CategoryPolicy extends AbstractPolicy
                 'createThreadLong',
                 'createThreadVideo',
                 'createThreadImage',
+                'createThreadAudio',
             ], false)
             && $actor->hasPermission('category'.$category->id.'.viewThreads')
             && $actor->hasPermission('category'.$category->id.'.createThread')

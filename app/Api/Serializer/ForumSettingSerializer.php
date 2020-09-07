@@ -135,6 +135,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'can_create_thread_long' => $this->actor->can('createThreadLong'),
                 'can_create_thread_video' => $this->actor->can('createThreadVideo'),
                 'can_create_thread_image' => $this->actor->can('createThreadImage'),
+                'can_create_thread_audio' => $this->actor->can('createThreadAudio'),
                 'can_create_thread_in_category' => (bool)Category::getIdsWhereCan($this->actor, 'createThread'),
                 'can_create_audio' => $this->actor->can('createAudio'),
                 'can_create_dialog' => $this->actor->can('dialog.create'),

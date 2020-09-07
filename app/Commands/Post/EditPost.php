@@ -121,12 +121,10 @@ class EditPost
         if (isset($attributes['isDeleted'])) {
             $this->assertCan($this->actor, 'hide', $post);
 
-            $message = $attributes['message'] ?? '';
-
             if ($attributes['isDeleted']) {
-                $post->hide($this->actor, ['message' => $message]);
+                $post->hide($this->actor, ['message' => $attributes['message'] ?? '']);
             } else {
-                $post->restore($this->actor, ['message' => $message]);
+                $post->restore($this->actor, ['message' => $attributes['message'] ?? '']);
             }
         }
 
