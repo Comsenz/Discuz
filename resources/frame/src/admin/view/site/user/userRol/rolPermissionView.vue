@@ -341,6 +341,63 @@
         </CardRow>
       </Card>
     </div>
+  <!-- 分类权限 -->
+  <div class="cont-class-box"  v-show="activeTab.name === 'class'">
+    <div class="cont-class-table">
+      <el-table ref="multipleTable"
+                :data="categoriesList"
+                tooltip-effect="dark"
+                style="width: 100%"
+                @selection-change="handleSelectionChange">
+        <el-table-column width="50">
+          <el-checkbox slot-scope="scope"
+                       :id="scope.row.id"
+                       v-model="scope.row.checkAll"
+                       :indeterminate="isIndeterminate"
+                       @change="handleCheckAllChange(scope)"></el-checkbox>
+        </el-table-column>
+
+        <el-table-column label="分类">
+          <template slot-scope="scope">{{ scope.row.name }}</template>
+        </el-table-column>
+
+        <el-table-column label="浏览分类">
+          <el-checkbox slot-scope="scope"
+                       v-model="scope.row.viewThreads"></el-checkbox>
+        </el-table-column>
+
+        <el-table-column label="发表内容">
+          <el-checkbox slot-scope="scope"
+                       v-model="scope.row.createThread"
+                       :disabled="!scope.row.viewThreads"></el-checkbox>
+        </el-table-column>
+
+        <el-table-column label="发表评论">
+          <el-checkbox slot-scope="scope"
+                       v-model="scope.row.replyThread"
+                       :disabled="!scope.row.viewThreads"></el-checkbox>
+        </el-table-column>
+
+        <el-table-column label="编辑内容">
+          <el-checkbox slot-scope="scope"
+                       v-model="scope.row.editThread"
+                       :disabled="!scope.row.viewThreads || scope.row.id =='7'"></el-checkbox>
+        </el-table-column>
+
+        <el-table-column label="删除内容">
+          <el-checkbox slot-scope="scope"
+                       v-model="scope.row.hideThread"
+                       :disabled="!scope.row.viewThreads || scope.row.id =='7'"></el-checkbox>
+        </el-table-column>
+
+        <el-table-column label="加精内容">
+          <el-checkbox slot-scope="scope"
+                       v-model="scope.row.essenceThread"
+                       :disabled="!scope.row.viewThreads || scope.row.id =='7'"></el-checkbox>
+        </el-table-column>
+      </el-table>
+    </div>
+  </div>
     <Card class="footer-btn">
       <el-button type="primary" @click="submitClick" size="medium">提交</el-button>
     </Card>
@@ -350,8 +407,10 @@
 <script>
 import "../../../../scss/site/module/userStyle.scss";
 import rolPermissionCon from "../../../../controllers/site/user/userRol/rolPermissionCon";
+// import '../../../scss/site/module/contStyle.scss';
 export default {
   name: "user-permission-view",
-  ...rolPermissionCon
+  ...rolPermissionCon,
+  // ...contClassConfigure,
 };
 </script>
