@@ -99,7 +99,7 @@ export default {
             },
             {
               id: 9,
-              title: "其它服务设置",
+              title: "其他服务设置",
               name: "otherServiceSet",
               icon: "iconqitafuwushezhi"
             },

@@ -150,7 +150,7 @@ export default {
               ], resolve);
             },
             metaInfo: {
-              title: "其它服务设置",
+              title: "其他服务设置",
               name: "otherServiceSet",
               attribution: "全局",
             }
@@ -162,7 +162,7 @@ export default {
               ], resolve);
             },
             metaInfo: {
-              title: "其它服务设置",
+              title: "其他服务设置",
               name: "otherServiceSet",
               attribution: "全局",
             }

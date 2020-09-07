@@ -6,7 +6,7 @@
         style="width: 100%">
         <el-table-column
           prop="date"
-          label="其它服务设置"
+          label="其他服务设置"
         >
           <template slot-scope="scope">
             <div class="pother-service-set-type-box">
