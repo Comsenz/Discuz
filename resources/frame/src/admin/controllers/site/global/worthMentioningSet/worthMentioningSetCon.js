@@ -28,14 +28,15 @@ export default {
         description: '用户在PC的网页使用微信扫码登录',
         status:'',
         icon:'iconweixin'
-      }, {
-        name: 'UCenter',
-        type: 'ucenter_close',
-        description: '配置UCenter地址以及通信密钥',
-        tag:'ucenter',
-        status: true,
-        icon: 'iconucenter',
-      }]
+      }, // {
+      //   name: 'UCenter',
+      //   type: 'ucenter_close',
+      //   description: '配置UCenter地址以及通信密钥',
+      //   tag:'ucenter',
+      //   status: true,
+      //   icon: 'iconucenter',
+      // }
+    ]
       // settingStatus:{}
     }
   },
