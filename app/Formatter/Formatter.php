@@ -55,6 +55,9 @@ class Formatter extends BaseFormatter
 
         parent::confTopic($configurator);
 
+        $configurator->plugins->load('Litedown');
+        $configurator->plugins->load('PipeTables');
+
         return $configurator;
     }
 
@@ -68,7 +71,7 @@ class Formatter extends BaseFormatter
     {
         $formatter = $this->cache->get('formatter');
 
-        if (!$formatter) {
+        if (! $formatter) {
             $this->cacheFormatter();
 
             $formatter = $this->cache->get('formatter');

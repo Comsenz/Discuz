@@ -59,14 +59,6 @@ class FormatterServiceProvider extends AbstractServiceProvider
             );
         });
 
-        $this->app->singleton(MarkdownFormatter::class, function () {
-            return new MarkdownFormatter(
-                $this->url,
-                $this->cache,
-                $this->app
-            );
-        });
-
         $this->app->singleton(DialogMessageFormatter::class, function () {
             return new DialogMessageFormatter(
                 $this->url,
