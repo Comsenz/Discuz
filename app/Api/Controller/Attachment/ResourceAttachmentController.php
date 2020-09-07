@@ -94,7 +94,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
             $response = $httpClient->get($url);
 
             return DiscuzResponseFactory::FileStreamResponse($response->getBody(), 200, [
-                'Content-Disposition' => 'attachment;filename=' . basename($attachment->file_name),
+                'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
             ]);
         } else {
             $filePath = storage_path('app/attachment/' . $attachment->attachment);
@@ -122,7 +122,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
             }
 
             return DiscuzResponseFactory::FileResponse($filePath, 200, [
-                'Content-Disposition' => 'attachment;filename=' . basename($attachment->file_name),
+                'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
             ]);
         }
     }
