@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $change_desc
  * @property int $order_id
  * @property int $user_wallet_cash_id
+ * @property int $question_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property Order $order
@@ -50,6 +51,12 @@ class UserWalletLog extends Model
     /**
      * 钱包明细类型
      */
+    const TYPE_QUESTION_FREEZE = 7; // 问答冻结
+
+    const TYPE_QUESTION_THAW = 8; // 问答解冻
+
+    const TYPE_QUESTION_RETURN_THAW = 9; // 问答返还解冻
+
     const TYPE_CASH_FREEZE = 10; //提现冻结
 
     const TYPE_CASH_SUCCESS = 11; //提现成功
@@ -66,6 +73,10 @@ class UserWalletLog extends Model
 
     const TYPE_INCOME_SCALE_REWARD  = 33; //分成打赏收入
 
+    const TYPE_INCOME_QUESTION_REWARD  = 35; // 问答答题收入
+
+    const TYPE_INCOME_ONLOOKER_REWARD  = 36; // 问答围观收入
+
     const TYPE_EXPEND_ARTIFICIAL = 50; //人工支出
 
     const TYPE_EXPEND_GROUP      = 51; //加入用户组支出
@@ -81,6 +92,10 @@ class UserWalletLog extends Model
     const TYPE_INCOME_SCALE_THREAD  = 62; //分成付费主题收入
 
     const TYPE_EXPEND_RENEW      = 71; //站点续费支出
+
+    const TYPE_EXPEND_QUESTION = 81; // 问答提问支出
+
+    const TYPE_EXPEND_ONLOOKER = 82; // 问答围观支出
 
     /**
      * 创建钱包动账记录
@@ -103,7 +118,8 @@ class UserWalletLog extends Model
         $change_desc,
         $user_wallet_cash_id = null,
         $order_id = null,
-        $source_user_id = 0
+        $source_user_id = 0,
+        $question_id = 0
     ) {
         $wallet_log                          = new static;
         $wallet_log->user_id                 = $user_id;
@@ -114,6 +130,7 @@ class UserWalletLog extends Model
         $wallet_log->user_wallet_cash_id     = $user_wallet_cash_id;
         $wallet_log->order_id                = $order_id;
         $wallet_log->source_user_id          = $source_user_id;
+        $wallet_log->question_id             = $question_id;
 
         $wallet_log->save();
 
