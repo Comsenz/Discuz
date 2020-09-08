@@ -114,13 +114,12 @@ export default {
       }
 
       if (type === 'ucenter_close') {
-        console.log(index,type,status);
         if (!this.forums.ucenter.ucenter_appid || !this.forums.ucenter.ucenter_key || !this.forums.ucenter.ucenter_url){
           this.$message.error('请先填写配置再开启');
           return;
         }
       }
-      console.log(index,type,status,'这是参数');
+
       if(type == 'offiaccount_close') {
         this.changeSettings('offiaccount_close',status,'wx_offiaccount');
       } else if( type == 'miniprogram_close'){
@@ -133,7 +132,6 @@ export default {
     },
     //修改配置时请求接口
     changeSettings(typeVal,statusVal,TagVal){
-      console.log(typeVal, statusVal, TagVal);
       //登录设置状态修改
       this.appFetch({
         url:'settings',

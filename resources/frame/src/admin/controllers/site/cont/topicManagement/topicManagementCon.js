@@ -161,15 +161,11 @@ export default {
       this.currentPag = 1;
       this.getThemeList(1);
     },
-    obtainValue() {
-      console.log(this.value);
-    },
 
     /*
     * 请求接口
     * */
     getThemeList(pageNumber) {
-      console.log(this.value);
       let searchData = this.searchData;
       this.appFetch({
         url: 'topics',
