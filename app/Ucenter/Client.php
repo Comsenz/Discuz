@@ -82,7 +82,7 @@ class Client
     protected function getHttpClient()
     {
         return $this->httpClient ?? $this->httpClient = new HttpClient([
-                'base_uri' => $this->settings->get('ucenter_url', 'ucenter'), //http://dev.discuz.com/uc_server/',
+                'base_uri' => $this->settings->get('ucenter_url', 'ucenter').'/',
                 'timeout'  =>  15
             ]);
     }
