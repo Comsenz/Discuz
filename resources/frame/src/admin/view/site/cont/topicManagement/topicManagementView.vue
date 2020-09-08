@@ -124,7 +124,7 @@
               <span
                 class="cont-manage-theme__table-main-bigbox-box"
                 @click="btnrecomment(items._data.id, items._data.recommended)"
-              >{{items._data.recommended ? recomment2 : recomment1}}</span>
+              >{{items._data.recommended === 1 ? recomment2 : recomment1}}</span>
               <span class="cont-manage-theme__table-main-bigbox-span"></span>
               <span class="cont-manage-theme__table-main-bigbox-box" @click="deteleTopic(items._data.id)">删除</span>
             </div>

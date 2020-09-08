@@ -72,15 +72,15 @@ export default {
       recomment2: '取消推荐',
       options: [
         {
-          value: true,
+          value: 1,
           label: '是',
         },
         {
-          value: false,
+          value: 0,
           label: '否',
         }
       ],
-      value: false,
+      value: '',
       checkedAll: false,
       recommentNumber: '',
       recommentParams: 'createdAt',
@@ -161,18 +161,16 @@ export default {
       this.currentPag = 1;
       this.getThemeList(1);
     },
-
+    obtainValue() {
+      console.log(this.value);
+    },
 
     /*
     * 请求接口
     * */
     getThemeList(pageNumber) {
+      console.log(this.value);
       let searchData = this.searchData;
-      if(this.value) {
-         this.recommentParams = 'recommended';
-      } else {
-        this.recommentParams = '-createdAt';
-      }
       this.appFetch({
         url: 'topics',
         method: 'get',
@@ -180,9 +178,10 @@ export default {
           include: ['user'],
           'filter[content]':searchData.topicContent,
           'page[number]': pageNumber,
+          'filter[recommended]': this.value,
           'page[size]': searchData.pageSelect,
           'filter[q]': searchData.themeKeyWords,
-          'sort': this.recommentParams,
+          'sort': '-createdAt',
           'filter[username]':searchData.topicAuthor,
           'filter[content]':searchData.topicContent,
           'filter[createdAtBegin]':searchData.releaseTime[0],
