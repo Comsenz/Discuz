@@ -189,6 +189,9 @@ class ListTopicController extends AbstractListController
         if ($viewCountEnd = Arr::get($filter, 'viewCountEnd')) {
             $query->where('topics.view_count', '<=', $viewCountEnd);
         }
+        if (Arr::has($filter, 'recommended')) {
+            $query->where('topics.recommended', (int)Arr::get($filter, 'recommended'));
+        }
 
         foreach ((array) $sort as $field => $order) {
             $query->orderBy(Str::snake($field), $order);
