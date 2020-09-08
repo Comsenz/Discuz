@@ -248,9 +248,9 @@ export default {
     */
     btnrecomment(id,comment){
       if(comment) {
-        this.recommentNumber = 0;
-      } else {
         this.recommentNumber = 1;
+      } else {
+        this.recommentNumber = 0;
       }
       this.appFetch({
         url: `topics`,
@@ -266,7 +266,7 @@ export default {
         }
       })
       .then((res) => {
-        if(res.data.attributes.recommended === 0) {
+        if(res.data.attributes.recommended === 1) {
           this.$message.success("推荐成功");
         } else {
           this.$message.success("取消推荐成功");
@@ -296,7 +296,7 @@ export default {
       })
       .then((res) => {
         if(nums === 1) {
-          if (num === 0) {
+          if (num === 1) {
             this.$message.success("全部推荐成功");
           } else {
             this.$message.success("全部取消推荐成功");
@@ -344,13 +344,13 @@ export default {
         }
       })
       if(this.recommend.length >= 1) {
-        this.allRecomment(0,this.recommend, 2);
+        this.allRecomment(1,this.recommend, 2);
       }
       if(this.detelethem.length >= 1) {
         this.deleteClick(this.detelethem, 2);
       }
       if(this.cancelrecomend.length >= 1) {
-        this.allRecomment(1,this.cancelrecomend, 2);
+        this.allRecomment(0,this.cancelrecomend, 2);
       }
       this.$message.success("提交成功");
       this.radio = [];

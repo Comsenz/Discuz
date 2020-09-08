@@ -95,7 +95,7 @@ export default {
               ], resolve);
             },
             metaInfo: {
-              title: "微第三方登录设置信设置",
+              title: "第三方登录设置",
               name: "worthMentioningSet",
               attribution: "全局"
             }
@@ -107,7 +107,7 @@ export default {
               ], resolve);
             },
             metaInfo: {
-              title: "微第三方登录设置信设置",
+              title: "第三方登录设置",
               name: "otherServiceSet",
               attribution: "全局",
             }

@@ -124,7 +124,7 @@
               <span
                 class="cont-manage-theme__table-main-bigbox-box"
                 @click="btnrecomment(items._data.id, items._data.recommended)"
-              >{{items._data.recommended ? recomment1 : recomment2}}</span>
+              >{{items._data.recommended ? recomment2 : recomment1}}</span>
               <span class="cont-manage-theme__table-main-bigbox-span"></span>
               <span class="cont-manage-theme__table-main-bigbox-box" @click="deteleTopic(items._data.id)">删除</span>
             </div>
@@ -152,8 +152,8 @@
     <div class="cont-manage-operating">
       <Card class="footer-btn">
         <el-button :loading="subLoading" type="primary"  @click="btnSubmit">提交</el-button>
-        <span class="cont-manage-operating-all operating-alls" @click="allRecomment(0,themeListAll, 1)">全部推荐</span>
-        <span class="cont-manage-operating-all" @click="allRecomment(1,themeListAll, 1)">全部取消推荐</span>
+        <span class="cont-manage-operating-all operating-alls" @click="allRecomment(1,themeListAll, 1)">全部推荐</span>
+        <span class="cont-manage-operating-all" @click="allRecomment(0,themeListAll, 1)">全部取消推荐</span>
         <span class="cont-manage-operating-all" @click="deleteClick(themeListAll, 1)">全部删除</span>
         <!-- <el-button @click="deleteClick" :loading="subLoading" type="primary">全部删除</el-button> -->
       </Card>
