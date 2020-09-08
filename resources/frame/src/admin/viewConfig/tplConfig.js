@@ -150,7 +150,7 @@ export default {
               ], resolve);
             },
             metaInfo: {
-              title: "其它服务设置",
+              title: "其他服务设置",
               name: "otherServiceSet",
               attribution: "全局",
             }
@@ -162,7 +162,7 @@ export default {
               ], resolve);
             },
             metaInfo: {
-              title: "其它服务设置",
+              title: "其他服务设置",
               name: "otherServiceSet",
               attribution: "全局",
             }
@@ -343,16 +343,6 @@ export default {
           "cont-class": {
             comLoad: function (resolve) {
               require(["../view/site/cont/contClassView"], resolve);
-            },
-            metaInfo: {
-              title: "内容分类",
-              name: "contClass",
-              attribution: "内容"
-            }
-          },
-          "cont-class-configure": {
-            comLoad: function (resolve) {
-              require(["../view/site/cont/contClassConfigureView"], resolve);
             },
             metaInfo: {
               title: "内容分类",

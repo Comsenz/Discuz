@@ -29,6 +29,7 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
@@ -83,6 +84,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $attachmentId = Arr::get($request->getQueryParams(), 'id');
+        $page = (int)Arr::get($request->getQueryParams(), 'page');
         $actor = $request->getAttribute('actor');
 
         $attachment = $this->getAttachment($attachmentId, $actor);
@@ -91,11 +93,31 @@ class ResourceAttachmentController implements RequestHandlerInterface
             $httpClient = new HttpClient();
             $path = Str::finish($attachment->file_path, '/') . $attachment->attachment;
             $url = $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addHour());
+            if ($page) {
+                $url .= '&ci-process=doc-preview&page='.$page;
+            }
             $response = $httpClient->get($url);
+            if ($response->getStatusCode() == 200) {
+                //下载
+                $header = [
+                    'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
+                ];
 
-            return DiscuzResponseFactory::FileStreamResponse($response->getBody(), 200, [
-                'Content-Disposition' => 'attachment;filename=' . basename($attachment->file_name),
-            ]);
+                //预览
+                if ($page) {
+                    $header = [
+                        'X-Total-Page' => $response->getHeader('X-Total-Page'),
+                        'Content-Type' => $response->getHeader('Content-Type'),
+                    ];
+                }
+                return DiscuzResponseFactory::FileStreamResponse(
+                    $response->getBody(),
+                    200,
+                    $header
+                );
+            } else {
+                throw new ModelNotFoundException();
+            }
         } else {
             $filePath = storage_path('app/attachment/' . $attachment->attachment);
 
@@ -122,7 +144,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
             }
 
             return DiscuzResponseFactory::FileResponse($filePath, 200, [
-                'Content-Disposition' => 'attachment;filename=' . basename($attachment->file_name),
+                'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
             ]);
         }
     }

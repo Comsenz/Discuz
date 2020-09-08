@@ -119,6 +119,7 @@ class Category extends Model
                 'createThreadLong',
                 'createThreadVideo',
                 'createThreadImage',
+                'createThreadAudio',
             ], false);
         } else {
             $hasGlobalPermission = $user->hasPermission($permission);

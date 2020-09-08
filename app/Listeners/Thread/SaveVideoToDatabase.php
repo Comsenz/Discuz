@@ -21,6 +21,7 @@ namespace App\Listeners\Thread;
 use App\Commands\Thread\CreateThreadVideo;
 use App\Events\Thread\Created;
 use App\Models\Thread;
+use App\Models\ThreadVideo;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
@@ -54,12 +55,28 @@ class SaveVideoToDatabase
 
         $fileId = Arr::get($data, 'attributes.file_id', '');
 
-        if ($fileId && $thread->type === Thread::TYPE_OF_VIDEO) {
-            $video = $this->bus->dispatch(
-                new CreateThreadVideo($actor, $thread, $data)
-            );
+        if (! $fileId) {
+            return;
+        }
 
-            $thread->setRelation('threadVideo', $video);
+        switch ($thread->type) {
+            // 视频帖
+            case Thread::TYPE_OF_VIDEO:
+                $video = $this->bus->dispatch(
+                    new CreateThreadVideo($actor, $thread, ThreadVideo::TYPE_OF_VIDEO, $data)
+                );
+
+                $thread->setRelation('threadVideo', $video);
+                break;
+
+            // 语音帖
+            case Thread::TYPE_OF_AUDIO:
+                $audio = $this->bus->dispatch(
+                    new CreateThreadVideo($actor, $thread, ThreadVideo::TYPE_OF_AUDIO, $data)
+                );
+
+                $thread->setRelation('threadAudio', $audio);
+                break;
         }
     }
 }

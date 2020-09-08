@@ -38,6 +38,7 @@ class LoginController extends AbstractResourceController
     protected $bus;
 
     protected $errors = [
+        '-999' => 'uc_connect_error',
         '-1' => 'uc_user_check_username_failed',
         '-2' => 'uc_user_username_badword',
         '-3' => 'uc_user_username_exists',
@@ -68,7 +69,7 @@ class LoginController extends AbstractResourceController
         $answer = Arr::get($attributes, 'answer');
         $ucResult = $this->uc->uc_user_login($username, $password, 0, 1, $questionid, $answer);
 
-        if($ucResult[0] > 0) {
+        if($ucResult && $ucResult[0] > 0) {
             $uc_user = UserUcenter::where('ucenter_id', $ucResult[0])->first();
 
             if(!is_null($uc_user)) {
@@ -90,6 +91,8 @@ class LoginController extends AbstractResourceController
             throw $noUserException;
 
         }
+
+        $ucResult = $ucResult ? $ucResult : [-999];
 
         throw new Exception($this->errors[$ucResult[0]]);
     }

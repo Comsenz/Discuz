@@ -51,7 +51,6 @@ class ThreadVideoRepository extends AbstractRepository
     {
         return $this->query()
             ->where('thread_id', $file_id)
-            ->where('type', ThreadVideo::TYPE_OF_VIDEO)
             ->firstOrFail();
     }
 }
