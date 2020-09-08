@@ -29,6 +29,7 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
@@ -83,6 +84,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $attachmentId = Arr::get($request->getQueryParams(), 'id');
+        $page = (int)Arr::get($request->getQueryParams(), 'page');
         $actor = $request->getAttribute('actor');
 
         $attachment = $this->getAttachment($attachmentId, $actor);
@@ -91,11 +93,28 @@ class ResourceAttachmentController implements RequestHandlerInterface
             $httpClient = new HttpClient();
             $path = Str::finish($attachment->file_path, '/') . $attachment->attachment;
             $url = $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addHour());
+            if ($page) {
+                $url .= 'ci-process=doc-preview&page='.$page;
+            }
             $response = $httpClient->get($url);
-
-            return DiscuzResponseFactory::FileStreamResponse($response->getBody(), 200, [
-                'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
-            ]);
+            if ($response->getStatusCode() == 200) {
+                if ($page) {
+                    return DiscuzResponseFactory::FileStreamResponse(
+                        $response->getBody(),
+                        200,
+                        [
+                            'X-Total-Page' => $response->getHeader('X-Total-Page'),
+                            'Content-Type' => $response->getHeader('Content-Type'),
+                        ]
+                    );
+                } else {
+                    return DiscuzResponseFactory::FileStreamResponse($response->getBody(), 200, [
+                        'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
+                    ]);
+                }
+            } else {
+                throw new ModelNotFoundException();
+            }
         } else {
             $filePath = storage_path('app/attachment/' . $attachment->attachment);
 
