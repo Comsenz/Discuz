@@ -85,7 +85,6 @@ module.exports = {
   noticeList: "/notification/tpl", //通知设置列表
   notification: "/notification/tpl/", //修改系统消息模版[通知设置]
   noticeConfigure: "/notification/tpl/", //通知配置列表,
-  categoriesAll:"/categories", //查看所有分类,
 
   wxPcUrl: "/oauth/wechat/web/user", //获取微信pcUrl
   wxLoginStatus: "/oauth/wechat/web/user/serach", //获取微信扫码用户状态

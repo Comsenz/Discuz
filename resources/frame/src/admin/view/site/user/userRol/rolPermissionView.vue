@@ -3,7 +3,7 @@
     <!-- 设置权限子菜单 -->
     <div class="index-main-con__main-title__class permission__title">
       <i></i>
-      <span v-for="(item,index) in menuData" :key="index" :class="activeTab.name === item.name?'is-active':''"  @click="activeTab = item">{{item.title}}</span>
+      <span v-for="(item,index) in menuData" :key="index" :class="activeTab.name === item.name?'is-active':''" @click="activeTab = item">{{ item.title }}</span>
     </div>
     <Card :header="$router.history.current.query.name + activeTab.title"></Card>
     <!-- 内容发布权限 -->
@@ -18,7 +18,7 @@
         </CardRow>
       </Card>
 
-        <Card>
+      <Card>
         <CardRow description="允许发布帖子">
           <el-checkbox
             v-model="checked"
@@ -163,7 +163,7 @@
           <el-checkbox v-model="checked" label="attachment.view.1">查看图片</el-checkbox>
         </CardRow>
       </Card>-->
-    <!-- $router.history.current.query.id === '7' -->
+      <!-- $router.history.current.query.id === '7' -->
       <Card>
         <CardRow description="查看站点成员列表、搜索成员的权限">
           <el-checkbox
@@ -289,7 +289,7 @@
     </div>
     <!-- 默认权限 -->
     <div v-show="activeTab.name === 'default'">
-        <Card>
+      <Card>
         <CardRow description>
           <p style="margin-left: 24PX">站点信息</p>
         </CardRow>
@@ -324,7 +324,7 @@
           >裂变推广</el-checkbox>
           <el-checkbox
             v-model="is_commission"
-            @change="handlescaleChange"
+            @change="handleScaleChange"
             :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
           >收入分成</el-checkbox>
         </CardRow>
@@ -341,65 +341,83 @@
         </CardRow>
       </Card>
     </div>
-  <!-- 分类权限 -->
-  <div class="cont-class-box"  v-show="activeTab.name === 'class'">
-    <div class="cont-class-table">
-      <el-table ref="multipleTable"
-                :data="categoriesList"
-                tooltip-effect="dark"
-                style="width: 100%"
-                @selection-change="handleSelectionChange">
-        <el-table-column width="50">
-          <el-checkbox slot-scope="scope"
-                       :id="scope.row.id"
-                       v-model="scope.row.checkAll"
-                       :indeterminate="isIndeterminate"
-                       @change="handleCheckAllChange(scope)"></el-checkbox>
-        </el-table-column>
+    <!-- 分类权限 -->
+    <div v-show="activeTab.name === 'category'" class="cont-class-box">
+      <div class="cont-class-table">
+        <el-table ref="multipleTable"
+                  :data="categoriesList"
+                  style="width: 100%"
+                  tooltip-effect="dark">
+          <el-table-column width="50">
+            <el-checkbox :id="scope.row.id"
+                         slot-scope="scope"
+                         v-model="scope.row.checkAll"
+                         :indeterminate="scope.row.isIndeterminate"
+                         @change="handleCheckAllChange(scope.row)">
+            </el-checkbox>
+          </el-table-column>
 
-        <el-table-column label="分类">
-          <template slot-scope="scope">{{ scope.row.name }}</template>
-        </el-table-column>
+          <el-table-column label="分类">
+            <template slot-scope="scope">{{ scope.row.name }}</template>
+          </el-table-column>
 
-        <el-table-column label="浏览分类">
-          <el-checkbox slot-scope="scope"
-                       v-model="scope.row.viewThreads"></el-checkbox>
-        </el-table-column>
+          <el-table-column label="浏览分类">
+            <el-checkbox slot-scope="scope"
+                         v-model="checked"
+                         :label="`category${scope.row.id}.viewThreads`"
+                         @change="handleCheckedCategoryPermissionsChange(scope.row)">{{ '' }}
+            </el-checkbox>
+          </el-table-column>
 
-        <el-table-column label="发表内容">
-          <el-checkbox slot-scope="scope"
-                       v-model="scope.row.createThread"
-                       :disabled="!scope.row.viewThreads"></el-checkbox>
-        </el-table-column>
+          <el-table-column label="发表内容">
+            <el-checkbox slot-scope="scope"
+                         v-model="checked"
+                         :disabled="checked.indexOf(`category${scope.row.id}.viewThreads`) === -1"
+                         :label="`category${scope.row.id}.createThread`"
+                         @change="handleCheckedCategoryPermissionsChange(scope.row)">{{ '' }}
+            </el-checkbox>
+          </el-table-column>
 
-        <el-table-column label="发表评论">
-          <el-checkbox slot-scope="scope"
-                       v-model="scope.row.replyThread"
-                       :disabled="!scope.row.viewThreads"></el-checkbox>
-        </el-table-column>
+          <el-table-column label="发表评论">
+            <el-checkbox slot-scope="scope"
+                         v-model="checked"
+                         :disabled="checked.indexOf(`category${scope.row.id}.viewThreads`) === -1"
+                         :label="`category${scope.row.id}.replyThread`"
+                         @change="handleCheckedCategoryPermissionsChange(scope.row)">{{ '' }}
+            </el-checkbox>
+          </el-table-column>
 
-        <el-table-column label="编辑内容">
-          <el-checkbox slot-scope="scope"
-                       v-model="scope.row.editThread"
-                       :disabled="!scope.row.viewThreads || scope.row.id =='7'"></el-checkbox>
-        </el-table-column>
+          <el-table-column label="编辑内容">
+            <el-checkbox slot-scope="scope"
+                         v-model="checked"
+                         :disabled="checked.indexOf(`category${scope.row.id}.viewThreads`) === -1 || groupId === '7'"
+                         :label="`category${scope.row.id}.thread.edit`"
+                         @change="handleCheckedCategoryPermissionsChange(scope.row)">{{ '' }}
+            </el-checkbox>
+          </el-table-column>
 
-        <el-table-column label="删除内容">
-          <el-checkbox slot-scope="scope"
-                       v-model="scope.row.hideThread"
-                       :disabled="!scope.row.viewThreads || scope.row.id =='7'"></el-checkbox>
-        </el-table-column>
+          <el-table-column label="删除内容">
+            <el-checkbox slot-scope="scope"
+                         v-model="checked"
+                         :disabled="checked.indexOf(`category${scope.row.id}.viewThreads`) === -1 || groupId === '7'"
+                         :label="`category${scope.row.id}.thread.hide`"
+                         @change="handleCheckedCategoryPermissionsChange(scope.row)">{{ '' }}
+            </el-checkbox>
+          </el-table-column>
 
-        <el-table-column label="加精内容">
-          <el-checkbox slot-scope="scope"
-                       v-model="scope.row.essenceThread"
-                       :disabled="!scope.row.viewThreads || scope.row.id =='7'"></el-checkbox>
-        </el-table-column>
-      </el-table>
+          <el-table-column label="加精内容">
+            <el-checkbox slot-scope="scope"
+                         v-model="checked"
+                         :disabled="checked.indexOf(`category${scope.row.id}.viewThreads`) === -1 || groupId === '7'"
+                         :label="`category${scope.row.id}.thread.essence`"
+                         @change="handleCheckedCategoryPermissionsChange(scope.row)">{{ '' }}
+            </el-checkbox>
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
-  </div>
     <Card class="footer-btn">
-      <el-button type="primary" @click="submitClick" size="medium">提交</el-button>
+      <el-button size="medium" type="primary" @click="submitClick">提交</el-button>
     </Card>
   </div>
 </template>
