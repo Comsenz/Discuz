@@ -98,20 +98,23 @@ class ResourceAttachmentController implements RequestHandlerInterface
             }
             $response = $httpClient->get($url);
             if ($response->getStatusCode() == 200) {
+                //下载
+                $header = [
+                    'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
+                ];
+
+                //预览
                 if ($page) {
-                    return DiscuzResponseFactory::FileStreamResponse(
-                        $response->getBody(),
-                        200,
-                        [
-                            'X-Total-Page' => $response->getHeader('X-Total-Page'),
-                            'Content-Type' => $response->getHeader('Content-Type'),
-                        ]
-                    );
-                } else {
-                    return DiscuzResponseFactory::FileStreamResponse($response->getBody(), 200, [
-                        'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
-                    ]);
+                    $header = [
+                        'X-Total-Page' => $response->getHeader('X-Total-Page'),
+                        'Content-Type' => $response->getHeader('Content-Type'),
+                    ];
                 }
+                return DiscuzResponseFactory::FileStreamResponse(
+                    $response->getBody(),
+                    200,
+                    $header
+                );
             } else {
                 throw new ModelNotFoundException();
             }
