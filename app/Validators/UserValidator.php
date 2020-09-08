@@ -117,18 +117,7 @@ class UserValidator extends AbstractValidator
         $rules = [
             'username' => 'required|max:15|unique:users',
             'password' => $this->getPasswordRules(),
-            'pay_password' => [
-                'bail',
-                'sometimes',
-                'required',
-                'confirmed',
-                'digits:6',
-                function ($attribute, $value, $fail) {
-                    if ($this->user && $this->user->checkWalletPayPassword($value)) {
-                        $fail(trans('user.cannot_use_the_same_password'));
-                    }
-                },
-            ],
+            'pay_password' => 'bail|sometimes|required|confirmed|digits:6',
             'pay_password_token' => 'sometimes|required|session_token:reset_pay_password',
             'register_reason' => 'filled|max:50',
             'groupId' => 'required',
