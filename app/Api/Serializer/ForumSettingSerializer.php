@@ -216,7 +216,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 $attributes['watermark'] = $this->forumField->getWatermarkSettings();
 
                 // UCenter设置
-                $attributes['ucenter'] = $this->forumField->getUCenterSettings();
+                $attributes['ucenter'] += $this->forumField->getUCenterSettings();
             }
         }
 
