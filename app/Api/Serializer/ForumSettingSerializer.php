@@ -158,7 +158,7 @@ class ForumSettingSerializer extends AbstractSerializer
             ],
 
             'ucenter' => [
-                'ucenter' => (bool) $this->settings->get('ucenter', 'ucenter'),         // 位置服务开关
+                'ucenter' => (bool) $this->settings->get('ucenter', 'ucenter'),
             ]
         ];
 
