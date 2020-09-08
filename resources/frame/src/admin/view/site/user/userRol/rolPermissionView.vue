@@ -372,7 +372,7 @@
           <el-table-column label="发表内容">
             <el-checkbox slot-scope="scope"
                          v-model="checked"
-                         :disabled="checked.indexOf(`category${scope.row.id}.viewThreads`) === -1"
+                         :disabled="checked.indexOf(`category${scope.row.id}.viewThreads`) === -1 || groupId === '7'"
                          :label="`category${scope.row.id}.createThread`"
                          @change="handleCheckedCategoryPermissionsChange(scope.row)">{{ '' }}
             </el-checkbox>
@@ -381,7 +381,7 @@
           <el-table-column label="发表评论">
             <el-checkbox slot-scope="scope"
                          v-model="checked"
-                         :disabled="checked.indexOf(`category${scope.row.id}.viewThreads`) === -1"
+                         :disabled="checked.indexOf(`category${scope.row.id}.viewThreads`) === -1 || groupId === '7'"
                          :label="`category${scope.row.id}.replyThread`"
                          @change="handleCheckedCategoryPermissionsChange(scope.row)">{{ '' }}
             </el-checkbox>
