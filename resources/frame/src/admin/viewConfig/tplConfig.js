@@ -350,16 +350,6 @@ export default {
               attribution: "内容"
             }
           },
-          "cont-class-configure": {
-            comLoad: function (resolve) {
-              require(["../view/site/cont/contClassConfigureView"], resolve);
-            },
-            metaInfo: {
-              title: "内容分类",
-              name: "contClass",
-              attribution: "内容"
-            }
-          },
           "cont-manage": {
             comLoad: function (resolve) {
               require([
