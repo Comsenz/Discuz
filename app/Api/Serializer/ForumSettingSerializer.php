@@ -155,6 +155,10 @@ class ForumSettingSerializer extends AbstractSerializer
             'lbs' => [
                 'lbs' => (bool) $this->settings->get('lbs', 'lbs'),         // 位置服务开关
                 'qq_lbs_key' => $this->settings->get('qq_lbs_key', 'lbs'),  // 腾讯位置服务 key
+            ],
+
+            'ucenter' => [
+                'ucenter' => (bool) $this->settings->get('ucenter', 'ucenter'),         // 位置服务开关
             ]
         ];
 
