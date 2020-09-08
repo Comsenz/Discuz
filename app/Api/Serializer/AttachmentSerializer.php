@@ -111,7 +111,7 @@ class AttachmentSerializer extends AbstractSerializer
             }
         }
 
-        if ($model->post->thread->price>0 && $model->post->is_first) {
+        if ($model->post && $model->post->thread->price>0 && $model->post->is_first) {
             $attributes['url'] = $this->url->to('/api/attachments/'.$model->id);
         }
 
