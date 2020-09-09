@@ -73,6 +73,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_record' => $this->settings->get('site_record'),
                 'site_cover' => $this->settings->get('site_cover') ?: '',
                 'site_record_code' => $this->settings->get('site_record_code') ?: '',
+                'site_onlooker_price' => $this->settings->get('site_onlooker_price') ?: 0, // TODO Question 需要设置站点围观默认单价吗
             ],
 
             // 注册设置

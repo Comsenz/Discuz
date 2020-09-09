@@ -50,6 +50,8 @@ class TranslatorExceptionHandler implements ExceptionHandlerInterface
                 'code' => $e->getMessage() ?: 'unknown_error',
             ]
         ];
+
+        /** @var TranslatorException $e */
         if (!empty($e->getDetail())) {
             $errors = array_merge($errors[0], ['detail' => $e->getDetail()]);
         }

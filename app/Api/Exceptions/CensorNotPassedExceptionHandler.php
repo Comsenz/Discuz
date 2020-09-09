@@ -38,11 +38,16 @@ class CensorNotPassedExceptionHandler implements ExceptionHandlerInterface
      */
     public function handle(Exception $e)
     {
-        $status = 500;
+        $status = $e->getCode();
         $error = [
-            'status' => (string) $status,
-            'code' => 'censor_not_passed',
+            'status' => $status,
+            'code' => $e->getMessage() ?: 'censor_not_passed',
         ];
+
+        /** @var CensorNotPassedException $e */
+        if (isset($e->getDetail()[1])) {
+            $error['detail'] = $e->getDetail()[1];
+        }
 
         return new ResponseBag($status, [$error]);
     }

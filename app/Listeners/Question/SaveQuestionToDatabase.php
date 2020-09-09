@@ -16,18 +16,16 @@
  * limitations under the License.
  */
 
-namespace App\Listeners\Post;
+namespace App\Listeners\Question;
 
 use App\Events\Post\Saved;
 use App\Models\Question;
 use App\Models\Thread;
-use App\Models\UserWallet;
 use App\Models\UserWalletLog;
 use App\Validators\QuestionValidator;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Arr;
 
@@ -93,7 +91,7 @@ class SaveQuestionToDatabase
                     'user_id' => $actor->id,
                     'be_user_id' => Arr::get($questionData, 'be_user_id'),
                     'price' => $price,
-                    'onlooker_unit_price' => Arr::get($questionData, 'onlooker_unit_price'),
+                    'onlooker_unit_price' => Arr::get($questionData, 'onlooker_unit_price'), // TODO Question 围观价格走Settings
                     'is_onlooker' => $actor->can('canBeOnlooker') ? Arr::get($questionData, 'is_onlooker', true) : false,
                     'expired_at' => Carbon::today()->addDays(Question::EXPIRED_DAY),
                     // 'expired_at' => Carbon::today()->subDays(8)->addDays(Question::EXPIRED_DAY),
@@ -120,7 +118,7 @@ class SaveQuestionToDatabase
                 $this->connection->rollback();
             }
 
-            // Send Notice  TODO Question
+            // TODO Question Send Notice
         }
     }
 }

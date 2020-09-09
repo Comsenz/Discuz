@@ -149,6 +149,7 @@ return [
         App\Providers\ThreadServiceProvider::class,
         App\Providers\UserServiceProvider::class,
         App\Providers\DialogMessageServiceProvider::class,
+        App\Providers\QuestionServiceProvider::class,
     ],
     'sms' => [
         // HTTP 请求的超时时间（秒）

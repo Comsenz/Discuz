@@ -184,6 +184,8 @@ class PayOrder
                 break;
             case Order::ORDER_TYPE_GROUP:
                 $order_info->body = trans('order.order_type_group');
+            case Order::ORDER_TYPE_ONLOOKER:
+                $order_info->body = trans('order.order_type_onlooker');
                 break;
             default:
                 $order_info->body = '';
@@ -195,6 +197,7 @@ class PayOrder
         if (!empty($order_info->payment_params)) {
             Order::where('order_sn', $this->order_sn)->update(['payment_type' => $this->payment_type]);
         }
+
         // 返回数据对象
         return $order_info;
     }

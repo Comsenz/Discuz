@@ -59,7 +59,7 @@ class QuestionClearCommand extends AbstractCommand
 
         $query = Question::query();
         $query->where('expired_at', '<=', $today);
-        $query->where('is_answer', Question::TYPE_ANSWER_UNANSWERED); // 未回答
+        $query->where('is_answer', Question::TYPE_OF_UNANSWERED); // 未回答
         $question = $query->get();
 
         $bar = $this->createProgressBar(count($question));
@@ -70,7 +70,7 @@ class QuestionClearCommand extends AbstractCommand
             $this->connection->beginTransaction();
             try {
                 /** @var Question $item */
-                $item->is_answer = Question::TYPE_ANSWER_EXPIRED;
+                $item->is_answer = Question::TYPE_OF_EXPIRED;
                 $item->save();
 
                 // freeze amount

@@ -63,6 +63,8 @@ class Attachment extends Model
 
     const TYPE_OF_DIALOG_MESSAGE = 4;
 
+    const TYPE_OF_ANSWER = 5; // 回答类型
+
     const UNAPPROVED = 0;
 
     const APPROVED = 1;

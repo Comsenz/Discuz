@@ -21,6 +21,7 @@ namespace App\Commands\Order;
 use App\Exceptions\OrderException;
 use App\Models\Order;
 use App\Models\PayNotify;
+use App\Models\Question;
 use App\Models\Thread;
 use App\Models\User;
 use App\Models\Group;
@@ -73,6 +74,7 @@ class CreateOrder
      * @throws OrderException
      * @throws ValidationException
      * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @throws Exception
      */
     public function handle(Validator $validator, ConnectionInterface $db, SettingsRepository $setting, Dispatcher $events)
     {
@@ -190,9 +192,41 @@ class CreateOrder
                     throw new OrderException('order_group_error');
                 }
                 break;
+            // 问答围观付费
+            case Order::ORDER_TYPE_ONLOOKER:
+                /** @var Thread $thread */
+                $thread = Thread::query()
+                    ->where('id', $this->data->get('thread_id'))
+                    ->where('price', 0)  // 问答的帖子价格是0
+                    ->where('is_approved', Thread::APPROVED)
+                    ->where('type', Order::ORDER_TYPE_ONLOOKER)
+                    ->whereNull('deleted_at')
+                    ->first();
+
+                if ($thread && $thread->question) {
+                    // 判断该问答是否允许围观
+                    if (!$thread->question->is_onlooker) {
+                        throw new Exception(trans('order.order_question_not_onlooker'));
+                    }
+                    // 判断该问题是否已被回答 才能围观
+                    if ($thread->question->is_answer != Question::TYPE_OF_ANSWERED) {
+                        throw new Exception(trans('order.order_question_onlooker_fail'));
+                    }
+
+                    // 获取后台设置的围观金额
+                    $amount = sprintf('%.2f', (float) $setting->get('site_onlooker_price')); // 站点围观单价
+
+                    // 设置收款人
+                    $payeeId = $thread->user_id; // 提问人
+                    $thirdPartyId = $thread->question->be_user_id; // 第三者收益人（回答人）
+                } else {
+                    throw new OrderException('order_post_not_found');
+                }
+                break;
             default:
                 throw new OrderException('order_type_error');
         }
+
         // 订单金额需检查
         if (($amount == 0 && ! $order_zero_amount_allowed) || $amount < 0) {
             throw new OrderException('order_amount_error');
@@ -215,6 +249,7 @@ class CreateOrder
         $order->order_sn        = $this->getOrderSn();
         $order->amount          = $amount;
         $order->be_scale        = $be_scale ?? 0;
+        $order->third_party_id = $thirdPartyId ?? 0; // 第三者收益人
         $order->user_id         = $this->actor->id;
         $order->type            = $orderType;
         $order->thread_id       = isset($thread) ? $thread->id : null;

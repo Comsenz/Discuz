@@ -178,6 +178,14 @@ $route->delete('/posts/{id}', 'posts.delete', ApiController\Posts\DeletePostCont
 
 /*
 |--------------------------------------------------------------------------
+| Question
+|--------------------------------------------------------------------------
+*/
+
+$route->post('/question/answer/{question_id}', 'question.answer.create', ApiController\Question\CreateQuestionAnswerController::class);
+
+/*
+|--------------------------------------------------------------------------
 | StopWords
 |--------------------------------------------------------------------------
 */
