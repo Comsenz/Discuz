@@ -18,23 +18,26 @@
 
 namespace App\Ucenter;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
+use Discuz\Contracts\Setting\SettingsRepository;
 use GuzzleHttp\Client as HttpClient;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class Client
 {
-    const UC_KEY = '123';
-
     const UC_CLIENT_RELEASE = '20170101';
-
-    const UC_APPID = '3';
-
-    const UC_IP = '127.0.0.1';
 
     protected $request;
 
     protected $httpClient;
+
+    protected $settings;
+
+    public function __construct(SettingsRepository $settings)
+    {
+        $this->settings = $settings;
+    }
 
     public function uc_user_login($username, $password, $isuid = 0, $checkques = 0, $questionid = '', $answer = '', $ip = '')
     {
@@ -63,13 +66,13 @@ class Client
             'inajax' => 2,
             'release' => self::UC_CLIENT_RELEASE,
             'input' => $this->uc_api_input($arg),
-            'appid' => self::UC_APPID,
+            'appid' => $this->settings->get('ucenter_appid', 'ucenter') //self::UC_APPID,
         ];
     }
 
     protected function uc_api_input($data)
     {
-        return Authcode::encode($data.'&agent='.md5(Arr::get($this->request->getServerParams(), 'HTTP_USER_AGENT')).'&time='.Carbon::now()->timestamp, self::UC_KEY);
+        return Authcode::encode($data.'&agent='.md5(Arr::get($this->request->getServerParams(), 'HTTP_USER_AGENT')).'&time='.Carbon::now()->timestamp, $this->settings->get('ucenter_key', 'ucenter'));
     }
 
     public function setRequest($request)
@@ -80,7 +83,7 @@ class Client
     protected function getHttpClient()
     {
         return $this->httpClient ?? $this->httpClient = new HttpClient([
-                'base_uri' => 'http://dev.discuz.com/uc_server/',
+                'base_uri' => Str::finish($this->settings->get('ucenter_url', 'ucenter'), '/'),
                 'timeout'  =>  15
             ]);
     }

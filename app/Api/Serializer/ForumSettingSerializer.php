@@ -136,6 +136,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'can_create_thread_long' => $this->actor->can('createThreadLong'),
                 'can_create_thread_video' => $this->actor->can('createThreadVideo'),
                 'can_create_thread_image' => $this->actor->can('createThreadImage'),
+                'can_create_thread_audio' => $this->actor->can('createThreadAudio'),
                 'can_create_thread_in_category' => (bool)Category::getIdsWhereCan($this->actor, 'createThread'),
                 'can_create_audio' => $this->actor->can('createAudio'),
                 'can_create_dialog' => $this->actor->can('dialog.create'),
@@ -159,6 +160,10 @@ class ForumSettingSerializer extends AbstractSerializer
             'lbs' => [
                 'lbs' => (bool) $this->settings->get('lbs', 'lbs'),         // 位置服务开关
                 'qq_lbs_key' => $this->settings->get('qq_lbs_key', 'lbs'),  // 腾讯位置服务 key
+            ],
+
+            'ucenter' => [
+                'ucenter' => (bool) $this->settings->get('ucenter', 'ucenter'),
             ]
         ];
 
@@ -216,7 +221,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 $attributes['watermark'] = $this->forumField->getWatermarkSettings();
 
                 // UCenter设置
-                $attributes['ucenter'] = $this->forumField->getUCenterSettings();
+                $attributes['ucenter'] += $this->forumField->getUCenterSettings();
             }
         }
 

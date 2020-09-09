@@ -29,7 +29,7 @@ class AddModeratorsToCategories extends Migration
     public function up()
     {
         $this->schema()->table('categories', function (Blueprint $table) {
-            $table->string('moderators', 100)->after('thread_count')->comment('分类版主');
+            $table->string('moderators', 100)->nullable()->after('thread_count')->comment('分类版主');
         });
     }
 

@@ -6,14 +6,14 @@
         style="width: 100%">
         <el-table-column
           prop="date"
-          label="其它服务设置"
+          label="其他服务设置"
         >
           <template slot-scope="scope">
             <div class="pother-service-set-type-box">
               <i class="iconfont iconweizhi1 table-icon"></i>
               <div class="table-con-box">
                 <p>{{scope.row.name }}</p>
-                <p>{{scope.row.description }}</p>
+                <p><span v-html="scope.row.description"></span></p>
               </div>
             </div>
           </template>

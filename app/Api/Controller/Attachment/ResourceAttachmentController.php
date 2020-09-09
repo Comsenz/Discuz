@@ -23,15 +23,20 @@ use App\Exceptions\OrderException;
 use App\Models\Attachment;
 use App\Models\Order;
 use App\Repositories\AttachmentRepository;
+use App\Settings\SettingsRepository;
+use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Http\DiscuzResponseFactory;
+use Illuminate\Contracts\Filesystem\Factory as Filesystem;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use GuzzleHttp\Client as HttpClient;
 
 class ResourceAttachmentController implements RequestHandlerInterface
 {
@@ -43,16 +48,29 @@ class ResourceAttachmentController implements RequestHandlerInterface
     protected $attachments;
 
     /**
+     * @var SettingsRepository
+     */
+    protected $settings;
+
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
      * {}
      */
     public $serializer = AttachmentSerializer::class;
 
     /**
      * @param AttachmentRepository $attachments
+     * @param SettingsRepository $settings
      */
-    public function __construct(AttachmentRepository $attachments)
+    public function __construct(AttachmentRepository $attachments, SettingsRepository $settings, Filesystem $filesystem)
     {
         $this->attachments = $attachments;
+        $this->settings = $settings;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -65,50 +83,82 @@ class ResourceAttachmentController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $attachmentUuid = Arr::get($request->getQueryParams(), 'id');
+        $attachmentId = Arr::get($request->getQueryParams(), 'id');
+        $page = (int)Arr::get($request->getQueryParams(), 'page');
         $actor = $request->getAttribute('actor');
 
-        $attachment = $this->getAttachment($attachmentUuid, $actor);
+        $attachment = $this->getAttachment($attachmentId, $actor);
 
-        $filePath = storage_path('app/attachment/' . $attachment->attachment);
+        if ($attachment->is_remote) {
+            $httpClient = new HttpClient();
+            $path = Str::finish($attachment->file_path, '/') . $attachment->attachment;
+            $url = $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addHour());
+            if ($page) {
+                $url .= '&ci-process=doc-preview&page='.$page;
+            }
+            $response = $httpClient->get($url);
+            if ($response->getStatusCode() == 200) {
+                //下载
+                $header = [
+                    'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
+                ];
 
-        // 帖子图片直接显示
-        if ($attachment->type == Attachment::TYPE_OF_IMAGE) {
-            // 是否要获取缩略图
-            if (Arr::get($request->getQueryParams(), 'thumb') === 'true') {
-                $thumb = Str::replaceLast('.', '_thumb.', $filePath);
+                //预览
+                if ($page) {
+                    $header = [
+                        'X-Total-Page' => $response->getHeader('X-Total-Page'),
+                        'Content-Type' => $response->getHeader('Content-Type'),
+                    ];
+                }
+                return DiscuzResponseFactory::FileStreamResponse(
+                    $response->getBody(),
+                    200,
+                    $header
+                );
+            } else {
+                throw new ModelNotFoundException();
+            }
+        } else {
+            $filePath = storage_path('app/attachment/' . $attachment->attachment);
 
-                // 缩略图是否存在
-                if (! file_exists($thumb)) {
-                    $img = (new ImageManager())->make($filePath);
+            // 帖子图片直接显示
+            if ($attachment->type == Attachment::TYPE_OF_IMAGE) {
+                // 是否要获取缩略图
+                if (Arr::get($request->getQueryParams(), 'thumb') === 'true') {
+                    $thumb = Str::replaceLast('.', '_thumb.', $filePath);
 
-                    $img->resize(300, null, function ($constraint) {
-                        $constraint->aspectRatio();     // 保持纵横比
-                        $constraint->upsize();          // 避免文件变大
-                    })->save($thumb);
+                    // 缩略图是否存在
+                    if (! file_exists($thumb)) {
+                        $img = (new ImageManager())->make($filePath);
+
+                        $img->resize(300, null, function ($constraint) {
+                            $constraint->aspectRatio();     // 保持纵横比
+                            $constraint->upsize();          // 避免文件变大
+                        })->save($thumb);
+                    }
+
+                    $filePath = $thumb;
                 }
 
-                $filePath = $thumb;
+                return DiscuzResponseFactory::FileResponse($filePath);
             }
 
-            return DiscuzResponseFactory::FileResponse($filePath);
+            return DiscuzResponseFactory::FileResponse($filePath, 200, [
+                'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
+            ]);
         }
-
-        return DiscuzResponseFactory::FileResponse($filePath, 200, [
-            'Content-Disposition' => 'attachment;filename=' . basename($attachment->file_name),
-        ]);
     }
 
     /**
-     * @param $attachmentUuid
+     * @param $attachmentId
      * @param $actor
      * @return Attachment|null
      * @throws OrderException
      * @throws PermissionDeniedException
      */
-    protected function getAttachment($attachmentUuid, $actor)
+    protected function getAttachment($attachmentId, $actor)
     {
-        $attachment = $this->attachments->findOrFail($attachmentUuid, $actor);
+        $attachment = $this->attachments->findOrFail($attachmentId, $actor);
 
         $this->assertCan($actor, 'view.' . $attachment->type, $attachment);
 

@@ -37,7 +37,7 @@ class Created
      * Created constructor.
      *
      * @param Thread $thread
-     * @param User $actor
+     * @param User|null $actor
      */
     public function __construct(Thread $thread, User $actor = null)
     {

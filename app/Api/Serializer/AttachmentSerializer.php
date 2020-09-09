@@ -24,6 +24,7 @@ use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
+use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Str;
 use Tobscure\JsonApi\Relationship;
 
@@ -47,13 +48,19 @@ class AttachmentSerializer extends AbstractSerializer
     protected $settings;
 
     /**
+     * @var UrlGenerator
+     */
+    protected $url;
+
+    /**
      * @param Filesystem $filesystem
      * @param SettingsRepository $settings
      */
-    public function __construct(Filesystem $filesystem, SettingsRepository $settings)
+    public function __construct(Filesystem $filesystem, SettingsRepository $settings, UrlGenerator $url)
     {
         $this->filesystem = $filesystem;
         $this->settings = $settings;
+        $this->url = $url;
     }
 
     /**
@@ -103,6 +110,10 @@ class AttachmentSerializer extends AbstractSerializer
                 }
             }
         }
+
+        // if ($model->post && $model->post->thread->price>0 && $model->post->is_first) {
+        //     $attributes['url'] = $this->url->to('/api/attachments/'.$model->id);
+        // }
 
         return $attributes;
     }

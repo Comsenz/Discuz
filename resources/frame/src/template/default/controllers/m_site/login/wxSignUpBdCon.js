@@ -203,8 +203,8 @@ export default {
           this.showSignupInput = true;
           if (res.errors[0].detail[0].includes("特殊字符")) {
             this.$dialog.alert({
-              title: "无法自动注册账号",
-              message: "您的微信昵称中含有不允许注册的字符，无法自动完成账号注册。请手工设置用户名。"
+              title: "无法自动注册帐号",
+              message: "您的微信昵称中含有不允许注册的字符，无法自动完成帐号注册。请手工设置用户名。"
             });
             this.userName = "";
             return;
