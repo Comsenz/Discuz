@@ -57,14 +57,18 @@ class ReplaceContentAttachUrl
 
             // 替换插入内容中的图片 URL
             $rawContent = Utils::replaceAttributes($rawContent, 'IMG', function ($img) use ($attachments) {
-                $img['src'] = $attachments[$img['title']] ?? $img['src'];
+                if (isset($img['title'])) {
+                    $img['src'] = $attachments[$img['title']] ?? $img['src'];
+                }
 
                 return $img;
             });
 
             // 替换插入内容中的附件 URL
             $rawContent = Utils::replaceAttributes($rawContent, 'URL', function ($url) use ($attachments) {
-                $url['url'] = $attachments[$url['title']] ?? $url['url'];
+                if (isset($url['title'])) {
+                    $url['url'] = $attachments[$url['title']] ?? $url['url'];
+                }
 
                 return $url;
             });
