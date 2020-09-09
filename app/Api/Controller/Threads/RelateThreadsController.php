@@ -92,7 +92,7 @@ class RelateThreadsController extends AbstractListController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $threadId = Arr::get($request->getQueryParams(), 'id');
+        $threadId = (int)Arr::get($request->getQueryParams(), 'id');
         $limit = Arr::get($request->getQueryParams(), 'limit');
         $include = $this->extractInclude($request);
 
@@ -100,25 +100,38 @@ class RelateThreadsController extends AbstractListController
         $topicIdArr = $thread->topic()->pluck('id');
 
         //话题主题
-        $query = $this->threads->query()->select('threads.*');
-        $query->join('thread_topic', 'threads.id', '=', 'thread_topic.thread_id')
-            ->whereIn('thread_topic.topic_id', $topicIdArr);
-        $query->orderBy('threads.view_count', 'desc');
+        $query = $this->threads->query()
+            ->select('threads.*')
+            ->join('thread_topic', 'threads.id', '=', 'thread_topic.thread_id')
+            ->where('is_approved', true)
+            ->where('id', '<>', $threadId)
+            ->whereNotNull('user_id')
+            ->whereNull('deleted_at')
+            ->whereIn('thread_topic.topic_id', $topicIdArr)
+            ->orderBy('threads.view_count', 'desc');
         $threads = $query->take($limit)->get();
+        $threadsIdArr = array_merge($threads->pluck('id')->toArray(), [$threadId]);
 
         if ($threads->count() < $limit) {
             //分类主题
-            $query = $this->threads->query()->select('threads.*');
-            $query->where('category_id', $thread->category_id);
-            $query->orderBy('threads.view_count', 'desc');
+            $query = $this->threads->query()->select('threads.*')
+                ->where('category_id', $thread->category_id)
+                ->where('is_approved', true)
+                ->whereNotIn('id', $threadsIdArr)
+                ->whereNotNull('user_id')
+                ->whereNull('deleted_at')
+                ->orderBy('threads.view_count', 'desc');
             $categoryThreads = $query->take($limit-$threads->count())->get();
             $threads = $threads->merge($categoryThreads);
+            $threadsIdArr = array_merge($threads->pluck('id')->toArray(), [$threadId]);
         }
-
         if ($threads->count() < $limit) {
             //全站主题
-            $query = $this->threads->query()->select('threads.*');
-            $query->orderBy('threads.view_count', 'desc');
+            $query = $this->threads->query()->select('threads.*')
+                ->whereNotNull('user_id')
+                ->whereNull('deleted_at')
+                ->whereNotIn('id', $threadsIdArr)
+                ->orderBy('threads.view_count', 'desc');
             $categoryThreads = $query->take($limit-$threads->count())->get();
             $threads = $threads->merge($categoryThreads);
         }
