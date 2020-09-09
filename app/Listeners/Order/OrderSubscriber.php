@@ -100,6 +100,8 @@ class OrderSubscriber
 
             $order->thread->refreshPaidCount()->save();
         }
+
+        // TODO Question 围观成功后发送给问答人/答题人通知
     }
 
     /**

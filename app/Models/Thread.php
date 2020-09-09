@@ -422,6 +422,11 @@ class Thread extends Model
         return $this->hasMany(ThreadTopic::class);
     }
 
+    public function question()
+    {
+        return $this->hasOne(Question::class);
+    }
+
     /**
      * Set the user for which the state relationship should be loaded.
      *

@@ -130,6 +130,9 @@ class Censor
             $content = $this->miniProgramCheck($content);
         }
 
+        // Delete repeated words
+        $this->wordMod = array_unique($this->wordMod);
+
         return $content;
     }
 
@@ -217,9 +220,29 @@ class Censor
 
         /**
          * @property \Discuz\Qcloud\QcloudManage
+         * @see 文本内容安全文档 https://cloud.tencent.com/document/product/1124/46976
          */
         $result = $qcloud->service('cms')->TextModeration($content);
+
         $keyWords = Arr::get($result, 'Data.Keywords', []);
+
+        if (isset($result['Data']['DetailResult'])) {
+            /**
+             * filter 筛选腾讯云敏感词类型范围
+             * Normal：正常，Polity：涉政，Porn：色情，Illegal：违法，Abuse：谩骂，Terror：暴恐，Ad：广告，Custom：自定义关键词
+             */
+            $filter = ['Normal', 'Ad']; // Tag Setting 可以放入配置
+            $filtered = collect($result['Data']['DetailResult'])->filter(function ($item) use ($filter) {
+                if (in_array($item['EvilLabel'], $filter)) {
+                    $item = [];
+                }
+                return $item;
+            });
+
+            $detailResult = $filtered->pluck('Keywords');
+            $detailResult = Arr::collapse($detailResult);
+            $keyWords = array_merge($keyWords, $detailResult);
+        }
 
         if (!blank($keyWords)) {
             // 记录触发的审核词

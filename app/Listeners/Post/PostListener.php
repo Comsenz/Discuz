@@ -83,9 +83,6 @@ class PostListener
 
         // #话题#
         $events->listen(Saved::class, [$this, 'threadTopic']);
-
-        // 创建问答
-        $events->listen(Saved::class, SaveQuestionToDatabase::class);
     }
 
     /**
