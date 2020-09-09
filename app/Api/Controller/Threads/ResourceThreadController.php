@@ -103,7 +103,7 @@ class ResourceThreadController extends AbstractResourceController
     {
         $threadId = Arr::get($request->getQueryParams(), 'id');
         $actor = $request->getAttribute('actor');
-        $include = $this->extractInclude($request);
+        $include = array_merge($this->extractInclude($request), ['firstPost.images', 'firstPost.attachments']);
 
         $thread = $this->threads->findOrFail($threadId, $actor);
 
