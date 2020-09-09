@@ -151,6 +151,7 @@ $route->delete('/categories/{id}', 'categories.delete', ApiController\Category\D
 $route->get('/favorites', 'favorites', ApiController\Threads\ListFavoritesController::class);
 $route->get('/threads', 'threads.index', ApiController\Threads\ListThreadsController::class);
 $route->get('/threads/share/{id}', 'threads.share', ApiController\Threads\ShareThreadController::class);
+$route->get('/threads/relate/{id}', 'threads.relate', ApiController\Threads\RelateThreadsController::class);
 $route->get('/threads/likes', 'threads.likes', ApiController\Threads\ListLikesController::class);
 $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceThreadController::class);
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
