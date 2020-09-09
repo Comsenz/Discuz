@@ -73,7 +73,7 @@ class ReplaceContentAttachUrl
                 return $url;
             });
 
-            $post->setParsedContentAttribute($rawContent);
+            $post->parsedContent = $rawContent;
         }
     }
 }
