@@ -46,9 +46,6 @@ class UcenterController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $ucenterClient = new Client();
-        $ucenterClient->setRequest($request);
-
         $content = '';
         $code = Arr::get($request->getQueryParams(), 'code');
 
