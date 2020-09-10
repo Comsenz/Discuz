@@ -4,9 +4,9 @@ import CardRow from '../../../../view/site/common/card/cardRow';
 export default {
   data:function () {
     return {
-      valueKey: '',
-      valueUrl: '',
       valueAppid: '',
+      valueUrl: '',
+      valueKey: '',
     }
   },
 
@@ -48,15 +48,15 @@ export default {
            },
             {
                "attributes":{
-                "key":"ucenter_key",
-                "value":this.valueKey,
+                "key":"ucenter_url",
+                "value":this.valueUrl,
                 "tag": 'ucenter'
                }
             },
             {
               "attributes":{
-               "key":"ucenter_url",
-               "value":this.valueUrl,
+               "key":"ucenter_key",
+               "value":this.valueKey,
                "tag": 'ucenter'
               }
             },
