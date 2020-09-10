@@ -204,11 +204,15 @@ class CreateOrder
                     ->first();
 
                 if ($thread && $thread->question) {
+                    // 查询是否已经围观过，一个用户只允许围观一次
+                    if (!$thread->orders->isEmpty()) {
+                        throw new Exception(trans('order.order_question_onlooker_seen'));
+                    }
                     // 判断该问答是否允许围观
                     if (!$thread->question->is_onlooker) {
                         throw new Exception(trans('order.order_question_not_onlooker'));
                     }
-                    // 判断该问题是否已被回答 才能围观
+                    // 判断该问题是否已被回答才能围观
                     if ($thread->question->is_answer != Question::TYPE_OF_ANSWERED) {
                         throw new Exception(trans('order.order_question_onlooker_fail'));
                     }

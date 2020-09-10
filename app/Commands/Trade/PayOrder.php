@@ -184,6 +184,7 @@ class PayOrder
                 break;
             case Order::ORDER_TYPE_GROUP:
                 $order_info->body = trans('order.order_type_group');
+                break;
             case Order::ORDER_TYPE_ONLOOKER:
                 $order_info->body = trans('order.order_type_onlooker');
                 break;
@@ -270,7 +271,6 @@ class PayOrder
                 break;
             default:
                 throw new TradeErrorException('payment_method_invalid', 500);
-                break;
         }
         return PayTrade::pay($order_info, $pay_gateway, $config, $extra); //生成支付参数
     }

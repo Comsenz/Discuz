@@ -164,6 +164,12 @@ trait NotifyTrait
                         $this->orderInfo->id    // 订单ID
                     );
 
+                    // 添加围观帖 围观总金额&围观总人数
+                    $question = $this->orderInfo->thread->question;
+                    $question->onlooker_price = numberFormat($question->onlooker_price, '+', $this->orderInfo->amount);
+                    $question->onlooker_number = $question->onlooker_number + 1;
+                    $question->save();
+
                     return $this->orderInfo;
 
                 default:

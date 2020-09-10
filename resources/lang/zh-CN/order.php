@@ -17,4 +17,5 @@ return [
 
     'order_question_not_onlooker'   => '帖子不允许围观',
     'order_question_onlooker_fail'   => '帖子未能达到围观条件',
+    'order_question_onlooker_seen'   => '帖子已支付围观',
 ];

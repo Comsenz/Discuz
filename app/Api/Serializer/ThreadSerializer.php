@@ -221,4 +221,14 @@ class ThreadSerializer extends AbstractSerializer
     {
         return $this->hasMany($thread, TopicSerializer::class);
     }
+
+    public function question($thread)
+    {
+        return $this->hasOne($thread, QuestionAnswerSerializer::class);
+    }
+
+    public function onlookers($thread)
+    {
+        return $this->hasMany($thread, UserSerializer::class);
+    }
 }

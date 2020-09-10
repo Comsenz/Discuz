@@ -82,6 +82,8 @@ class ResourceThreadController extends AbstractResourceController
         'posts.mentionUsers',
         'firstPost.mentionUsers',
         'topic',
+        'question',
+        'onlookers',
     ];
 
     /**
