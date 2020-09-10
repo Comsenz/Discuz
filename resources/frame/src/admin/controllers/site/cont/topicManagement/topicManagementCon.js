@@ -243,9 +243,9 @@ export default {
     */
     btnrecomment(id,comment){
       if(comment) {
-        this.recommentNumber = 1;
-      } else {
         this.recommentNumber = 0;
+      } else {
+        this.recommentNumber = 1;
       }
       this.appFetch({
         url: `topics`,
