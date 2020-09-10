@@ -36,7 +36,7 @@ class UcenterController implements RequestHandlerInterface
 
     protected $settings;
 
-    public function __construct(SettingsRepository $settings, )
+    public function __construct(SettingsRepository $settings)
     {
         $this->settings = $settings;
     }
