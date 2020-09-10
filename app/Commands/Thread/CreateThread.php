@@ -98,7 +98,7 @@ class CreateThread
     {
         $this->events = $events;
 
-        $thread->type = (int) Arr::get($this->data, 'attributes.type', Thread::TYPE_OF_TEXT);
+        $thread->type = (int)Arr::get($this->data, 'attributes.type', Thread::TYPE_OF_TEXT);
 
         $this->canCreateThread($thread->type);
 
@@ -107,7 +107,7 @@ class CreateThread
         $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
 
         // 视频帖、图片帖不传内容时设置默认内容
-        if (! $content) {
+        if (!$content) {
             switch ($thread->type) {
                 case Thread::TYPE_OF_VIDEO:
                     $content = '分享视频';
@@ -136,19 +136,19 @@ class CreateThread
         // 非文字贴可设置价格
         if ($thread->type !== Thread::TYPE_OF_TEXT) {
             // 是否有权发布付费贴
-            if ($thread->price = (float) Arr::get($this->data, 'attributes.price', 0)) {
+            if ($thread->price = (float)Arr::get($this->data, 'attributes.price', 0)) {
                 $this->assertCan($this->actor, 'createThreadPaid');
             }
 
             // 付费长文帖可设置免费阅读字数
             if ($thread->type === Thread::TYPE_OF_LONG && $thread->price) {
-                $thread->free_words = (int) Arr::get($this->data, 'attributes.free_words', 0);
+                $thread->free_words = (int)Arr::get($this->data, 'attributes.free_words', 0);
             }
         }
 
         // 经纬度及地理位置
-        $thread->longitude = (float) Arr::get($this->data, 'attributes.longitude', 0);
-        $thread->latitude = (float) Arr::get($this->data, 'attributes.latitude', 0);
+        $thread->longitude = (float)Arr::get($this->data, 'attributes.longitude', 0);
+        $thread->latitude = (float)Arr::get($this->data, 'attributes.latitude', 0);
         $thread->address = Arr::get($this->data, 'attributes.address', '');
         $thread->location = Arr::get($this->data, 'attributes.location', '');
 
