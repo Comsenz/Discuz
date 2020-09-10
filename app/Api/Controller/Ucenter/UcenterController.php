@@ -36,7 +36,7 @@ class UcenterController implements RequestHandlerInterface
 
     protected $settings;
 
-    public function __construct(SettingsRepository $settings)
+    public function __construct(SettingsRepository $settings, )
     {
         $this->settings = $settings;
     }
@@ -46,9 +46,6 @@ class UcenterController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $ucenterClient = new Client();
-        $ucenterClient->setRequest($request);
-
         $content = '';
         $code = Arr::get($request->getQueryParams(), 'code');
 
