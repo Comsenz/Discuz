@@ -64,7 +64,7 @@
         
         <div class="cont-manage-header_condition">
           <span class="cont-manage-header_condition-titles condttions-titles" style="padding-left: 20px">推荐：</span>
-          <el-select v-model="value" @change="obtainValue" placeholder="请选择">
+          <el-select v-model="value" :clearable="true" @change="obtainValue" placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -103,7 +103,7 @@
               :label="items._data.id"
               @change="handleCheckedCitiesChange()"
             ></el-checkbox> -->
-            <el-radio-group v-model="radio[index]"  @change="themidpost($event,items._data.id)">
+            <el-radio-group v-model="radio[index]" @change="themidpost($event,items._data.id)">
               <el-radio :label="1">推荐</el-radio>
               <el-radio :label="2">取消</el-radio>
               <el-radio :label="3">删除</el-radio>
