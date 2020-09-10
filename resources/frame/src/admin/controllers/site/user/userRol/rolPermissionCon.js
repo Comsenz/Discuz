@@ -29,8 +29,8 @@ export default {
           name: 'publish'
         },
         {
-          title: '安全设置',
-          name: 'security'
+          title: '内容分类权限',
+          name: 'category'
         },
         {
           title: '前台操作权限',
@@ -41,17 +41,17 @@ export default {
           name: 'manage'
         },
         {
-          title: '其他权限',
+          title: '安全设置',
+          name: 'security'
+        },
+        {
+          title: '其他设置',
           name: 'other'
         },
-        {
-          title: '默认权限',
-          name: 'default'
-        },
-        {
-          title: '分类权限',
-          name: 'category'
-        }
+        // {
+        //   title: '默认权限',
+        //   name: 'default'
+        // },
       ]
     }
   },

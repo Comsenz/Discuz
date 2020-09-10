@@ -40,7 +40,7 @@ export default {
     this.wechat()
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
-    this.tipWx = '点击下面的确认解绑按钮后，您将解除微信与本账号的绑定。\n\n如果您没有设置密码或手机等其它登录方法，将无法再次登录！';
+    this.tipWx = '点击下面的确认解绑按钮后，您将解除微信与本帐号的绑定。\n\n如果您没有设置密码或手机等其它登录方法，将无法再次登录！';
     let qcloud_faceid = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_faceid;
     if (qcloud_faceid == false) {
       this.realNameShow = false

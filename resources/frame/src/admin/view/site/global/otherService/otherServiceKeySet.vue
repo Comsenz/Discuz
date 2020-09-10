@@ -1,9 +1,9 @@
 <template>
   <div>
-    <Card header="腾讯位置服务账号"></Card>
+    <Card header="腾讯位置服务帐号"></Card>
 
     <Card header="key：">
-      <CardRow description="腾讯位置服务账号 - key与配额 - key管理的key">
+      <CardRow description="腾讯位置服务帐号 - 控制台 - key与配额 - key管理的key">
         <el-input v-model="key"></el-input>
       </CardRow>
     </Card>
