@@ -53,27 +53,27 @@ class ReplaceContentAttachUrl
                 });
 
             // 数据原始内容，即 s9e 解析后的 XML
-            $rawContent = $post->getRawOriginal('content');
+            $xml = $post->getRawOriginal('content');
 
             // 替换插入内容中的图片 URL
-            $rawContent = Utils::replaceAttributes($rawContent, 'IMG', function ($img) use ($attachments) {
-                if (isset($img['title'])) {
-                    $img['src'] = $attachments[$img['title']] ?? $img['src'];
+            Utils::replaceAttributes($xml, 'IMG', function ($img) use (&$xml, $attachments) {
+                if (isset($img['title']) && isset($attachments[$img['title']])) {
+                    $xml = str_replace(htmlspecialchars($img['src']), $attachments[$img['title']], $xml);
                 }
 
                 return $img;
             });
 
             // 替换插入内容中的附件 URL
-            $rawContent = Utils::replaceAttributes($rawContent, 'URL', function ($url) use ($attachments) {
-                if (isset($url['title'])) {
-                    $url['url'] = $attachments[$url['title']] ?? $url['url'];
+            Utils::replaceAttributes($xml, 'URL', function ($url) use (&$xml, $attachments) {
+                if (isset($url['title']) && isset($attachments[$url['title']])) {
+                    $xml = str_replace(htmlspecialchars($url['url']), $attachments[$url['title']], $xml);
                 }
 
                 return $url;
             });
 
-            $post->parsedContent = $rawContent;
+            $post->parsedContent = $xml;
         }
     }
 }
