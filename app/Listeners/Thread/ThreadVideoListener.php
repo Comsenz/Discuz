@@ -64,8 +64,10 @@ class ThreadVideoListener
      */
     public function whenThreadSaving(Saving $event)
     {
+        $thread = $event->thread;
+
         // 视频帖 或 语音帖
-        if (in_array($event->thread->type, [Thread::TYPE_OF_VIDEO, Thread::TYPE_OF_AUDIO])) {
+        if (! $thread->exists && in_array($thread->type, [Thread::TYPE_OF_VIDEO, Thread::TYPE_OF_AUDIO])) {
             $this->validator->make(
                 [
                     'switch' => (bool) $this->settings->get('qcloud_vod', 'qcloud'),
