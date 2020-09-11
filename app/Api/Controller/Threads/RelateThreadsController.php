@@ -55,8 +55,6 @@ class RelateThreadsController extends AbstractListController
     public $optionalInclude = [
         'threadVideo',
         'category',
-        'lastPostedUser',
-        'user.groups',
         'firstPost.images',
         'firstPost.attachments',
         'firstPost.likedUsers',
