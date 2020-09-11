@@ -24,6 +24,7 @@ use App\Models\Thread;
 use App\Models\UserWalletLog;
 use App\Validators\QuestionValidator;
 use Carbon\Carbon;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Exception;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Database\ConnectionInterface;
@@ -46,11 +47,17 @@ class SaveQuestionToDatabase
      */
     protected $connection;
 
-    public function __construct(EventDispatcher $eventDispatcher, QuestionValidator $questionValidator, ConnectionInterface $connection)
+    /**
+     * @var SettingsRepository
+     */
+    protected $settings;
+
+    public function __construct(EventDispatcher $eventDispatcher, QuestionValidator $questionValidator, ConnectionInterface $connection, SettingsRepository $settings)
     {
         $this->eventDispatcher = $eventDispatcher;
         $this->questionValidator = $questionValidator;
         $this->connection = $connection;
+        $this->settings = $settings;
     }
 
     /**
@@ -91,10 +98,9 @@ class SaveQuestionToDatabase
                     'user_id' => $actor->id,
                     'be_user_id' => Arr::get($questionData, 'be_user_id'),
                     'price' => $price,
-                    'onlooker_unit_price' => Arr::get($questionData, 'onlooker_unit_price'), // TODO Question 围观价格走Settings
+                    'onlooker_unit_price' => $this->settings->get('site_onlooker_price'),
                     'is_onlooker' => $actor->can('canBeOnlooker') ? Arr::get($questionData, 'is_onlooker', true) : false,
                     'expired_at' => Carbon::today()->addDays(Question::EXPIRED_DAY),
-                    // 'expired_at' => Carbon::today()->subDays(8)->addDays(Question::EXPIRED_DAY),
                 ];
                 $question = Question::build($build);
                 $question->save();
