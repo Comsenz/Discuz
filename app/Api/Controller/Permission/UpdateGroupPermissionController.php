@@ -66,18 +66,9 @@ class UpdateGroupPermissionController extends AbstractListController
             return DiscuzResponseFactory::EmptyResponse();
         }
 
-        $permissions = collect(Arr::get($data, 'attributes.permissions'));
-
-        // 必要权限，后台未开放管理：收藏、点赞、创建订单、支付订单
-        $defaultPermission = [
-            'thread.favorite',
-            'thread.likePosts',
-            'order.create',
-            'trade.pay.order',
-        ];
-
         // 合并默认权限，去空，去重，转换格式
-        $permissions = $permissions->merge($defaultPermission)
+        $permissions = collect(Arr::get($data, 'attributes.permissions'))
+            ->merge(Permission::DEFAULT_PERMISSION)
             ->filter()
             ->unique()
             ->map(function ($item) use ($groupId) {

@@ -22,11 +22,13 @@ use App\Api\Serializer\ThreadSerializer;
 use App\Repositories\ThreadRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
+use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Exception\InvalidParameterException;
 
@@ -53,8 +55,6 @@ class RelateThreadsController extends AbstractListController
     public $optionalInclude = [
         'threadVideo',
         'category',
-        'lastPostedUser',
-        'user.groups',
         'firstPost.images',
         'firstPost.attachments',
         'firstPost.likedUsers',
@@ -71,18 +71,26 @@ class RelateThreadsController extends AbstractListController
     protected $url;
 
     /**
+     * @var Cache
+     */
+    protected $cache;
+
+    /**
      * @param ThreadRepository $threads
      * @param UrlGenerator $url
+     * @param Cache $cache
      */
-    public function __construct(ThreadRepository $threads, UrlGenerator $url)
+    public function __construct(ThreadRepository $threads, UrlGenerator $url, Cache $cache)
     {
         $this->threads = $threads;
         $this->url = $url;
+        $this->cache = $cache;
     }
 
     /**
      * {@inheritdoc}
      * @throws InvalidParameterException
+     * @throws InvalidArgumentException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -93,8 +101,14 @@ class RelateThreadsController extends AbstractListController
         $thread = $this->threads->findOrFail($threadId);
         $topicIdArr = $thread->topic()->pluck('id');
 
+        $cacheKey = 'relateThreads_'.$threadId;
+        $cacheData = $this->cache->get($cacheKey);
+        if ($cacheData < $limit) {
+            $cacheData = [];
+        }
+
         //话题主题
-        $threads = $this->search($limit, [$threadId], null, $topicIdArr);
+        $threads = $this->search($limit, [$threadId], null, $topicIdArr, $cacheData);
 
         if ($threads->count() < $limit) {
             //分类主题
@@ -109,6 +123,8 @@ class RelateThreadsController extends AbstractListController
             $threads = $threads->merge($totalThreads);
         }
 
+        $this->cache->put($cacheKey, $threads->pluck('id')->toArray(), 360);
+
         // 加载关联
         $threads->loadMissing($include);
 
@@ -120,9 +136,10 @@ class RelateThreadsController extends AbstractListController
      * @param $excludeThreads
      * @param null $category_id
      * @param null $topicIdArr
+     * @param null $cacheData
      * @return Builder[]|Collection
      */
-    private function search($limit, $excludeThreads, $category_id = null, $topicIdArr = null)
+    private function search($limit, $excludeThreads, $category_id = null, $topicIdArr = null, $cacheData = null)
     {
         $query = $this->threads->query()->select('threads.*')
             ->whereNotNull('user_id')
@@ -130,6 +147,11 @@ class RelateThreadsController extends AbstractListController
             ->where('is_approved', true)
             ->whereNotIn('id', $excludeThreads)
             ->orderBy('threads.view_count', 'desc');
+        // cache
+        if ($cacheData) {
+            $query->whereIn('id', $cacheData);
+        }
+
         // 分类
         if ($category_id) {
             $query->where('category_id', $category_id);
