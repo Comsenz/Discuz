@@ -101,6 +101,7 @@ $route->get('/oauth/wechat/pc/login/{session_token}', 'wechat.pc.login', ApiCont
 |--------------------------------------------------------------------------
 */
 
+$route->get('/users/recommended', 'user.recommended', ApiController\Users\RecommendedUserController::class);
 $route->get('/users', 'users.list', ApiController\Users\ListUsersController::class);
 $route->post('/users', 'users.create', ApiController\Users\CreateUserController::class);
 $route->post('/users/pay-password/reset', '', ApiController\Users\ResetPayPasswordController::class);

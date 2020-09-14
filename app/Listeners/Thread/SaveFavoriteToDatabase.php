@@ -19,6 +19,7 @@
 namespace App\Listeners\Thread;
 
 use App\Events\Thread\Saving;
+use App\Models\ThreadUser;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
 
@@ -37,7 +38,7 @@ class SaveFavoriteToDatabase
         if ($thread->exists && isset($data['attributes']['isFavorite'])) {
             $this->assertCan($actor, 'favorite', $thread);
 
-            $isFavorite = $actor->favoriteThreads()->where('thread_id', $thread->id)->exists();
+            $isFavorite = ThreadUser::query()->where('thread_id', $thread->id)->where('user_id', $actor->id)->exists();
 
             if ($isFavorite) {
                 // 已收藏且 isFavorite 为 false 时，取消收藏
