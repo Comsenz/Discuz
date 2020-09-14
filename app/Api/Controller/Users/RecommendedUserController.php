@@ -37,6 +37,11 @@ use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class RecommendedUserController extends AbstractListController
 {
+    /**
+     * 缓存数据倍数
+     */
+    const DATA_MULTIPLE = 10;
+
     use AssertPermissionTrait;
 
     /**
@@ -80,15 +85,22 @@ class RecommendedUserController extends AbstractListController
         $include = $this->extractInclude($request);
         $limit = Arr::get($request->getQueryParams(), 'limit');
 
-        // $cacheKey = 'users_recommendedUser';
-        // $cacheData = $this->cache->get($cacheKey);
-        // if ($cacheData < $limit) {
-        //     $cacheData = [];
-        // }
+        $cacheKey = 'users_recommendedUser';
+        $cacheData = $this->cache->get($cacheKey);
+        $data_Limit = $limit * self::DATA_MULTIPLE;
+        if ($cacheData && count($cacheData) >= $data_Limit) {
+            $cacheData = Arr::random($cacheData, $limit);
+        } else {
+            //缓存不存在、数据不够时 重新创建缓存，设置缓存数据池条数
+            $cacheData = null;
+        }
 
-        $users = $this->search($limit);
+        $users = $this->search($data_Limit, $cacheData);
 
-        // $this->cache->put($cacheKey, $users->pluck('id')->toArray(), 360);
+        if (!$cacheData) {
+            $this->cache->put($cacheKey, $users->pluck('id')->toArray(), 360);
+            $users = $users->random($limit);
+        }
 
         // 加载关联
         $users->loadMissing($include);
@@ -113,8 +125,6 @@ class RecommendedUserController extends AbstractListController
             $query->whereIn('id', $cacheData);
         }
 
-        $query->take($limit);
-
-        return $query->get();
+        return $query->take($limit)->get();
     }
 }
