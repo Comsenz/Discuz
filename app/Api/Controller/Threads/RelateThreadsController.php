@@ -101,7 +101,7 @@ class RelateThreadsController extends AbstractListController
         $thread = $this->threads->findOrFail($threadId);
         $topicIdArr = $thread->topic()->pluck('id');
 
-        $cacheKey = 'relateThreads_'.$threadId;
+        $cacheKey = 'threads_relateThreads_'.$threadId;
         $cacheData = $this->cache->get($cacheKey);
         if ($cacheData < $limit) {
             $cacheData = [];
