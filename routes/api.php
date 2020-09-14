@@ -101,6 +101,7 @@ $route->get('/oauth/wechat/pc/login/{session_token}', 'wechat.pc.login', ApiCont
 |--------------------------------------------------------------------------
 */
 
+$route->get('/users/recommended', 'user.recommended', ApiController\Users\RecommendedUserController::class);
 $route->get('/users', 'users.list', ApiController\Users\ListUsersController::class);
 $route->post('/users', 'users.create', ApiController\Users\CreateUserController::class);
 $route->post('/users/pay-password/reset', '', ApiController\Users\ResetPayPasswordController::class);
@@ -117,7 +118,6 @@ $route->delete('/users/{id}/deny', 'user.delete.deny', ApiController\Users\Delet
 $route->delete('/users/{id}/avatar', 'user.delete.avatar', ApiController\Users\DeleteAvatarController::class);
 $route->delete('/users/{id}/wechat', 'user.delete.wechat', ApiController\Users\UnbindWechatController::class);
 $route->get('/export/users', 'export.users', ApiController\Users\ExportUserController::class);
-$route->get('/users/recommended', 'user.recommended', ApiController\Users\RecommendedUserController::class);
 
 /*
 |--------------------------------------------------------------------------
