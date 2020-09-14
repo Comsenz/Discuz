@@ -88,6 +88,8 @@ class RecommendedUserController extends AbstractListController
 
         $users = $this->search($cacheData, $limit);
 
+        $this->cache->put($cacheKey, $users->pluck('id')->toArray(), 360);
+
         // 加载关联
         $users->loadMissing($include);
 
@@ -103,7 +105,7 @@ class RecommendedUserController extends AbstractListController
     {
         $query = $this->users->query()->select('users.*')
         ->where('status', 0)
-        ->whereBetween('login_at', [Carbon::now(), Carbon::parse('-30 days')])
+        ->whereBetween('login_at', [Carbon::parse('-30 days'), Carbon::now()])
         ->orderBy('thread_count', 'desc')
         ->orderBy('login_at', 'desc');
         // cache
