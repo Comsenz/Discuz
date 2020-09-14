@@ -80,15 +80,15 @@ class RecommendedUserController extends AbstractListController
         $include = $this->extractInclude($request);
         $limit = Arr::get($request->getQueryParams(), 'limit');
 
-        $cacheKey = 'users_recommendedUser';
-        $cacheData = $this->cache->get($cacheKey);
-        if ($cacheData < $limit) {
-            $cacheData = [];
-        }
+        // $cacheKey = 'users_recommendedUser';
+        // $cacheData = $this->cache->get($cacheKey);
+        // if ($cacheData < $limit) {
+        //     $cacheData = [];
+        // }
 
-        $users = $this->search($cacheData, $limit);
+        $users = $this->search($limit);
 
-        $this->cache->put($cacheKey, $users->pluck('id')->toArray(), 360);
+        // $this->cache->put($cacheKey, $users->pluck('id')->toArray(), 360);
 
         // 加载关联
         $users->loadMissing($include);
@@ -101,7 +101,7 @@ class RecommendedUserController extends AbstractListController
      * @param null $limit
      * @return Collection
      */
-    public function search($cacheData, $limit)
+    public function search($limit, $cacheData = null)
     {
         $query = $this->users->query()->select('users.*')
         ->where('status', 0)
