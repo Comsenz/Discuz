@@ -93,7 +93,7 @@ class QuestionClearCommand extends AbstractCommand
 
                 // 修改过期后输出
                 $this->question('');
-                $this->question('过期帖: ' . $item->id);
+                $this->question('过期问答ID: ' . $item->id . ' 帖子ID：' . $item->thread_id);
                 $this->comment('金额返还 ' . $item->price);
 
                 $this->connection->commit();
