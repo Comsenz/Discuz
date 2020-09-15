@@ -55,6 +55,7 @@ class AttachmentSerializer extends AbstractSerializer
     /**
      * @param Filesystem $filesystem
      * @param SettingsRepository $settings
+     * @param UrlGenerator $url
      */
     public function __construct(Filesystem $filesystem, SettingsRepository $settings, UrlGenerator $url)
     {
@@ -106,7 +107,10 @@ class AttachmentSerializer extends AbstractSerializer
                     $attributes['thumbUrl'] = $url . (strpos($url, '?') === false ? '?' : '&')
                         . 'imageMogr2/thumbnail/' . Attachment::FIX_WIDTH . 'x' . Attachment::FIX_WIDTH;
                 } else {
-                    $attributes['thumbUrl'] = Str::replaceLast('.', '_thumb.', $url);
+                    // 缩略图不存在时使用原图
+                    $attributes['thumbUrl'] = $this->filesystem->disk('attachment')->exists(
+                        Str::replaceLast('.', '_thumb.', $path)
+                    ) ? Str::replaceLast('.', '_thumb.', $url) : $url;
                 }
             }
         }

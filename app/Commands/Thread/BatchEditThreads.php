@@ -117,6 +117,17 @@ class BatchEditThreads
                 }
             }
 
+            if (isset($attributes['isSite'])) {
+                if ($this->actor->can('isSite', $thread)) {
+                    if ($thread->is_site != $attributes['isSite']) {
+                        $thread->is_site = $attributes['isSite'];
+                    }
+                } else {
+                    $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
+                    continue;
+                }
+            }
+
             if (isset($attributes['isEssence'])) {
                 if ($this->actor->can('essence', $thread)) {
                     if ($thread->is_essence != $attributes['isEssence']) {

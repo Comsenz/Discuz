@@ -3,7 +3,7 @@
     <Card header="UCenter配置"></Card>
     
     <Card header="APPID：">
-      <CardRow description="填写申请PC端微信授权登录后，你获得的APPID">
+      <CardRow description="填写UCenter中该应用的APPID">
         <el-input v-model="valueAppid"></el-input>
       </CardRow>
     </Card>

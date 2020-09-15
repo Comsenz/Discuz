@@ -71,7 +71,7 @@ class ThreadVideoSerializer extends AbstractSerializer
 
         $urlKey = $this->settings->get('qcloud_vod_url_key', 'qcloud');
         $urlExpire = (int) $this->settings->get('qcloud_vod_url_expire', 'qcloud');
-        if ($urlKey && $urlExpire) {
+        if ($urlKey && $urlExpire && $model->media_url) {
             $currentTime = Carbon::now()->timestamp;
             $dir = Str::beforeLast(parse_url($model->media_url)['path'], '/') . '/';
             $t = dechex($currentTime+$urlExpire);
