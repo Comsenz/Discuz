@@ -76,14 +76,13 @@ class RecommendedUserController extends AbstractListController
     }
 
     /**
-     * 我的关注
      * {@inheritdoc}
      * @throws InvalidParameterException|InvalidArgumentException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $include = $this->extractInclude($request);
-        $limit = Arr::get($request->getQueryParams(), 'limit');
+        $limit = (int)Arr::get($request->getQueryParams(), 'limit');
 
         $cacheKey = 'users_recommendedUser';
         $cacheData = $this->cache->get($cacheKey);
