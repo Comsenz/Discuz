@@ -20,11 +20,9 @@ namespace App\Commands\Attachment;
 
 use App\Events\Attachment\Deleted;
 use App\Events\Attachment\Deleting;
-use App\Exceptions\TranslatorException;
 use App\Models\Attachment;
 use App\Models\User;
 use App\Repositories\AttachmentRepository;
-use App\Tools\AttachmentUploadTool;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
@@ -51,8 +49,6 @@ class DeleteAttachment
     public $actor;
 
     /**
-     * 暂未用到，留给插件使用
-     *
      * @var array
      */
     public $data;
@@ -72,13 +68,11 @@ class DeleteAttachment
     /**
      * @param Dispatcher $events
      * @param AttachmentRepository $attachments
-     * @param AttachmentUploadTool $uploadTool
      * @return Attachment
-     * @throws TranslatorException
      * @throws PermissionDeniedException
      * @throws Exception
      */
-    public function handle(Dispatcher $events, AttachmentRepository $attachments, AttachmentUploadTool $uploadTool)
+    public function handle(Dispatcher $events, AttachmentRepository $attachments)
     {
         $this->events = $events;
 
@@ -90,15 +84,8 @@ class DeleteAttachment
             new Deleting($attachment, $this->actor, $this->data)
         );
 
-        $attachment->raise(new Deleted($attachment));
-
-        // 删除源文件
-        $result = $uploadTool->delete($attachment);
-
-        if ($result) {
-            $attachment->delete();
-        } else {
-            throw new TranslatorException('post_attachment_delete_error');
+        if ($attachment->delete()) {
+            $attachment->raise(new Deleted($attachment, $this->actor));
         }
 
         $this->dispatchEventsFor($attachment, $this->actor);

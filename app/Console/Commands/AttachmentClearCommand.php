@@ -18,82 +18,49 @@
 
 namespace App\Console\Commands;
 
+use App\Commands\Attachment\DeleteAttachment;
 use App\Models\Attachment;
+use App\Models\User;
 use Carbon\Carbon;
 use Discuz\Console\AbstractCommand;
-use Discuz\Foundation\Application;
-use Illuminate\Contracts\Filesystem\Factory as Filesystem;
+use Illuminate\Contracts\Bus\Dispatcher;
 
 class AttachmentClearCommand extends AbstractCommand
 {
+    /**
+     * {@inheritdoc}
+     */
     protected $signature = 'clear:attachment';
 
-    protected $description = '清理本地/COS未使用的附件';
-
-    protected $app;
-
-    protected $attachment;
-
-    protected $filesystem;
+    /**
+     * {@inheritdoc}
+     */
+    protected $description = 'Clear local / COS unused attachments';
 
     /**
-     * AvatarCleanCommand constructor.
-     * @param string|null $name
-     * @param Application $app
-     * @param Attachment $attachment
-     * @param Filesystem $filesystem
+     * clear attachment
      */
-    public function __construct(string $name = null, Application $app, Attachment $attachment, Filesystem $filesystem)
+    protected function handle()
     {
-        parent::__construct($name);
+        /** @var Dispatcher $bus */
+        $bus = app(Dispatcher::class);
 
-        $this->app = $app;
-        $this->attachment = $attachment;
-        $this->filesystem = $filesystem;
-    }
+        /** @var User $actor */
+        $actor = User::query()->find(1);
 
-    public function handle()
-    {
-        $yesterday = Carbon::yesterday()->toDateTimeString();
+        $attachments = Attachment::query()
+            ->where('type_id', 0)
+            ->where('created_at', '<', Carbon::yesterday())
+            ->get();
 
-        $attachments = $this->attachment->where('type_id', 0)->whereTime('created_at', '<', $yesterday)->get();
-
-        $bar = $this->createProgressBar(count($attachments));
+        $bar = $this->createProgressBar($attachments->count());
 
         $bar->start();
 
-        $attachments->map(function ($attachment) use ($bar) {
-            $path = $attachment->file_path . '/' . $attachment->attachment;
-
-            $thumb = '';
-            // 判断是否是远程文件
-            if ($attachment->is_remote) {
-                $res = $this->filesystem->disk('attachment_cos')->delete($path);
-                $type = 'cos';
-            } else {
-                $res = $this->filesystem->disk('attachment')->delete($path);
-                // 如果是帖子图片,删除本地缩略图
-                if ($attachment->type == Attachment::TYPE_OF_IMAGE) {
-                    $thumb = $attachment::replaceThumb($path);
-                    $this->filesystem->disk('attachment')->delete($thumb);
-                }
-                $type = 'local';
-            }
-
-            // 删除后输出
-            if ($res) {
-                $this->line('');
-                $info = '当前附件ID: ' . $attachment->id;
-                $this->question($info);
-                $msg = '删除了' . $type . ': ' . $path;
-                $this->comment($msg);
-                if (!empty($thumb)) {
-                    $tMsg = '删除了' . $type . ': ' . $thumb;
-                    $this->comment($tMsg);
-                }
-
-                $attachment->delete();
-            }
+        $attachments->map(function (Attachment $attachment) use ($bus, $actor, $bar) {
+            $bus->dispatch(
+                new DeleteAttachment($attachment->id, $actor)
+            );
 
             $bar->advance();
         });
