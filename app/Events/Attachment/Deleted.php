@@ -35,7 +35,7 @@ class Deleted
 
     /**
      * @param Attachment $attachment
-     * @param User $actor
+     * @param User|null $actor
      */
     public function __construct(Attachment $attachment, User $actor = null)
     {
