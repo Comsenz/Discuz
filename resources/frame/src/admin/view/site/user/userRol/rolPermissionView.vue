@@ -271,7 +271,7 @@
         <CardRow description="前台更改成员所属用户组的权限">
           <el-checkbox
             v-model="checked"
-            label="group.edit"
+            label="user.edit.group"
             :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
           >编辑用户组</el-checkbox>
         </CardRow>
