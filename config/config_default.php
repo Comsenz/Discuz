@@ -135,7 +135,7 @@ return [
     'excel' => [
         'root' => storage_path('public/exports')
     ],
-    //加载ServiceProvider
+    // 加载ServiceProvider
     'providers' => [
         App\Formatter\FormatterServiceProvider::class,
         App\Passport\Oauth2ServiceProvider::class,

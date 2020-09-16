@@ -180,7 +180,6 @@ class CreateThread
             );
         } catch (Exception $e) {
             $thread->delete();
-
             throw $e;
         }
 

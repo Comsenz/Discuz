@@ -31,7 +31,7 @@ class QuestionServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-
+        //
     }
 
     /**
