@@ -27,6 +27,7 @@ class CreateQuestions extends Migration
             $table->unsignedBigInteger('onlooker_number')->default(0)->comment('当前围观总人数');
             $table->tinyInteger('is_onlooker')->default(1)->comment('是否允许围观');
             $table->tinyInteger('is_answer')->default(0)->comment('是否已回答 0未回答 1已回答 2已过期');
+            $table->tinyInteger('is_anonymous')->default(0)->comment('是否匿名 0否 1是');
             $table->tinyInteger('is_approved')->unsigned()->default(1)->comment('回答内容是否合法');
             $table->dateTime('updated_at')->comment('更新时间');
             $table->dateTime('created_at')->comment('创建时间');
