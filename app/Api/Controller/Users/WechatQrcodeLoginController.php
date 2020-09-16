@@ -19,16 +19,21 @@
 namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\TokenSerializer;
+use App\Commands\Users\GenJwtToken;
 use App\Models\SessionToken;
 use Discuz\Api\Controller\AbstractResourceController;
+use Discuz\Auth\AssertPermissionTrait;
 use Exception;
+use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class WechatPcLoginController extends AbstractResourceController
+class WechatQrcodeLoginController extends AbstractResourceController
 {
+    use AssertPermissionTrait;
+
     public $serializer = TokenSerializer::class;
 
     public $optionalInclude = [];
@@ -39,11 +44,18 @@ class WechatPcLoginController extends AbstractResourceController
     protected $url;
 
     /**
-     * @param UrlGenerator $url
+     * @var BusDispatcher
      */
-    public function __construct(UrlGenerator $url)
+    protected $bus;
+
+    /**
+     * @param UrlGenerator $url
+     * @param BusDispatcher $bus
+     */
+    public function __construct(UrlGenerator $url, BusDispatcher $bus)
     {
         $this->url = $url;
+        $this->bus = $bus;
     }
 
     /**
@@ -52,27 +64,32 @@ class WechatPcLoginController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $sessionToken = Arr::get($request->getQueryParams(), 'session_token');
+        // check
+        $actor = $request->getAttribute('actor');
+        $this->assertRegistered($actor);
 
+        // get session key
+        $sessionToken = Arr::get($request->getQueryParams(), 'session_token');
         $token = SessionToken::get($sessionToken);
         if (empty($token)) {
             throw new Exception(trans('user.pc_qrcode_time_out'));
         }
 
-        $build = [
-            'token_type' => '',
-            'expires_in' => '',
-            'access_token' => '',
-            'refresh_token' => '',
-            'pc_login' => false,
-        ];
+        $response = $this->bus->dispatch(
+            new GenJwtToken(['username' => $actor->username])
+        );
 
-        // data judgment payload
-        if (!is_null($token->payload)) {
-            $build = $token->payload;
-            $build += ['pc_login' => true];
+        $accessToken = json_decode($response->getBody());
+
+        if ($response->getStatusCode() === 200) {
+            // build
+            $token->payload = $accessToken;
+            $token->save();
+            $accessToken->pc_login = true;
+        } else {
+            throw new Exception(trans('user.pc_qrcode_time_fail'));
         }
 
-        return (object) $build;
+        return $accessToken;
     }
 }
