@@ -114,7 +114,7 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
             if ($response->getStatusCode() != 200) {
                 throw new TranslatorException('post_goods_http_client_fail');
             }
-            $this->html = `$response->getBody()->getContents()`;
+            $this->html = $response->getBody()->getContents();
         } elseif ($sendType == 'File') {
             $this->html = file_get_contents($this->address);
         }

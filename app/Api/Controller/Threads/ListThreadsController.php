@@ -476,6 +476,16 @@ class ListThreadsController extends AbstractListController
                 ->having('distance', '<', $distance)
                 ->orderBy('distance');
         }
+
+        // 站点信息页推荐
+        if ($isSite = Arr::get($filter, 'isSite')) {
+            if ($isSite == 'yes') {
+                $query->where('threads.is_site', true);
+            } elseif ($isSite == 'no') {
+                $query->where('threads.is_site', false);
+            }
+        }
+
     }
 
     /**

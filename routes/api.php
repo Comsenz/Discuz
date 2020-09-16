@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 use App\Api\Controller as ApiController;
@@ -46,7 +57,8 @@ $route->get('/signature', 'signature', ApiController\Qcloud\CreateVodUploadSigna
 
 $route->get('/groups', 'groups.list', ApiController\Group\ListGroupsController::class);
 $route->get('/groups/{id}', 'groups.resource', ApiController\Group\ResourceGroupsController::class);
-$route->post('/groups', 'group.create', ApiController\Group\CreateGroupController::class);
+$route->post('/groups', 'groups.create', ApiController\Group\CreateGroupController::class);
+$route->post('/groups/{id}/icon', 'groups.upload.icon', ApiController\Group\UploadIconController::class);
 $route->patch('/groups/{id}', 'group.update', ApiController\Group\UpdateGroupController::class);
 $route->patch('/groups', 'group.update', ApiController\Group\UpdateGroupsController::class);
 $route->delete('/groups/{id}', 'group.delete', ApiController\Group\DeleteGroupController::class);
@@ -54,7 +66,7 @@ $route->delete('/groups', 'groups.delete', ApiController\Group\DeleteGroupsContr
 
 /*
 |--------------------------------------------------------------------------
-| Groups - Permission
+| Permission
 |--------------------------------------------------------------------------
 */
 
@@ -85,7 +97,7 @@ $route->get('/oauth/welink', 'welink.login', ApiController\Users\WelinkLoginCont
 $route->get('/oauth/wechat/web/user', 'wechat.web.user', ApiController\Users\WechatWebUserLoginController::class);
 $route->get('/oauth/wechat/web/user/event', 'wechat.web.user.event', ApiController\Users\WechatWebUserLoginEventController::class);
 $route->post('/oauth/wechat/web/user/event', 'wechat.web.user.postevent', ApiController\Users\WechatWebUserLoginPostEventController::class);
-$route->get('/oauth/wechat/web/user/serach', 'wechat.web.user.search', ApiController\Users\WechatWebUserLoginSearchController::class);
+$route->get('/oauth/wechat/web/user/search', 'wechat.web.user.search', ApiController\Users\WechatWebUserLoginSearchController::class);
 $route->post('/oauth/wechat/miniprogram', 'wechat.miniprogram.login', ApiController\Users\WechatMiniProgramLoginController::class);
 $route->get('/oauth/wechat/miniprogram/code', 'wechat.mini.program.code', ApiController\Wechat\WechatMiniProgramCodeController::class);
 $route->get('/oauth/wechat/qy', 'wechat.qy.login', ApiController\Users\WechatQyLoginController::class);
@@ -101,6 +113,7 @@ $route->get('/oauth/wechat/pc/login/{session_token}', 'wechat.pc.login', ApiCont
 |--------------------------------------------------------------------------
 */
 
+$route->get('/users/recommended', 'user.recommended', ApiController\Users\RecommendedUserController::class);
 $route->get('/users', 'users.list', ApiController\Users\ListUsersController::class);
 $route->post('/users', 'users.create', ApiController\Users\CreateUserController::class);
 $route->post('/users/pay-password/reset', '', ApiController\Users\ResetPayPasswordController::class);
@@ -151,6 +164,7 @@ $route->delete('/categories/{id}', 'categories.delete', ApiController\Category\D
 $route->get('/favorites', 'favorites', ApiController\Threads\ListFavoritesController::class);
 $route->get('/threads', 'threads.index', ApiController\Threads\ListThreadsController::class);
 $route->get('/threads/share/{id}', 'threads.share', ApiController\Threads\ShareThreadController::class);
+$route->get('/threads/relate/{id}', 'threads.relate', ApiController\Threads\RelateThreadsController::class);
 $route->get('/threads/likes', 'threads.likes', ApiController\Threads\ListLikesController::class);
 $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceThreadController::class);
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
@@ -316,7 +330,7 @@ $route->delete('/reports/batch/{ids}', 'reports.batchDelete', ApiController\Repo
 |--------------------------------------------------------------------------
 */
 
-$route->get('/analysis/goods', 'analysis.goods.url', ApiController\Analysis\ResourceAnalysisGoodsController::class);
+$route->post('/analysis/goods', 'analysis.goods.url', ApiController\Analysis\ResourceAnalysisGoodsController::class);
 
 /*
 |--------------------------------------------------------------------------

@@ -59,6 +59,7 @@ use Illuminate\Support\Stringable;
  * @property bool|null $is_paid
  * @property bool $is_sticky
  * @property bool $is_essence
+ * @property bool $is_site
  * @property Post $firstPost
  * @property Topic|Collection $topic
  * @property User $user

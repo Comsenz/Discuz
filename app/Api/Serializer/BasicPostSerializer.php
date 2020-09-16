@@ -65,7 +65,7 @@ class BasicPostSerializer extends AbstractSerializer
             Utils::getAttributeValues($model->getRawOriginal('content'), 'IMG', 'title')
         )->merge(
             Utils::getAttributeValues($model->getRawOriginal('content'), 'URL', 'title')
-        )->unique();
+        )->unique()->values();
 
         $attributes = [
             'replyUserId'       => $model->reply_user_id,

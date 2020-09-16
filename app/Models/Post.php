@@ -56,6 +56,7 @@ use Illuminate\Support\Str;
  * @property bool $is_comment
  * @property bool $is_approved
  * @property Collection $images
+ * @property Collection $attachments
  * @property Thread $thread
  * @property User $user
  * @property User $replyUser
@@ -478,7 +479,7 @@ class Post extends Model
     }
 
     /**
-     * Define the relationship with the post's attachments.
+     * Define the relationship with the post's images.
      *
      * @return HasMany
      */

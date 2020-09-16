@@ -91,8 +91,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
 
         if ($attachment->is_remote) {
             $httpClient = new HttpClient();
-            $path = Str::finish($attachment->file_path, '/') . $attachment->attachment;
-            $url = $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addHour());
+            $url = $this->filesystem->disk('attachment_cos')->temporaryUrl($attachment->full_path, Carbon::now()->addHour());
             if ($page) {
                 $url .= '&ci-process=doc-preview&page='.$page;
             }

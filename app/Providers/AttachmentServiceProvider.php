@@ -18,11 +18,13 @@
 
 namespace App\Providers;
 
+use App\Events\Attachment\Deleted;
 use App\Events\Attachment\Saving;
 use App\Events\Attachment\Uploaded;
 use App\Events\Attachment\Uploading;
 use App\Listeners\Attachment\AddWatermarkToImage;
 use App\Listeners\Attachment\CheckImage;
+use App\Listeners\Attachment\DeleteFile;
 use App\Listeners\Attachment\LocalImageHandler;
 use App\Listeners\Attachment\OrientateImage;
 use Discuz\Foundation\AbstractServiceProvider;
@@ -49,5 +51,6 @@ class AttachmentServiceProvider extends AbstractServiceProvider implements Defer
         $events->listen(Uploaded::class, LocalImageHandler::class);
 
         $events->listen(Saving::class, CheckImage::class);
+        $events->listen(Deleted::class, DeleteFile::class);
     }
 }

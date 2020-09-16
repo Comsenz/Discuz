@@ -18,10 +18,11 @@
 
 namespace App\Ucenter;
 
+use Carbon\Carbon;
 use Discuz\Contracts\Setting\SettingsRepository;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
 use GuzzleHttp\Client as HttpClient;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class Client
 {
@@ -82,7 +83,7 @@ class Client
     protected function getHttpClient()
     {
         return $this->httpClient ?? $this->httpClient = new HttpClient([
-                'base_uri' => $this->settings->get('ucenter_url', 'ucenter'), //http://dev.discuz.com/uc_server/',
+                'base_uri' => Str::finish($this->settings->get('ucenter_url', 'ucenter'), '/'),
                 'timeout'  =>  15
             ]);
     }

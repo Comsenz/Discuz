@@ -43,7 +43,8 @@ class CategoryPolicy extends AbstractPolicy
         }
 
         if (
-            in_array($actor->id, explode(',', $category->moderators))
+            $category->exists
+            // && in_array($actor->id, explode(',', $category->moderators))
             && $actor->hasPermission('category' . $category->id . '.' . $ability)
         ) {
             return true;

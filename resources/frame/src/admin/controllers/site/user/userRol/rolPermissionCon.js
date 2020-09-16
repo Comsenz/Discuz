@@ -115,7 +115,6 @@ export default {
      * @param category
      */
     handleCheckAllChange(category) {
-      console.log(category, 'pppp');
       let categoryPermissions = [
         `category${category.id}.viewThreads`,
         `category${category.id}.createThread`,

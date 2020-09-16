@@ -9,7 +9,7 @@
     <!-- 内容发布权限 -->
     <div v-show="activeTab.name === 'publish'">
       <Card>
-        <CardRow description="允许发布文字">
+        <CardRow description="允许发布文字帖">
           <el-checkbox
             v-model="checked"
             label="createThread"
@@ -19,7 +19,7 @@
       </Card>
 
       <Card>
-        <CardRow description="允许发布帖子">
+        <CardRow description="允许发布长文帖">
           <el-checkbox
             v-model="checked"
             label="createThreadLong"
@@ -29,7 +29,7 @@
       </Card>
 
       <Card>
-        <CardRow description="允许发布图片">
+        <CardRow description="允许发布图片帖">
           <el-checkbox
             v-model="checked"
             label="createThreadImage"
@@ -40,7 +40,7 @@
 
 
       <Card>
-        <CardRow description="允许发布视频">
+        <CardRow description="允许发布视频帖">
           <el-checkbox
             v-model="checked"
             label="createThreadVideo"
@@ -271,7 +271,7 @@
         <CardRow description="前台更改成员所属用户组的权限">
           <el-checkbox
             v-model="checked"
-            label="group.edit"
+            label="user.edit.group"
             :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
           >编辑用户组</el-checkbox>
         </CardRow>

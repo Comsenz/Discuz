@@ -37,6 +37,9 @@ use Illuminate\Support\Str;
  * @property int $is_approved
  * @property string $attachment
  * @property string $file_path
+ * @property string $full_path
+ * @property string $thumb_path
+ * @property string $blur_path
  * @property string $file_name
  * @property int $file_size
  * @property string $file_type
@@ -137,14 +140,40 @@ class Attachment extends Model
     }
 
     /**
-     * 获取替换缩略图名称
-     *
-     * @param $imgPath
+     * @param string $value
      * @return string
      */
-    public static function replaceThumb($imgPath)
+    public function getFilePathAttribute($value)
     {
-        return Str::replaceLast('.', '_thumb.', $imgPath);
+        return Str::finish($value, '/');
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullPathAttribute()
+    {
+        return $this->file_path . $this->attachment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getThumbPathAttribute()
+    {
+        return $this->file_path . Str::replaceLast('.', '_thumb.', $this->attachment);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlurPathAttribute()
+    {
+        $parts = explode('.', $this->attachment);
+
+        $parts[0] = md5($parts[0]);
+
+        return $this->file_path . implode('_blur.', $parts);
     }
 
     /**

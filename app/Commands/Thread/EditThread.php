@@ -160,6 +160,14 @@ class EditThread
             }
         }
 
+        if (isset($attributes['isSite'])) {
+            $this->assertCan($this->actor, 'isSite', $thread);
+
+            if ($thread->is_site != $attributes['isSite']) {
+                $thread->is_site = $attributes['isSite'];
+            }
+        }
+
         if (isset($attributes['isEssence'])) {
             $this->assertCan($this->actor, 'essence', $thread);
 
