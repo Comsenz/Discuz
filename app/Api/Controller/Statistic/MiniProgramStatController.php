@@ -34,11 +34,14 @@ class MiniProgramStatController implements RequestHandlerInterface
     {
         $body = $request->getBody();
         $client = $this->getHttpClient();
-        return $client->post('https://h5.udrig.com/app/wx/v1', [
+        $client->post('https://h5.udrig.com/app/wx/v1', [
             'body' => $body,
             'headers' => [
                 'Content-Type' => 'application/json'
             ]
         ]);
+
+        $body = $request->getParsedBody();
+        return $client->get('https://discuzq-0gxi1bn2969fa48d.service.tcloudbase.com/access?pt=mp-weixin&dn=' . $body[0]['app']['channel']);
     }
 }
