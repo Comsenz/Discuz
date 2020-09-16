@@ -3,13 +3,13 @@
     <!-- 设置权限子菜单 -->
     <div class="index-main-con__main-title__class permission__title">
       <i></i>
-      <span v-for="(item,index) in menuData" :key="index" :class="activeTab.name === item.name?'is-active':''"  @click="activeTab = item">{{item.title}}</span>
+      <span v-for="(item,index) in menuData" :key="index" :class="activeTab.name === item.name?'is-active':''" @click="activeTab = item">{{ item.title }}</span>
     </div>
     <Card :header="$router.history.current.query.name + activeTab.title"></Card>
     <!-- 内容发布权限 -->
     <div v-show="activeTab.name === 'publish'">
       <Card>
-        <CardRow description="允许发布文字">
+        <CardRow description="允许发布文字帖">
           <el-checkbox
             v-model="checked"
             label="createThread"
@@ -18,8 +18,8 @@
         </CardRow>
       </Card>
 
-        <Card>
-        <CardRow description="允许发布帖子">
+      <Card>
+        <CardRow description="允许发布长文帖">
           <el-checkbox
             v-model="checked"
             label="createThreadLong"
@@ -29,7 +29,7 @@
       </Card>
 
       <Card>
-        <CardRow description="允许发布图片">
+        <CardRow description="允许发布图片帖">
           <el-checkbox
             v-model="checked"
             label="createThreadImage"
@@ -40,7 +40,7 @@
 
 
       <Card>
-        <CardRow description="允许发布视频">
+        <CardRow description="允许发布视频帖">
           <el-checkbox
             v-model="checked"
             label="createThreadVideo"
@@ -95,6 +95,36 @@
             label="createThreadPaid"
             :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7' || wechatPayment"
           >发布付费内容</el-checkbox>
+        </CardRow>
+      </Card>
+
+      <Card>
+        <CardRow description="允许发布问答，只有在开启微信支付且允许发布付费内容时才能设置提问价格">
+          <el-checkbox
+            v-model="checked"
+            label="createThreadQuestion"
+            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+          >发布问答</el-checkbox>
+        </CardRow>
+      </Card>
+
+      <Card>
+        <CardRow description="允许成为发布问答时的提问对象">
+          <el-checkbox
+            v-model="checked"
+            label="canBeAsked"
+            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+          >允许被提问</el-checkbox>
+        </CardRow>
+      </Card>
+
+      <Card>
+        <CardRow description="允许在发布问答时设置围观">
+          <el-checkbox
+            v-model="checked"
+            label="canBeOnlooker"
+            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+          >设置围观</el-checkbox>
         </CardRow>
       </Card>
     </div>
@@ -163,7 +193,7 @@
           <el-checkbox v-model="checked" label="attachment.view.1">查看图片</el-checkbox>
         </CardRow>
       </Card>-->
-    <!-- $router.history.current.query.id === '7' -->
+      <!-- $router.history.current.query.id === '7' -->
       <Card>
         <CardRow description="查看站点成员列表、搜索成员的权限">
           <el-checkbox
@@ -271,7 +301,7 @@
         <CardRow description="前台更改成员所属用户组的权限">
           <el-checkbox
             v-model="checked"
-            label="group.edit"
+            label="user.edit.group"
             :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
           >编辑用户组</el-checkbox>
         </CardRow>
@@ -289,7 +319,7 @@
     </div>
     <!-- 默认权限 -->
     <div v-show="activeTab.name === 'default'">
-        <Card>
+      <Card>
         <CardRow description>
           <p style="margin-left: 24PX">站点信息</p>
         </CardRow>
@@ -324,7 +354,7 @@
           >裂变推广</el-checkbox>
           <el-checkbox
             v-model="is_commission"
-            @change="handlescaleChange"
+            @change="handleScaleChange"
             :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
           >收入分成</el-checkbox>
         </CardRow>
@@ -341,8 +371,83 @@
         </CardRow>
       </Card>
     </div>
+    <!-- 分类权限 -->
+    <div v-show="activeTab.name === 'category'" class="cont-class-box">
+      <div class="cont-class-table">
+        <el-table ref="multipleTable"
+                  :data="categoriesList"
+                  style="width: 100%"
+                  tooltip-effect="dark">
+          <el-table-column width="50">
+            <el-checkbox :id="scope.row.id"
+                         slot-scope="scope"
+                         v-model="scope.row.checkAll"
+                         :indeterminate="scope.row.isIndeterminate"
+                         @change="handleCheckAllChange(scope.row)">
+            </el-checkbox>
+          </el-table-column>
+
+          <el-table-column label="分类">
+            <template slot-scope="scope">{{ scope.row.name }}</template>
+          </el-table-column>
+
+          <el-table-column label="浏览分类">
+            <el-checkbox slot-scope="scope"
+                         v-model="checked"
+                         :label="`category${scope.row.id}.viewThreads`"
+                         @change="handleCheckedCategoryPermissionsChange(scope.row)">{{ '' }}
+            </el-checkbox>
+          </el-table-column>
+
+          <el-table-column label="发表内容">
+            <el-checkbox slot-scope="scope"
+                         v-model="checked"
+                         :disabled="checked.indexOf(`category${scope.row.id}.viewThreads`) === -1 || groupId === '7'"
+                         :label="`category${scope.row.id}.createThread`"
+                         @change="handleCheckedCategoryPermissionsChange(scope.row)">{{ '' }}
+            </el-checkbox>
+          </el-table-column>
+
+          <el-table-column label="发表评论">
+            <el-checkbox slot-scope="scope"
+                         v-model="checked"
+                         :disabled="checked.indexOf(`category${scope.row.id}.viewThreads`) === -1 || groupId === '7'"
+                         :label="`category${scope.row.id}.replyThread`"
+                         @change="handleCheckedCategoryPermissionsChange(scope.row)">{{ '' }}
+            </el-checkbox>
+          </el-table-column>
+
+          <el-table-column label="编辑内容">
+            <el-checkbox slot-scope="scope"
+                         v-model="checked"
+                         :disabled="checked.indexOf(`category${scope.row.id}.viewThreads`) === -1 || groupId === '7'"
+                         :label="`category${scope.row.id}.thread.edit`"
+                         @change="handleCheckedCategoryPermissionsChange(scope.row)">{{ '' }}
+            </el-checkbox>
+          </el-table-column>
+
+          <el-table-column label="删除内容">
+            <el-checkbox slot-scope="scope"
+                         v-model="checked"
+                         :disabled="checked.indexOf(`category${scope.row.id}.viewThreads`) === -1 || groupId === '7'"
+                         :label="`category${scope.row.id}.thread.hide`"
+                         @change="handleCheckedCategoryPermissionsChange(scope.row)">{{ '' }}
+            </el-checkbox>
+          </el-table-column>
+
+          <el-table-column label="加精内容">
+            <el-checkbox slot-scope="scope"
+                         v-model="checked"
+                         :disabled="checked.indexOf(`category${scope.row.id}.viewThreads`) === -1 || groupId === '7'"
+                         :label="`category${scope.row.id}.thread.essence`"
+                         @change="handleCheckedCategoryPermissionsChange(scope.row)">{{ '' }}
+            </el-checkbox>
+          </el-table-column>
+        </el-table>
+      </div>
+    </div>
     <Card class="footer-btn">
-      <el-button type="primary" @click="submitClick" size="medium">提交</el-button>
+      <el-button size="medium" type="primary" @click="submitClick">提交</el-button>
     </Card>
   </div>
 </template>
@@ -350,8 +455,10 @@
 <script>
 import "../../../../scss/site/module/userStyle.scss";
 import rolPermissionCon from "../../../../controllers/site/user/userRol/rolPermissionCon";
+// import '../../../scss/site/module/contStyle.scss';
 export default {
   name: "user-permission-view",
-  ...rolPermissionCon
+  ...rolPermissionCon,
+  // ...contClassConfigure,
 };
 </script>

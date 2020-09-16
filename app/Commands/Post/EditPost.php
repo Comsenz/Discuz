@@ -24,6 +24,7 @@ use App\Events\Post\Saved;
 use App\Events\Post\Saving;
 use App\Models\Post;
 use App\Models\PostMod;
+use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\PostRepository;
 use App\Validators\PostValidator;
@@ -95,6 +96,20 @@ class EditPost
             // 敏感词校验
             $content = $censor->checkText($attributes['content']);
 
+            // 视频帖、图片帖不传内容时设置默认内容
+            if ($post->is_first && empty(trim($content))) {
+                switch ($post->thread->type) {
+                    case Thread::TYPE_OF_VIDEO:
+                        $content = '分享视频';
+                        break;
+                    case Thread::TYPE_OF_IMAGE:
+                        $content = '分享图片';
+                        break;
+                    default:
+                        $content = '分享';
+                }
+            }
+
             // 存在审核敏感词时，将主题放入待审核
             if ($censor->isMod) {
                 $post->is_approved = Post::UNAPPROVED;
@@ -121,12 +136,10 @@ class EditPost
         if (isset($attributes['isDeleted'])) {
             $this->assertCan($this->actor, 'hide', $post);
 
-            $message = $attributes['message'] ?? '';
-
             if ($attributes['isDeleted']) {
-                $post->hide($this->actor, ['message' => $message]);
+                $post->hide($this->actor, ['message' => $attributes['message'] ?? '']);
             } else {
-                $post->restore($this->actor, ['message' => $message]);
+                $post->restore($this->actor, ['message' => $attributes['message'] ?? '']);
             }
         }
 

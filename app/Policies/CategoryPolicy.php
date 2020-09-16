@@ -43,7 +43,8 @@ class CategoryPolicy extends AbstractPolicy
         }
 
         if (
-            in_array($actor->id, explode(',', $category->moderators))
+            $category->exists
+            // && in_array($actor->id, explode(',', $category->moderators))
             && $actor->hasPermission('category' . $category->id . '.' . $ability)
         ) {
             return true;
@@ -87,6 +88,7 @@ class CategoryPolicy extends AbstractPolicy
                 'createThreadLong',
                 'createThreadVideo',
                 'createThreadImage',
+                'createThreadAudio',
             ], false)
             && $actor->hasPermission('category'.$category->id.'.viewThreads')
             && $actor->hasPermission('category'.$category->id.'.createThread')

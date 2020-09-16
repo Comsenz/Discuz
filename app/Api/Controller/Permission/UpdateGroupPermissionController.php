@@ -66,17 +66,9 @@ class UpdateGroupPermissionController extends AbstractListController
             return DiscuzResponseFactory::EmptyResponse();
         }
 
-        $permissions = collect(Arr::get($data, 'attributes.permissions'));
-
-        // 默认权限：收藏、点赞、打赏
-        $defaultPermission = [
-            'thread.favorite',
-            'thread.likePosts',
-            'order.create'
-        ];
-
         // 合并默认权限，去空，去重，转换格式
-        $permissions = $permissions->merge($defaultPermission)
+        $permissions = collect(Arr::get($data, 'attributes.permissions'))
+            ->merge(Permission::DEFAULT_PERMISSION)
             ->filter()
             ->unique()
             ->map(function ($item) use ($groupId) {
@@ -87,7 +79,7 @@ class UpdateGroupPermissionController extends AbstractListController
             })
             ->toArray();
 
-        Permission::query()->where('group_id', $groupId)->where('permission', 'not like', 'category%')->delete();
+        Permission::query()->where('group_id', $groupId)->delete();
 
         Permission::query()->insert($permissions);
 

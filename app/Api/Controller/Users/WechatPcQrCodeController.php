@@ -59,7 +59,7 @@ class WechatPcQrCodeController extends AbstractResourceController
         $token = SessionToken::generate(self::IDENTIFIER);
         $token->save();
 
-        $locationUrl = $this->url->action('', ['session_token' => $token->token]);
+        $locationUrl = $this->url->action('/pages/user/pc-login', ['session_token' => $token->token]);
 
         $qrCode = new QrCode($locationUrl);
 

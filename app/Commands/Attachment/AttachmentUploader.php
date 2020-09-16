@@ -22,6 +22,7 @@ use App\Models\Attachment;
 use Carbon\Carbon;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Filesystem\CosAdapter;
+use Illuminate\Contracts\Filesystem\Factory;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 
@@ -85,12 +86,30 @@ class AttachmentUploader
     {
         $this->file = $file;
 
-        /**
-         * 如果类型是 1（帖子图片）并且使用云存储，就使用云上数据处理，生成高斯模糊图。
-         * @see https://cloud.tencent.com/document/product/460/18147#.E4.BA.91.E4.B8.8A.E6.95.B0.E6.8D.AE.E5.A4.84.E7.90.86
-         */
-        $fileName = $this->file->hashName();
-        $this->put($type, $this->file, $fileName, $this->path, $options);
+        $fileName = pathinfo($this->file->hashName());
+
+        $this->put($type, $this->file, $fileName['filename'] . '.' . $this->file->clientExtension(), $this->path, $options);
+    }
+
+    public function delete(Attachment $attachment)
+    {
+        /** @var Factory $filesystem */
+        $filesystem = app(Factory::class);
+
+        $filesystem = $filesystem->disk($attachment->is_remote ? 'attachment_cos' : 'attachment');
+
+        $filesystem->delete($attachment->full_path);
+
+        // 帖子图片
+        if ($attachment->type === Attachment::TYPE_OF_IMAGE) {
+            // 删除缩略图
+            if (! $attachment->is_remote) {
+                $filesystem->delete($attachment->thumb_path);
+            }
+
+            // 删除高斯模糊图
+            $filesystem->delete($attachment->blur_path);
+        }
     }
 
     /**
@@ -105,6 +124,10 @@ class AttachmentUploader
     {
         $path = $path ?: $this->path;
 
+        /**
+         * 如果类型是 1（帖子图片）并且使用云存储，就使用云上数据处理，生成高斯模糊图。
+         * @see https://cloud.tencent.com/document/product/460/18147#.E4.BA.91.E4.B8.8A.E6.95.B0.E6.8D.AE.E5.A4.84.E7.90.86
+         */
         if ($type === Attachment::TYPE_OF_IMAGE && $this->isRemote()) {
             [$hash, $extension] = explode('.', $fileName);
 
@@ -121,8 +144,7 @@ class AttachmentUploader
                 ]
             ], $options);
         }
-
-        $this->filesystem->put($path, $file, $options);
+        $this->filesystem->putFileAs($path, $file, $fileName, $options);
     }
 
     /**
@@ -155,7 +177,7 @@ class AttachmentUploader
         $fullPath = $this->file->hashName($this->getPath());
 
         return $this->isRemote() && (bool) $this->settings->get('qcloud_cos_sign_url', 'qcloud', true)
-            ? $this->filesystem->temporaryUrl($fullPath, Carbon::now()->addMinutes(15))
+            ? $this->filesystem->temporaryUrl($fullPath, Carbon::now()->addHour())
             : $this->filesystem->url($fullPath);
     }
 }

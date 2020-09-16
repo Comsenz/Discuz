@@ -57,7 +57,6 @@ class PostListener
         $events->listen(Saving::class, CheckPublish::class);
         $events->listen(Saving::class, [$this, 'whenPostWasSaving']);
         $events->listen(Created::class, [$this, 'whenPostWasCreated']);
-        $events->listen(Created::class, SaveAudioToDatabase::class);
 
         // 审核回复
         $events->listen(PostWasApproved::class, [$this, 'whenPostWasApproved']);

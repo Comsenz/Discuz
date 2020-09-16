@@ -25,6 +25,7 @@ use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\ValidationException;
 
 class ThreadVideoListener
 {
@@ -59,10 +60,14 @@ class ThreadVideoListener
 
     /**
      * @param Saving $event
+     * @throws ValidationException
      */
     public function whenThreadSaving(Saving $event)
     {
-        if (Arr::get($event->data, 'attributes.type') == Thread::TYPE_OF_VIDEO) {
+        $thread = $event->thread;
+
+        // 视频帖 或 语音帖
+        if (! $thread->exists && in_array($thread->type, [Thread::TYPE_OF_VIDEO, Thread::TYPE_OF_AUDIO])) {
             $this->validator->make(
                 [
                     'switch' => (bool) $this->settings->get('qcloud_vod', 'qcloud'),

@@ -64,7 +64,7 @@
         
         <div class="cont-manage-header_condition">
           <span class="cont-manage-header_condition-titles condttions-titles" style="padding-left: 20px">推荐：</span>
-          <el-select v-model="value" @change="obtainValue" placeholder="请选择">
+          <el-select v-model="value" :clearable="true" @change="obtainValue" placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -103,7 +103,7 @@
               :label="items._data.id"
               @change="handleCheckedCitiesChange()"
             ></el-checkbox> -->
-            <el-radio-group v-model="radio[index]"  @change="themidpost($event,items._data.id)">
+            <el-radio-group v-model="radio[index]" @change="themidpost($event,items._data.id)">
               <el-radio :label="1">推荐</el-radio>
               <el-radio :label="2">取消</el-radio>
               <el-radio :label="3">删除</el-radio>
@@ -124,7 +124,7 @@
               <span
                 class="cont-manage-theme__table-main-bigbox-box"
                 @click="btnrecomment(items._data.id, items._data.recommended)"
-              >{{items._data.recommended ? recomment1 : recomment2}}</span>
+              >{{items._data.recommended === 1 ? recomment2 : recomment1}}</span>
               <span class="cont-manage-theme__table-main-bigbox-span"></span>
               <span class="cont-manage-theme__table-main-bigbox-box" @click="deteleTopic(items._data.id)">删除</span>
             </div>
@@ -152,8 +152,8 @@
     <div class="cont-manage-operating">
       <Card class="footer-btn">
         <el-button :loading="subLoading" type="primary"  @click="btnSubmit">提交</el-button>
-        <span class="cont-manage-operating-all operating-alls" @click="allRecomment(0,themeListAll, 1)">全部推荐</span>
-        <span class="cont-manage-operating-all" @click="allRecomment(1,themeListAll, 1)">全部取消推荐</span>
+        <span class="cont-manage-operating-all operating-alls" @click="allRecomment(1,themeListAll, 1)">全部推荐</span>
+        <span class="cont-manage-operating-all" @click="allRecomment(0,themeListAll, 1)">全部取消推荐</span>
         <span class="cont-manage-operating-all" @click="deleteClick(themeListAll, 1)">全部删除</span>
         <!-- <el-button @click="deleteClick" :loading="subLoading" type="primary">全部删除</el-button> -->
       </Card>

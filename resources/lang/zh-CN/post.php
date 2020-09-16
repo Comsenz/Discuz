@@ -1,8 +1,19 @@
 <?php
 
 /**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
+ * Copyright (C) 2020 Tencent Cloud.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 /**
@@ -12,8 +23,6 @@
 return [
     'post_not_found' => '未查询到该条回复',
     'post_not_comment' => '不能回复，回复回帖的内容', // 点评
-
-    'post_attachment_delete_error' => '删除上传内容失败',
 
     // goods商品解析
     'post_goods_not_found_address' => '未匹配到地址格式',

@@ -34,6 +34,7 @@ use App\Notifications\System;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\EventsDispatchTrait;
 use Discuz\SpecialChar\SpecialCharServer;
@@ -132,6 +133,11 @@ class UpdateUser
                 // 当原支付密码为空时，视为初始化支付密码，不需要验证 pay_password_token
                 // 当原支付密码不为空时，则需验证 pay_password_token
                 if ($user->pay_password) {
+                    // 验证新密码与原密码不能相同
+                    if ($user->checkWalletPayPassword($payPassword)) {
+                        throw new TranslatorException('user_update_error', ['cannot_use_the_same_password']);
+                    }
+
                     $this->validator->setUser($user);
                     $validator['pay_password_token'] = Arr::get($attributes, 'pay_password_token');
                 }
@@ -209,6 +215,13 @@ class UpdateUser
                 $newGroups = collect($groups)->filter(function ($groupId) {
                     return (int) $groupId;
                 })->unique()->sort();
+                // 只有管理员用户组可以编辑为管理员或游客
+                if (
+                    !$this->actor->isAdmin() &&
+                    ($newGroups->search(1) !== false || $newGroups->search(7) !== false)
+                ) {
+                    throw new PermissionDeniedException();
+                }
 
                 // 获取旧用户组
                 $oldGroups = $user->groups->keyBy('id')->sortKeys();

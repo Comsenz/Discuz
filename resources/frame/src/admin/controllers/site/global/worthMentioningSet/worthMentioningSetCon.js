@@ -31,11 +31,12 @@ export default {
       }, {
         name: 'UCenter',
         type: 'ucenter_close',
-        description: '配置UCenter地址以及通信密钥',
         tag:'ucenter',
-        status: true,
+        description: '配置UCenter地址以及通信密钥',
+        status: '',
         icon: 'iconucenter',
-      }]
+      }
+    ]
       // settingStatus:{}
     }
   },
@@ -55,7 +56,7 @@ export default {
           this.$message.error(res.errors[0].code);
         }else {
           this.forums = data.readdata._data;
-          console.log(this.forums,'这是初始化');
+          console.log(data,'这是初始化');
           if (data.readdata._data.passport.offiaccount_close == '0') {
             this.settingStatus[0].status = false;
           } else {
@@ -70,6 +71,11 @@ export default {
             this.settingStatus[2].status = false;
           } else {
             this.settingStatus[2].status = true;
+          }
+          if (data.readdata._data.ucenter.ucenter == false) {
+            this.settingStatus[3].status = false;
+          } else {
+            this.settingStatus[3].status = true;
           }
         }
         // this.$message({'修改成功'});
@@ -106,13 +112,22 @@ export default {
           }
         }
       }
-      console.log(index,type,status,'这是参数');
+
+      if (type === 'ucenter_close') {
+        if (!this.forums.ucenter.ucenter_appid || !this.forums.ucenter.ucenter_key || !this.forums.ucenter.ucenter_url){
+          this.$message.error('请先填写配置再开启');
+          return;
+        }
+      }
+
       if(type == 'offiaccount_close') {
         this.changeSettings('offiaccount_close',status,'wx_offiaccount');
       } else if( type == 'miniprogram_close'){
         this.changeSettings('miniprogram_close',status,'wx_miniprogram');
+      } else if (type == 'ucenter_close') {
+        this.changeSettings('ucenter', status == '1' ? true : false, 'ucenter');
       } else {
-        this.changeSettings('oplatform_close',status,'wx_oplatform');
+        this.changeSettings('oplatform_close', status, 'wx_oplatform');
       }
     },
     //修改配置时请求接口

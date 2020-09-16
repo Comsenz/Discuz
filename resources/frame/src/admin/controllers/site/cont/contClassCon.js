@@ -17,10 +17,14 @@ export default {
       delLoading:false,             //删除按钮状态
       subLoading:false,             //提交按钮状态
       showClass:false,              //分类权限显示隐藏
-    }
+      dialogVisible: false
+    };
   },
 
   methods:{
+    addClick() {
+      console.log('12344');
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
 
@@ -103,12 +107,6 @@ export default {
         this.getCategories();
       });
       this.visible = false;
-    },
-
-    // 权限设置跳转页面
-    permission(id) {
-      this.$router.push({path:'/admin/cont-class-configure',query: {id:id}})
-      // this.$router.push({path:'/admin/contclass-configure',query: {id:id}});
     },
 
     /*

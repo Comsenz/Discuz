@@ -19,6 +19,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $group_id
@@ -26,6 +27,16 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Permission extends Model
 {
+    const DEFAULT_PERMISSION = [
+        'thread.favorite',              // 收藏
+        'thread.likePosts',             // 点赞
+        'userFollow.create',            // 关注
+        'user.view',                    // 查看个人信息，目前仅用于前台显示权限
+        'order.create',                 // 创建订单
+        'trade.pay.order',              // 支付订单
+        'cash.create',                  // 提现
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -44,7 +55,7 @@ class Permission extends Model
     /**
      * Define the relationship with the group that this permission is for.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function group()
     {

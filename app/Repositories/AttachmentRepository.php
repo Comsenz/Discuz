@@ -36,16 +36,16 @@ class AttachmentRepository extends AbstractRepository
     }
 
     /**
-     * Find a attachment by uuid, optionally making sure it is visible to a
+     * Find a attachment by id, optionally making sure it is visible to a
      * certain user, or throw an exception.
      *
-     * @param $uuid
+     * @param $id
      * @param User|null $actor
      * @return Attachment
      */
-    public function findOrFail($uuid, User $actor = null)
+    public function findOrFail($id, User $actor = null)
     {
-        $query = Attachment::where('id', $uuid);
+        $query = Attachment::where('id', $id);
 
         return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }

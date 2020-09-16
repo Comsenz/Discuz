@@ -20,6 +20,7 @@ namespace App\Api\Controller\Ucenter;
 
 use App\Ucenter\Authcode;
 use App\Ucenter\Client;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -33,21 +34,23 @@ class UcenterController implements RequestHandlerInterface
 
     const API_RETURN_FAILED = -1;
 
-    const UC_KEY = '';  //后期取配置
+    protected $settings;
+
+    public function __construct(SettingsRepository $settings)
+    {
+        $this->settings = $settings;
+    }
 
     /**
      * @inheritDoc
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $ucenterClient = new Client();
-        $ucenterClient->setRequest($request);
-
         $content = '';
         $code = Arr::get($request->getQueryParams(), 'code');
 
         $get = $post = [];
-        parse_str(Authcode::decode($code, self::UC_KEY), $get);
+        parse_str(Authcode::decode($code, $this->settings->get('ucenter_key', 'ucenter')), $get);
 
         if (Carbon::now()->timestamp - Arr::get($get, 'time') > 3600) {
             $content = 'Authracation has expiried';

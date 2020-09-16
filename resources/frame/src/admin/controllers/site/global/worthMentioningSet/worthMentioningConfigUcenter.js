@@ -4,8 +4,9 @@ import CardRow from '../../../../view/site/common/card/cardRow';
 export default {
   data:function () {
     return {
-      valueKey: '',
+      valueAppid: '',
       valueUrl: '',
+      valueKey: '',
     }
   },
 
@@ -26,8 +27,9 @@ export default {
         if (data.errors){
           this.$message.error(data.errors[0].code);
         }else {
-          this.valueKey = data.data.attributes.ucenter.ucenter_key;
-          this.valueUrl = data.data.attributes.ucenter.ucenter_url;
+          this.valueKey = data.readdata._data.ucenter.ucenter_key;
+          this.valueUrl = data.readdata._data.ucenter.ucenter_url;
+          this.valueAppid = data.readdata._data.ucenter.ucenter_appid;
         }
       })
     },
@@ -38,16 +40,23 @@ export default {
         data:{
           "data":[
             {
+              "attributes":{
+               "key":"ucenter_appid",
+               "value":this.valueAppid,
+               "tag": 'ucenter'
+              }
+           },
+            {
                "attributes":{
-                "key":"ucenter_key",
-                "value":this.valueKey,
+                "key":"ucenter_url",
+                "value":this.valueUrl,
                 "tag": 'ucenter'
                }
             },
             {
               "attributes":{
-               "key":"ucenter_url",
-               "value":this.valueUrl,
+               "key":"ucenter_key",
+               "value":this.valueKey,
                "tag": 'ucenter'
               }
             },

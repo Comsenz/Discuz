@@ -20,12 +20,13 @@ namespace App\Commands\Attachment;
 
 use App\Events\Attachment\Deleted;
 use App\Events\Attachment\Deleting;
-use App\Exceptions\TranslatorException;
+use App\Models\Attachment;
 use App\Models\User;
 use App\Repositories\AttachmentRepository;
-use App\Tools\AttachmentUploadTool;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
+use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class DeleteAttachment
@@ -34,11 +35,11 @@ class DeleteAttachment
     use EventsDispatchTrait;
 
     /**
-     * The uuid of the attachment to delete.
+     * The id of the attachment to delete.
      *
      * @var string
      */
-    public $attachmentUuid;
+    public $attachmentId;
 
     /**
      * The user performing the action.
@@ -48,20 +49,18 @@ class DeleteAttachment
     public $actor;
 
     /**
-     * 暂未用到，留给插件使用
-     *
      * @var array
      */
     public $data;
 
     /**
-     * @param int $attachmentUuid
+     * @param int $attachmentId
      * @param User $actor
      * @param array $data
      */
-    public function __construct($attachmentUuid, User $actor, array $data = [])
+    public function __construct($attachmentId, User $actor, array $data = [])
     {
-        $this->attachmentUuid = $attachmentUuid;
+        $this->attachmentId = $attachmentId;
         $this->actor = $actor;
         $this->data = $data;
     }
@@ -69,16 +68,15 @@ class DeleteAttachment
     /**
      * @param Dispatcher $events
      * @param AttachmentRepository $attachments
-     * @param AttachmentUploadTool $uploadTool
-     * @return \App\Models\Attachment
-     * @throws TranslatorException
-     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @return Attachment
+     * @throws PermissionDeniedException
+     * @throws Exception
      */
-    public function handle(Dispatcher $events, AttachmentRepository $attachments, AttachmentUploadTool $uploadTool)
+    public function handle(Dispatcher $events, AttachmentRepository $attachments)
     {
         $this->events = $events;
 
-        $attachment = $attachments->findOrFail($this->attachmentUuid, $this->actor);
+        $attachment = $attachments->findOrFail($this->attachmentId, $this->actor);
 
         $this->assertCan($this->actor, 'delete', $attachment);
 
@@ -86,15 +84,8 @@ class DeleteAttachment
             new Deleting($attachment, $this->actor, $this->data)
         );
 
-        $attachment->raise(new Deleted($attachment));
-
-        // 删除源文件
-        $result = $uploadTool->delete($attachment);
-
-        if ($result) {
-            $attachment->delete();
-        } else {
-            throw new TranslatorException('post_attachment_delete_error');
+        if ($attachment->delete()) {
+            $attachment->raise(new Deleted($attachment, $this->actor));
         }
 
         $this->dispatchEventsFor($attachment, $this->actor);

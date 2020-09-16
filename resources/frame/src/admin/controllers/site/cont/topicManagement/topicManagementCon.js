@@ -72,15 +72,15 @@ export default {
       recomment2: '取消推荐',
       options: [
         {
-          value: true,
+          value: 1,
           label: '是',
         },
         {
-          value: false,
+          value: 0,
           label: '否',
         }
       ],
-      value: false,
+      value: '',
       checkedAll: false,
       recommentNumber: '',
       recommentParams: 'createdAt',
@@ -162,17 +162,11 @@ export default {
       this.getThemeList(1);
     },
 
-
     /*
     * 请求接口
     * */
     getThemeList(pageNumber) {
       let searchData = this.searchData;
-      if(this.value) {
-         this.recommentParams = 'recommended';
-      } else {
-        this.recommentParams = '-createdAt';
-      }
       this.appFetch({
         url: 'topics',
         method: 'get',
@@ -180,9 +174,10 @@ export default {
           include: ['user'],
           'filter[content]':searchData.topicContent,
           'page[number]': pageNumber,
+          'filter[recommended]': this.value,
           'page[size]': searchData.pageSelect,
           'filter[q]': searchData.themeKeyWords,
-          'sort': this.recommentParams,
+          'sort': '-createdAt',
           'filter[username]':searchData.topicAuthor,
           'filter[content]':searchData.topicContent,
           'filter[createdAtBegin]':searchData.releaseTime[0],
@@ -266,7 +261,7 @@ export default {
         }
       })
       .then((res) => {
-        if(res.data.attributes.recommended === 0) {
+        if(res.data.attributes.recommended === 1) {
           this.$message.success("推荐成功");
         } else {
           this.$message.success("取消推荐成功");
@@ -296,7 +291,7 @@ export default {
       })
       .then((res) => {
         if(nums === 1) {
-          if (num === 0) {
+          if (num === 1) {
             this.$message.success("全部推荐成功");
           } else {
             this.$message.success("全部取消推荐成功");
@@ -344,13 +339,13 @@ export default {
         }
       })
       if(this.recommend.length >= 1) {
-        this.allRecomment(0,this.recommend, 2);
+        this.allRecomment(1,this.recommend, 2);
       }
       if(this.detelethem.length >= 1) {
         this.deleteClick(this.detelethem, 2);
       }
       if(this.cancelrecomend.length >= 1) {
-        this.allRecomment(1,this.cancelrecomend, 2);
+        this.allRecomment(0,this.cancelrecomend, 2);
       }
       this.$message.success("提交成功");
       this.radio = [];

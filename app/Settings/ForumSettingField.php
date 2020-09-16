@@ -251,6 +251,7 @@ class ForumSettingField
         return [
             'ucenter_url' => $this->settings->get('ucenter_url', 'ucenter'),
             'ucenter_key' => $this->settings->get('ucenter_key', 'ucenter'),
+            'ucenter_appid' => $this->settings->get('ucenter_appid', 'ucenter'),
         ];
     }
 }
