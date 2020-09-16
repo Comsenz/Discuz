@@ -97,6 +97,36 @@
           >发布付费内容</el-checkbox>
         </CardRow>
       </Card>
+
+      <Card>
+        <CardRow description="允许发布问答，只有在开启微信支付且允许发布付费内容时才能设置提问价格">
+          <el-checkbox
+            v-model="checked"
+            label="createThreadQuestion"
+            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+          >发布问答</el-checkbox>
+        </CardRow>
+      </Card>
+
+      <Card>
+        <CardRow description="允许成为发布问答时的提问对象">
+          <el-checkbox
+            v-model="checked"
+            label="canBeAsked"
+            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+          >允许被提问</el-checkbox>
+        </CardRow>
+      </Card>
+
+      <Card>
+        <CardRow description="允许在发布问答时设置围观">
+          <el-checkbox
+            v-model="checked"
+            label="canBeOnlooker"
+            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+          >设置围观</el-checkbox>
+        </CardRow>
+      </Card>
     </div>
     <!-- 安全设置 -->
     <div v-show="activeTab.name === 'security'">
