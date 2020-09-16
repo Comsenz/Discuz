@@ -35,4 +35,5 @@ return [
 
     // PC
     'pc_qrcode_time_out' => '二维码已失效，扫码超时',
+    'pc_qrcode_time_fail' => '扫码登陆失败',
 ];
