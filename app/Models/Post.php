@@ -219,6 +219,10 @@ class Post extends Model
      */
     public function formatContent()
     {
+        if (empty($this->attributes['content'])) {
+            return $this->attributes['content'];
+        }
+
         return static::$formatter->render($this->attributes['content']);
     }
 

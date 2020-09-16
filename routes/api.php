@@ -196,7 +196,7 @@ $route->delete('/posts/{id}', 'posts.delete', ApiController\Posts\DeletePostCont
 |--------------------------------------------------------------------------
 */
 
-$route->post('/question/answer/{question_id}', 'question.answer.create', ApiController\Question\CreateQuestionAnswerController::class);
+$route->post('/questions/{question_id}/answer', 'questions.answer.create', ApiController\Question\CreateQuestionAnswerController::class);
 
 /*
 |--------------------------------------------------------------------------
