@@ -86,9 +86,9 @@ class AttachmentUploader
     {
         $this->file = $file;
 
-        $fileName = $this->file->hashName();
+        $fileName = pathinfo($this->file->hashName());
 
-        $this->put($type, $this->file, $fileName, $this->path, $options);
+        $this->put($type, $this->file, $fileName['filename'] . $this->file->clientExtension(), $this->path, $options);
     }
 
     public function delete(Attachment $attachment)
