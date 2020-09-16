@@ -16,19 +16,28 @@
  * limitations under the License.
  */
 
-namespace App\Tools;
+namespace App\Listeners\Attachment;
 
-use Discuz\Foundation\AbstractUploadTool;
+use App\Commands\Attachment\AttachmentUploader;
+use App\Events\Attachment\Deleted;
 
-class ImageUploadTool extends AbstractUploadTool
+class DeleteFile
 {
     /**
-     * @var type
+     * @var AttachmentUploader
      */
-    protected $fileType = [];
+    public $uploader;
 
     /**
-     * @var type
+     * @param AttachmentUploader $uploader
      */
-    protected $fileSize = 5*1024*1024;
+    public function __construct(AttachmentUploader $uploader)
+    {
+        $this->uploader = $uploader;
+    }
+
+    public function handle(Deleted $event)
+    {
+        $this->uploader->delete($event->attachment);
+    }
 }

@@ -23,7 +23,10 @@ use App\Events\Post\Saved;
 use App\Events\Post\Saving;
 use App\Models\Attachment;
 use App\Models\Post;
+use App\Models\Thread;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
+use Exception;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Builder;
@@ -57,50 +60,24 @@ class PostAttachment
 
     /**
      * @param Saving $event
-     * @throws \Exception
+     * @throws Exception
      */
     public function whenPostIsSaving(Saving $event)
     {
-        $post = $event->post;
-        $attachments = (array) Arr::get($event->data, 'relationships.attachments.data');
-
-        switch ($event->post->thread->type) {
-            // // 文本
-            // case 0:
-            //     // 文字帖不能有附件
-            //     if ($attachments) {
-            //         throw new \Exception('cannot_create_text_thread_with_attachments');
-            //     }
-            //
-            //     break;
-            // // 帖子
-            // case 1:
-            // // 视频
-            // case 2:
-            // 图片
-            case 3:
-                // TODO: 前端修改帖子删除方式后，增加判读编辑图片帖时必须有图片
-                // 发表图片帖必须有图片
-                if (! $post->exists && $post->is_first) {
-                    $images = $attachments && Attachment::query()
-                            ->where('user_id', $event->actor->id)
-                            ->where('type', Attachment::TYPE_OF_IMAGE)
-                            ->where('type_id', 0)
-                            ->whereIn('id', array_column($attachments, 'id'))
-                            ->exists();
-
-                    if (! $images) {
-                        throw new \Exception('cannot_create_image_thread_without_attachments');
-                    }
-                }
-
-                break;
+        // 图片帖必须有图片
+        if (
+            $event->post->is_first
+            && Arr::has($event->data, 'relationships.attachments.data')
+            && ! array_column(Arr::get($event->data, 'relationships.attachments.data'), 'id')
+            && $event->post->thread->type === Thread::TYPE_OF_IMAGE
+        ) {
+            throw new Exception('cannot_create_image_thread_without_attachments');
         }
     }
 
     /**
      * @param Saved $event
-     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @throws PermissionDeniedException
      */
     public function whenPostWasSaved(Saved $event)
     {

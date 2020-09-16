@@ -140,7 +140,7 @@ class CreateAttachment
                 $uploader->getPath(),
                 $this->name ?: $file->getClientOriginalName(),
                 $file->getSize(),
-                $file->getMimeType(),
+                $file->getClientMimeType(),
                 $uploader->isRemote(),
                 Attachment::APPROVED,
                 $this->ipAddress,

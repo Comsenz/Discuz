@@ -17,10 +17,14 @@ export default {
       delLoading:false,             //删除按钮状态
       subLoading:false,             //提交按钮状态
       showClass:false,              //分类权限显示隐藏
-    }
+      dialogVisible: false
+    };
   },
 
   methods:{
+    addClick() {
+      console.log('12344');
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
 

@@ -55,6 +55,7 @@ class AttachmentSerializer extends AbstractSerializer
     /**
      * @param Filesystem $filesystem
      * @param SettingsRepository $settings
+     * @param UrlGenerator $url
      */
     public function __construct(Filesystem $filesystem, SettingsRepository $settings, UrlGenerator $url)
     {
@@ -72,14 +73,12 @@ class AttachmentSerializer extends AbstractSerializer
     {
         $this->paidContent($model);
 
-        $path = Str::finish($model->file_path, '/') . $model->attachment;
-
         if ($model->is_remote) {
             $url = $this->settings->get('qcloud_cos_sign_url', 'qcloud', true)
-                ? $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addHour())
-                : $this->filesystem->disk('attachment_cos')->url($path);
+                ? $this->filesystem->disk('attachment_cos')->temporaryUrl($model->full_path, Carbon::now()->addHour())
+                : $this->filesystem->disk('attachment_cos')->url($model->full_path);
         } else {
-            $url = $this->filesystem->disk('attachment')->url($path);
+            $url = $this->filesystem->disk('attachment')->url($model->full_path);
         }
 
         $attributes = [
@@ -106,7 +105,10 @@ class AttachmentSerializer extends AbstractSerializer
                     $attributes['thumbUrl'] = $url . (strpos($url, '?') === false ? '?' : '&')
                         . 'imageMogr2/thumbnail/' . Attachment::FIX_WIDTH . 'x' . Attachment::FIX_WIDTH;
                 } else {
-                    $attributes['thumbUrl'] = Str::replaceLast('.', '_thumb.', $url);
+                    // 缩略图不存在时使用原图
+                    $attributes['thumbUrl'] = $this->filesystem->disk('attachment')->exists($model->thumb_path)
+                        ? Str::replaceLast('.', '_thumb.', $url)
+                        : $url;
                 }
             }
         }
