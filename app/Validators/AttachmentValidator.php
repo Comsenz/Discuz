@@ -50,13 +50,13 @@ class AttachmentValidator extends AbstractValidator
     {
         $typeName = $this->getTypeName();
         // 文件类型
-        $mimes = Str::of($this->settings->get("support_{$typeName}_ext"))
+        $extensions = Str::of($this->settings->get("support_{$typeName}_ext"))
             ->explode(',')
             ->unique();
-        $mimes = $mimes->each(function ($value, $key) use ($mimes) {
+        $extensions = $extensions->each(function ($value, $key) use ($extensions) {
             // 无论如何禁止上传 php 文件
             if ($value == 'php') {
-                unset($mimes[$key]);
+                unset($extensions[$key]);
             }
         })->push('bin')->join(',');
 
@@ -64,7 +64,8 @@ class AttachmentValidator extends AbstractValidator
         $rules =  [
             'type' => 'required|integer|between:0,4',
             'size' => 'bail|gt:0',
-            'file' => ['bail', 'required', "mimes:{$mimes}"],
+            'file' => ['bail', 'required'],
+            'ext' =>  ['required_with:file', "in:{$extensions}"],
         ];
 
         // 文件大小
@@ -79,7 +80,7 @@ class AttachmentValidator extends AbstractValidator
     {
         $typeName = $this->getTypeName();
         return [
-            'file.mimes' => '文件类型错误，支持'.$this->settings->get("support_{$typeName}_ext"),
+            'ext.in' => '文件类型错误，支持'.$this->settings->get("support_{$typeName}_ext"),
         ];
     }
 
