@@ -55,7 +55,7 @@ class GroupSerializer extends AbstractSerializer
             'name'              => $model->name,
             'type'              => $model->type,
             'color'             => $model->color,
-            'icon'              => $this->getIconUrl($model->icon),
+            'icon'              => $this->getIconUrl($model),
             'default'           => $model->default,
             'isDisplay'         => (bool) $model->is_display,
             'isPaid'            => (bool) $model->is_paid,
@@ -86,11 +86,15 @@ class GroupSerializer extends AbstractSerializer
     }
 
     /**
-     * @param string $icon
+     * @param Group $group
      * @return null|string
      */
-    protected function getIconUrl($icon)
+    protected function getIconUrl($group)
     {
-        return $icon ? $this->url->to('/storage/' . $icon) : null;
+        if ($group->icon) {
+            return $this->url->to('/storage/' . $group->icon);
+        } elseif (in_array($group->id, [Group::ADMINISTRATOR_ID, Group::GUEST_ID, Group::MEMBER_ID])) {
+            return $this->url->to("/images/groups/group-{$group->id}.svg");
+        }
     }
 }
