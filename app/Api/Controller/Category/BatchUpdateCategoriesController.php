@@ -19,9 +19,12 @@
 namespace App\Api\Controller\Category;
 
 use App\Api\Serializer\CategorySerializer;
-use App\Commands\Category\BatchEditCategories;
+use App\Commands\Category\EditCategory;
 use Discuz\Api\Controller\AbstractListController;
+use Exception;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -54,12 +57,33 @@ class BatchUpdateCategoriesController extends AbstractListController
         $data = $request->getParsedBody()->get('data', []);
         $ip = ip($request->getServerParams());
 
-        $result = $this->bus->dispatch(
-            new BatchEditCategories($actor, $data, $ip)
-        );
+        $meta = [];
 
-        $document->setMeta($result['meta']);
+        $categories = collect($data)
+            ->unique('id')
+            ->keyBy('id')
+            ->map(function ($category, $id) use ($actor, $ip, &$meta) {
+                try {
+                    return $this->bus->dispatch(
+                        new EditCategory($id, $actor, $category, $ip)
+                    );
+                } catch (ValidationException $e) {
+                    $meta[] = ['id' => $id, 'message' => $e->errors()];
+                } catch (Exception $e) {
+                    $meta[] = [
+                        'id' => $id,
+                        'message' => Str::of(get_class($e))
+                            ->afterLast('\\')
+                            ->beforeLast('Exception')
+                            ->snake()
+                            ->__toString(),
+                    ];
+                }
+            })
+            ->filter();
 
-        return $result['data'];
+        $document->setMeta($meta);
+
+        return $categories;
     }
 }
