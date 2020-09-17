@@ -20,6 +20,7 @@ namespace App\Api\Serializer;
 
 use App\Models\Category;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Tobscure\JsonApi\Relationship;
 
 class CategorySerializer extends AbstractSerializer
 {
@@ -51,5 +52,14 @@ class CategorySerializer extends AbstractSerializer
             'canHideThread'     => $this->actor->can('thread.hide', $model),
             'canEssenceThread'  => $this->actor->can('thread.essence', $model),
         ];
+    }
+
+    /**
+     * @param Category $category
+     * @return Relationship
+     */
+    protected function moderators($category)
+    {
+        return $this->hasMany($category, UserSerializer::class, 'moderatorUsers');
     }
 }

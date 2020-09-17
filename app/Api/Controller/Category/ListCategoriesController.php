@@ -20,9 +20,12 @@ namespace App\Api\Controller\Category;
 
 use App\Api\Serializer\CategorySerializer;
 use App\Models\Category;
+use App\Models\User;
 use Discuz\Api\Controller\AbstractListController;
+use Illuminate\Support\Collection;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class ListCategoriesController extends AbstractListController
 {
@@ -34,19 +37,47 @@ class ListCategoriesController extends AbstractListController
     /**
      * {@inheritdoc}
      */
+    public $optionalInclude = ['moderators'];
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param Document $document
+     * @return Collection
+     * @throws InvalidParameterException
+     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
+        /** @var User $actor */
         $actor = $request->getAttribute('actor');
         $filter = $this->extractFilter($request);
+        $include = $this->extractInclude($request);
 
         $query = Category::query();
-        // 可发布主题的分类
-        if ($actor->id && isset($filter['createThread']) && $filter['createThread']) {
+
+        // 可查看内容的分类
+        $query->whereNotIn('id', Category::getIdsWhereCannot($actor, 'viewThreads'));
+
+        // 可发布内容的分类
+        if ($actor->exists && isset($filter['createThread']) && $filter['createThread']) {
             $query->whereNotIn('id', Category::getIdsWhereCannot($actor, 'createThread'));
         }
-        // 仅返回可查看内容的分类
-        return $query->whereNotIn('id', Category::getIdsWhereCannot($actor, 'viewThreads'))
-            ->orderBy('sort')
-            ->get();
+
+        $categories = $query->orderBy('sort')->get();
+
+        // 分类版主
+        if (in_array('moderators', $include)) {
+            $users = User::query()->findMany(
+                $categories->pluck('moderators')->flatten()->unique()
+            );
+
+            $categories->map(function (Category $category) use ($users) {
+                $category->setRelation('moderatorUsers', $users->whereIn('id', $category->moderators));
+            });
+
+            // 因关系与字段重名，序列化时使用 moderatorUsers，为避免 loadMissing 异常，移除 moderators
+            $include = array_diff($include, ['moderators']);
+        }
+
+        return $categories->loadMissing($include);
     }
 }
