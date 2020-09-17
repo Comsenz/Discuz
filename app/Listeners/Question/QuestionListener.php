@@ -18,6 +18,7 @@
 
 namespace App\Listeners\Question;
 
+use App\Events\Post\Revising;
 use App\Events\Post\Saved as PostSaved;
 use App\Events\Question\Saved as QuestionAnswerSaved;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -28,6 +29,9 @@ class QuestionListener
     {
         // 创建帖子后，发表问答内容
         $events->listen(PostSaved::class, SaveQuestionToDatabase::class);
+
+        // 当帖子修改中
+        $events->listen(Revising::class, WhenThePostIsBeingRevised::class);
 
         /**
          * 回答问题后

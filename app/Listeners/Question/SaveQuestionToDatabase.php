@@ -29,6 +29,7 @@ use Exception;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\ValidationException;
 
 class SaveQuestionToDatabase
 {
@@ -62,7 +63,7 @@ class SaveQuestionToDatabase
 
     /**
      * @param Saved $event
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      * @throws Exception
      */
     public function handle(Saved $event)
@@ -72,60 +73,63 @@ class SaveQuestionToDatabase
         $data = $event->data;
 
         if ($post->thread->type == Thread::TYPE_OF_QUESTION) {
-            $questionData = Arr::get($data, 'relationships.question.data');
+            // 判断是否是创建
+            if ($post->wasRecentlyCreated) {
+                $questionData = Arr::get($data, 'relationships.question.data');
 
-            /**
-             * Validator
-             * @see AbstractValidator
-             */
-            $this->questionValidator->valid($questionData);
-            $price = Arr::get($questionData, 'price');
-            if ($actor->userWallet->available_amount < $price) {
-                throw new Exception(trans('wallet.available_amount_error')); // 钱包余额不足
+                /**
+                 * Validator
+                 * @see AbstractValidator
+                 */
+                $this->questionValidator->valid($questionData);
+                $price = Arr::get($questionData, 'price');
+                if ($actor->userWallet->available_amount < $price) {
+                    throw new Exception(trans('wallet.available_amount_error')); // 钱包余额不足
+                }
+
+                // Start Transaction
+                $this->connection->beginTransaction();
+                try {
+                    // freeze amount
+                    $actor->userWallet->available_amount = $actor->userWallet->available_amount - $price;
+                    $actor->userWallet->freeze_amount = $actor->userWallet->freeze_amount + $price;
+                    $actor->userWallet->save();
+
+                    // Create Question
+                    $build = [
+                        'thread_id' => $post->thread_id,
+                        'user_id' => $actor->id,
+                        'be_user_id' => Arr::get($questionData, 'be_user_id'),
+                        'price' => $price,
+                        'onlooker_unit_price' => $this->settings->get('site_onlooker_price'),
+                        'is_onlooker' => $actor->can('canBeOnlooker') ? Arr::get($questionData, 'is_onlooker', true) : false,
+                        'is_anonymous' => Arr::get($data, 'attributes.is_anonymous', false),
+                        'expired_at' => Carbon::today()->addDays(Question::EXPIRED_DAY),
+                    ];
+                    $question = Question::build($build);
+                    $question->save();
+
+                    // Create Wallet Log
+                    UserWalletLog::createWalletLog(
+                        $actor->id,             // 明细所属用户 id
+                        -$price,                // 变动可用金额
+                        $price,                 // 变动冻结金额
+                        UserWalletLog::TYPE_QUESTION_RETURN_THAW, // 7 问答冻结
+                        trans('wallet.question_freeze_desc'),
+                        null,                   // 关联提现ID
+                        null,                   // 订单ID
+                        0,                      // 分成来源用户
+                        $question->id           // 关联问答ID
+                    );
+
+                    $this->connection->commit();
+
+                } catch (Exception $e) {
+                    $this->connection->rollback();
+                }
+
+                // TODO Question Send Notice
             }
-
-            // Start Transaction
-            $this->connection->beginTransaction();
-            try {
-                // freeze amount
-                $actor->userWallet->available_amount = $actor->userWallet->available_amount - $price;
-                $actor->userWallet->freeze_amount = $actor->userWallet->freeze_amount + $price;
-                $actor->userWallet->save();
-
-                // Create Question
-                $build = [
-                    'thread_id' => $post->thread_id,
-                    'user_id' => $actor->id,
-                    'be_user_id' => Arr::get($questionData, 'be_user_id'),
-                    'price' => $price,
-                    'onlooker_unit_price' => $this->settings->get('site_onlooker_price'),
-                    'is_onlooker' => $actor->can('canBeOnlooker') ? Arr::get($questionData, 'is_onlooker', true) : false,
-                    'is_anonymous' => Arr::get($data, 'attributes.is_anonymous', false),
-                    'expired_at' => Carbon::today()->addDays(Question::EXPIRED_DAY),
-                ];
-                $question = Question::build($build);
-                $question->save();
-
-                // Create Wallet Log
-                UserWalletLog::createWalletLog(
-                    $actor->id,             // 明细所属用户 id
-                    -$price,                // 变动可用金额
-                    $price,                 // 变动冻结金额
-                    UserWalletLog::TYPE_QUESTION_RETURN_THAW, // 7 问答冻结
-                    trans('wallet.question_freeze_desc'),
-                    null,                   // 关联提现ID
-                    null,                   // 订单ID
-                    0,                      // 分成来源用户
-                    $question->id           // 关联问答ID
-                );
-
-                $this->connection->commit();
-
-            } catch (Exception $e) {
-                $this->connection->rollback();
-            }
-
-            // TODO Question Send Notice
         }
     }
 }

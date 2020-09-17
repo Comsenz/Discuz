@@ -66,6 +66,7 @@ use Illuminate\Support\Stringable;
  * @property User $user
  * @property Category $category
  * @property threadVideo $threadVideo
+ * @property Question $question
  * @package App\Models
  */
 class Thread extends Model
