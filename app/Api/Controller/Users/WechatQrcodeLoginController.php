@@ -18,23 +18,22 @@
 
 namespace App\Api\Controller\Users;
 
-use App\Api\Serializer\TokenSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Models\SessionToken;
-use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\NotAuthenticatedException;
+use Discuz\Http\DiscuzResponseFactory;
 use Exception;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class WechatQrcodeLoginController extends AbstractResourceController
+class WechatQrcodeLoginController implements RequestHandlerInterface
 {
     use AssertPermissionTrait;
-
-    public $serializer = TokenSerializer::class;
 
     public $optionalInclude = [];
 
@@ -59,10 +58,12 @@ class WechatQrcodeLoginController extends AbstractResourceController
     }
 
     /**
-     * {@inheritdoc}
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @throws NotAuthenticatedException
      * @throws Exception
      */
-    protected function data(ServerRequestInterface $request, Document $document)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         // check
         $actor = $request->getAttribute('actor');
@@ -85,11 +86,11 @@ class WechatQrcodeLoginController extends AbstractResourceController
             // build
             $token->payload = $accessToken;
             $token->save();
-            $accessToken->pc_login = true;
         } else {
             throw new Exception(trans('user.pc_qrcode_time_fail'));
         }
 
-        return $accessToken;
+        // return $accessToken;
+        return DiscuzResponseFactory::JsonApiResponse(['pc_login' => true]);
     }
 }
