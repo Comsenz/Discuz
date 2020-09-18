@@ -110,7 +110,10 @@ class OrderSubscriber
      */
     public function sendScaleNotice($order, $type)
     {
-        // 发送分成收入通知
+        /**
+         * 发送分成收入通知
+         * @var Order $order
+         */
         if ($order->isScale()) {
             // 判断是发给 收款人/付款人 的上级
             $userDistribution = $type == 'payee' ? $order->payee->userDistribution : $order->user->userDistribution ;

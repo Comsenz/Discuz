@@ -78,7 +78,7 @@ class Rewarded extends System
             $build = [
                 'user_id' => $this->order->user->id,
                 'order_id' => $this->order->id,
-                'thread_id' => 0,       // 无主题关联
+                'thread_id' => 0,  // 注册无主题关联
                 'thread_username' => 0,
                 'thread_title' => 0,
                 'content' => '',
@@ -86,6 +86,13 @@ class Rewarded extends System
                 'amount' => $this->order->calculateAuthorAmount(), // 获取上级的实际分成金额数
                 'order_type' => $this->order->type,  // 1：注册，2：打赏，3：付费主题，4：付费用户组
             ];
+            // 判断如果是 打赏/付费有主题 类型
+            if (in_array($this->order->type, [2, 3])) {
+                $build['thread_id'] = $this->order->thread->id;
+                $build['thread_username'] = $this->order->thread->user->username;
+                $build['thread_title'] = $this->order->thread->title;
+                $this->build($build);
+            }
         } else {
             $build = [
                 'user_id' => $this->order->user->id,  // 付款人ID

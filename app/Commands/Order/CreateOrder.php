@@ -124,7 +124,7 @@ class CreateOrder
                     $payeeId = $thread->user_id;
                     $amount = sprintf('%.2f', (float) $this->data->get('amount'));
 
-                    // 查询收款人是否有上级邀请
+                    // 判断权限是否可以邀请用户分成，查询收款人是否有上级邀请
                     if ($thread->user->can('other.canInviteUserScale') && $thread->user->isAllowScale(Order::ORDER_TYPE_REWARD)) {
                         $be_scale = $thread->user->userDistribution->be_scale;
                     }
