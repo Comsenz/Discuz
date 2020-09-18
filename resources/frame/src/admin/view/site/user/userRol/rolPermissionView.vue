@@ -281,7 +281,7 @@
         <CardRow description="前台更改成员禁用状态的权限">
           <el-checkbox
             v-model="checked"
-            label="user.edit"
+            label="user.edit.status"
             :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
           >编辑用户状态</el-checkbox>
         </CardRow>

@@ -143,6 +143,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'can_batch_edit_threads' => $this->actor->can('thread.batchEdit'),
                 'can_view_user_list' => $this->actor->can('viewUserList'),
                 'can_edit_user_group' => $this->actor->can('user.edit.group'),
+                'can_edit_user_status' => $this->actor->can('user.edit.status'),
                 'can_create_invite' => $this->actor->can('createInvite'),
                 'can_create_thread_paid' => $this->actor->can('createThreadPaid'),
                 'create_thread_with_captcha' => ! $this->actor->isAdmin() && $this->actor->can('createThreadWithCaptcha'),
