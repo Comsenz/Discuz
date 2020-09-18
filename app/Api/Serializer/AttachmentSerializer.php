@@ -85,6 +85,7 @@ class AttachmentSerializer extends AbstractSerializer
             'order'             => $model->order,
             'type'              => $model->type,
             'type_id'           => $model->type_id,
+            'price'             => $model->price,
             'isRemote'          => $model->is_remote,
             'isApproved'        => $model->is_approved,
             'url'               => $url,
@@ -113,9 +114,9 @@ class AttachmentSerializer extends AbstractSerializer
             }
         }
 
-        // if ($model->post && $model->post->thread->price>0 && $model->post->is_first) {
-        //     $attributes['url'] = $this->url->to('/api/attachments/'.$model->id);
-        // }
+        if ($model->post && $model->post->thread->price>0 && $model->post->is_first) {
+            $attributes['url'] = $this->url->to('/api/attachments/'.$model->id);
+        }
 
         return $attributes;
     }

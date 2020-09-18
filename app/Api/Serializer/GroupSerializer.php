@@ -93,8 +93,10 @@ class GroupSerializer extends AbstractSerializer
     {
         if ($group->icon) {
             return $this->url->to('/storage/' . $group->icon);
-        } elseif (in_array($group->id, [Group::ADMINISTRATOR_ID, Group::GUEST_ID, Group::MEMBER_ID])) {
+        } elseif (in_array($group->id, [Group::ADMINISTRATOR_ID, Group::GUEST_ID])) {
             return $this->url->to("/images/groups/group-{$group->id}.svg");
+        } else {
+            return $this->url->to('/images/groups/group-10.svg');
         }
     }
 }
