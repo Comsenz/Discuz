@@ -31,5 +31,6 @@ return [
     'post_goods_not_found_enum' => '暂不支持解析该地址内容',
     'post_goods_http_client_fail' => '请求地址失败',
 
+    'post_question_missing_parameter' => '问答缺失参数',
     'post_question_edit_fail_answered' => '问答帖已回答后不允许修改',
 ];
