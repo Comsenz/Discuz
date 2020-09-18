@@ -1,5 +1,9 @@
 <?php
+
 return [
+    'order_status_fail'             => '订单状态异常',
+    'order_not_found'                => '订单不存在',
+
     'order_amount_error'            => '订单金额有误',
     'order_create_failure'          => '订单创建失败',
     'order_post_not_found'          => '订单主题不存在',
@@ -9,6 +13,7 @@ return [
     'order_type_reward'             => '打赏',
     'order_type_thread'             => '付费主题',
     'order_type_group'              => '付费用户组',
+    'order_type_question'           => '问答提问支付',
     'order_type_onlooker'           => '问答围观',
 
     'payee_not_found'               => '收款人不存在',

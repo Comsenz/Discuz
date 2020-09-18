@@ -192,6 +192,16 @@ class CreateOrder
                     throw new OrderException('order_group_error');
                 }
                 break;
+            // 问答提问支付
+            case Order::ORDER_TYPE_QUESTION:
+                // 判断是否允许发布问答帖
+                $this->assertCan($this->actor, 'createThreadQuestion');
+
+                // 创建订单
+                $amount = sprintf('%.2f', (float) $this->data->get('amount')); // 设置订单问答价格
+                $payeeId = $this->data->get('payee_id'); // 设置收款人 (回答人)
+
+                break;
             // 问答围观付费
             case Order::ORDER_TYPE_ONLOOKER:
                 /** @var Thread $thread */
@@ -247,7 +257,7 @@ class CreateOrder
         $pay_notify->payment_sn = $payment_sn;
         $pay_notify->user_id    = $this->actor->id;
 
-        // 订单
+        // 订单 amount、payeeId 必须定义值
         $order                  = new Order();
         $order->payment_sn      = $payment_sn;
         $order->order_sn        = $this->getOrderSn();

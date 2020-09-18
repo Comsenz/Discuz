@@ -33,4 +33,5 @@ return [
 
     'post_question_missing_parameter' => '问答缺失参数',
     'post_question_edit_fail_answered' => '问答帖已回答后不允许修改',
+    'post_question_payment_amount_fail' => '问答支付金额异常',
 ];

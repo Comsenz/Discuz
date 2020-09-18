@@ -69,7 +69,9 @@ class Order extends Model
 
     const ORDER_TYPE_GROUP    = 4; //付费用户组
 
-    const ORDER_TYPE_ONLOOKER = 5; // 问答付费围观
+    const ORDER_TYPE_QUESTION = 5; // 问答提问支付
+
+    const ORDER_TYPE_ONLOOKER = 6; // 问答付费围观
 
     /**
      * 订单状态

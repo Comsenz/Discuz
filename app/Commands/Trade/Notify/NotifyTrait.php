@@ -116,6 +116,9 @@ trait NotifyTrait
                     );
                     return $this->orderInfo;
 
+                case Order::ORDER_TYPE_QUESTION:
+                    // 提问时不分成，因为还未回答
+                    return $this->orderInfo;
                 case Order::ORDER_TYPE_ONLOOKER:
                     // 获取站点作者分成比例
                     $siteAuthorScale = $setting->get('site_author_scale');

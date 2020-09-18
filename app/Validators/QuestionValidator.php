@@ -30,6 +30,7 @@ class QuestionValidator extends AbstractValidator
         return [
             'be_user_id' => 'required', // 被提问的用户
             'price' => 'required', // 提问价格
+            'order_id' => 'required', // 支付的订单ID
         ];
     }
 
@@ -38,6 +39,6 @@ class QuestionValidator extends AbstractValidator
      */
     protected function haveToFields()
     {
-        return ['be_user_id', 'price'];
+        return ['be_user_id', 'price', 'order_id'];
     }
 }

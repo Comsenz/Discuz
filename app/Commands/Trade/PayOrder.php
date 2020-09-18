@@ -185,6 +185,9 @@ class PayOrder
             case Order::ORDER_TYPE_GROUP:
                 $order_info->body = trans('order.order_type_group');
                 break;
+            case Order::ORDER_TYPE_QUESTION:
+                $order_info->body = trans('order.order_type_question');
+                break;
             case Order::ORDER_TYPE_ONLOOKER:
                 $order_info->body = trans('order.order_type_onlooker');
                 break;
@@ -263,7 +266,7 @@ class PayOrder
                         break;
                 }
 
-                //订单过期时间
+                // 订单过期时间
                 $extra['time_expire'] = $time_expire;
                 break;
             case Order::PAYMENT_TYPE_WALLET: // 用户钱包支付
@@ -272,6 +275,7 @@ class PayOrder
             default:
                 throw new TradeErrorException('payment_method_invalid', 500);
         }
+
         return PayTrade::pay($order_info, $pay_gateway, $config, $extra); //生成支付参数
     }
 }

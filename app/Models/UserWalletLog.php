@@ -51,10 +51,6 @@ class UserWalletLog extends Model
     /**
      * 钱包明细类型
      */
-    const TYPE_QUESTION_FREEZE = 7; // 问答冻结
-
-    const TYPE_QUESTION_THAW = 8; // 问答解冻
-
     const TYPE_QUESTION_RETURN_THAW = 9; // 问答返还解冻
 
     const TYPE_CASH_FREEZE = 10; //提现冻结

@@ -19,6 +19,7 @@
 namespace App\Listeners\Question;
 
 use App\Events\Post\Saved;
+use App\Models\Order;
 use App\Models\Question;
 use App\Models\Thread;
 use App\Models\UserWalletLog;
@@ -80,6 +81,17 @@ class SaveQuestionToDatabase
                     throw new Exception(trans('post.post_question_missing_parameter')); // 问答缺失参数
                 }
 
+                try {
+                    /** @var Order $order */
+                    $order = Order::query()->where('order_sn', Arr::get($questionData, 'order_id'))->firstOrFail();
+                } catch (Exception $e) {
+                    throw new Exception(trans('order.order_not_found'));
+                }
+                // 订单是否未支付，并且是该主题人支付的
+                if ($order->status != Order::ORDER_STATUS_PAID || $actor->id != $order->user_id) {
+                    throw new Exception(trans('order.order_status_fail'));
+                }
+
                 /**
                  * Validator
                  * @see AbstractValidator
@@ -89,15 +101,14 @@ class SaveQuestionToDatabase
                 if ($actor->userWallet->available_amount < $price) {
                     throw new Exception(trans('wallet.available_amount_error')); // 钱包余额不足
                 }
+                // 判断支付的金额是否和帖子设置一致
+                if ($price != $order->amount) {
+                    throw new Exception(trans('post.post_question_payment_amount_fail'));
+                }
 
                 // Start Transaction
                 $this->connection->beginTransaction();
                 try {
-                    // freeze amount
-                    $actor->userWallet->available_amount = $actor->userWallet->available_amount - $price;
-                    $actor->userWallet->freeze_amount = $actor->userWallet->freeze_amount + $price;
-                    $actor->userWallet->save();
-
                     // Create Question
                     $build = [
                         'thread_id' => $post->thread_id,
@@ -112,21 +123,19 @@ class SaveQuestionToDatabase
                     $question = Question::build($build);
                     $question->save();
 
-                    // Create Wallet Log
-                    UserWalletLog::createWalletLog(
-                        $actor->id,             // 明细所属用户 id
-                        -$price,                // 变动可用金额
-                        $price,                 // 变动冻结金额
-                        UserWalletLog::TYPE_QUESTION_RETURN_THAW, // 7 问答冻结
-                        trans('wallet.question_freeze_desc'),
-                        null,                   // 关联提现ID
-                        null,                   // 订单ID
-                        0,                      // 分成来源用户
-                        $question->id           // 关联问答ID
-                    );
+                    /**
+                     * Update WalletLog relation question_id
+                     * @var UserWalletLog $walletLog
+                     */
+                    $walletLog = UserWalletLog::query()->where([
+                        'user_id' => $actor->id,
+                        'order_id' => $order->id,
+                        'change_type' => UserWalletLog::TYPE_EXPEND_QUESTION,
+                    ])->first();
+                    $walletLog->question_id = $question->id;
+                    $walletLog->save();
 
                     $this->connection->commit();
-
                 } catch (Exception $e) {
                     $this->connection->rollback();
                 }
