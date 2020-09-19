@@ -64,6 +64,12 @@ class PostObserver
 
             $this->refreshSitePostCount();
         }
+
+        if ($post->is_first && $post->wasChanged('updated_at')) {
+            $post->thread->updated_at = $post->updated_at;
+
+            $post->thread->save();
+        }
     }
 
     /**
