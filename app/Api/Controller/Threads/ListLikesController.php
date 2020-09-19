@@ -19,10 +19,8 @@
 namespace App\Api\Controller\Threads;
 
 use App\Models\Thread;
-use App\Repositories\ThreadRepository;
-use App\Repositories\UserRepository;
 use Discuz\Auth\AssertPermissionTrait;
-use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -30,15 +28,6 @@ use Tobscure\JsonApi\Document;
 class ListLikesController extends ListThreadsController
 {
     use AssertPermissionTrait;
-
-    protected $users;
-
-    public function __construct(ThreadRepository $threads, UrlGenerator $url, UserRepository $users)
-    {
-        parent::__construct($threads, $url);
-
-        $this->users = $users;
-    }
 
     /**
      * {@inheritdoc}
@@ -80,13 +69,15 @@ class ListLikesController extends ListThreadsController
 
     public function search($actor, $filter, $sort, $limit = null, $offset = 0)
     {
-        $user_id = Arr::get($filter, 'user_id', '0');
+        $userId = Arr::get($filter, 'user_id', '0');
 
-        $query = $this->threads->query()
-            ->select('threads.*')
+        /** @var Builder $query */
+        $query = $this->threads->query()->whereVisibleTo($actor);
+
+        $query = $query->select('threads.*')
             ->join('posts', 'threads.id', '=', 'posts.thread_id')
             ->join('post_user', 'posts.id', '=', 'post_user.post_id')
-            ->where('post_user.user_id', $user_id)
+            ->where('post_user.user_id', $userId)
             ->where('posts.is_first', true)
             ->where('threads.is_approved', Thread::APPROVED)
             ->whereNull('threads.deleted_at');
