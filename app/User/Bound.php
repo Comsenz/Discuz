@@ -36,15 +36,17 @@ class Bound
     /**
      * @param $sessionToken
      * @param $accessToken
+     * @param $data
      * @return mixed
      */
-    public function pcLogin($sessionToken, $accessToken)
+    public function pcLogin($sessionToken, $accessToken, $data)
     {
         $token = SessionToken::query()->where('token', $sessionToken)->first();
 
         if (!empty($token)) {
             /** @var SessionToken $token */
             $token->payload = $accessToken;
+            $token->user_id = $data['user_id'];
             $token->save();
             $accessToken->pc_login = true;
         } else {

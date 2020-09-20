@@ -160,7 +160,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
             // bound
             if (Arr::has($request->getQueryParams(), 'session_token')) {
                 $sessionToken = Arr::get($request->getQueryParams(), 'session_token');
-                $accessToken = $this->bound->pcLogin($sessionToken, $accessToken);
+                $accessToken = $this->bound->pcLogin($sessionToken, $accessToken, ['user_id' => $wechatUser->user->id]);
             }
 
             return $accessToken;
