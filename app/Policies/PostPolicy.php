@@ -54,7 +54,7 @@ class PostPolicy extends AbstractPolicy
      */
     public function can(User $actor, $ability, Post $post)
     {
-        if (! $post->is_first && $actor->can($ability . 'Posts', $post->thread)) {
+        if ($actor->can($ability . 'Posts', $post->thread)) {
             return true;
         }
     }
