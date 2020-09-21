@@ -56,11 +56,10 @@ class CreateAttachmentController extends AbstractCreateController
         $name = Arr::get($request->getParsedBody(), 'name', '');
         $type = (int) Arr::get($request->getParsedBody(), 'type', 0);
         $order = (int) Arr::get($request->getParsedBody(), 'order', 0);
-        $price = (float) Arr::get($request->getParsedBody(), 'price', 0);
         $ipAddress = ip($request->getServerParams());
 
         return $this->bus->dispatch(
-            new CreateAttachment($actor, $file, $name, $ipAddress, $type, $price, $order)
+            new CreateAttachment($actor, $file, $name, $ipAddress, $type, $order)
         );
     }
 }
