@@ -54,7 +54,7 @@ class CheckOrder extends AbstractRule
     {
         try {
             /** @var Order $order */
-            $order = Order::query()->where($value)->firstOrFail();
+            $order = Order::query()->where('order_sn', $value)->firstOrFail();
         } catch (Exception $e) {
             throw new Exception(trans('order.order_not_found'));
         }
