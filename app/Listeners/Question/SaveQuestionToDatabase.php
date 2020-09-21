@@ -19,6 +19,7 @@
 namespace App\Listeners\Question;
 
 use App\Events\Post\Saved;
+use App\Models\Order;
 use App\Models\Question;
 use App\Models\Thread;
 use App\Models\UserWalletLog;
@@ -106,14 +107,16 @@ class SaveQuestionToDatabase
                     $question->save();
 
                     // 判断如果没有传 order_id 说明是0元提问，就不需要冻结钱包
-                    if (!empty($order_id = Arr::get($questionData, 'order_id', null))) {
+                    if (!empty($orderSn = Arr::get($questionData, 'order_id', null))) {
                         /**
                          * Update WalletLog relation question_id
+                         * @var Order $order
                          * @var UserWalletLog $walletLog
                          */
+                        $order = Order::query()->where('order_sn', $orderSn)->firstOrFail();
                         $walletLog = UserWalletLog::query()->where([
                             'user_id' => $actor->id,
-                            'order_id' => $order_id,
+                            'order_id' => $order->id,
                             'change_type' => UserWalletLog::TYPE_EXPEND_QUESTION,
                         ])->first();
 
