@@ -9,6 +9,7 @@ return [
     'order_type_reward'             => '打赏',
     'order_type_thread'             => '付费主题',
     'order_type_group'              => '付费用户组',
+    'order_type_attachment'         => '付费附件',
 
     'payee_not_found'               => '收款人不存在',
     'order_group_error'             => '用户组不存在或配置有误',

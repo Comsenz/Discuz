@@ -19,6 +19,7 @@
 namespace App\Commands\Order;
 
 use App\Exceptions\OrderException;
+use App\Models\Attachment;
 use App\Models\Order;
 use App\Models\PayNotify;
 use App\Models\Thread;
@@ -84,6 +85,7 @@ class CreateOrder
 
         $validator_info = $validator->make($this->data->toArray(), [
             'group_id'  => 'filled|int',
+            'attachment_id'  => 'filled|int',
             'type'          => 'required|int',
             'thread_id'     => 'required_if:type,' . Order::ORDER_TYPE_REWARD . ',' . Order::ORDER_TYPE_THREAD . '|int',
             'amount'        => 'required_if:type,' . Order::ORDER_TYPE_REWARD . '|numeric|min:0.01',
@@ -188,6 +190,35 @@ class CreateOrder
                     $amount = $group->fee;
                 } else {
                     throw new OrderException('order_group_error');
+                }
+                break;
+            //付费附件
+            case Order::ORDER_TYPE_ATTACHMENT:
+                /** @var Attachment $attachment */
+                $attachment = Attachment::query()
+                    ->where('id', $this->data->attachment_id)
+                    ->first();
+
+                $order = Order::query()
+                    ->where('attachment_id', $this->data->get('attachment_id'))
+                    ->where('user_id', $this->actor->id)
+                    ->where('status', Order::ORDER_STATUS_PAID)
+                    ->where('type', Order::ORDER_TYPE_ATTACHMENT)
+                    ->exists();
+
+                if ($attachment && !$order && $attachment->price >0) {
+                    // 判断该主题作者是否有 被付费的权限
+                    $this->assertCan($attachment->user, 'createThreadPaid');
+
+                    $payeeId = $attachment->user_id;
+                    $amount = $attachment->price;
+
+                    // 查询收款人是否有上级邀请
+                    if ($attachment->user->can('other.canInviteUserScale') && $attachment->user->isAllowScale(Order::ORDER_TYPE_THREAD)) {
+                        $be_scale = $attachment->user->userDistribution->be_scale;
+                    }
+                } else {
+                    throw new OrderException('order_attachment_error');
                 }
                 break;
             default:

@@ -70,6 +70,8 @@ class UserWalletLog extends Model
 
     const TYPE_EXPEND_GROUP      = 51; //加入用户组支出
 
+    const TYPE_EXPEND_ATTACHMENT      = 52; //付费附件支出
+
     // ----- 分割线 -----
 
     const TYPE_EXPEND_REWARD     = 41; //打赏支出
@@ -79,6 +81,10 @@ class UserWalletLog extends Model
     const TYPE_EXPEND_THREAD     = 61; //付费主题支出
 
     const TYPE_INCOME_SCALE_THREAD  = 62; //分成付费主题收入
+
+    const TYPE_INCOME_ATTACHMENT     = 63; //付费附件收入
+
+    const TYPE_INCOME_SCALE_ATTACHMENT  = 64; //付费附件分成收入
 
     const TYPE_EXPEND_RENEW      = 71; //站点续费支出
 

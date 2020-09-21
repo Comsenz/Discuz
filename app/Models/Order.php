@@ -39,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $type
  * @property int $thread_id
  * @property int $group_id
+ * @property int $attachment_id
  * @property int $status
  * @property int $platform
  * @property int $payment_type
@@ -66,6 +67,8 @@ class Order extends Model
     const ORDER_TYPE_THREAD   = 3; //付费主题
 
     const ORDER_TYPE_GROUP    = 4; //付费用户组
+
+    const ORDER_TYPE_ATTACHMENT = 7; //付费附件
 
     /**
      * 订单状态
@@ -116,7 +119,7 @@ class Order extends Model
 
     /**
      * 订单类型
-     * 1：注册，2：打赏，3：付费主题，4：付费用户组
+     * 1：注册，2：打赏，3：付费主题，4：付费用户组， 5：付费附件
      *
      * @var array
      */
@@ -125,6 +128,7 @@ class Order extends Model
         2 => '打赏',
         3 => '付费主题',
         4 => '付费用户组',
+        5 => '付费附件',
     ];
 
     /**
