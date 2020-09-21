@@ -61,4 +61,9 @@ class QuestionAnswerSerializer extends AbstractSerializer
         return $model->id;
     }
 
+    public function beUser($model)
+    {
+        return$this->hasOne($model, UserSerializer::class);
+    }
+
 }

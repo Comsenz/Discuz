@@ -393,16 +393,6 @@ class Thread extends Model
     }
 
     /**
-     * Onlookers
-     *
-     * @return HasManyThrough
-     */
-    public function onlookers()
-    {
-        return $this->hasManyThrough(User::class, Order::class, 'thread_id', 'id', 'id', 'user_id');
-    }
-
-    /**
      * Define the relationship with the thread's operation Log.
      */
     public function logs()
@@ -443,6 +433,16 @@ class Thread extends Model
     public function question()
     {
         return $this->hasOne(Question::class);
+    }
+
+    /**
+     * Onlookers
+     *
+     * @return HasManyThrough
+     */
+    public function onlookers()
+    {
+        return $this->hasManyThrough(User::class, Order::class, 'thread_id', 'id', 'id', 'user_id');
     }
 
     /**

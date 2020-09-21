@@ -47,7 +47,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon updated_at
  * @property Carbon expired_at
  * @property User $user
- * @property User $beUserId
+ * @property User $beUser
  * @property UserWalletLog $userWalletLog
  */
 class Question extends Model
@@ -155,7 +155,7 @@ class Question extends Model
         if (empty($this->attributes['content'])) {
             return $this->attributes['content'];
         }
-        
+
         return static::$formatter->render($this->attributes['content']);
     }
 
@@ -189,7 +189,7 @@ class Question extends Model
     /**
      * @return BelongsTo
      */
-    public function beUserId()
+    public function beUser()
     {
         return $this->belongsTo(User::class, 'be_user_id', 'id');
     }
