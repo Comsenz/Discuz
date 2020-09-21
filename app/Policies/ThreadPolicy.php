@@ -67,6 +67,12 @@ class ThreadPolicy extends AbstractPolicy
             return true;
         }
 
+        // 获取推荐到站点信息页数据时 允许
+        $request = app('request');
+        if (Arr::get($request->getServerParams(), 'filter.isSite', '') == 'yes') {
+            return true;
+        }
+
         // 是当前分类的版主 且 拥有该权限
         if (
             $thread->category
@@ -84,6 +90,8 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function find(User $actor, Builder $query)
     {
+        $request = app('request');
+
         // 过滤不存在用户的内容
         $query->whereExists(function ($query) {
             $query->selectRaw('1')
@@ -92,7 +100,9 @@ class ThreadPolicy extends AbstractPolicy
         });
 
         // 隐藏不允许当前用户查看的分类内容。
-        $query->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'viewThreads'));
+        if (Arr::get($request->getServerParams(), 'filter.isSite', '') !== 'yes') {
+            $query->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'viewThreads'));
+        }
 
         // 回收站
         if (! $actor->hasPermission('viewTrashed')) {
@@ -114,7 +124,7 @@ class ThreadPolicy extends AbstractPolicy
                     ->orWhere('threads.user_id', $actor->id);
             });
         }
-        $request = app('request');
+
         //过滤小程序视频主题
         if (!$this->settings->get('miniprogram_video', 'wx_miniprogram') &&
             strpos(Arr::get($request->getServerParams(), 'HTTP_X_APP_PLATFORM'), 'wx_miniprogram') !== false) {
