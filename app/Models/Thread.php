@@ -409,6 +409,11 @@ class Thread extends Model
         return $this->hasOne(ThreadVideo::class)->where('type', ThreadVideo::TYPE_OF_VIDEO);
     }
 
+    public function threadAudio()
+    {
+        return $this->hasOne(ThreadVideo::class)->where('type', ThreadVideo::TYPE_OF_AUDIO);
+    }
+
     public function topic()
     {
         return $this->belongsToMany(Topic::class)->withPivot('created_at');

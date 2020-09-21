@@ -59,6 +59,7 @@ class ResourceThreadController extends AbstractResourceController
         'user',
         'firstPost',
         'threadVideo',
+        'threadAudio',
         'firstPost.images',
         'firstPost.attachments',
         'posts',

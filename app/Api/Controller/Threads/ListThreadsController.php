@@ -52,6 +52,7 @@ class ListThreadsController extends AbstractListController
         'user',
         'firstPost',
         'threadVideo',
+        'threadAudio',
         'lastPostedUser',
         'category',
     ];

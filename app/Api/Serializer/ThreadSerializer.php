@@ -218,6 +218,19 @@ class ThreadSerializer extends AbstractSerializer
         return $this->hasOne($thread, ThreadVideoSerializer::class);
     }
 
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function threadAudio($thread)
+    {
+        return $this->hasOne($thread, ThreadVideoSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
     public function topic($thread)
     {
         return $this->hasMany($thread, TopicSerializer::class);
