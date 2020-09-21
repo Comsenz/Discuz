@@ -67,12 +67,6 @@ class ThreadPolicy extends AbstractPolicy
             return true;
         }
 
-        // 获取推荐到站点信息页数据时 允许
-        $request = app('request');
-        if (Arr::get($request->getServerParams(), 'filter.isSite', '') == 'yes') {
-            return true;
-        }
-
         // 是当前分类的版主 且 拥有该权限
         if (
             $thread->category

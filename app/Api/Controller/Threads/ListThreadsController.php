@@ -134,9 +134,12 @@ class ListThreadsController extends AbstractListController
     {
         $actor = $request->getAttribute('actor');
 
-        $this->assertCan($actor, 'viewThreads');
-
+        // 获取推荐到站点信息页数据时 不检查权限
         $filter = $this->extractFilter($request);
+        if (Arr::get($filter, 'isSite', '') !== 'yes') {
+            $this->assertCan($actor, 'viewThreads');
+        }
+
         $sort = $this->extractSort($request);
 
         $limit = $this->extractLimit($request);
