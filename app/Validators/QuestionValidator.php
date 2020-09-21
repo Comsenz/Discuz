@@ -18,20 +18,32 @@
 
 namespace App\Validators;
 
+use App\Rules\Question\CheckOrder;
+use App\Rules\Question\CheckPrice;
+use App\Rules\Question\UserVerification;
 use Discuz\Foundation\AbstractValidator;
+use Exception;
 
 class QuestionValidator extends AbstractValidator
 {
     /**
      * @return array
+     * @throws Exception
      */
     protected function getRules()
     {
-        return [
-            'be_user_id' => 'required', // 被提问的用户
-            'price' => 'required', // 提问价格
-            'order_id' => 'required', // 支付的订单ID
+        $actor = $this->data['actor'];
+
+        $rule = [
+            'be_user_id' => ['required', new UserVerification($actor)], // 被提问的用户
+            'price' => ['required', new CheckPrice($actor)], // 提问价格
         ];
+
+        if ($this->data['price']) {
+            $rule += ['order_id' => new CheckOrder($actor, $this->data['price'])];
+        }
+
+        return $rule;
     }
 
     /**
@@ -40,5 +52,21 @@ class QuestionValidator extends AbstractValidator
     protected function haveToFields()
     {
         return ['be_user_id', 'price', 'order_id'];
+    }
+
+    /**
+     * 伪造未传输的关联字段 - 默认值为空
+     *
+     * @param $str
+     * @param $default
+     * @return string|int
+     */
+    protected function faker($str, $default = '')
+    {
+        if (!array_key_exists($str, $this->data)) {
+            return $default;
+        }
+
+        return $this->data[$str];
     }
 }

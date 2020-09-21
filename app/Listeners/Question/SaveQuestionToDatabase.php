@@ -19,7 +19,6 @@
 namespace App\Listeners\Question;
 
 use App\Events\Post\Saved;
-use App\Models\Order;
 use App\Models\Question;
 use App\Models\Thread;
 use App\Models\UserWalletLog;
@@ -81,30 +80,13 @@ class SaveQuestionToDatabase
                     throw new Exception(trans('post.post_question_missing_parameter')); // 问答缺失参数
                 }
 
-                try {
-                    /** @var Order $order */
-                    $order = Order::query()->where('order_sn', Arr::get($questionData, 'order_id'))->firstOrFail();
-                } catch (Exception $e) {
-                    throw new Exception(trans('order.order_not_found'));
-                }
-                // 订单是否未支付，并且是该主题人支付的
-                if ($order->status != Order::ORDER_STATUS_PAID || $actor->id != $order->user_id) {
-                    throw new Exception(trans('order.order_status_fail'));
-                }
-
                 /**
                  * Validator
-                 * @see AbstractValidator
+                 * @see QuestionValidator
                  */
+                $questionData['actor'] = $actor;
                 $this->questionValidator->valid($questionData);
                 $price = Arr::get($questionData, 'price');
-                if ($actor->userWallet->available_amount < $price) {
-                    throw new Exception(trans('wallet.available_amount_error')); // 钱包余额不足
-                }
-                // 判断支付的金额是否和帖子设置一致
-                if ($price != $order->amount) {
-                    throw new Exception(trans('post.post_question_payment_amount_fail'));
-                }
 
                 // Start Transaction
                 $this->connection->beginTransaction();
@@ -129,7 +111,7 @@ class SaveQuestionToDatabase
                      */
                     $walletLog = UserWalletLog::query()->where([
                         'user_id' => $actor->id,
-                        'order_id' => $order->id,
+                        'order_id' => Arr::get($questionData, 'order_id', null),
                         'change_type' => UserWalletLog::TYPE_EXPEND_QUESTION,
                     ])->first();
                     $walletLog->question_id = $question->id;
