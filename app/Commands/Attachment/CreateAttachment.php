@@ -29,6 +29,7 @@ use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Validation\ValidationException;
 use Psr\Http\Message\UploadedFileInterface;
 
 class CreateAttachment
@@ -64,6 +65,11 @@ class CreateAttachment
     public $type;
 
     /**
+     * @var float
+     */
+    public $price;
+
+    /**
      * @var int
      */
     public $order;
@@ -74,15 +80,17 @@ class CreateAttachment
      * @param string $name
      * @param string $ipAddress
      * @param int $type
+     * @param float $price
      * @param int $order
      */
-    public function __construct(User $actor, UploadedFileInterface $file, string $name, string $ipAddress, $type, $order = 0)
+    public function __construct(User $actor, UploadedFileInterface $file, string $name, string $ipAddress, $type, float $price, $order = 0)
     {
         $this->actor = $actor;
         $this->file = $file;
         $this->name = $name;
         $this->ipAddress = $ipAddress;
         $this->type = $type;
+        $this->price = $price;
         $this->order = $order;
     }
 
@@ -92,7 +100,7 @@ class CreateAttachment
      * @param AttachmentUploader $uploader
      * @return Attachment
      * @throws PermissionDeniedException
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function handle(Dispatcher $events, AttachmentValidator $validator, AttachmentUploader $uploader)
     {
@@ -146,6 +154,7 @@ class CreateAttachment
                 $uploader->isRemote(),
                 Attachment::APPROVED,
                 $this->ipAddress,
+                $this->price,
                 $this->order
             );
 

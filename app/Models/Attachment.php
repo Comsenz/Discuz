@@ -104,6 +104,7 @@ class Attachment extends Model
      * @param bool $isRemote 是否云存储
      * @param bool $isApproved 是否合法
      * @param string $ip ip 地址
+     * @param float $price 附件价格
      * @param int $order 文件顺序
      * @return static
      */
@@ -118,6 +119,7 @@ class Attachment extends Model
         $isRemote,
         $isApproved,
         $ip,
+        $price,
         $order = 0
     ) {
         $attachment = new static;
@@ -134,6 +136,7 @@ class Attachment extends Model
         $attachment->file_size = $size;
         $attachment->file_type = $mime;
         $attachment->ip = $ip;
+        $attachment->price = $price;
 
         $attachment->raise(new Created($attachment));
 
