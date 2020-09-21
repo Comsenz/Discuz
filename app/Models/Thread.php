@@ -232,7 +232,7 @@ class Thread extends Model
     public function setLastPost(Post $post)
     {
         $this->last_posted_user_id = $post->user_id;
-        $this->updated_at = $post->created_at;
+        $this->updated_at = $post->created_at->gt($this->updated_at) ? $post->created_at : $this->updated_at;
 
         return $this;
     }

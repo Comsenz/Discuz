@@ -61,7 +61,7 @@ class TokenSerializer extends AbstractSerializer
     public function getId($model)
     {
         if (property_exists($model, 'pc_login')) {
-            return 1;
+            return $model->user_id;
         }
 
         return static::$user->id;

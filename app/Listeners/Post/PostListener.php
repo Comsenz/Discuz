@@ -156,10 +156,9 @@ class PostListener
     public function whenPostWasSaved(Saved $event)
     {
         $post = $event->post;
-
-        // 刷新主题回复数、最后一条回复
         $thread = $post->thread;
 
+        // 刷新主题回复数、最后一条回复
         if ($thread && $thread->exists) {
             $thread->refreshPostCount();
             $thread->refreshLastPost();

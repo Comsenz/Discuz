@@ -70,6 +70,7 @@ class ThreadPolicy extends AbstractPolicy
         // 是当前分类的版主 且 拥有该权限
         if (
             $thread->category
+            && ! $actor->isGuest()
             // && in_array($actor->id, explode(',', $thread->category->moderators))
             && $actor->hasPermission('category' . $thread->category->id . '.thread.' . $ability)
         ) {
