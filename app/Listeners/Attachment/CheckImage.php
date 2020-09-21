@@ -65,7 +65,7 @@ class CheckImage
 
             $image = $isRemote
                 ? $uploader->getUrl()
-                : storage_path('app/' . $file->hashName($uploader->getPath()));
+                : storage_path('app/' . $uploader->getFullPath());
 
             $this->censor->checkImage($image, $isRemote);
 
