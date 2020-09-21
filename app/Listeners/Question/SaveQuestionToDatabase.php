@@ -105,17 +105,20 @@ class SaveQuestionToDatabase
                     $question = Question::build($build);
                     $question->save();
 
-                    /**
-                     * Update WalletLog relation question_id
-                     * @var UserWalletLog $walletLog
-                     */
-                    $walletLog = UserWalletLog::query()->where([
-                        'user_id' => $actor->id,
-                        'order_id' => Arr::get($questionData, 'order_id', null),
+                    // 判断如果没有传 order_id 说明是0元提问，就不需要冻结钱包
+                    if (!empty($order_id = Arr::get($questionData, 'order_id', null))) {
+                        /**
+                         * Update WalletLog relation question_id
+                         * @var UserWalletLog $walletLog
+                         */
+                        $walletLog = UserWalletLog::query()->where([
+                            'user_id' => $actor->id,
+                            'order_id' => $order_id,
                         'change_type' => UserWalletLog::TYPE_EXPEND_QUESTION,
                     ])->first();
-                    $walletLog->question_id = $question->id;
-                    $walletLog->save();
+                        $walletLog->question_id = $question->id;
+                        $walletLog->save();
+                    }
 
                     $this->connection->commit();
                 } catch (Exception $e) {
