@@ -33,7 +33,6 @@ use Illuminate\Support\Str;
  * @property int $type_id
  * @property int $order
  * @property int $type
- * @property float $price
  * @property int $is_remote
  * @property int $is_approved
  * @property string $attachment
@@ -197,8 +196,4 @@ class Attachment extends Model
         return $this->belongsTo(Post::class, 'type_id');
     }
 
-    public function order()
-    {
-        return $this->hasMany(Order::class);
-    }
 }

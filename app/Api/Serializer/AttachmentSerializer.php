@@ -85,7 +85,6 @@ class AttachmentSerializer extends AbstractSerializer
             'order'             => $model->order,
             'type'              => $model->type,
             'type_id'           => $model->type_id,
-            'price'             => $model->price,
             'isRemote'          => $model->is_remote,
             'isApproved'        => $model->is_approved,
             'url'               => $url,
