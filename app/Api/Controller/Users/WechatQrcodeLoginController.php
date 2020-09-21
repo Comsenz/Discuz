@@ -85,6 +85,7 @@ class WechatQrcodeLoginController implements RequestHandlerInterface
         if ($response->getStatusCode() === 200) {
             // build
             $token->payload = $accessToken;
+            $token->user_id = $actor->id;
             $token->save();
         } else {
             throw new Exception(trans('user.pc_qrcode_time_fail'));
