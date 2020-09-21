@@ -94,7 +94,7 @@ class ThreadPolicy extends AbstractPolicy
         });
 
         // 隐藏不允许当前用户查看的分类内容。
-        if (Arr::get($request->getServerParams(), 'filter.isSite', '') !== 'yes') {
+        if (Arr::get($request->getQueryParams(), 'filter.isSite', '') !== 'yes') {
             $query->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'viewThreads'));
         }
 
