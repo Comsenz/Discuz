@@ -102,6 +102,23 @@ class OrderSubscriber
         }
 
         // TODO Question 围观成功后发送给问答人/答题人通知
+
+
+        // 附件付费通知
+        if ($order->type == Order::ORDER_TYPE_ATTACHMENT && $order->status == Order::ORDER_STATUS_PAID) {
+            // 发送通知
+            $order->payee->notify(new Rewarded($order, $order->user, RewardedMessage::class));
+            $order->payee->notify(new Rewarded($order, $order->user, WechatRewardedMessage::class, [
+                'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
+                'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
+                    'actor_username' => $order->user->username,    // 发送人姓名
+                    'actual_amount' => $order->calculateAuthorAmount(true)       // 获取实际金额
+                ]),
+            ]));
+
+            // 发送分成通知
+            $this->sendScaleNotice($order, 'payee');
+        }
     }
 
     /**

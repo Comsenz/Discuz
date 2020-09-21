@@ -28,6 +28,8 @@ return [
     'income_scale_thread'       => '分成付费主题收入',
     'income_question_reward'    => '问答答题收入',
     'income_onlooker_reward'    => '问答围观收入',
+    'income_attachment'         => '付费附件收入',
+    'income_scale_attachment'   => '分成付费附件收入',
 
     'expend_renew'              => '站点续费支出',
     'expend_reward'             => '打赏主题支出',
@@ -36,6 +38,7 @@ return [
     'expend_artificial'         => '人工支出',
     'expend_question'           => '问答提问支出',
     'expend_onlooker'           => '问答围观支出',
+    'expend_attachment'         => '付费附件支出',
 
     'cash_operate_desc'         => '提现',
 

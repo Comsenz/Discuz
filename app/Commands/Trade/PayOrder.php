@@ -191,6 +191,9 @@ class PayOrder
             case Order::ORDER_TYPE_ONLOOKER:
                 $order_info->body = trans('order.order_type_onlooker');
                 break;
+            case Order::ORDER_TYPE_ATTACHMENT:
+                $order_info->body = trans('order.order_type_attachment');
+                break;
             default:
                 $order_info->body = '';
                 break;

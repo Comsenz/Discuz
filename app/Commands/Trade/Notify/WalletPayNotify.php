@@ -48,14 +48,13 @@ class WalletPayNotify
      * @param SettingsRepository $setting
      * @return array
      * @throws ErrorException
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function handle(ConnectionInterface $connection, Dispatcher $events, SettingsRepository $setting)
     {
         $log = app('payLog');
         try {
             $log->info('notify', $this->data);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             goto todo;
         }
 
@@ -67,7 +66,7 @@ class WalletPayNotify
         $connection->beginTransaction();
         try {
             // 从钱包余额中扣除订单金额
-            $userWallet = UserWallet::lockForUpdate()->find($this->data['user_id']);
+            $userWallet = UserWallet::query()->lockForUpdate()->find($this->data['user_id']);
             $userWallet->available_amount = $userWallet->available_amount - $this->data['amount'];
 
             // 记录钱包变更明细
@@ -98,6 +97,10 @@ class WalletPayNotify
                 case Order::ORDER_TYPE_ONLOOKER:
                     $change_type = UserWalletLog::TYPE_EXPEND_ONLOOKER;
                     $change_type_lang = 'wallet.expend_onlooker';
+                    break;
+                case Order::ORDER_TYPE_ATTACHMENT:
+                    $change_type = UserWalletLog::TYPE_EXPEND_ATTACHMENT;
+                    $change_type_lang = 'wallet.expend_attachment';
                     break;
                 default:
                     $change_type = $this->data['type'];

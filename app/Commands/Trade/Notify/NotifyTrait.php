@@ -69,6 +69,7 @@ trait NotifyTrait
                     return $this->orderInfo;
 
                 case Order::ORDER_TYPE_REWARD:
+                case Order::ORDER_TYPE_ATTACHMENT:
                 case Order::ORDER_TYPE_THREAD:
                     // 站长作者分成配置
                     $site_author_scale = $setting->get('site_author_scale');
@@ -222,6 +223,15 @@ trait NotifyTrait
                 // 问答围观收入
                 $change_type = UserWalletLog::TYPE_INCOME_ONLOOKER_REWARD;
                 $change_type_lang = 'wallet.income_onlooker_reward';
+                break;
+            case Order::ORDER_TYPE_ATTACHMENT: // 付费主题
+                if ($scale) {
+                    $change_type = UserWalletLog::TYPE_INCOME_SCALE_ATTACHMENT;
+                    $change_type_lang = 'wallet.income_scale_attachment';
+                } else {
+                    $change_type = UserWalletLog::TYPE_INCOME_ATTACHMENT;
+                    $change_type_lang = 'wallet.income_attachment';
+                }
                 break;
             default:
                 $change_type = $this->orderInfo->type;

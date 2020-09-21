@@ -15,6 +15,7 @@ return [
     'order_type_group'              => '付费用户组',
     'order_type_question'           => '问答提问支付',
     'order_type_onlooker'           => '问答围观',
+    'order_type_attachment'         => '付费附件',
 
     'payee_not_found'               => '收款人不存在',
     'order_group_error'             => '用户组不存在或配置有误',

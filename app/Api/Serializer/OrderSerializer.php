@@ -40,6 +40,7 @@ class OrderSerializer extends AbstractSerializer
             'type'                  => $model->type,
             'thread_id'             => $model->thread_id,
             'group_id'              => $model->group_id,
+            'attachment_id'         => $model->attachment_id,
             'updated_at'            => $this->formatDate($model->updated_at),
             'created_at'            => $this->formatDate($model->created_at),
         ];
