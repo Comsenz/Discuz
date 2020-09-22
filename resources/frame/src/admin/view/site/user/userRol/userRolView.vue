@@ -22,58 +22,16 @@
             width="100"
             label="显示组名">
             <template slot-scope="scope">
-              <el-switch
-                :disabled="scope.row._data.id === '7' || !scope.row._data.icon"
-                v-model="scope.row._data.isDisplay"
-                active-color="#336699"
-                inactive-color="#bbbbbb">
-            </el-switch>
+            <el-switch
+            :disabled="scope.row._data.id === '7'"
+            v-model="scope.row._data.isDisplay"
+            active-color="#336699"
+            inactive-color="#bbbbbb">
+          </el-switch>
             </template>
           </el-table-column>
 
-          <el-table-column
-            width="100"
-            label="组图标">
-            <template slot-scope="scope">
-              <div class="" @click="uploadClick(scope.row._data.id,scope.$index)">
-                <el-upload 
-                  class="avatar-uploader"
-                  action
-                  :show-file-list="false"
-                  :http-request="uploaderLogo"
-                  :on-success="handleAvatarSuccess"
-                  @change="handleFile"
-                  :before-upload="beforeAvatarUpload"
-                  >
-                  <div v-if="scope.row._data.icon" class="avatar">
-                    <img
-                      :src="scope.row._data.icon"
-                      class="avatar-LogoImage"
-                    />
-                    <div class="avatar-delete" @click.stop="deleteGroupsIcon(scope.$index,scope.row._data.id)">
-                      <span><i class="iconfont iconhuishouzhan"></i></span>
-                    </div>
-                  </div>
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-              </div>
-            </template>
-          </el-table-column>
-
-          <el-table-column
-            width="100"
-            label="允许购买">
-            <template slot-scope="scope">
-              <el-switch
-                v-if="scope.row._data.id !== '1'"
-                v-model="scope.row._data.isPaid"
-                active-color="#336699"
-                inactive-color="#bbbbbb">
-              </el-switch>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="操作">
+          <el-table-column>
             <template slot-scope="scope">
               <el-button v-if="scope.row._data.id !== '1'" :disabled="addStatus && tableData.length-1 === scope.$index" type="text" @click="$router.push({path:'/admin/rol-permission',query:{id:scope.row._data.id,name:scope.row._data.name}})">设置权限</el-button>
               <el-button v-if="scope.row._data.id !== '1' && scope.row._data.id !== '6' && scope.row._data.id !== '7' && scope.row._data.id !== '10' && scope.row._data.default !== 1" @click="singleDelete(scope.$index,scope.row._data.id)" type="text">删除</el-button>
