@@ -133,12 +133,8 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function edit(User $actor, Thread $thread)
     {
-        // 是作者本人且拥有编辑自己主题或回复的权限 或者 是管理员 或者 有权编辑首帖
-        if (
-            ($thread->user_id == $actor->id && $actor->hasPermission('editOwnThreadOrPost'))
-            || $actor->isAdmin()
-            || $actor->can('edit', $thread->firstPost)
-        ) {
+        // 是作者本人且拥有编辑自己主题或回复的权限 或者 是管理员
+        if (($thread->user_id == $actor->id && $actor->hasPermission('editOwnThreadOrPost')) || $actor->isAdmin()) {
             return true;
         }
     }
@@ -150,12 +146,8 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function hide(User $actor, Thread $thread)
     {
-        // 是作者本人且拥有删除自己主题或回复的权限 或者 是管理员 或者 有权删除首帖
-        if (
-            ($thread->user_id == $actor->id && $actor->hasPermission('hideOwnThreadOrPost'))
-            || $actor->isAdmin()
-            || $actor->can('hide', $thread->firstPost)
-        ) {
+        // 是作者本人且拥有删除自己主题或回复的权限 或者 是管理员
+        if (($thread->user_id == $actor->id && $actor->hasPermission('hideOwnThreadOrPost')) || $actor->isAdmin()) {
             return true;
         }
     }
