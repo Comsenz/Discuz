@@ -152,6 +152,9 @@ class CreateThread
         $thread->address = Arr::get($this->data, 'attributes.address', '');
         $thread->location = Arr::get($this->data, 'attributes.location', '');
 
+        // 附件价格
+        $thread->attachment_price = Arr::get($this->data, 'attributes.attachment_price', 0);
+
         $thread->setRelation('user', $this->actor);
 
         $thread->raise(new Created($thread));
