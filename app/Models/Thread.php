@@ -42,6 +42,7 @@ use Illuminate\Support\Stringable;
  * @property int $type
  * @property string $title
  * @property float $price
+ * @property float $attachment_price
  * @property int $free_words
  * @property int $post_count
  * @property int $view_count
@@ -57,6 +58,7 @@ use Illuminate\Support\Stringable;
  * @property int $deleted_user_id
  * @property int $is_approved
  * @property bool|null $is_paid
+ * @property bool|null $is_paid_attachment
  * @property bool $is_sticky
  * @property bool $is_essence
  * @property bool $is_site
@@ -126,6 +128,8 @@ class Thread extends Model
      * @var Collection
      */
     protected static $userHasPaidThreads;
+
+    protected static $userHasPaidThreadAttachments;
 
     /**
      * datetime 时间转换
@@ -436,17 +440,27 @@ class Thread extends Model
 
         // 当前用户对于传入主题列表是否付费
         if ($threads) {
-            $orders = Order::query()
-                ->whereIn('thread_id', $threads->pluck('id'))
-                ->where('user_id', $user->id)
-                ->where('status', Order::ORDER_STATUS_PAID)
-                ->where('type', Order::ORDER_TYPE_THREAD)
-                ->pluck('thread_id');
+            foreach ([Order::ORDER_TYPE_THREAD, Order::ORDER_TYPE_ATTACHMENT] as $type) {
+                $data = [];
+                $orders = Order::query()
+                    ->whereIn('thread_id', $threads->pluck('id'))
+                    ->where('user_id', $user->id)
+                    ->where('status', Order::ORDER_STATUS_PAID)
+                    ->where('type', $type)
+                    ->pluck('thread_id');
 
-            static::$userHasPaidThreads[$user->id] = $threads->keyBy('id')
-                ->map(function ($thread) use ($orders) {
-                    return $orders->contains($thread->id);
-                });
+                $data[$user->id] = $threads->keyBy('id')
+                    ->map(function ($thread) use ($orders) {
+                        return $orders->contains($thread->id);
+                    });
+                if ($type == Order::ORDER_TYPE_THREAD) {
+                    // 主题付费数据
+                    static::$userHasPaidThreads = $data;
+                } elseif ($type == Order::ORDER_TYPE_ATTACHMENT) {
+                    // 主题附件付费数据
+                    static::$userHasPaidThreadAttachments = $data;
+                }
+            }
         }
     }
 
@@ -464,7 +478,7 @@ class Thread extends Model
     }
 
     /**
-     * 主题对于某用户是否付费
+     * 主题对于某用户是否付费主题
      *
      * @return bool|null
      */
@@ -503,9 +517,52 @@ class Thread extends Model
             ->where('status', Order::ORDER_STATUS_PAID)
             ->where('type', Order::ORDER_TYPE_THREAD)
             ->exists();
-
         static::$userHasPaidThreads[$user->id][$this->id] = $isPaid;
 
         return $isPaid;
+    }
+
+    /**
+     * 获取附件付费状态
+     * @return bool|null
+     */
+    public function getIsPaidAttachmentAttribute()
+    {
+        $user = static::$stateUser;
+
+        // 必须有用户
+        if (! $user) {
+            throw new \RuntimeException('You must set the user with setStateUser()');
+        }
+
+        // 非付费主题返回 null
+        if ($this->attachment_price <= 0) {
+            return null;
+        }
+
+        // 用户不存在返回 false
+        if (! $user->exists) {
+            return false;
+        }
+
+        // 作者本人 或 管理员 返回 true
+        if ($this->user_id === $user->id || $user->isAdmin()) {
+            return true;
+        }
+
+        // 是否已缓存付费状态（为避免 N + 1 问题）
+        if (isset(static::$userHasPaidThreadAttachments[$user->id][$this->id])) {
+            return static::$userHasPaidThreadAttachments[$user->id][$this->id];
+        }
+
+        $isPaidAttachment = Order::query()
+            ->where('user_id', $user->id)
+            ->where('thread_id', $this->id)
+            ->where('status', Order::ORDER_STATUS_PAID)
+            ->where('type', Order::ORDER_TYPE_THREAD)
+            ->exists();
+        static::$userHasPaidThreadAttachments[$user->id][$this->id] = $isPaidAttachment;
+
+        return $isPaidAttachment;
     }
 }
