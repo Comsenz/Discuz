@@ -41,6 +41,13 @@ class CreateUserWalletCashController extends AbstractResourceController
     ];
 
     /**
+     * {@inheritdoc}
+     */
+    public $optionalInclude = [
+        'wechat'
+    ];
+
+    /**
      * @var Dispatcher
      */
     protected $bus;

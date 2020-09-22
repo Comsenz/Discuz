@@ -106,7 +106,7 @@ class UserWalletCashReview
         $cash_status = (int) Arr::get($this->data, 'cash_status');
 
         //只允许修改为审核通过或审核不通过
-        if (!in_array($cash_status, [UserWalletCash::STATUS_REVIEWED, UserWalletCash::STATUS_REVIEW_FAILED])) {
+        if (!in_array($cash_status, [UserWalletCash::STATUS_REVIEWED, UserWalletCash::STATUS_REVIEW_FAILED, UserWalletCash::STATUS_PAID])) {
             throw new WalletException('operate_forbidden');
         }
 
@@ -125,6 +125,10 @@ class UserWalletCashReview
                     //检查证书
                     if (!file_exists(storage_path().'/cert/apiclient_cert.pem') || !file_exists(storage_path().'/cert/apiclient_key.pem')) {
                         throw new WalletException('pem_notexist');
+                    }
+                    //零钱付款
+                    if ($cash_record->cash_type != UserWalletCash::TRANSFER_TYPE_MCH) {
+                        return $status_result[$id] = 'failure';
                     }
                     //审核通过
                     if ($cash_record->save()) {
@@ -162,12 +166,47 @@ class UserWalletCashReview
                             $cash_record->id
                         );
 
-                        $cash_record->remark = Arr::get($this->data, 'remark');
+                        $cash_record->remark = Arr::get($this->data, 'remark', '');
                         $cash_record->refunds_status = UserWalletCash::REFUNDS_STATUS_YES;
                         $cash_record->save();
                         $this->connection->commit();
                         return $status_result[$id] = 'success';
                     } catch (Exception $e) {
+                        //回滚事务
+                        $this->connection->rollback();
+                        throw new WalletException($e->getMessage(), 500);
+                    }
+                } elseif ($cash_status == UserWalletCash::STATUS_PAID) {
+                    //人工打款
+                    if ($cash_record->cash_type != UserWalletCash::TRANSFER_TYPE_MANUAL) {
+                        return $status_result[$id] = 'failure';
+                    }
+                    //开始事务
+                    $this->connection->beginTransaction();
+                    try {
+                        $cash_record->remark = Arr::get($this->data, 'remark', '');
+                        $cash_record->cash_status = UserWalletCash::STATUS_PAID;//已打款
+                        $cash_record->save();
+                        //获取用户钱包
+                        $user_wallet = UserWallet::lockForUpdate()->find($cash_record->user_id);
+                        //去除冻结金额
+                        $user_wallet->freeze_amount = $user_wallet->freeze_amount - $cash_record->cash_apply_amount;
+                        $user_wallet->save();
+                        //冻结变动金额，为负数
+                        $change_freeze_amount = -$cash_record->cash_apply_amount;
+                        //添加钱包明细
+                        $user_wallet_log = UserWalletLog::createWalletLog(
+                            $cash_record->user_id,
+                            0,
+                            $change_freeze_amount,
+                            UserWalletLog::TYPE_CASH_SUCCESS,
+                            app('translator')->get('wallet.cash_success'),
+                            $cash_record->id
+                        );
+                        //提交事务
+                        $this->connection->commit();
+                        return $status_result[$id] = 'success';
+                    } catch (\Exception $e) {
                         //回滚事务
                         $this->connection->rollback();
                         throw new WalletException($e->getMessage(), 500);

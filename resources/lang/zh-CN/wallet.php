@@ -38,4 +38,7 @@ return [
 
     'unbind_wechat'         => '请绑定微信后再进行操作',
 
+    'cash_type_error'       => '提现方式不存在',
+    'cash_mch_invalid'      => '未开启微信企业付款到零钱功能',
+
 ];

@@ -77,10 +77,6 @@ class CreateUserWalletCash
         // 判断有没有权限执行此操作
         $this->assertCan($this->actor, 'cash.create');
 
-        if (!$this->actor->wechat) {
-            throw new WalletException('unbind_wechat');
-        }
-
         $this->data = collect(Arr::get($this->data, 'data.attributes'));
 
         $cash_setting = $setting->tag('cash');
@@ -89,14 +85,35 @@ class CreateUserWalletCash
         $cash_sum_limit = (float)Arr::get($cash_setting, 'cash_sum_limit', 5000);//每日总提现额
         $cash_max_sum = (float)Arr::get($cash_setting, 'cash_max_sum', 5000);//每次最大金额
         $cash_min_sum = (float)Arr::get($cash_setting, 'cash_min_sum', 0);//每次最小金额
+
         // 验证参数
         $validator_info = $validator->make($this->data->toArray(), [
             'cash_apply_amount' => 'required|numeric|min:' . $cash_min_sum . '|max:' . $cash_max_sum,
+            'cash_type'         => 'required|int',
+            'cash_mobile'       => 'required_if:cash_type, '. UserWalletCash::TRANSFER_TYPE_MANUAL . ' |regex:/^1[345789][0-9]{9}$/',
             'remark'            => 'sometimes|max:255',
         ]);
+
         if ($validator_info->fails()) {
             throw new ValidationException($validator_info);
         }
+        $cash_type = (int) Arr::get($this->data, 'cash_type');
+
+        if (!in_array($cash_type, [UserWalletCash::TRANSFER_TYPE_MANUAL, UserWalletCash::TRANSFER_TYPE_MCH])) {
+            throw new WalletException('cash_type_error');
+        }
+
+        $cash_mobile = Arr::get($this->data, 'cash_mobile', '');
+        if ($cash_type == UserWalletCash::TRANSFER_TYPE_MCH) {
+            $wxpay_mchpay = $setting->get('wxpay_mchpay_close', 'wxpay');
+            if (!$wxpay_mchpay) {
+                throw new WalletException('cash_mch_invalid');
+            }
+            if (!$this->actor->wechat) {
+                throw new WalletException('unbind_wechat');
+            }
+        }
+
         if ($cash_interval_time != 0) {
             $time_before = Carbon::now()->addDays(-$cash_interval_time);
             //提现间隔时间
@@ -148,7 +165,9 @@ class CreateUserWalletCash
                 $tax_amount,
                 $cash_actual_amount,
                 $cash_apply_amount,
-                $remark
+                $remark,
+                $cash_type,
+                $cash_mobile
             );
             //冻结钱包金额
             $user_wallet->available_amount = $user_wallet->available_amount - $cash_apply_amount;
