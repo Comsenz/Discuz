@@ -64,14 +64,37 @@ class PostAttachment
      */
     public function whenPostIsSaving(Saving $event)
     {
-        // 图片帖必须有图片
-        if (
-            $event->post->is_first
-            && Arr::has($event->data, 'relationships.attachments.data')
-            && ! array_column(Arr::get($event->data, 'relationships.attachments.data'), 'id')
-            && $event->post->thread->type === Thread::TYPE_OF_IMAGE
-        ) {
-            throw new Exception('cannot_create_image_thread_without_attachments');
+        if ($event->post->is_first) {
+            if ($event->post->exists) {
+                // 编辑
+                if (Arr::has($event->data, 'relationships.attachments.data') &&
+                    ! array_column(Arr::get($event->data, 'relationships.attachments.data'), 'id')
+                ) {
+                    // 图片帖必须有图片
+                    if ($event->post->thread->type === Thread::TYPE_OF_IMAGE) {
+                        throw new Exception('cannot_create_image_thread_without_attachments');
+                    }
+
+                    // 设置了附件价格必须有附件
+                    if ($event->post->thread->attachment_price > 0) {
+                        throw new Exception('cannot_create_thread_without_attachments');
+                    }
+                }
+            } else {
+                // 创建
+                if (! Arr::has($event->data, 'relationships.attachments.data') ||
+                    ! array_column(Arr::get($event->data, 'relationships.attachments.data'), 'id')) {
+                    // 图片帖必须有图片
+                    if ($event->post->thread->type === Thread::TYPE_OF_IMAGE) {
+                        throw new Exception('cannot_create_image_thread_without_attachments');
+                    }
+
+                    // 设置了附件价格必须有附件
+                    if ($event->post->thread->attachment_price > 0) {
+                        throw new Exception('cannot_create_thread_without_attachments');
+                    }
+                }
+            }
         }
     }
 
