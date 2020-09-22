@@ -13,7 +13,7 @@ class AddAttachmentPriceToThreads extends Migration
     public function up()
     {
         $this->schema()->table('threads', function (Blueprint $table) {
-            $table->decimal('attachment_price')->unsigned()->default(0)->comment('是否推荐到首页（0否 1是）');
+            $table->decimal('attachment_price')->unsigned()->default(0)->after('price')->comment('是否推荐到首页（0否 1是）');
         });
     }
 
