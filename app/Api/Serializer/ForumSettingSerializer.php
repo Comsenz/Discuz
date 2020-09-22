@@ -96,6 +96,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'paycenter' => [
                 'wxpay_close' => (bool)$this->settings->get('wxpay_close', 'wxpay'),
                 'wxpay_ios' => (bool)$this->settings->get('wxpay_ios', 'wxpay'),
+                'wxpay_mchpay_close' => (bool)$this->settings->get('wxpay_mchpay_close', 'wxpay'),
             ],
 
             // 附件设置
