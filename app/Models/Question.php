@@ -194,6 +194,11 @@ class Question extends Model
         return $this->belongsTo(User::class, 'be_user_id', 'id');
     }
 
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class, 'type_id')->where('type', Attachment::TYPE_OF_ANSWER)->orderBy('order');
+    }
+
     public function userWalletLog()
     {
         return $this->belongsTo(UserWalletLog::class, 'id', 'question_id');

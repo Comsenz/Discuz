@@ -85,6 +85,7 @@ class ResourceThreadController extends AbstractResourceController
         'topic',
         'question',
         'question.beUser',
+        'question.attachments',
         'onlookers',
     ];
 

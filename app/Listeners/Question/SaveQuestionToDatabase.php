@@ -75,7 +75,7 @@ class SaveQuestionToDatabase
 
         if ($post->thread->type == Thread::TYPE_OF_QUESTION) {
             // 判断是否是创建
-            if ($post->wasRecentlyCreated) {
+            if ($post->is_first && $post->wasRecentlyCreated) {
                 $questionData = Arr::get($data, 'relationships.question.data');
                 if (empty($questionData)) {
                     throw new Exception(trans('post.post_question_missing_parameter')); // 问答缺失参数
