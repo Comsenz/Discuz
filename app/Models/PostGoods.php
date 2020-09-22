@@ -192,6 +192,16 @@ class PostGoods extends Model
         return $mode ?? 'Guzzle';
     }
 
+    public function getImagePathAttribute($value)
+    {
+        // imagePath add to urlPrefix
+        if (substr($value, 0, 7) !== 'http://' && substr($value, 0, 8) !== 'https://') {
+            $value = 'https://' . $value;
+        }
+
+        return $value;
+    }
+
     /**
      * Define the relationship with the report's author.
      *
