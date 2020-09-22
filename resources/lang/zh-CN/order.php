@@ -22,7 +22,7 @@ return [
     'order_group_error'             => '用户组不存在或配置有误',
     'order_group_forbidden'         => '默认用户组不允许购买',
 
-    'order_question_not_onlooker'   => '帖子不允许围观',
-    'order_question_onlooker_fail'   => '帖子未能达到围观条件',
-    'order_question_onlooker_seen'   => '帖子已支付围观',
+    'order_question_onlooker_reject'     => '帖子不允许围观',
+    'order_question_onlooker_unanswered' => '帖子还未回答，不允许围观',
+    'order_question_onlooker_seen'       => '帖子已支付围观金额',
 ];

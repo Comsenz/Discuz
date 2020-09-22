@@ -210,7 +210,7 @@ class CreateOrder
                     ->where('id', $this->data->get('thread_id'))
                     ->where('price', 0)  // 问答的帖子价格是0
                     ->where('is_approved', Thread::APPROVED)
-                    ->where('type', Order::ORDER_TYPE_ONLOOKER)
+                    ->where('type', Thread::TYPE_OF_QUESTION)
                     ->whereNull('deleted_at')
                     ->first();
 
@@ -221,11 +221,11 @@ class CreateOrder
                     }
                     // 判断该问答是否允许围观
                     if (!$thread->question->is_onlooker) {
-                        throw new Exception(trans('order.order_question_not_onlooker'));
+                        throw new Exception(trans('order.order_question_onlooker_reject'));
                     }
                     // 判断该问题是否已被回答才能围观
                     if ($thread->question->is_answer != Question::TYPE_OF_ANSWERED) {
-                        throw new Exception(trans('order.order_question_onlooker_fail'));
+                        throw new Exception(trans('order.order_question_onlooker_unanswered'));
                     }
 
                     // 获取后台设置的围观金额
