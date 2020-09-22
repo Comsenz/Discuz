@@ -224,7 +224,7 @@ trait NotifyTrait
                 $change_type = UserWalletLog::TYPE_INCOME_ONLOOKER_REWARD;
                 $change_type_lang = 'wallet.income_onlooker_reward';
                 break;
-            case Order::ORDER_TYPE_ATTACHMENT: // 付费主题
+            case Order::ORDER_TYPE_ATTACHMENT: // 付费附件
                 if ($scale) {
                     $change_type = UserWalletLog::TYPE_INCOME_SCALE_ATTACHMENT;
                     $change_type_lang = 'wallet.income_scale_attachment';

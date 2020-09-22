@@ -87,7 +87,6 @@ class CreateOrder
 
         $validator_info = $validator->make($this->data->toArray(), [
             'group_id'  => 'filled|int',
-            'attachment_id'  => 'filled|int',
             'type'          => 'required|int',
             'thread_id'     => 'required_if:type,' . Order::ORDER_TYPE_REWARD . ',' . Order::ORDER_TYPE_THREAD . '|int',
             'amount'        => 'required_if:type,' . Order::ORDER_TYPE_REWARD . '|numeric|min:0.01',
@@ -241,31 +240,36 @@ class CreateOrder
                 break;
             //付费附件
             case Order::ORDER_TYPE_ATTACHMENT:
-                /** @var Attachment $attachment */
-                $attachment = Attachment::query()
-                    ->where('id', $this->data->attachment_id)
+                /** @var Thread $thread */
+                $thread = Thread::query()
+                    ->where('id', $this->data->get('thread_id'))
+                    ->where('user_id', '<>', $this->actor->id)
+                    ->where('attachment_price', '>', 0)
+                    ->where('is_approved', Thread::APPROVED)
+                    ->whereNull('deleted_at')
                     ->first();
 
+                // 根据主题 id 查询是否已付过费
                 $order = Order::query()
-                    ->where('attachment_id', $this->data->get('attachment_id'))
+                    ->where('thread_id', $this->data->get('thread_id'))
                     ->where('user_id', $this->actor->id)
                     ->where('status', Order::ORDER_STATUS_PAID)
                     ->where('type', Order::ORDER_TYPE_ATTACHMENT)
                     ->exists();
 
-                if ($attachment && !$order && $attachment->price >0) {
+                if ($thread && !$order && $thread->attachment_price >0) {
                     // 判断该主题作者是否有 被付费的权限
-                    $this->assertCan($attachment->user, 'createThreadPaid');
+                    $this->assertCan($thread->user, 'createThreadPaid');
 
-                    $payeeId = $attachment->user_id;
-                    $amount = $attachment->price;
+                    $payeeId = $thread->user_id;
+                    $amount = $thread->attachment_price;
 
-                    // 查询收款人是否有上级邀请
-                    if ($attachment->user->can('other.canInviteUserScale') && $attachment->user->isAllowScale(Order::ORDER_TYPE_THREAD)) {
-                        $be_scale = $attachment->user->userDistribution->be_scale;
+                    // 付费附件也是用主题的分成权限。查询收款人是否有上级邀请
+                    if ($thread->user->can('other.canInviteUserScale') && $thread->user->isAllowScale(Order::ORDER_TYPE_THREAD)) {
+                        $be_scale = $thread->user->userDistribution->be_scale;
                     }
                 } else {
-                    throw new OrderException('order_attachment_error');
+                    throw new OrderException('order_thread_attachment_error');
                 }
                 break;
             default:

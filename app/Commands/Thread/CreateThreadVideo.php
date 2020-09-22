@@ -94,9 +94,9 @@ class CreateThreadVideo
         $threadVideo->type = $this->type;
         $threadVideo->status = ThreadVideo::VIDEO_STATUS_TRANSCODING;
         $threadVideo->file_id = $fileId;
-        $threadVideo->file_name = Arr::get($this->data, 'attributes.file_name', '');
-        $threadVideo->media_url = Arr::get($this->data, 'attributes.media_url', '');
-        $threadVideo->cover_url = Arr::get($this->data, 'attributes.cover_url', '');
+        $threadVideo->file_name = Arr::get($this->data, 'attributes.file_name', '') ?: $threadVideo->file_name;
+        $threadVideo->media_url = Arr::get($this->data, 'attributes.media_url', '') ?: $threadVideo->media_url;
+        $threadVideo->cover_url = Arr::get($this->data, 'attributes.cover_url', '') ?: $threadVideo->cover_url;
 
         $threadVideo->save();
 
