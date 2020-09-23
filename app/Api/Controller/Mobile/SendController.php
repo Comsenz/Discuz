@@ -158,7 +158,6 @@ class SendController extends AbstractCreateController
         $result = $this->smsSend($data['mobile'], new SendCodeMessage(['code' => $mobileCode->code, 'expire' => self::CODE_EXCEPTION]));
 
         if (isset($result['qcloud']['status']) && $result['qcloud']['status'] === 'success') {
-            $this->cache->put($data['mobile'], 'send', Carbon::now()->addSeconds(self::CODE_INTERVAL));
             $mobileCode->save();
         }
 
