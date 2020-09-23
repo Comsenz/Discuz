@@ -74,6 +74,7 @@ class ListThreadsController extends AbstractListController
         'lastDeletedLog',
         'topic',
         'question',
+        'question.beUser',
     ];
 
     /**
