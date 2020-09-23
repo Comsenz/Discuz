@@ -89,7 +89,7 @@
       </Card>
 
       <Card>
-        <CardRow description="允许发布付费内容、允许被打赏">
+        <CardRow description="允许发布付费内容、付费附件、允许被打赏">
           <el-checkbox
             v-model="checked"
             label="createThreadPaid"

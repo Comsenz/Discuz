@@ -214,68 +214,8 @@
   .el-button+.el-button{
     margin-left: 20PX;
   }
-  .avatar-uploader .el-upload {
-    width: 40PX;
-    height: 40PX;
-    background-color: #F9F9F9;
-    border: 1PX dashed #d9d9d9;
-    border-radius: 6PX;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: $main;
-  }
-  .avatar-uploader-icon {
-    font-size: 12PX;
-    color: #b5b5b5;
-    width: 40PX;
-    height: 40PX;
-    line-height: 40PX;
-    text-align: center;
-  }
-  .avatar {
-    width: 40PX;
-    height: 40PX;
-    display: block;
-    position: relative;
-  }
-  .avatar-LogoImage {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    width: 28PX;
-    height: 28PX;
-  }
-  .avatar-delete {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    z-index: 12;
-    width: 100%;
-    height: 14PX;
-    line-height: 14PX;
-    background: rgba(0,0,0,0.5);
-    span {
-      display: inline-block;
-      transform: scale(0.8);
-    
-      .iconhuishouzhan {
-        font-size: 12PX;
-        color: #fff;
-        
-
-      
-      }
-    }
-  }
 
 }
-
 
 
 /*

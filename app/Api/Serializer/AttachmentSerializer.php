@@ -115,8 +115,12 @@ class AttachmentSerializer extends AbstractSerializer
             $attributes['thumbUrl'] = $url;
         }
 
-        if ($model->post && $model->post->is_first && $model->post->thread->price > 0) {
-            $attributes['url'] = $this->url->to('/api/attachments/' . $model->id);
+        if (
+            $model->post &&
+            $model->post->is_first &&
+            ($model->post->thread->price > 0 || $model->post->thread->attachment_price > 0)
+        ) {
+            $attributes['url'] = $this->url->to('/api/attachments/' . $model->id) . '?t=' .Attachment::getFileToken($this->actor);
         }
 
         return $attributes;

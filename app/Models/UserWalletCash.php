@@ -242,4 +242,14 @@ class UserWalletCash extends Model
     {
         return $this->belongsTo(UserWallet::class, 'user_id', 'user_id');
     }
+
+    /**
+     * Define the relationship with the cash record's wechat.
+     *
+     * @return belongsTo
+     */
+    public function wechat()
+    {
+        return $this->belongsTo(UserWechat::class, 'user_id', 'user_id');
+    }
 }
