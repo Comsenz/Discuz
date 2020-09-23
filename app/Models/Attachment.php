@@ -146,8 +146,14 @@ class Attachment extends Model
         $cache = app(Cache::class);
         $token = $cache->get('attachments_user_' . $actor->id);
         if (!$token) {
-            $token = SessionToken::generate('attachment', null, $actor->id, 3600);
-            $token->save();
+            $token = SessionToken::query()
+                ->where('scope', 'attachment')
+                ->where('user_id', $actor->id)
+                ->first();
+            if (!$token) {
+                $token = SessionToken::generate('attachment', null, $actor->id, 3600);
+                $token->save();
+            }
             $token = $token->token;
             $cache->put('attachments_user_' . $actor->id, $token, 3599);
         }

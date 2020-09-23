@@ -22,6 +22,8 @@ use App\Api\Serializer\AttachmentSerializer;
 use App\Exceptions\OrderException;
 use App\Models\Attachment;
 use App\Models\Order;
+use App\Models\SessionToken;
+use App\Models\User;
 use App\Repositories\AttachmentRepository;
 use App\Settings\SettingsRepository;
 use Carbon\Carbon;
@@ -86,9 +88,15 @@ class ResourceAttachmentController implements RequestHandlerInterface
     {
         $attachmentId = Arr::get($request->getQueryParams(), 'id');
         $page = (int)Arr::get($request->getQueryParams(), 'page');
-        $actor = $request->getAttribute('actor');
+        $t =  Arr::get($request->getQueryParams(), 't', '');
+        $token = SessionToken::get($t);
+        if ($token) {
+            $user = $token->user;
+        } else {
+            throw new PermissionDeniedException();
+        }
 
-        $attachment = $this->getAttachment($attachmentId, $actor);
+        $attachment = $this->getAttachment($attachmentId, $user);
 
         if ($attachment->is_remote) {
             $httpClient = new HttpClient();
@@ -150,8 +158,8 @@ class ResourceAttachmentController implements RequestHandlerInterface
     }
 
     /**
-     * @param $attachmentId
-     * @param $actor
+     * @param int $attachmentId
+     * @param User $actor
      * @return Attachment|null
      * @throws OrderException
      * @throws PermissionDeniedException
@@ -160,20 +168,31 @@ class ResourceAttachmentController implements RequestHandlerInterface
     {
         $attachment = $this->attachments->findOrFail($attachmentId, $actor);
 
-        $this->assertCan($actor, 'view.' . $attachment->type, $attachment);
-
         // 附件是否被绑定到帖子上
         $post = $attachment->post;
-        if ($post->deleted_at && ! $actor->isAdmin()) {
-            return null;
+        if (!$attachment->post || ($post->deleted_at && ! $actor->isAdmin())) {
+            throw new PermissionDeniedException();
         }
 
         // 主题是否收费
         $thread = $post->thread;
-        if ($thread->price > 0 && ! $actor->isAdmin()) {
+        if ($thread->price > 0 && ! $actor->isAdmin() && $thread->user_id != $actor->id) {
             $order = Order::query()->where('user_id', $actor->id)
                 ->where('thread_id', $thread->id)
-                ->where('type', Order::ORDER_TYPE_REWARD)
+                ->where('type', Order::ORDER_TYPE_THREAD)
+                ->where('status', Order::ORDER_STATUS_PAID)
+                ->exists();
+
+            if (! $order) {
+                throw new OrderException('order_post_not_found');
+            }
+        }
+
+        // 主题附件是否付费
+        if ($thread->attachment_price > 0 && ! $actor->isAdmin() && $thread->user_id != $actor->id) {
+            $order = Order::query()->where('user_id', $actor->id)
+                ->where('thread_id', $thread->id)
+                ->where('type', Order::ORDER_TYPE_ATTACHMENT)
                 ->where('status', Order::ORDER_STATUS_PAID)
                 ->exists();
 
