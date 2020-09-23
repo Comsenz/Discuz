@@ -16,39 +16,35 @@
  * limitations under the License.
  */
 
-namespace App\Events\Question;
+namespace App\MessageTemplate;
 
-use App\Models\Question;
-use App\Models\User;
+use Discuz\Notifications\Messages\DatabaseMessage;
+use Illuminate\Contracts\Routing\UrlGenerator;
 
-class Created
+/**
+ * 问答提问通知
+ *
+ * Class QuestionedMessage
+ * @package App\MessageTemplate
+ */
+class QuestionedMessage extends DatabaseMessage
 {
-    /**
-     * @var Question
-     */
-    public $question;
+    protected $tplId = 39;
 
-    /**
-     * @var User
-     */
-    public $actor;
+    protected $url;
 
-    /**
-     * @var array
-     */
-    public $data;
-
-    /**
-     * Created constructor.
-     *
-     * @param Question $question
-     * @param null $actor
-     * @param array $data
-     */
-    public function __construct(Question $question, $actor = null, array $data = [])
+    public function __construct(UrlGenerator $url)
     {
-        $this->question = $question;
-        $this->actor = $actor;
-        $this->data = $data;
+        $this->url = $url;
+    }
+
+    protected function titleReplaceVars()
+    {
+        return [];
+    }
+
+    protected function contentReplaceVars($data)
+    {
+        return $data;
     }
 }

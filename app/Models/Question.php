@@ -25,6 +25,8 @@ use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
+use Illuminate\Support\Stringable;
 
 /**
  * @package App\Models
@@ -49,6 +51,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon expired_at
  * @property User $user
  * @property User $beUser
+ * @property Thread $thread
  * @property UserWalletLog $userWalletLog
  */
 class Question extends Model
@@ -62,6 +65,11 @@ class Question extends Model
     const TYPE_OF_ANSWERED = 1; // 已回答
 
     const TYPE_OF_EXPIRED = 2; // 已过期
+
+    /**
+     * 通知内容展示长度(字)
+     */
+    const CONTENT_LENGTH = 80;
 
     protected $fillable = [
         'thread_id',
@@ -161,6 +169,29 @@ class Question extends Model
     }
 
     /**
+     * 获取回答内容 content
+     *
+     * @param $substr
+     * @param false $parse
+     * @return Stringable|string
+     */
+    public function getContentFormat($substr, $parse = false)
+    {
+        // 截取内容
+        $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
+
+        // 是否需要解析
+        if ($parse) {
+            // 原文
+            $content = $this->content;
+        } else {
+            $content = $this->formatContent();
+        }
+
+        return $content;
+    }
+
+    /**
      * Create a new self
      *
      * @param array $attributes
@@ -193,6 +224,14 @@ class Question extends Model
     public function beUser()
     {
         return $this->belongsTo(User::class, 'be_user_id', 'id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function thread()
+    {
+        return $this->belongsTo(Thread::class);
     }
 
     /**

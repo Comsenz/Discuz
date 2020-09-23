@@ -20,6 +20,7 @@ namespace App\Listeners\Question;
 
 use App\Events\Post\Revising;
 use App\Events\Post\Saved as PostSaved;
+use App\Events\Question\Created;
 use App\Events\Question\Saved as QuestionAnswerSaved;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -27,17 +28,27 @@ class QuestionListener
 {
     public function subscribe(Dispatcher $events)
     {
-        // 创建帖子后，发表问答内容
+        /**
+         * 创建帖子后，发表问答内容
+         * @see SaveQuestionToDatabase 创建问答信息
+         * @see CreateQuestionNoticeWillBeSend 触发通知
+         */
         $events->listen(PostSaved::class, SaveQuestionToDatabase::class);
+        $events->listen(Created::class, CreateQuestionNoticeWillBeSend::class);
 
-        // 当帖子修改中
+        /**
+         * 当帖子修改时
+         * @see WhenThePostIsBeingRevised 不允许修改已回答后的内容
+         */
         $events->listen(Revising::class, WhenThePostIsBeingRevised::class);
 
         /**
          * 回答问题后
          * @see QuestionAnswerMakeMoney 打款
          * @see QuestionAttachment 绑定附件
+         * @see SendReceiptAfterAnswer 回答后发送回执
          */
-        $events->listen(QuestionAnswerSaved::class, QuestionAnswerMakeMoney::class); // 打款
+        $events->listen(QuestionAnswerSaved::class, QuestionAnswerMakeMoney::class);
+        $events->listen(QuestionAnswerSaved::class, SendReceiptAfterAnswer::class);
     }
 }

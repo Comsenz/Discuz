@@ -123,7 +123,7 @@ class Liked extends System
     }
 
     /**
-     * 设置驱动名称
+     * 设置频道名称
      *
      * @param $strClass
      */

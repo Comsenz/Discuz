@@ -126,7 +126,7 @@ class Rewarded extends System
     }
 
     /**
-     * 设置驱动名称&属性
+     * 设置频道名称&属性
      *
      * @param $strClass
      */

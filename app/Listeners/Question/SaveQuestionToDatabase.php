@@ -26,7 +26,9 @@ use App\Models\UserWalletLog;
 use App\Validators\QuestionValidator;
 use Carbon\Carbon;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Foundation\EventsDispatchTrait;
 use Exception;
+use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Arr;
@@ -34,10 +36,7 @@ use Illuminate\Validation\ValidationException;
 
 class SaveQuestionToDatabase
 {
-    /**
-     * @var EventDispatcher
-     */
-    protected $eventDispatcher;
+    use EventsDispatchTrait;
 
     /**
      * @var QuestionValidator
@@ -54,12 +53,23 @@ class SaveQuestionToDatabase
      */
     protected $settings;
 
-    public function __construct(EventDispatcher $eventDispatcher, QuestionValidator $questionValidator, ConnectionInterface $connection, SettingsRepository $settings)
-    {
-        $this->eventDispatcher = $eventDispatcher;
+    /**
+     * @var BusDispatcher
+     */
+    protected $bus;
+
+    public function __construct(
+        EventDispatcher $eventDispatcher,
+        QuestionValidator $questionValidator,
+        ConnectionInterface $connection,
+        SettingsRepository $settings,
+        BusDispatcher $bus
+    ) {
+        $this->events = $eventDispatcher;
         $this->questionValidator = $questionValidator;
         $this->connection = $connection;
         $this->settings = $settings;
+        $this->bus = $bus;
     }
 
     /**
@@ -92,7 +102,10 @@ class SaveQuestionToDatabase
                 // Start Transaction
                 $this->connection->beginTransaction();
                 try {
-                    // Create Question
+                    /**
+                     * Create Question
+                     * @var Question $question
+                     */
                     $build = [
                         'thread_id' => $post->thread_id,
                         'user_id' => $actor->id,
@@ -129,8 +142,10 @@ class SaveQuestionToDatabase
                     $this->connection->rollback();
                 }
 
-                // TODO Question Send Notice
+                // 延迟执行事件
+                $this->dispatchEventsFor($question, $actor);
             }
         }
     }
+
 }
