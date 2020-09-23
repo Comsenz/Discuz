@@ -65,6 +65,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
     /**
      * @param AttachmentRepository $attachments
      * @param SettingsRepository $settings
+     * @param Filesystem $filesystem
      */
     public function __construct(AttachmentRepository $attachments, SettingsRepository $settings, Filesystem $filesystem)
     {
@@ -170,7 +171,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
         // 主题是否收费
         $thread = $post->thread;
         if ($thread->price > 0 && ! $actor->isAdmin()) {
-            $order = Order::where('user_id', $actor->id)
+            $order = Order::query()->where('user_id', $actor->id)
                 ->where('thread_id', $thread->id)
                 ->where('type', Order::ORDER_TYPE_REWARD)
                 ->where('status', Order::ORDER_STATUS_PAID)
