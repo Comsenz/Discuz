@@ -106,7 +106,7 @@ class CreateThread
         $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
         $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
 
-        // 视频帖、图片帖不传内容时设置默认内容
+        // 视频帖、图片帖、语音帖不传内容时设置默认内容
         if (! $content) {
             switch ($thread->type) {
                 case Thread::TYPE_OF_VIDEO:
@@ -114,6 +114,9 @@ class CreateThread
                     break;
                 case Thread::TYPE_OF_IMAGE:
                     $content = '分享图片';
+                    break;
+                case Thread::TYPE_OF_AUDIO:
+                    $content = '分享语音';
                     break;
             }
         }
