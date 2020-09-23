@@ -66,7 +66,7 @@ class QuestionAnswerSerializer extends AbstractSerializer
         return$this->hasOne($model, UserSerializer::class);
     }
 
-    protected function attachments($model)
+    protected function images($model)
     {
         return $this->hasMany($model, AttachmentSerializer::class);
     }

@@ -24,6 +24,7 @@ use Carbon\Carbon;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @package App\Models
@@ -194,7 +195,12 @@ class Question extends Model
         return $this->belongsTo(User::class, 'be_user_id', 'id');
     }
 
-    public function attachments()
+    /**
+     * 关联回答图片
+     *
+     * @return HasMany
+     */
+    public function images()
     {
         return $this->hasMany(Attachment::class, 'type_id')->where('type', Attachment::TYPE_OF_ANSWER)->orderBy('order');
     }
