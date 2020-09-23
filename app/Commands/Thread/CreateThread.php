@@ -156,7 +156,9 @@ class CreateThread
         $thread->location = Arr::get($this->data, 'attributes.location', '');
 
         // 附件价格
-        $thread->attachment_price = (float) Arr::get($this->data, 'attributes.attachment_price', 0);
+        if ($thread->attachment_price = (float) Arr::get($this->data, 'attributes.attachment_price', 0)) {
+            $this->assertCan($this->actor, 'createThreadPaid');
+        }
 
         $thread->setRelation('user', $this->actor);
 
