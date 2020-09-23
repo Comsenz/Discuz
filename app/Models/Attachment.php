@@ -142,10 +142,16 @@ class Attachment extends Model
 
     public static function getFileToken($actor)
     {
-        // $token = Cache::
-        $token = SessionToken::generate('attachment', null, $actor->id, 3600);
-        $token->save();
-        return $token->token;
+        /** @var Cache $cache */
+        $cache = app(Cache::class);
+        $token = $cache->get('attachments_user_' . $actor->id);
+        if (!$token) {
+            $token = SessionToken::generate('attachment', null, $actor->id, 3600);
+            $token->save();
+            $token = $token->token;
+            $cache->put('attachments_user_' . $actor->id, $token, 3599);
+        }
+        return $token;
     }
 
     /**
