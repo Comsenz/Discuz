@@ -111,6 +111,8 @@ class AttachmentSerializer extends AbstractSerializer
                         : $url;
                 }
             }
+        } elseif ($model->type == Attachment::TYPE_OF_ANSWER) {
+            $attributes['thumbUrl'] = $url;
         }
 
         if ($model->post && $model->post->is_first && $model->post->thread->price > 0) {
