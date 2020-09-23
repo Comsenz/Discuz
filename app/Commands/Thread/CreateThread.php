@@ -134,6 +134,11 @@ class CreateThread
         // 长文帖需要设置标题
         if ($thread->type === Thread::TYPE_OF_LONG) {
             $thread->title = $title;
+
+            // 只有长文有附件，可以设置价格
+            if ($thread->attachment_price = (float) Arr::get($this->data, 'attributes.attachment_price', 0)) {
+                $this->assertCan($this->actor, 'createThreadPaid');
+            }
         }
 
         // 非文字贴可设置价格
@@ -154,11 +159,6 @@ class CreateThread
         $thread->latitude = (float) Arr::get($this->data, 'attributes.latitude', 0);
         $thread->address = Arr::get($this->data, 'attributes.address', '');
         $thread->location = Arr::get($this->data, 'attributes.location', '');
-
-        // 附件价格
-        if ($thread->attachment_price = (float) Arr::get($this->data, 'attributes.attachment_price', 0)) {
-            $this->assertCan($this->actor, 'createThreadPaid');
-        }
 
         $thread->setRelation('user', $this->actor);
 
