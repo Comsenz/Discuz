@@ -86,17 +86,17 @@ class RecommendedUserController extends AbstractListController
 
         $cacheKey = 'users_recommendedUser';
         $cacheData = $this->cache->get($cacheKey);
-        $data_Limit = $limit * self::DATA_MULTIPLE;
-        if ($cacheData && count($cacheData) >= $data_Limit) {
+        $dataLimit = $limit * self::DATA_MULTIPLE;
+        if ($cacheData && count($cacheData) >= $dataLimit) {
             $cacheData = Arr::random($cacheData, $limit);
         } else {
             //缓存不存在、数据不够时 重新创建缓存，设置缓存数据池条数
             $cacheData = null;
         }
 
-        $users = $this->search($data_Limit, $cacheData);
+        $users = $this->search($dataLimit, $cacheData);
 
-        if (!$cacheData) {
+        if (!$cacheData && $users->count() == $dataLimit) {
             $this->cache->put($cacheKey, $users->pluck('id')->toArray(), 360);
             $users = $users->random($limit);
         }
