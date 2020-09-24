@@ -109,8 +109,8 @@ class RelateThreadsController extends AbstractListController
         $cacheKey = 'threads_relateThreads_'.$threadId;
         $cacheData = $this->cache->get($cacheKey);
 
-        $data_Limit = $limit * self::DATA_MULTIPLE;
-        if ($cacheData && count($cacheData) >= $data_Limit) {
+        $dataLimit = $limit * self::DATA_MULTIPLE;
+        if ($cacheData && count($cacheData) >= $dataLimit) {
             $cacheData = Arr::random($cacheData, $limit);
         } else {
             //缓存不存在、数据不够时 重新创建缓存，设置缓存数据池条数
@@ -118,24 +118,29 @@ class RelateThreadsController extends AbstractListController
         }
 
         //话题主题
-        $threads = $this->search($data_Limit, [$threadId], null, $topicIdArr, $cacheData);
+        $threads = $this->search($dataLimit, [$threadId], null, $topicIdArr, $cacheData);
 
-        if (!$cacheData && $threads->count() < $data_Limit) {
+        if (!$cacheData && $threads->count() < $dataLimit) {
             //分类主题
             $excludeThreads = array_merge($threads->pluck('id')->toArray(), [$threadId]);
-            $categoryThreads = $this->search($data_Limit - $threads->count(), $excludeThreads, $thread->category_id);
+            $categoryThreads = $this->search($dataLimit - $threads->count(), $excludeThreads, $thread->category_id);
             $threads = $threads->merge($categoryThreads);
         }
-        if (!$cacheData && $threads->count() < $data_Limit) {
+        if (!$cacheData && $threads->count() < $dataLimit) {
             //全站主题
             $excludeThreads = array_merge($threads->pluck('id')->toArray(), [$threadId]);
-            $totalThreads = $this->search($data_Limit - $threads->count(), $excludeThreads);
+            $totalThreads = $this->search($dataLimit - $threads->count(), $excludeThreads);
             $threads = $threads->merge($totalThreads);
         }
 
         if (!$cacheData) {
-            $this->cache->put($cacheKey, $threads->pluck('id')->toArray(), 360);
-            $threads = $threads->random($limit);
+            if ($threads->count() == $dataLimit) {
+                $this->cache->put($cacheKey, $threads->pluck('id')->toArray(), 360);
+            }
+
+            if ($threads->count() >= $limit) {
+                $threads = $threads->random($limit);
+            }
         }
 
         // 加载关联
