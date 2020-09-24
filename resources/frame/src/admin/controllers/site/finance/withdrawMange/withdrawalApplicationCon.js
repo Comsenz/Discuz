@@ -71,7 +71,10 @@ export default {
 
       total:0,                    //总数
       pageCount:0,                //总页数
-      currentPaga:1               //第几页
+      currentPaga:1,               //第几页
+      openid: '',
+      type1: '微信零钱',
+      type2: '人工打款',
     }
   },
   methods:{
@@ -105,7 +108,17 @@ export default {
           return "未知状态";
       }
     },
-
+    accountNumber(num) {
+      if (num._data.cash_type === 1) {
+        if (num.wechat) {
+          return num.wechat._data.mp_openid || num.wechat._data.min_openid;
+        } else {
+          return '';
+        }
+      } else {
+        return num.user._data.originalMobile;
+      }
+    },
     noReviewClick(id){
       let data = {id:[]};
       this.$MessageBox.prompt('', '提示', {
@@ -159,7 +172,7 @@ export default {
         url:'reflect',
         method:'get',
         data:{
-          include:['user','userWallet'],
+          include:['user','userWallet', 'wechat'],
           'filter[cash_status]':this.statusSelect,
           'page[number]':this.currentPaga,
           'page[size]':10,
@@ -174,7 +187,6 @@ export default {
         }else {
           this.tableData = [];
           this.tableData = res.readdata;
-
           this.total = res.meta.total;
           this.pageCount = res.meta.pageCount;
         }

@@ -401,7 +401,14 @@
     margin-top: 15PX;
   }
 }
-
+.card-pay {
+  .card-row-lf {
+    padding-top: 10PX !important;
+  }
+  .card-row-rf {
+    padding-top: 0 !important;
+  }
+}
 /**
   用户管理
  */

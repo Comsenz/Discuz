@@ -52,10 +52,90 @@ export default {
         //   title: '默认权限',
         //   name: 'default'
         // },
-      ]
+      ],
+      value: '',
+      purchasePrice: '',
+      dyedate: '',
+      ispad:'',
     }
   },
   methods: {
+    /**
+     * 允许购买权限修改
+    */
+    allowtobuy() {
+      let valueType = '';
+      if (this.value) {
+        valueType = 1;
+      } else {
+        valueType = 0;
+      }
+      this.appFetch({
+        url:'settings',
+        method:'post',
+        data:{
+          "data":[
+            {
+             "attributes":{
+              "key": 'wxpay_mchpay_close',
+              "value":valueType,
+              "tag": 'wxpay',
+             }
+            }
+           ]
+        }
+      })
+      .then(data => {
+        console.log(data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    },
+    /**
+     * 用户组付费金额和到期时间
+    */
+    paymentAmountandDueDate() {
+      this.appFetch({
+        url: 'groups',
+        method: 'post',
+        data: {
+          data: {
+            'attributes': {
+              'name': this.$route.query.name,
+              'is_paid': this.ispad,
+              'fee': this.purchasePrice,
+              'days': this.dyedate,
+            }
+          }
+        }
+      }).then(res => {
+        this.getGroupResource();
+        console.log(res);
+      })
+    },
+    patchGroupScale() {
+      this.appFetch({
+        url: 'groups',
+        method: 'post',
+        splice: '/' + this.groupId,
+        data: {
+          data: {
+            "attributes": {
+              'name': this.$route.query.name,
+              "scale": this.scale,
+              "is_subordinate": this.is_subordinate,
+              "is_commission": this.is_commission,
+            }
+          }
+        }
+      }).then(res => {
+        if (res.errors) {
+          this.$message.error(res.errors[0].code);
+        }
+      }).catch(err => {
+      })
+    },
     signUpSet() {
       this.appFetch({
         url: 'forum',
@@ -64,20 +144,26 @@ export default {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
+          console.log(res.readdata._data.paycenter);
           if (res.readdata._data.qcloud.qcloud_vod === false) {
-            this.videoDisabled = true
+            this.videoDisabled = true;
           }
           if (res.readdata._data.qcloud.qcloud_captcha === false) {
-            this.captchaDisabled = true
+            this.captchaDisabled = true;
           }
           if (res.readdata._data.qcloud.qcloud_faceid === false) {
-            this.realNameDisabled = true
+            this.realNameDisabled = true;
           }
           if (res.readdata._data.qcloud.qcloud_sms === false) {
-            this.bindPhoneDisabled = true
+            this.bindPhoneDisabled = true;
           }
           if (res.readdata._data.paycenter.wxpay_close === false) {
             this.wechatPayment = true;
+          }
+          if (res.readdata._data.paycenter.wxpay_mchpay_close === 1) {
+            this.value = true;
+          } else {
+            this.value = false;
           }
         }
       })
@@ -171,8 +257,10 @@ export default {
       if (!this.checkNum()) {
         return;
       }
+      // this.allowtobuy();
       this.patchGroupScale();
       this.patchGroupPermission();
+      // this.paymentAmountandDueDate();
     },
 
     /*
@@ -190,6 +278,10 @@ export default {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
+          // console.log(res);
+          // this.ispad = res.data.attributes.isPaid;
+          // this.purchasePrice = res.data.attributes.fee;
+          // this.dyedate = res.data.attributes.days;
           let data = res.readdata.permission;
           this.checked = [];
           this.scale = res.data.attributes.scale;
@@ -287,7 +379,9 @@ export default {
   },
   created() {
     this.groupId = this.$route.query.id;
-
+    this.activeTab.title = this.$route.query.title || '内容发布权限';
+    this.activeTab.name = this.$route.query.names || 'publish';
+    console.log( this.groupId);
     this.getGroupResource();
     this.signUpSet();
   },
