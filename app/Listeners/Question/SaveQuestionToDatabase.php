@@ -93,6 +93,7 @@ class SaveQuestionToDatabase
 
                 /**
                  * Validator
+                 *
                  * @see QuestionValidator
                  */
                 $questionData['actor'] = $actor;
@@ -104,6 +105,7 @@ class SaveQuestionToDatabase
                 try {
                     /**
                      * Create Question
+                     *
                      * @var Question $question
                      */
                     $build = [
@@ -120,9 +122,10 @@ class SaveQuestionToDatabase
                     $question->save();
 
                     // 判断如果没有传 order_id 说明是0元提问，就不需要冻结钱包
-                    if (!empty($orderSn = Arr::get($questionData, 'order_id', null))) {
+                    if (! empty($orderSn = Arr::get($questionData, 'order_id', null))) {
                         /**
                          * Update WalletLog relation question_id
+                         *
                          * @var Order $order
                          * @var UserWalletLog $walletLog
                          */
