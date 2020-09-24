@@ -19,13 +19,10 @@
 namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\UserSerializer;
-use App\Models\User;
-use App\Repositories\UserFollowRepository;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Auth\Exception\NotAuthenticatedException;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Database\Eloquent\Collection;
@@ -96,9 +93,13 @@ class RecommendedUserController extends AbstractListController
 
         $users = $this->search($dataLimit, $cacheData);
 
-        if (!$cacheData && $users->count() == $dataLimit) {
-            $this->cache->put($cacheKey, $users->pluck('id')->toArray(), 360);
-            $users = $users->random($limit);
+        if (!$cacheData) {
+            if ($users->count() == $dataLimit) {
+                $this->cache->put($cacheKey, $users->pluck('id')->toArray(), 360);
+            }
+            if ($users->count() >= $limit) {
+                $users = $users->random($limit);
+            }
         }
 
         // 加载关联
