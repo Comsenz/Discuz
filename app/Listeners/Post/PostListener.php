@@ -169,6 +169,7 @@ class PostListener
         if ($replyId = $post->reply_post_id) {
             /** @var Post $replyPost */
             $replyPost = Post::query()->find($replyId);
+            $replyPost->timestamps = false;
             $replyPost->refreshReplyCount();
             $replyPost->save();
         }
