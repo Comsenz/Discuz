@@ -89,7 +89,7 @@
       </Card>
 
       <Card>
-        <CardRow description="允许发布付费内容、允许被打赏">
+        <CardRow description="允许发布付费内容、付费附件、允许被打赏">
           <el-checkbox
             v-model="checked"
             label="createThreadPaid"
@@ -107,6 +107,35 @@
           >允许被打赏</el-checkbox>
         </CardRow>
       </Card> -->
+      <Card>
+        <CardRow description="允许发布问答，只有在开启微信支付且允许发布付费内容时才能设置提问价格">
+          <el-checkbox
+            v-model="checked"
+            label="createThreadQuestion"
+            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+          >发布问答</el-checkbox>
+        </CardRow>
+      </Card>
+
+      <Card>
+        <CardRow description="允许成为发布问答时的提问对象">
+          <el-checkbox
+            v-model="checked"
+            label="canBeAsked"
+            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+          >允许被提问</el-checkbox>
+        </CardRow>
+      </Card>
+
+      <Card>
+        <CardRow description="允许在发布问答时设置围观">
+          <el-checkbox
+            v-model="checked"
+            label="canBeOnlooker"
+            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+          >设置围观</el-checkbox>
+        </CardRow>
+      </Card>
     </div>
     <!-- 安全设置 -->
     <div v-show="activeTab.name === 'security'">
@@ -291,7 +320,7 @@
         <CardRow description="前台更改成员禁用状态的权限">
           <el-checkbox
             v-model="checked"
-            label="user.edit"
+            label="user.edit.status"
             :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
           >编辑用户状态</el-checkbox>
         </CardRow>

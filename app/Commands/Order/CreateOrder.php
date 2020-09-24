@@ -19,6 +19,7 @@
 namespace App\Commands\Order;
 
 use App\Exceptions\OrderException;
+use App\Models\Attachment;
 use App\Models\Order;
 use App\Models\PayNotify;
 use App\Models\Thread;
@@ -124,7 +125,7 @@ class CreateOrder
                     $payeeId = $thread->user_id;
                     $amount = sprintf('%.2f', (float) $this->data->get('amount'));
 
-                    // 查询收款人是否有上级邀请
+                    // 判断权限是否可以邀请用户分成，查询收款人是否有上级邀请
                     if ($thread->user->can('other.canInviteUserScale') && $thread->user->isAllowScale(Order::ORDER_TYPE_REWARD)) {
                         $be_scale = $thread->user->userDistribution->be_scale;
                     }
@@ -188,6 +189,40 @@ class CreateOrder
                     $amount = $group->fee;
                 } else {
                     throw new OrderException('order_group_error');
+                }
+                break;
+            //付费附件
+            case Order::ORDER_TYPE_ATTACHMENT:
+                /** @var Thread $thread */
+                $thread = Thread::query()
+                    ->where('id', $this->data->get('thread_id'))
+                    ->where('user_id', '<>', $this->actor->id)
+                    ->where('attachment_price', '>', 0)
+                    ->where('is_approved', Thread::APPROVED)
+                    ->whereNull('deleted_at')
+                    ->first();
+
+                // 根据主题 id 查询是否已付过费
+                $order = Order::query()
+                    ->where('thread_id', $this->data->get('thread_id'))
+                    ->where('user_id', $this->actor->id)
+                    ->where('status', Order::ORDER_STATUS_PAID)
+                    ->where('type', Order::ORDER_TYPE_ATTACHMENT)
+                    ->exists();
+
+                if ($thread && !$order && $thread->attachment_price >0) {
+                    // 判断该主题作者是否有 被付费的权限
+                    $this->assertCan($thread->user, 'createThreadPaid');
+
+                    $payeeId = $thread->user_id;
+                    $amount = $thread->attachment_price;
+
+                    // 付费附件也是用主题的分成权限。查询收款人是否有上级邀请
+                    if ($thread->user->can('other.canInviteUserScale') && $thread->user->isAllowScale(Order::ORDER_TYPE_THREAD)) {
+                        $be_scale = $thread->user->userDistribution->be_scale;
+                    }
+                } else {
+                    throw new OrderException('order_thread_attachment_error');
                 }
                 break;
             default:

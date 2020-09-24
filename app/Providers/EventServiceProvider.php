@@ -103,9 +103,9 @@ class EventServiceProvider extends BaseEventServiceProvider
         PaidGroup::class => [
             PaidGroupOrder::class
         ],
-        // WillSerializeData::class => [
-        //     ReplaceContentAttachUrl::class,
-        // ],
+        WillSerializeData::class => [
+            ReplaceContentAttachUrl::class,
+        ],
     ];
 
     protected $subscribe = [

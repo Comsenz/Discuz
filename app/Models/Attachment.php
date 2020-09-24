@@ -25,6 +25,7 @@ use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\Cache\Repository as Cache;
 
 /**
  * @property int $id
@@ -139,6 +140,26 @@ class Attachment extends Model
         return $attachment;
     }
 
+    public static function getFileToken($actor)
+    {
+        /** @var Cache $cache */
+        $cache = app(Cache::class);
+        $token = $cache->get('attachments_user_' . $actor->id);
+        if (!$token) {
+            $token = SessionToken::query()
+                ->where('scope', 'attachment')
+                ->where('user_id', $actor->id)
+                ->first();
+            if (!$token) {
+                $token = SessionToken::generate('attachment', null, $actor->id, 3600);
+                $token->save();
+            }
+            $token = $token->token;
+            $cache->put('attachments_user_' . $actor->id, $token, 3599);
+        }
+        return $token;
+    }
+
     /**
      * @param string $value
      * @return string
@@ -195,4 +216,5 @@ class Attachment extends Model
     {
         return $this->belongsTo(Post::class, 'type_id');
     }
+
 }

@@ -30,6 +30,10 @@ export default {
         {
           name: '批量设置精华',
           label: 'marrow'
+        },
+        {
+          name: '批量推送到付费首页',
+          label: 'site'
         }
       ],  //操作列表
       operatingSelect: '',   //操作单选选择
@@ -44,6 +48,7 @@ export default {
 
       toppingRadio: 2,       //是否置顶
       essenceRadio: 2,       //是否精华
+      siteRadio: 2,       //是否推送到付费
 
       checkAll: false,       //全选状态
       checkAllNum: 0,        //多选打勾数
@@ -98,6 +103,7 @@ export default {
         numberOfRepliesMax: '',   //被回复数最大
         essentialTheme: '',       //精华主题类型
         topType: '',              //置顶主题类型
+        isSite: '',               //是否推送首页付费主题
         topicId: 0,               //主题话题ID
       },
       topic: null,  // 话题
@@ -115,6 +121,10 @@ export default {
         }, {
           name: '置顶并精华主题',
           id: '3'
+        },
+        {
+          name: '付费首页主题',
+          id: '4'
         }
       ],
       subLoading:false,     //提交按钮状态
@@ -280,6 +290,9 @@ export default {
         case 'marrow':
           attributes.isEssence = this.essenceRadio === 1 ? true : false;
           break;
+        case 'site':
+          attributes.isSite = this.siteRadio === 1 ? true : false;
+          break;
         default:
           selectStatus = true;
           this.subLoading = false;
@@ -357,18 +370,27 @@ export default {
         case '0':
           this.searchData.essentialTheme = '';
           this.searchData.topType = '';
+          this.searchData.isSite = '';
           break;
         case '1':
           this.searchData.essentialTheme = '';
           this.searchData.topType = 'yes';
+          this.searchData.isSite = '';
           break;
         case '2':
           this.searchData.essentialTheme = 'yes';
           this.searchData.topType = '';
+          this.searchData.isSite = '';
           break;
         case '3':
           this.searchData.essentialTheme = 'yes';
           this.searchData.topType = 'yes';
+          this.searchData.isSite = '';
+          break;
+        case '4':
+          this.searchData.essentialTheme = '';
+          this.searchData.topType = '';
+          this.searchData.isSite = 'yes';
           break;
       }
 
@@ -405,6 +427,7 @@ export default {
           'filter[isEssence]': searchData.essentialTheme,
           'filter[isSticky]': searchData.topType,
           'filter[topicId]': searchData.topicId,
+          'filter[isSite]': searchData.isSite,
           'sort': '-createdAt'
         }
       }).then(res => {

@@ -21,6 +21,7 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\TokenSerializer;
 use App\Models\SessionToken;
 use Discuz\Api\Controller\AbstractResourceController;
+use Exception;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
@@ -47,7 +48,7 @@ class WechatPcLoginController extends AbstractResourceController
 
     /**
      * {@inheritdoc}
-     * @throws \Exception
+     * @throws Exception
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -55,7 +56,7 @@ class WechatPcLoginController extends AbstractResourceController
 
         $token = SessionToken::get($sessionToken);
         if (empty($token)) {
-            throw new \Exception(trans('user.pc_qrcode_time_out'));
+            throw new Exception(trans('user.pc_qrcode_time_out'));
         }
 
         $build = [
@@ -64,11 +65,16 @@ class WechatPcLoginController extends AbstractResourceController
             'access_token' => '',
             'refresh_token' => '',
             'pc_login' => false,
+            'user_id' => null,
         ];
 
+        // data judgment payload
         if (!is_null($token->payload)) {
             $build = $token->payload;
-            $build += ['pc_login' => true];
+            $build += [
+                'pc_login' => true,
+                'user_id' => $token->user_id
+            ];
         }
 
         return (object) $build;

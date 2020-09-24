@@ -100,6 +100,23 @@ class OrderSubscriber
 
             $order->thread->refreshPaidCount()->save();
         }
+
+
+        // 附件付费通知
+        if ($order->type == Order::ORDER_TYPE_ATTACHMENT && $order->status == Order::ORDER_STATUS_PAID) {
+            // 发送通知
+            $order->payee->notify(new Rewarded($order, $order->user, RewardedMessage::class));
+            $order->payee->notify(new Rewarded($order, $order->user, WechatRewardedMessage::class, [
+                'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
+                'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
+                    'actor_username' => $order->user->username,    // 发送人姓名
+                    'actual_amount' => $order->calculateAuthorAmount(true)       // 获取实际金额
+                ]),
+            ]));
+
+            // 发送分成通知
+            $this->sendScaleNotice($order, 'payee');
+        }
     }
 
     /**
@@ -110,7 +127,10 @@ class OrderSubscriber
      */
     public function sendScaleNotice($order, $type)
     {
-        // 发送分成收入通知
+        /**
+         * 发送分成收入通知
+         * @var Order $order
+         */
         if ($order->isScale()) {
             // 判断是发给 收款人/付款人 的上级
             $userDistribution = $type == 'payee' ? $order->payee->userDistribution : $order->user->userDistribution ;

@@ -61,6 +61,7 @@ class ThreadSerializer extends AbstractSerializer
             'type'              => (int) $model->type,
             'title'             => $model->title,
             'price'             => $model->price,
+            'attachmentPrice'   => $model->attachment_price,
             'freeWords'         => (int) $model->free_words,
             'viewCount'         => (int) $model->view_count,
             'postCount'         => (int) $model->post_count,
@@ -96,6 +97,10 @@ class ThreadSerializer extends AbstractSerializer
         if ($model->price > 0) {
             $attributes['paid'] = $model->is_paid;      // 向下兼容，建议改为 isPaid
             $attributes['isPaid'] = $model->is_paid;
+        }
+
+        if ($model->attachment_price > 0) {
+            $attributes['isPaidAttachment'] = $model->is_paid_attachment;
         }
 
         return $attributes;
@@ -218,6 +223,19 @@ class ThreadSerializer extends AbstractSerializer
         return $this->hasOne($thread, ThreadVideoSerializer::class);
     }
 
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function threadAudio($thread)
+    {
+        return $this->hasOne($thread, ThreadVideoSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
     public function topic($thread)
     {
         return $this->hasMany($thread, TopicSerializer::class);

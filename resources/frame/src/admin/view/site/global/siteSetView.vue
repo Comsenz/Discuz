@@ -115,6 +115,14 @@
       </CardRow>
     </Card>
 
+    <Card header="问答围观价格：">
+      <div class="record-top">
+        <CardRow description="问答围观的价格，平台先分成，剩下的提问者和回答者对半分">
+          <el-input v-model="askPrice"></el-input>
+        </CardRow>
+      </div>
+    </Card>
+
     <Card header="网站备案信息：">
       <div class="record-top">
         <CardRow description="你的Discuz!Q 站点的 ICP 备案编号">

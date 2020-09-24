@@ -70,6 +70,7 @@ class ThreadPolicy extends AbstractPolicy
         // 是当前分类的版主 且 拥有该权限
         if (
             $thread->category
+            && ! $actor->isGuest()
             // && in_array($actor->id, explode(',', $thread->category->moderators))
             && $actor->hasPermission('category' . $thread->category->id . '.thread.' . $ability)
         ) {
@@ -83,6 +84,8 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function find(User $actor, Builder $query)
     {
+        $request = app('request');
+
         // 过滤不存在用户的内容
         $query->whereExists(function ($query) {
             $query->selectRaw('1')
@@ -91,7 +94,9 @@ class ThreadPolicy extends AbstractPolicy
         });
 
         // 隐藏不允许当前用户查看的分类内容。
-        $query->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'viewThreads'));
+        if (Arr::get($request->getQueryParams(), 'filter.isSite', '') !== 'yes') {
+            $query->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'viewThreads'));
+        }
 
         // 回收站
         if (! $actor->hasPermission('viewTrashed')) {
@@ -113,7 +118,7 @@ class ThreadPolicy extends AbstractPolicy
                     ->orWhere('threads.user_id', $actor->id);
             });
         }
-        $request = app('request');
+
         //过滤小程序视频主题
         if (!$this->settings->get('miniprogram_video', 'wx_miniprogram') &&
             strpos(Arr::get($request->getServerParams(), 'HTTP_X_APP_PLATFORM'), 'wx_miniprogram') !== false) {
@@ -128,12 +133,8 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function edit(User $actor, Thread $thread)
     {
-        // 是作者本人且拥有编辑自己主题或回复的权限 或者 是管理员 或者 有权编辑首帖
-        if (
-            ($thread->user_id == $actor->id && $actor->hasPermission('editOwnThreadOrPost'))
-            || $actor->isAdmin()
-            || $actor->can('edit', $thread->firstPost)
-        ) {
+        // 是作者本人且拥有编辑自己主题或回复的权限 或者 是管理员
+        if (($thread->user_id == $actor->id && $actor->hasPermission('editOwnThreadOrPost')) || $actor->isAdmin()) {
             return true;
         }
     }
@@ -145,12 +146,8 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function hide(User $actor, Thread $thread)
     {
-        // 是作者本人且拥有删除自己主题或回复的权限 或者 是管理员 或者 有权删除首帖
-        if (
-            ($thread->user_id == $actor->id && $actor->hasPermission('hideOwnThreadOrPost'))
-            || $actor->isAdmin()
-            || $actor->can('hide', $thread->firstPost)
-        ) {
+        // 是作者本人且拥有删除自己主题或回复的权限 或者 是管理员
+        if (($thread->user_id == $actor->id && $actor->hasPermission('hideOwnThreadOrPost')) || $actor->isAdmin()) {
             return true;
         }
     }

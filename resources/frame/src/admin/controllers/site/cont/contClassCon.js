@@ -17,10 +17,14 @@ export default {
       delLoading:false,             //删除按钮状态
       subLoading:false,             //提交按钮状态
       showClass:false,              //分类权限显示隐藏
-    }
+      dialogVisible: false
+    };
   },
 
   methods:{
+    addClick() {
+      console.log('12344');
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
 
@@ -212,28 +216,36 @@ export default {
               }).catch(err=>{
               })
     },
-    batchUpdateCategories(data){
-      return  this.appFetch({
-                url:'categoriesBatchUpdate',      //批量修改分类
-                method:'patch',
-                data:{
-                    data
-                }
-              }).then(res=>{
-                this.subLoading = false;
-                if (res.meta){
-                  res.meta.forEach((item,index)=>{
-                    setTimeout(()=>{
-                      this.$message.error(item.message.name[0])
-                    },(index+1) * 500);
-                  });
-                } else {
-                  this.$message({
-                    message: '操作成功',
-                    type: 'success'
-                  });
-                }
-              }).catch(err=>{
+    batchUpdateCategories(data) {
+      return this.appFetch({
+        url: 'categoriesBatchUpdate',      //批量修改分类
+        method: 'patch',
+        data: {
+          data
+        }
+      }).then(res => {
+        this.subLoading = false;
+        if (res.meta) {
+          // TODO 优化提示
+          let errors = {
+            'permission_denied': '权限不足！',
+          }
+          res.meta.forEach((item, index) => {
+            setTimeout(() => {
+              if (typeof item.message === 'string') {
+                this.$message.error(errors[item.message] ? errors[item.message] : item.message)
+              } else {
+                this.$message.error(item.message.name[0])
+              }
+            }, (index + 1) * 500);
+          });
+        } else {
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
+        }
+      }).catch(err => {
         console.log(err);
       })
     }

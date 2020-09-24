@@ -65,6 +65,8 @@ class CreateThreadVideoController extends AbstractCreateController
 
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
 
+        $type = (int) Arr::get($attributes, 'type', ThreadVideo::TYPE_OF_VIDEO);
+
         $this->validation->make($attributes, [
             'file_id' => 'required',
         ])->validate();
@@ -73,7 +75,7 @@ class CreateThreadVideoController extends AbstractCreateController
             new CreateThreadVideo(
                 $actor,
                 new Thread,
-                ThreadVideo::TYPE_OF_VIDEO,
+                $type,
                 $request->getParsedBody()->get('data', [])
             )
         );

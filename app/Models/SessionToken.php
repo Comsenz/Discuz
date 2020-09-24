@@ -30,6 +30,7 @@ use Illuminate\Support\Str;
  * @property string $payload
  * @property Carbon $created_at
  * @property Carbon $expired_at
+ * @property User|null $user
  */
 class SessionToken extends Model
 {

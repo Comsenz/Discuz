@@ -120,7 +120,7 @@ class CreateAttachment
             );
 
             // 验证
-            $validator->valid(['type' => $this->type, 'size' => $file->getSize(), 'file' => $file]);
+            $validator->valid(['type' => $this->type, 'size' => $file->getSize(), 'file' => $file, 'ext'=>$file->clientExtension()]);
 
             $this->events->dispatch(
                 new Uploading($this->actor, $file)
@@ -136,11 +136,11 @@ class CreateAttachment
             $attachment = Attachment::build(
                 $this->actor->id,
                 $this->type,
-                $file->hashName(),
+                $uploader->fileName,
                 $uploader->getPath(),
                 $this->name ?: $file->getClientOriginalName(),
                 $file->getSize(),
-                $file->extension(),
+                $file->getClientMimeType(),
                 $uploader->isRemote(),
                 Attachment::APPROVED,
                 $this->ipAddress,

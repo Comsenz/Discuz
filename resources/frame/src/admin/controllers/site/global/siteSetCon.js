@@ -29,6 +29,7 @@ export default {
       fileList: [],
       deleBtn: false,
       disabled: true, // 付费模式置灰
+      askPrice: '', // 问答围观价格
       numberimg: [
         {
           imageUrl: "",
@@ -141,6 +142,7 @@ export default {
             this.siteStat = data.readdata._data.set_site.site_stat;
             this.siteClose = data.readdata._data.set_site.site_close;
             this.siteMasterId = data.readdata._data.set_site.site_author.id;
+            this.askPrice = data.readdata._data.set_site.site_onlooker_price;
             // if (data.readdata._data.logo) {
             //   this.fileList.push({url: data.readdata._data.logo});
             // }
@@ -408,7 +410,14 @@ export default {
                 value: this.siteCloseMsg,
                 tag: "default"
               }
-            }
+            },
+            {
+              attributes: {
+                key: "site_onlooker_price",
+                value: this.askPrice,
+                tag: "default"
+              }
+            },
           ]
         }
       })

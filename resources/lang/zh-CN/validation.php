@@ -231,6 +231,7 @@ return [
         'price'     => '价格',
         'captcha'   => '验证码',
         'type'      => '类型',
+        'attachment_price'   => '附件价格',
 
         // NotificationTpl
         'template_id' => '模板ID',

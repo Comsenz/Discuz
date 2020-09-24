@@ -61,7 +61,7 @@ class LocalImageHandler
 
         // 原图
         $image = $this->image->make(
-            storage_path('app/' . $uploader->file->hashName($uploader->getPath()))
+            storage_path('app/' . $uploader->getFullPath())
         );
 
         // 缩略图及高斯模糊图存储路径

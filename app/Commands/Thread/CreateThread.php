@@ -106,7 +106,7 @@ class CreateThread
         $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
         $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
 
-        // 视频帖、图片帖不传内容时设置默认内容
+        // 视频帖、图片帖、语音帖不传内容时设置默认内容
         if (! $content) {
             switch ($thread->type) {
                 case Thread::TYPE_OF_VIDEO:
@@ -114,6 +114,9 @@ class CreateThread
                     break;
                 case Thread::TYPE_OF_IMAGE:
                     $content = '分享图片';
+                    break;
+                case Thread::TYPE_OF_AUDIO:
+                    $content = '分享语音';
                     break;
             }
         }
@@ -131,6 +134,11 @@ class CreateThread
         // 长文帖需要设置标题
         if ($thread->type === Thread::TYPE_OF_LONG) {
             $thread->title = $title;
+
+            // 只有长文有附件，可以设置价格
+            if ($thread->attachment_price = (float) Arr::get($this->data, 'attributes.attachment_price', 0)) {
+                $this->assertCan($this->actor, 'createThreadPaid');
+            }
         }
 
         // 非文字贴可设置价格

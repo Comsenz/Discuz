@@ -25,6 +25,7 @@ use Discuz\Filesystem\CosAdapter;
 use Illuminate\Contracts\Filesystem\Factory;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
 
 class AttachmentUploader
 {
@@ -46,7 +47,12 @@ class AttachmentUploader
     /**
      * @var string
      */
-    protected $path = 'public/attachments';
+    public $fileName;
+
+    /**
+     * @var string
+     */
+    protected $path = 'public/attachments/';
 
     /**
      * @var array
@@ -74,7 +80,7 @@ class AttachmentUploader
         $this->filesystem = $filesystem;
         $this->settings = $settings;
 
-        $this->path = $this->path . date('/Y/m/d/');
+        $this->path = $this->getPath() . date('Y/m/d/');
     }
 
     /**
@@ -86,9 +92,9 @@ class AttachmentUploader
     {
         $this->file = $file;
 
-        $fileName = $this->file->hashName();
+        $this->fileName = Str::random(40) . '.' . $this->file->clientExtension();
 
-        $this->put($type, $this->file, $fileName, $this->path, $options);
+        $this->put($type, $this->file, $this->fileName, $this->path, $options);
     }
 
     public function delete(Attachment $attachment)
@@ -144,8 +150,7 @@ class AttachmentUploader
                 ]
             ], $options);
         }
-
-        $this->filesystem->put($path, $file, $options);
+        $this->filesystem->putFileAs($path, $file, $fileName, $options);
     }
 
     /**
@@ -153,7 +158,24 @@ class AttachmentUploader
      */
     public function getPath()
     {
-        return $this->path;
+        return rtrim($this->path, '/') . '/';
+    }
+
+    /**
+     * @param $path
+     * @return string
+     */
+    public function setPath($path)
+    {
+        return rtrim($path, '/') . '/';
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullPath()
+    {
+        return $this->getPath() . $this->fileName;
     }
 
     /**
@@ -171,11 +193,11 @@ class AttachmentUploader
      */
     public function getUrl()
     {
-        if (!$this->file->hashName()) {
+        if (! $this->fileName) {
             return '';
         }
 
-        $fullPath = $this->file->hashName($this->getPath());
+        $fullPath = $this->getFullPath();
 
         return $this->isRemote() && (bool) $this->settings->get('qcloud_cos_sign_url', 'qcloud', true)
             ? $this->filesystem->temporaryUrl($fullPath, Carbon::now()->addHour())

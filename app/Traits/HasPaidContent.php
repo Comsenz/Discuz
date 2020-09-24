@@ -126,7 +126,8 @@ trait HasPaidContent
     public function blurImage(Attachment $attachment)
     {
         if (
-            $attachment->type === Attachment::TYPE_OF_IMAGE
+            is_null($attachment->getAttributeValue('blur'))
+            && $attachment->type === Attachment::TYPE_OF_IMAGE
             && $attachment->post
             && $attachment->post->is_first
             && $attachment->post->thread

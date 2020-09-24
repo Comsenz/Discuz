@@ -23,16 +23,22 @@ return [
     'income_scale_reward'       => '分成打赏主题收入',
     'income_thread'             => '付费主题收入',
     'income_scale_thread'       => '分成付费主题收入',
+    'income_attachment'         => '付费附件收入',
+    'income_scale_attachment'   => '分成付费附件收入',
 
     'expend_renew'              => '站点续费支出',
     'expend_reward'             => '打赏主题支出',
     'expend_thread'             => '付费主题支出',
     'expend_group'              => '加入用户组支出',
     'expend_artificial'         => '人工支出',
+    'expend_attachment'         => '付费附件支出',
 
     'cash_operate_desc'         => '提现',
 
 
     'unbind_wechat'         => '请绑定微信后再进行操作',
+
+    'cash_type_error'       => '提现方式不存在',
+    'cash_mch_invalid'      => '未开启微信企业付款到零钱功能',
 
 ];
