@@ -142,9 +142,9 @@ class PayOrder
             'pay_password' => [
                 'sometimes',
                 'required_if:payment_type,20',
-                function ($attribute, $value, $fail) {
-                    // 使用钱包支付时验证密码
+                function ($attribute, $value, $fail) use ($failCount) {
                     if (
+                    // 使用钱包支付时验证密码
                         $this->data->get('payment_type') == Order::PAYMENT_TYPE_WALLET
                         && ! $this->actor->checkWalletPayPassword($value)
                     ) {
@@ -152,7 +152,7 @@ class PayOrder
                         $request = app('request');
                         UserWalletFailLogs::build(ip($request->getServerParams()), $this->actor->id);
 
-                        $fail(trans('trade.wallet_pay_password_error'));
+                        $fail(trans('trade.wallet_pay_password_error', ['value'=>UserWalletFailLogs::TOPLIMIT - $failCount]));
                     }
                 }
             ],
