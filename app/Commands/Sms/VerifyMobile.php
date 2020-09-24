@@ -35,6 +35,7 @@ use App\User\Bind;
 use App\Validators\UserValidator;
 use Discuz\Api\Client;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\LoginFailedException;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\EventsDispatchTrait;
@@ -96,7 +97,7 @@ class VerifyMobile
     protected function login()
     {
         //register new user
-        if (is_null($this->mobileCode->user)) {
+        if (is_null($this->mobileCode->user) && Arr::get($this->params, 'register', 0)) {
 
             if (!(bool)$this->settings->get('register_close')) {
                 throw new PermissionDeniedException('register_close');
@@ -110,6 +111,8 @@ class VerifyMobile
                 new RegisterPhoneUser($this->actor, $data)
             );
             $this->mobileCode->setRelation('user', $user);
+        } else {
+            throw new LoginFailedException;
         }
 
         //公众号绑定
