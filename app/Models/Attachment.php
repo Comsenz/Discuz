@@ -83,16 +83,17 @@ class Attachment extends Model
     ];
 
     /**
-     * type：0 帖子附件 1 帖子图片 2 帖子音频 3 帖子视频 4消息图片
+     * type：0 帖子附件 1 帖子图片 2 帖子音频 3 帖子视频 4 消息图片 5 回答图片
      *
      * @var array
      */
     public static $allowTypes = [
-        'file',
-        'img',
-        'audio',
-        'video',
-        'dialogMessage',
+        self::TYPE_OF_FILE => 'file',
+        self::TYPE_OF_IMAGE => 'img',
+        self::TYPE_OF_AUDIO => 'audio',
+        self::TYPE_OF_VIDEO => 'video',
+        self::TYPE_OF_DIALOG_MESSAGE => 'dialogMessage',
+        self::TYPE_OF_ANSWER => 'answer',
     ];
 
     /**

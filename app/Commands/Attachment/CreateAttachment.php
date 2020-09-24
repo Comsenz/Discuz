@@ -98,7 +98,11 @@ class CreateAttachment
     {
         $this->events = $events;
 
-        $this->assertCan($this->actor, 'attachment.create.' . $this->type);
+        $this->assertCan($this->actor, 'attachment.create.' . (int) in_array($this->type, [
+                Attachment::TYPE_OF_IMAGE,
+                Attachment::TYPE_OF_DIALOG_MESSAGE,
+                Attachment::TYPE_OF_ANSWER,
+            ]));
 
         $file = $this->file;
 
