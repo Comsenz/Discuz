@@ -101,6 +101,8 @@ class OrderSubscriber
             $order->thread->refreshPaidCount()->save();
         }
 
+        // TODO Question 围观成功后发送给问答人/答题人通知
+
 
         // 附件付费通知
         if ($order->type == Order::ORDER_TYPE_ATTACHMENT && $order->status == Order::ORDER_STATUS_PAID) {

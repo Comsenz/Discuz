@@ -33,9 +33,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property float $amount
  * @property float $master_amount
  * @property float $author_amount
+ * @property float $third_party_amount
  * @property int $be_scale
  * @property int $user_id
  * @property int $payee_id
+ * @property int $third_party_id
  * @property int $type
  * @property int $thread_id
  * @property int $group_id
@@ -67,6 +69,10 @@ class Order extends Model
     const ORDER_TYPE_THREAD   = 3; //付费主题
 
     const ORDER_TYPE_GROUP    = 4; //付费用户组
+
+    const ORDER_TYPE_QUESTION = 5; // 问答提问支付
+
+    const ORDER_TYPE_ONLOOKER = 6; // 问答付费围观
 
     const ORDER_TYPE_ATTACHMENT = 7; //付费附件
 

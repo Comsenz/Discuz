@@ -117,6 +117,65 @@ trait NotifyTrait
                     );
                     return $this->orderInfo;
 
+                case Order::ORDER_TYPE_QUESTION:
+                    // 提问时不分成，因为还未回答
+                    return $this->orderInfo;
+                case Order::ORDER_TYPE_ONLOOKER:
+                    // 获取站点作者分成比例
+                    $siteAuthorScale = $setting->get('site_author_scale');
+                    $authorRatio = $siteAuthorScale / 10;
+                    // 用户支付围观单价金额 * 作者分成 = 围观帖子实际金额
+                    $onlookerActualPrice = numberFormat($this->orderInfo->amount, '*', $authorRatio);
+                    // 再去和作者/答题人55平分
+                    $onlookerPrice = numberFormat($onlookerActualPrice, '/', 2); // 实际每人分红金额
+
+                    // build save
+                    $this->orderInfo->master_amount = numberFormat($this->orderInfo->amount, '-', $onlookerActualPrice); // 站长分成金额
+                    $this->orderInfo->author_amount = $onlookerPrice; // 作者分成金额
+                    $this->orderInfo->third_party_amount = $onlookerPrice; // 第三者收益金额
+                    $this->orderInfo->save();
+
+                    // 收款人钱包可用金额增加
+                    $userWallet = UserWallet::query()->lockForUpdate()->find($this->orderInfo->payee_id);
+                    $userWallet->available_amount = numberFormat($userWallet->available_amount, '+', $onlookerPrice);
+                    $userWallet->save();
+                    // 第三者钱包可用金额增加
+                    $thirdPartyWallet = UserWallet::query()->lockForUpdate()->find($this->orderInfo->third_party_id);
+                    $thirdPartyWallet->available_amount = numberFormat($thirdPartyWallet->available_amount, '+', $onlookerPrice);
+                    $thirdPartyWallet->save();
+
+                    // 钱包明细记录类型
+                    $payeeOrderDetail = $this->orderByDetailType();
+
+                    // 添加提问人钱包明细
+                    UserWalletLog::createWalletLog(
+                        $this->orderInfo->payee_id,  // 明细所属用户 id
+                        $onlookerPrice,              // 变动可用金额
+                        0,                           // 变动冻结金额
+                        $payeeOrderDetail['change_type'], // 36 问答围观收入
+                        trans($payeeOrderDetail['change_type_lang']),
+                        null,                   // 关联提现ID
+                        $this->orderInfo->id    // 订单ID
+                    );
+                    // 添加答题人明细
+                    UserWalletLog::createWalletLog(
+                        $this->orderInfo->third_party_id,  // 第三者收益人 id (答题人)
+                        $onlookerPrice,         // 变动可用金额
+                        0,                      // 变动冻结金额
+                        $payeeOrderDetail['change_type'], // 36 问答围观收入
+                        trans($payeeOrderDetail['change_type_lang']),
+                        null,                   // 关联提现ID
+                        $this->orderInfo->id    // 订单ID
+                    );
+
+                    // 添加围观帖 围观总金额&围观总人数
+                    $question = $this->orderInfo->thread->question;
+                    $question->onlooker_price = numberFormat($question->onlooker_price, '+', $this->orderInfo->amount);
+                    $question->onlooker_number = $question->onlooker_number + 1;
+                    $question->save();
+
+                    return $this->orderInfo;
+
                 default:
                     break;
             }
@@ -159,6 +218,11 @@ trait NotifyTrait
                     $change_type = UserWalletLog::TYPE_INCOME_SCALE_REGISTER;
                     $change_type_lang = 'wallet.income_scale_register';
                 }
+                break;
+            case Order::ORDER_TYPE_ONLOOKER:
+                // 问答围观收入
+                $change_type = UserWalletLog::TYPE_INCOME_ONLOOKER_REWARD;
+                $change_type_lang = 'wallet.income_onlooker_reward';
                 break;
             case Order::ORDER_TYPE_ATTACHMENT: // 付费附件
                 if ($scale) {

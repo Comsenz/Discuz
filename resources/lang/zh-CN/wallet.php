@@ -13,6 +13,9 @@ return [
     'cash_review_failure'           => '审核不通过，退回',
     'operate_forbidden' => '非法操作',
     'pem_notexist' => '证书不存在，请先上传证书',
+    'question_freeze_desc'   => '问答冻结',
+    'question_thaw_desc'     => '问答解冻',
+    'question_return_thaw_desc'  => '问答返还解冻',
 
     // 分割线
 
@@ -23,6 +26,8 @@ return [
     'income_scale_reward'       => '分成打赏主题收入',
     'income_thread'             => '付费主题收入',
     'income_scale_thread'       => '分成付费主题收入',
+    'income_question_reward'    => '问答答题收入',
+    'income_onlooker_reward'    => '问答围观收入',
     'income_attachment'         => '付费附件收入',
     'income_scale_attachment'   => '分成付费附件收入',
 
@@ -31,6 +36,8 @@ return [
     'expend_thread'             => '付费主题支出',
     'expend_group'              => '加入用户组支出',
     'expend_artificial'         => '人工支出',
+    'expend_question'           => '问答提问支出',
+    'expend_onlooker'           => '问答围观支出',
     'expend_attachment'         => '付费附件支出',
 
     'cash_operate_desc'         => '提现',

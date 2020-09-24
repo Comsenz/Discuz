@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
@@ -67,6 +68,7 @@ use Illuminate\Support\Stringable;
  * @property User $user
  * @property Category $category
  * @property threadVideo $threadVideo
+ * @property Question $question
  * @package App\Models
  */
 class Thread extends Model
@@ -83,6 +85,10 @@ class Thread extends Model
     const TYPE_OF_IMAGE = 3;
 
     const TYPE_OF_AUDIO = 4;
+
+    const TYPE_OF_QUESTION = 5;
+
+    const TYPE_OF_GOODS = 6;
 
     const UNAPPROVED = 0;
 
@@ -426,6 +432,21 @@ class Thread extends Model
     public function threadTopic()
     {
         return $this->hasMany(ThreadTopic::class);
+    }
+
+    public function question()
+    {
+        return $this->hasOne(Question::class);
+    }
+
+    /**
+     * Onlookers
+     *
+     * @return HasManyThrough
+     */
+    public function onlookers()
+    {
+        return $this->hasManyThrough(User::class, Order::class, 'thread_id', 'id', 'id', 'user_id');
     }
 
     /**

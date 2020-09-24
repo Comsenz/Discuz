@@ -22,6 +22,7 @@ use App\Exceptions\OrderException;
 use App\Models\Attachment;
 use App\Models\Order;
 use App\Models\PayNotify;
+use App\Models\Question;
 use App\Models\Thread;
 use App\Models\User;
 use App\Models\Group;
@@ -74,6 +75,7 @@ class CreateOrder
      * @throws OrderException
      * @throws ValidationException
      * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @throws Exception
      */
     public function handle(Validator $validator, ConnectionInterface $db, SettingsRepository $setting, Dispatcher $events)
     {
@@ -191,6 +193,51 @@ class CreateOrder
                     throw new OrderException('order_group_error');
                 }
                 break;
+            // 问答提问支付
+            case Order::ORDER_TYPE_QUESTION:
+                // 判断是否允许发布问答帖
+                $this->assertCan($this->actor, 'createThreadQuestion');
+
+                // 创建订单
+                $amount = sprintf('%.2f', (float) $this->data->get('amount')); // 设置订单问答价格
+                $payeeId = $this->data->get('payee_id'); // 设置收款人 (回答人)
+
+                break;
+            // 问答围观付费
+            case Order::ORDER_TYPE_ONLOOKER:
+                /** @var Thread $thread */
+                $thread = Thread::query()
+                    ->where('id', $this->data->get('thread_id'))
+                    ->where('price', 0)  // 问答的帖子价格是0
+                    ->where('is_approved', Thread::APPROVED)
+                    ->where('type', Thread::TYPE_OF_QUESTION)
+                    ->whereNull('deleted_at')
+                    ->first();
+
+                if ($thread && $thread->question) {
+                    // 查询是否已经围观过，一个用户只允许围观一次
+                    if (!$thread->orders->isEmpty()) {
+                        throw new Exception(trans('order.order_question_onlooker_seen'));
+                    }
+                    // 判断该问答是否允许围观
+                    if (!$thread->question->is_onlooker) {
+                        throw new Exception(trans('order.order_question_onlooker_reject'));
+                    }
+                    // 判断该问题是否已被回答才能围观
+                    if ($thread->question->is_answer != Question::TYPE_OF_ANSWERED) {
+                        throw new Exception(trans('order.order_question_onlooker_unanswered'));
+                    }
+
+                    // 获取后台设置的围观金额
+                    $amount = sprintf('%.2f', (float) $setting->get('site_onlooker_price')); // 站点围观单价
+
+                    // 设置收款人
+                    $payeeId = $thread->user_id; // 提问人
+                    $thirdPartyId = $thread->question->be_user_id; // 第三者收益人（回答人）
+                } else {
+                    throw new OrderException('order_post_not_found');
+                }
+                break;
             //付费附件
             case Order::ORDER_TYPE_ATTACHMENT:
                 /** @var Thread $thread */
@@ -228,6 +275,7 @@ class CreateOrder
             default:
                 throw new OrderException('order_type_error');
         }
+
         // 订单金额需检查
         if (($amount == 0 && ! $order_zero_amount_allowed) || $amount < 0) {
             throw new OrderException('order_amount_error');
@@ -244,12 +292,13 @@ class CreateOrder
         $pay_notify->payment_sn = $payment_sn;
         $pay_notify->user_id    = $this->actor->id;
 
-        // 订单
+        // 订单 amount、payeeId 必须定义值
         $order                  = new Order();
         $order->payment_sn      = $payment_sn;
         $order->order_sn        = $this->getOrderSn();
         $order->amount          = $amount;
         $order->be_scale        = $be_scale ?? 0;
+        $order->third_party_id = $thirdPartyId ?? 0; // 第三者收益人
         $order->user_id         = $this->actor->id;
         $order->type            = $orderType;
         $order->thread_id       = isset($thread) ? $thread->id : null;

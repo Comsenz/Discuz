@@ -55,6 +55,7 @@ class PayTrade
             default:
                 break;
         }
+
         return $payment_params;
     }
 

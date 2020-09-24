@@ -73,6 +73,8 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_record' => $this->settings->get('site_record'),
                 'site_cover' => $this->settings->get('site_cover') ?: '',
                 'site_record_code' => $this->settings->get('site_record_code') ?: '',
+                'site_onlooker_price' => $this->settings->get('site_onlooker_price') ?: 0, // 默认围观值前端根据权限判断
+                'site_master_scale' => $this->settings->get('site_master_scale'), // 站长比例
             ],
 
             // 注册设置
@@ -152,6 +154,10 @@ class ForumSettingSerializer extends AbstractSerializer
                 'publish_need_bind_phone' => ! $this->actor->isAdmin() && $this->actor->can('publishNeedBindPhone') && ! $this->actor->mobile,
                 'initialized_pay_password' => (bool)$this->actor->pay_password,  // 是否初始化支付密码
                 'can_invite_user_scale' => $this->actor->can('other.canInviteUserScale'),
+                'can_create_thread_goods' => $this->actor->can('createThreadGoods'), // 允许发布商品帖
+                'can_create_thread_question' => $this->actor->can('createThreadQuestion'), // 允许发布问答帖
+                'can_be_asked' => $this->actor->can('canBeAsked'), // 允许被提问
+                'can_be_onlooker' => $this->actor->can('canBeOnlooker'), // 允许被围观
             ],
 
             'lbs' => [
