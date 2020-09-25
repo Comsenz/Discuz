@@ -38,6 +38,15 @@
         </CardRow>
       </Card>
 
+      <Card>
+        <CardRow description="允许发布语音帖">
+          <el-checkbox
+            v-model="checked"
+            label="createThreadAudio"
+            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+          >发布语音</el-checkbox>
+        </CardRow>
+      </Card>
 
       <Card>
         <CardRow description="允许发布视频帖">
