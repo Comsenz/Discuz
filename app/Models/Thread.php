@@ -580,7 +580,7 @@ class Thread extends Model
             ->where('user_id', $user->id)
             ->where('thread_id', $this->id)
             ->where('status', Order::ORDER_STATUS_PAID)
-            ->where('type', Order::ORDER_TYPE_THREAD)
+            ->where('type', Order::ORDER_TYPE_ATTACHMENT)
             ->exists();
         static::$userHasPaidThreadAttachments[$user->id][$this->id] = $isPaidAttachment;
 
