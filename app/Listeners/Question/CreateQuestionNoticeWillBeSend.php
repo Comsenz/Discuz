@@ -36,7 +36,7 @@ class CreateQuestionNoticeWillBeSend
         $question->beUser->notify(new Questioned($question, $actor, QuestionedMessage::class));
         $question->beUser->notify(new Questioned($question, $actor, WechatQuestionedMessage::class, [
             'message' => $question->thread->getContentByType(Thread::CONTENT_LENGTH, true),
-            'raw' => array_merge(Arr::only($question->toArray(), ['thread_id']), [
+            'raw' => array_merge(Arr::only($question->toArray(), ['thread_id', 'price']), [
                 'actor_username' => $question->user->username,   // 提问人姓名
             ]),
         ]));

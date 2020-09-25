@@ -18,6 +18,7 @@
 
 namespace App\Rules\Question;
 
+use App\Models\User;
 use Discuz\Validation\AbstractRule;
 
 /**
@@ -46,7 +47,18 @@ class UserVerification extends AbstractRule
      */
     public function passes($attribute, $value)
     {
-        return $this->actor->id != $value;
+        // 不允许被提问人是自己
+        if ($this->actor->id != $value) {
+            /**
+             *  查询被提问人是否允许被提问
+             *
+             *  @var User $user
+             */
+            $user = User::query()->where('id', $value)->first();
+            return $user->can('other.canBeAsked');
+        }
+
+        return false;
     }
 
     /**

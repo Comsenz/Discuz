@@ -25,7 +25,7 @@ use App\Models\Question;
 use App\Notifications\Questioned;
 use Illuminate\Support\Arr;
 
-class SendReceiptAfterAnswer
+class SendNotificationOfAnswer
 {
     public function handle(Saved $event)
     {

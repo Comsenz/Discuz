@@ -72,7 +72,7 @@ class Order extends Model
 
     const ORDER_TYPE_QUESTION = 5; // 问答提问支付
 
-    const ORDER_TYPE_ONLOOKER = 6; // 问答付费围观
+    const ORDER_TYPE_ONLOOKER = 6; // 问答围观
 
     const ORDER_TYPE_ATTACHMENT = 7; //付费附件
 
@@ -134,7 +134,9 @@ class Order extends Model
         2 => '打赏',
         3 => '付费主题',
         4 => '付费用户组',
-        5 => '付费附件',
+        5 => '问答回答收入',
+        6 => '问答围观收入',
+        7 => '付费附件',
     ];
 
     /**

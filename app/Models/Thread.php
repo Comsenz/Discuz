@@ -64,12 +64,14 @@ use Illuminate\Support\Stringable;
  * @property bool $is_essence
  * @property bool $is_site
  * @property Post $firstPost
- * @property Topic|Collection $topic
+ * @property Collection $topic
+ * @property Collection $orders
  * @property User $user
  * @property Category $category
  * @property threadVideo $threadVideo
  * @property Question $question
- * @package App\Models
+ * @method increment($column, $amount = 1, array $extra = [])
+ * @method decrement($column, $amount = 1, array $extra = [])
  */
 class Thread extends Model
 {
@@ -394,6 +396,21 @@ class Thread extends Model
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    /**
+     * 查询主题下某一种交易类型
+     * （交易类型：1注册、2打赏、3付费主题、4付费用户组、5问答提问支付、6问答付费围观、7付费附件）
+     *
+     * @param int $type
+     * @param bool $more
+     * @return Collection|Order|Model
+     */
+    public function ordersByType($type, $more = true)
+    {
+        $query = $this->orders()->where('type', $type);
+
+        return $more ? $query->get() : $query->first();
     }
 
     /**

@@ -30,25 +30,31 @@ class QuestionListener
     {
         /**
          * 创建帖子后，发表问答内容
+         *
          * @see SaveQuestionToDatabase 创建问答信息
-         * @see CreateQuestionNoticeWillBeSend 触发通知
+         * @see CreateQuestionNoticeWillBeSend 触发回答人通知
          */
         $events->listen(PostSaved::class, SaveQuestionToDatabase::class);
         $events->listen(Created::class, CreateQuestionNoticeWillBeSend::class);
 
         /**
          * 当帖子修改时
+         *
          * @see WhenThePostIsBeingRevised 不允许修改已回答后的内容
          */
         $events->listen(Revising::class, WhenThePostIsBeingRevised::class);
 
         /**
          * 回答问题后
-         * @see QuestionAnswerMakeMoney 打款
+         *
+         * @see QuestionAnswerMakeMoney 打款->钱包扣款->记录钱包日志->钱包变动通知
+         * @see ChangeUserWallet 钱包扣款
+         * @see SaveWalletLogToDatabase 记录钱包日志
+         * @see SendNotificationOfWalletChanges 钱包变动发送通知
          * @see QuestionAttachment 绑定附件
-         * @see SendReceiptAfterAnswer 回答后发送回执
+         * @see SendNotificationOfAnswer 回答后发送回执通知
          */
         $events->listen(QuestionAnswerSaved::class, QuestionAnswerMakeMoney::class);
-        $events->listen(QuestionAnswerSaved::class, SendReceiptAfterAnswer::class);
+        $events->listen(QuestionAnswerSaved::class, SendNotificationOfAnswer::class);
     }
 }

@@ -17,6 +17,9 @@ return [
     'question_thaw_desc'     => '问答解冻',
     'question_return_thaw_desc'  => '问答返还解冻',
 
+    // user_wallet_log
+    'detail_type_does_not_exist' => '钱包明细类型',
+
     // 分割线
 
     'income_register'           => '注册收入',

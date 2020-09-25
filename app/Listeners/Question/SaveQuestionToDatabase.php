@@ -124,12 +124,20 @@ class SaveQuestionToDatabase
                     // 判断如果没有传 order_id 说明是0元提问，就不需要冻结钱包
                     if (! empty($orderSn = Arr::get($questionData, 'order_id', null))) {
                         /**
+                         * Update Order relation thread_id
+                         *
+                         * @var Order $order
+                         */
+                        $order = Order::query()->where('order_sn', $orderSn)->firstOrFail();
+                        $order->thread_id = $post->thread_id;
+                        $order->save();
+
+                        /**
                          * Update WalletLog relation question_id
                          *
                          * @var Order $order
                          * @var UserWalletLog $walletLog
                          */
-                        $order = Order::query()->where('order_sn', $orderSn)->firstOrFail();
                         $walletLog = UserWalletLog::query()->where([
                             'user_id' => $actor->id,
                             'order_id' => $order->id,

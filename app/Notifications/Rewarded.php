@@ -133,21 +133,20 @@ class Rewarded extends System
     protected function setChannelName($strClass)
     {
         switch ($strClass) {
+            case 'App\MessageTemplate\RewardedMessage':
+                $this->channel = 'database';
+                $this->isScaleClass = false;
+                break;
             case 'App\MessageTemplate\Wechat\WechatRewardedMessage':
                 $this->channel = 'wechat';
                 $this->isScaleClass = false;
                 break;
-            case 'App\MessageTemplate\Wechat\WechatRewardedScaleMessage':
-                $this->channel = 'wechat';
-                $this->isScaleClass = true;
-                break;
-            case 'App\MessageTemplate\RewardedMessage':
-            default:
-                $this->channel = 'database';
-                $this->isScaleClass = false;
-                break;
             case 'App\MessageTemplate\RewardedScaleMessage':
                 $this->channel = 'database';
+                $this->isScaleClass = true;
+                break;
+            case 'App\MessageTemplate\Wechat\WechatRewardedScaleMessage':
+                $this->channel = 'wechat';
                 $this->isScaleClass = true;
                 break;
         }

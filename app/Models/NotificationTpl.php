@@ -354,13 +354,15 @@ class NotificationTpl extends Model
                 'content' => self::getWechatFormat([
                     'first' => '{username}向你提问',
                     'keyword1' => '{content}',
-                    'keyword2' => '{dateline}',
+                    'keyword2' => '{money}',
+                    'keyword3' => '{dateline}',
                     'remark' => '点击查看',
                     'redirect_url' => '{redirecturl}',
                 ]),
                 'vars' => serialize([
                     '{username}' => '问答人',
                     '{content}' => '主题(提问)内容',
+                    '{money}' => '问答价格',
                     '{dateline}' => '通知时间',
                     '{redirecturl}' => '跳转地址',
                 ])
