@@ -132,7 +132,7 @@
           <el-checkbox
             v-model="checked"
             label="canBeOnlooker"
-            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+            :disabled="! canBeOnlooker || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
           >设置围观</el-checkbox>
         </CardRow>
       </Card>
