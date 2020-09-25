@@ -157,7 +157,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'can_create_thread_goods' => $this->actor->can('createThreadGoods'), // 允许发布商品帖
                 'can_create_thread_question' => $this->actor->can('createThreadQuestion'), // 允许发布问答帖
                 'can_be_asked' => $this->actor->can('canBeAsked'), // 允许被提问
-                'can_be_onlooker' => $this->actor->can('canBeOnlooker'), // 允许被围观
+                'can_be_onlooker' => $this->settings->get('site_onlooker_price') > 0 && $this->actor->can('canBeOnlooker'), // 允许被围观
             ],
 
             'lbs' => [

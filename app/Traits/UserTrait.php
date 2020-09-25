@@ -19,6 +19,7 @@
 namespace App\Traits;
 
 use App\Models\DenyUser;
+use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
@@ -107,6 +108,19 @@ trait UserTrait
                         ->whereRaw('deny_user_id = id')
                         ->limit(1)
                 ]);
+            }
+        }
+
+        // 是否可以被提问
+        if ($canBeAsked = Arr::get($filter, 'canBeAsked')) {
+            $groupIds = Permission::query()->where('permission', 'canBeAsked')->pluck('group_id');
+
+            $query->join('group_user', 'users.id', '=', 'group_user.user_id');
+
+            if ($canBeAsked === 'yes') {
+                $query->whereIn('group_id', $groupIds);
+            } elseif ($canBeAsked === 'no') {
+                $query->whereNotIn('group_id', $groupIds);
             }
         }
     }
