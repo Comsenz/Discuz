@@ -22,6 +22,7 @@ use App\Models\Dialog;
 use App\Models\User;
 use Discuz\Foundation\AbstractRepository;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class DialogRepository extends AbstractRepository
 {
@@ -35,6 +36,11 @@ class DialogRepository extends AbstractRepository
         return Dialog::query();
     }
 
+    /**
+     * @param $id
+     * @param User|null $actor
+     * @return Builder|Model|Dialog
+     */
     public function findOrFail($id, User $actor = null)
     {
         $query = $this->query()
