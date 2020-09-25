@@ -313,7 +313,7 @@ $route->post('/dialog/batch', 'dialog.batchCreate', ApiController\Dialog\BatchCr
 $route->get('/dialog', 'dialog.list', ApiController\Dialog\ListDialogController::class);
 $route->post('/dialog/message', 'dialog.message.create', ApiController\Dialog\CreateDialogMessageController::class);
 $route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListDialogMessageController::class);
-
+$route->delete('/dialog/{id}', 'dialog.delete', ApiController\Dialog\DeleteDialogController::class);
 /*
 |--------------------------------------------------------------------------
 | Reports
