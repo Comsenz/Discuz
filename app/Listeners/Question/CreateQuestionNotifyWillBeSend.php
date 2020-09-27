@@ -18,26 +18,26 @@
 
 namespace App\Listeners\Question;
 
-use App\Events\Question\Saved;
-use App\MessageTemplate\QuestionedAnswerMessage;
-use App\MessageTemplate\Wechat\WechatQuestionedAnswerMessage;
-use App\Models\Question;
+use App\Events\Question\Created;
+use App\MessageTemplate\QuestionedMessage;
+use App\MessageTemplate\Wechat\WechatQuestionedMessage;
+use App\Models\Thread;
 use App\Notifications\Questioned;
 use Illuminate\Support\Arr;
 
-class SendNotificationOfAnswer
+class CreateQuestionNotifyWillBeSend
 {
-    public function handle(Saved $event)
+    public function handle(Created $event)
     {
         $question = $event->question;
         $actor = $event->actor;
 
-        // 回答后发送回执
-        $question->user->notify(new Questioned($question, $actor, QuestionedAnswerMessage::class));
-        $question->user->notify(new Questioned($question, $actor, WechatQuestionedAnswerMessage::class, [
-            'message' => $question->getContentFormat(Question::CONTENT_LENGTH, true), // 解析回答内容
-            'raw' => array_merge(Arr::only($question->toArray(), ['thread_id']), [
-                'actor_username' => $actor->username, // 回答人姓名
+        // 向回答人发送问答通知
+        $question->beUser->notify(new Questioned($question, $actor, QuestionedMessage::class));
+        $question->beUser->notify(new Questioned($question, $actor, WechatQuestionedMessage::class, [
+            'message' => $question->thread->getContentByType(Thread::CONTENT_LENGTH, true),
+            'raw' => array_merge(Arr::only($question->toArray(), ['thread_id', 'price']), [
+                'actor_username' => $question->user->username,   // 提问人姓名
             ]),
         ]));
     }

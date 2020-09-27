@@ -30,9 +30,9 @@ class WalletListener
          * 执行钱包操作时
          *
          * @see SaveWalletLogToDatabase 记录钱包日志
-         * @see SendNotificationOfWalletChanges 发送金额变动通知 - 财务通知
+         * @see SendNotifyOfWalletChanges 发送金额变动通知 - 财务通知
          */
         $events->listen(Saved::class, SaveWalletLogToDatabase::class);
-        $events->listen(Saved::class, SendNotificationOfWalletChanges::class);
+        $events->listen(Saved::class, SendNotifyOfWalletChanges::class);
     }
 }

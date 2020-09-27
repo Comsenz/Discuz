@@ -28,7 +28,7 @@ use App\Models\UserWalletLog;
 use App\Notifications\Rewarded;
 use Illuminate\Support\Arr;
 
-class SendNotificationOfWalletChanges
+class SendNotifyOfWalletChanges
 {
     /**
      * @param Saved $event
@@ -50,7 +50,11 @@ class SendNotificationOfWalletChanges
                     $question = Question::query()->where('id', $data['question_id'])->first();
                     $order = $question->thread->ordersByType(Order::ORDER_TYPE_QUESTION, false);
 
-                    // 回答人接收收入通知
+                    /**
+                     * 回答人接收收入通知
+                     *
+                     * @see SendNotifyOfAnswer 回答后发送回执通知
+                     */
                     $user->notify(new Rewarded($order, $order->user, RewardedMessage::class));
                     $user->notify(new Rewarded($order, $user, WechatRewardedMessage::class, [
                         'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
