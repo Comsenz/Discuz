@@ -457,16 +457,6 @@ class Thread extends Model
     }
 
     /**
-     * Onlookers
-     *
-     * @return HasManyThrough
-     */
-    public function onlookers()
-    {
-        return $this->hasManyThrough(User::class, Order::class, 'thread_id', 'id', 'id', 'user_id');
-    }
-
-    /**
      * Set the user for which the state relationship should be loaded.
      *
      * @param User $user

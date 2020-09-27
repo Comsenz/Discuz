@@ -22,6 +22,7 @@ use App\Api\Serializer\ThreadSerializer;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\Thread;
+use App\Models\User;
 use App\Repositories\PostRepository;
 use App\Repositories\ThreadRepository;
 use Discuz\Api\Controller\AbstractResourceController;
@@ -29,6 +30,7 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Exception\InvalidParameterException;
@@ -60,8 +62,6 @@ class ResourceThreadController extends AbstractResourceController
         'firstPost',
         'threadVideo',
         'threadAudio',
-        'firstPost.images',
-        'firstPost.attachments',
         'posts',
         'posts.user',
         'posts.replyUser',
@@ -90,6 +90,14 @@ class ResourceThreadController extends AbstractResourceController
     ];
 
     /**
+     * {@inheritdoc}
+     */
+    public $mustInclude = [
+        'firstPost.images',
+        'firstPost.attachments',
+    ];
+
+    /**
      * @param ThreadRepository $threads
      * @param PostRepository $posts
      */
@@ -106,9 +114,10 @@ class ResourceThreadController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $threadId = Arr::get($request->getQueryParams(), 'id');
+        /** @var User $actor */
         $actor = $request->getAttribute('actor');
-        $include = array_merge($this->extractInclude($request), ['firstPost.images', 'firstPost.attachments']);
+        $threadId = Arr::get($request->getQueryParams(), 'id');
+        $include = $this->extractInclude($request);
 
         $thread = $this->threads->findOrFail($threadId, $actor);
 
@@ -131,6 +140,42 @@ class ResourceThreadController extends AbstractResourceController
         // 特殊关联：付费用户
         if (in_array('paidUsers', $include)) {
             $this->loadOrderUsers($thread, Order::ORDER_TYPE_THREAD);
+        }
+
+        // 特殊关联：围观用户
+        if (in_array('onlookers', $include)) {
+            $this->loadOrderUsers($thread, Order::ORDER_TYPE_ONLOOKER);
+        }
+
+        // 问答帖且允许围观时查询当前用户是否围观
+        if ($thread->type === Thread::TYPE_OF_QUESTION && $thread->question->is_onlooker) {
+            // 游客身份 直接未围观
+            if ($actor->isGuest()) {
+                $thread->setAttribute('isOnlooker', false);
+
+            // 作者 或 被提问者 或 管理员 直接已围观
+            } elseif ($actor->id === $thread->id || $actor->id === $thread->question->be_user_id || $actor->isAdmin()) {
+                $thread->setAttribute('isOnlooker', true);
+
+            // 付费围观
+            } else {
+                /** @var Collection $onlookers 已查询关联时，直接从中获取 */
+                $onlookers = $thread->getRelationValue('onlookers');
+
+                if ($onlookers && $onlookers->firstWhere('user_id', $actor->id)) {
+                    $thread->setAttribute('isOnlooker', true);
+                } else {
+                    $thread->setAttribute(
+                        'isOnlooker',
+                        Order::query()
+                            ->where('thread_id', $thread->id)
+                            ->where('user_id', $actor->id)
+                            ->where('status', Order::ORDER_STATUS_PAID)
+                            ->where('type', Thread::TYPE_OF_QUESTION)
+                            ->exists()
+                    );
+                }
+            }
         }
 
         // 主题关联模型
@@ -196,8 +241,8 @@ class ResourceThreadController extends AbstractResourceController
     }
 
     /**
-     * @param $thread
-     * @param $type
+     * @param Thread $thread
+     * @param int $type
      * @return Thread
      */
     private function loadOrderUsers(Thread $thread, $type)
@@ -208,6 +253,9 @@ class ResourceThreadController extends AbstractResourceController
                 break;
             case Order::ORDER_TYPE_THREAD:
                 $relation = 'paidUsers';
+                break;
+            case Order::ORDER_TYPE_ONLOOKER:
+                $relation = 'onlooker';
                 break;
             default:
                 return $thread;

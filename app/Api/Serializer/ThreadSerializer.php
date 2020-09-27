@@ -21,6 +21,7 @@ namespace App\Api\Serializer;
 use App\Models\Thread;
 use App\Traits\HasPaidContent;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Discuz\Auth\Guest;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Tobscure\JsonApi\Relationship;
 
@@ -102,6 +103,15 @@ class ThreadSerializer extends AbstractSerializer
         if ($model->attachment_price > 0) {
             $attributes['isPaidAttachment'] = $model->is_paid_attachment;
         }
+
+        if (isset($model->getAttributes()['isOnlooker'])) {
+            $attributes['isOnlooker'] = $model->getAttribute('isOnlooker');
+        }
+
+        // TODO Question 匿名提问
+        // if ($model->getRelation('question')) {
+        //     $model->user = new Guest;
+        // }
 
         return $attributes;
     }

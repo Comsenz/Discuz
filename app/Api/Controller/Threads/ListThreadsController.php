@@ -28,6 +28,7 @@ use App\Repositories\ThreadRepository;
 use App\Repositories\TopicRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -35,6 +36,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class ListThreadsController extends AbstractListController
 {
@@ -64,7 +66,6 @@ class ListThreadsController extends AbstractListController
         'user.groups',
         'deletedUser',
         'firstPost.images',
-        'firstPost.attachments',
         'firstPost.likedUsers',
         'lastThreePosts',
         'lastThreePosts.user',
@@ -73,8 +74,13 @@ class ListThreadsController extends AbstractListController
         'paidUsers',
         'lastDeletedLog',
         'topic',
-        'question',
         'question.beUser',
+    ];
+
+    public $mustInclude = [
+        'favoriteState',
+        'firstPost.likeState',
+        'question',
     ];
 
     /**
@@ -130,7 +136,11 @@ class ListThreadsController extends AbstractListController
     }
 
     /**
-     * {@inheritdoc}
+     * @param ServerRequestInterface $request
+     * @param Document $document
+     * @return Collection|mixed
+     * @throws InvalidParameterException
+     * @throws PermissionDeniedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -146,7 +156,7 @@ class ListThreadsController extends AbstractListController
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-        $include = array_merge($this->extractInclude($request), ['favoriteState', 'firstPost.likeState']);
+        $include = $this->extractInclude($request);
 
         $threads = $this->search($actor, $filter, $sort, $limit, $offset);
 
@@ -274,7 +284,6 @@ class ListThreadsController extends AbstractListController
      * @param Builder $query
      * @param array $filter
      * @param User $actor
-     * @throws \Exception
      */
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
@@ -384,6 +393,7 @@ class ListThreadsController extends AbstractListController
 
         // 待审核
         $isApproved = Arr::get($filter, 'isApproved');
+
         if ($isApproved === '1') {
             $query->where('threads.is_approved', Thread::APPROVED);
         } elseif ($actor->hasPermission('thread.approvePosts')) {
@@ -420,6 +430,7 @@ class ListThreadsController extends AbstractListController
 
         // 关注的人的文章
         $fromUserId = Arr::get($filter, 'fromUserId');
+
         if ($fromUserId && $fromUserId == $actor->id) {
             $query->join('user_follow', 'threads.user_id', '=', 'user_follow.to_user_id')
                 ->where('user_follow.from_user_id', $fromUserId);
@@ -437,18 +448,14 @@ class ListThreadsController extends AbstractListController
         }
 
         // 附近的帖
-        if ($location = Arr::get($filter, 'location')) {
-            $location = explode(',', $location, 3);
-            $longitude = (float) Arr::get($location, 0, 0);     // 经度
-            $latitude = (float) Arr::get($location, 1, 0);      // 纬度
-            $distance = abs(Arr::get($location, 2, 5));         // 距离
+        $location = explode(',', Arr::get($filter, 'location'), 3);
+        $longitude = (float) Arr::get($location, 0, 0);     // 经度
+        $latitude = (float) Arr::get($location, 1, 0);      // 纬度
+        $distance = abs(Arr::get($location, 2, 5));         // 距离
 
+        if ($longitude && $latitude && $distance) {
             // 距离不能超过 100km
             $distance = $distance > 100 ? 5 : $distance;
-
-            if (! ($longitude && $latitude && $distance)) {
-                throw new \Exception('unable_to_get_location', 404);
-            }
 
             // 地球平均半径 6371km
             $raw = Str::replaceArray('?', [$latitude, $longitude, $latitude], '6371 * acos(
