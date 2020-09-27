@@ -55,7 +55,7 @@ class UserVerification extends AbstractRule
              *  @var User $user
              */
             $user = User::query()->where('id', $value)->first();
-            if ($user->can('other.canBeAsked')) {
+            if ($user->can('canBeAsked')) {
                 return true;
             }
 
