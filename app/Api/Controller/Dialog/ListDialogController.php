@@ -129,8 +129,17 @@ class ListDialogController extends AbstractListController
     {
         $query = $this->dialog->query();
 
-        $query->where('sender_user_id', $actor->id);
-        $query->orWhere('recipient_user_id', $actor->id);
+        $query->select('dialog.*')
+            ->join('dialog_message', 'dialog.id', '=', 'dialog_message.dialog_id')
+            ->where(function ($query) use ($actor) {
+                $query->where('sender_user_id', $actor->id)
+                    ->whereRaw('`dialog_message`.`created_at` > IFNULL( `dialog`.`sender_deleted_at`, 0 )');
+            })
+            ->orWhere(function ($query) use ($actor) {
+                $query->where('recipient_user_id', $actor->id)
+                    ->whereRaw('`dialog_message`.`created_at` > IFNULL( `dialog`.`recipient_deleted_at`, 0 )');
+            })
+            ->groupBy('dialog.id');
 
         $this->dialogCount = $limit > 0 ? $query->count() : null;
 
