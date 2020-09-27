@@ -55,8 +55,17 @@ class UserVerification extends AbstractRule
              *  @var User $user
              */
             $user = User::query()->where('id', $value)->first();
-            return $user->can('other.canBeAsked');
+            if ($user->can('other.canBeAsked')) {
+                return true;
+            }
+
+            // 被提问用户没有权限回答
+            $this->message = 'post.post_question_ask_be_user_permission_denied';
+            return false;
         }
+
+        // 不能向自己提问
+        $this->message = 'post.post_question_ask_yourself_fail';
 
         return false;
     }
@@ -69,6 +78,6 @@ class UserVerification extends AbstractRule
     public function message()
     {
         // 不能向自己提问
-        return trans('post.post_question_ask_yourself_fail');
+        return trans($this->message);
     }
 }
