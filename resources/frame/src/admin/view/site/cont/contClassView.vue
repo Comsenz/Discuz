@@ -28,7 +28,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="分类管理员" min-width="250">
+        <!-- <el-table-column label="分类管理员" min-width="250">
           <template slot-scope="scope">
             <el-input v-model="scope.row.description">
             <i slot="suffix" class="add-image" @click="dialogVisible = true">
@@ -39,7 +39,7 @@
             </i>
             </el-input>
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
