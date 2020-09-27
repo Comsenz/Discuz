@@ -18,17 +18,16 @@
 
 namespace App\Commands\Order;
 
+use App\Events\Group\PaidGroup;
 use App\Exceptions\OrderException;
-use App\Models\Attachment;
+use App\Models\Group;
 use App\Models\Order;
 use App\Models\PayNotify;
 use App\Models\Question;
 use App\Models\Thread;
 use App\Models\User;
-use App\Models\Group;
 use App\Settings\SettingsRepository;
 use Discuz\Auth\AssertPermissionTrait;
-use App\Events\Group\PaidGroup;
 use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\ConnectionInterface;
@@ -121,8 +120,8 @@ class CreateOrder
                     ->first();
 
                 if ($thread) {
-                    // 判断该主题作者是否有 被打赏的权限
-                    $this->assertCan($thread->user, 'createThreadPaid');
+                    // 主题作者是否允许被打赏
+                    $this->assertCan($thread->user, 'canBeReward');
 
                     $payeeId = $thread->user_id;
                     $amount = sprintf('%.2f', (float) $this->data->get('amount'));
@@ -158,9 +157,6 @@ class CreateOrder
 
                 // 主题存在且未付过费
                 if ($thread && ! $order) {
-                    // 判断该主题作者是否有 被付费的权限
-                    $this->assertCan($thread->user, 'createThreadPaid');
-
                     $payeeId = $thread->user_id;
                     $amount = $thread->price;
 
@@ -263,10 +259,7 @@ class CreateOrder
                     ->where('type', Order::ORDER_TYPE_ATTACHMENT)
                     ->exists();
 
-                if ($thread && !$order && $thread->attachment_price >0) {
-                    // 判断该主题作者是否有 被付费的权限
-                    $this->assertCan($thread->user, 'createThreadPaid');
-
+                if ($thread && ! $order && $thread->attachment_price > 0) {
                     $payeeId = $thread->user_id;
                     $amount = $thread->attachment_price;
 

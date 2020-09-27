@@ -98,7 +98,7 @@
       </Card>
 
       <Card>
-        <CardRow description="允许发布付费内容、付费附件、允许被打赏">
+        <CardRow description="允许发布付费内容、付费附件">
           <el-checkbox
             v-model="checked"
             label="createThreadPaid"
@@ -107,15 +107,16 @@
         </CardRow>
       </Card>
 
-      <!-- <Card>
+      <Card>
         <CardRow description="内容允许被打赏">
           <el-checkbox
             v-model="checked"
-            label="createThreadPaid"
+            label="canBeReward"
             :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7' || wechatPayment"
           >允许被打赏</el-checkbox>
         </CardRow>
-      </Card> -->
+      </Card>
+
       <Card>
         <CardRow description="允许发布问答，只有在开启微信支付且允许发布付费内容时才能设置提问价格">
           <el-checkbox
