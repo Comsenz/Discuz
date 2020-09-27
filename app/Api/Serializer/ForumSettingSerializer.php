@@ -75,6 +75,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_record_code' => $this->settings->get('site_record_code') ?: '',
                 'site_onlooker_price' => $this->settings->get('site_onlooker_price') ?: 0, // 默认围观值前端根据权限判断
                 'site_master_scale' => $this->settings->get('site_master_scale'), // 站长比例
+                'site_pay_group_close' => $this->settings->get('site_pay_group_close'), // 用户组购买开关
             ],
 
             // 注册设置
