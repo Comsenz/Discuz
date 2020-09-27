@@ -226,8 +226,8 @@ class ResourceThreadController extends AbstractResourceController
                 $relation = 'rewardedUsers';
                 break;
             case Order::ORDER_TYPE_THREAD:
-                $type = [Order::ORDER_TYPE_THREAD, Order::ORDER_TYPE_ATTACHMENT];
                 $relation = 'paidUsers';
+                $type = [Order::ORDER_TYPE_THREAD, Order::ORDER_TYPE_ATTACHMENT];
                 break;
             case Order::ORDER_TYPE_ONLOOKER:
                 $relation = 'onlookers';
@@ -239,7 +239,7 @@ class ResourceThreadController extends AbstractResourceController
         $orderUsers = Order::with('user')
             ->where('thread_id', $thread->id)
             ->where('status', Order::ORDER_STATUS_PAID)
-            ->whereIn('type', is_array($type)?:[$type])
+            ->whereIn('type', is_array($type) ? $type : [$type])
             ->where('is_anonymous', false)
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc')
