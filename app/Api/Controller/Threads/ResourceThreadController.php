@@ -255,7 +255,7 @@ class ResourceThreadController extends AbstractResourceController
                 $relation = 'paidUsers';
                 break;
             case Order::ORDER_TYPE_ONLOOKER:
-                $relation = 'onlooker';
+                $relation = 'onlookers';
                 break;
             default:
                 return $thread;
