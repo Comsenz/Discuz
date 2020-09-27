@@ -1201,7 +1201,7 @@
   box-sizing: border-box;
   flex: 1;
   position: relative;
-  width: 80%;
+  width: 100%;
   min-width: 1px;
 }
 .vditor-wysiwyg pre.vditor-reset {
