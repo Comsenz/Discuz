@@ -595,6 +595,7 @@ class ListThreadsController extends AbstractListController
                 break;
             case Order::ORDER_TYPE_THREAD:
                 $relation = 'paidUsers';
+                $type = [Order::ORDER_TYPE_THREAD, Order::ORDER_TYPE_ATTACHMENT];
                 break;
             default:
                 return $threads;
@@ -618,7 +619,7 @@ class ListThreadsController extends AbstractListController
             ->whereRaw('(' . $subSql . ') < ?', [$limit])
             ->whereIn('a.thread_id', $threadIds)
             ->where('a.status', Order::ORDER_STATUS_PAID)
-            ->where('a.type', $type)
+            ->whereIn('a.type', $type)
             ->where('a.is_anonymous', false)
             ->orderBy('a.created_at', 'desc')
             ->orderBy('a.id', 'desc')
