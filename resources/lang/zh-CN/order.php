@@ -25,4 +25,6 @@ return [
     'order_question_onlooker_reject'     => '帖子不允许围观',
     'order_question_onlooker_unanswered' => '帖子还未回答，不允许围观',
     'order_question_onlooker_seen'       => '帖子已支付围观金额',
+
+    'order_pay_group_closed' => '权限购买未开启',
 ];

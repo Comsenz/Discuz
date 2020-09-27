@@ -52,6 +52,7 @@ use App\Policies\StopWordPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\UserWalletCashPolicy;
 use App\Policies\UserWalletLogsPolicy;
+use App\Policies\GroupPaidUserPolicy;
 use App\Policies\UserWalletPolicy;
 use Discuz\Api\Events\ConfigMiddleware;
 use Discuz\Api\Events\WillSerializeData;
@@ -117,6 +118,7 @@ class EventServiceProvider extends BaseEventServiceProvider
         UserWalletPolicy::class,
         UserWalletLogsPolicy::class,
         UserWalletCashPolicy::class,
-        CashReviewSubscriber::class
+        CashReviewSubscriber::class,
+        GroupPaidUserPolicy::class,
     ];
 }

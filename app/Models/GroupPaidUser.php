@@ -19,10 +19,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Discuz\Database\ScopeVisibilityTrait;
 
 class GroupPaidUser extends Model
 {
+
+    use ScopeVisibilityTrait;
     use SoftDeletes;
 
     protected $fillable = ['delete_type'];
@@ -61,5 +66,37 @@ class GroupPaidUser extends Model
         $group_paid_user->delete_type = $delete_type;
         // 返回模型
         return $group_paid_user;
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function operator()
+    {
+        return $this->belongsTo(User::class, 'operator_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function order()
+    {
+        return $this->belongsTo(order::class, 'order_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function group()
+    {
+        return $this->belongsTo(group::class, 'group_id');
     }
 }

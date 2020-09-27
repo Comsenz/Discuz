@@ -55,6 +55,7 @@ $route->get('/signature', 'signature', ApiController\Qcloud\CreateVodUploadSigna
 |--------------------------------------------------------------------------
 */
 
+$route->get('/groups/paid', 'groups.paid', ApiController\Group\ListPaidUserGroupsController::class);
 $route->get('/groups', 'groups.list', ApiController\Group\ListGroupsController::class);
 $route->get('/groups/{id}', 'groups.resource', ApiController\Group\ResourceGroupsController::class);
 $route->post('/groups', 'groups.create', ApiController\Group\CreateGroupController::class);

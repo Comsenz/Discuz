@@ -179,6 +179,12 @@ class CreateOrder
                 if (in_array($group_id, Group::PRESET_GROUPS)) {
                     throw new OrderException('order_group_forbidden');
                 }
+
+                if (!$setting->get('site_pay_group_close')) {
+                    //权限购买开关未开启
+                    throw new OrderException('order_pay_group_closed');
+                }
+
                 /** @var Group $group */
                 $group = Group::query()->find($group_id);
                 if (
