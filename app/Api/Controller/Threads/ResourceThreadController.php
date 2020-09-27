@@ -239,7 +239,7 @@ class ResourceThreadController extends AbstractResourceController
         $orderUsers = Order::with('user')
             ->where('thread_id', $thread->id)
             ->where('status', Order::ORDER_STATUS_PAID)
-            ->whereIn('type', $type)
+            ->whereIn('type', is_array($type)?:[$type])
             ->where('is_anonymous', false)
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc')
