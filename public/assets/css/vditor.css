@@ -284,7 +284,7 @@
   opacity: 0.86;
 }
 .vditor-panel--none .vditor-input{
-  max-width: 104px;
+  max-width: 103px;
 }
 .vditor-panel--arrow:before {
   position: absolute;
