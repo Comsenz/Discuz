@@ -125,7 +125,7 @@ class ListDialogMessageController extends AbstractListController
         }
         $dialog->setRead($type);
 
-        $dialogMessages = $this->search($actor, $sort, $filter, $limit, $offset);
+        $dialogMessages = $this->search($actor, $sort, $filter, $dialog, $limit, $offset);
 
         $document->addPaginationLinks(
             $this->url->route('dialog.message.list'),
@@ -147,12 +147,14 @@ class ListDialogMessageController extends AbstractListController
 
     /**
      * @param User $actor
+     * @param $sort
      * @param array $filter
+     * @param $dialog
      * @param null $limit
      * @param int $offset
      * @return Collection
      */
-    public function search(User $actor, $sort, $filter, $limit = null, $offset = 0)
+    public function search(User $actor, $sort, $filter, $dialog, $limit = null, $offset = 0)
     {
         $query = $this->dialogMessage->query();
 
@@ -164,6 +166,13 @@ class ListDialogMessageController extends AbstractListController
                 $query->where('sender_user_id', $actor->id);
                 $query->orWhere('recipient_user_id', $actor->id);
             });
+
+        // 过滤删除数据
+        if ($dialog->sender_user_id == $actor->id) {
+            $query->where('dialog_message.created_at', '>', 'dialog.sender_deleted_at');
+        } else {
+            $query->where('dialog_message.created_at', '>', 'dialog.recipient_deleted_at');
+        }
 
         $this->dialogMessageCount = $limit > 0 ? $query->count() : null;
 
