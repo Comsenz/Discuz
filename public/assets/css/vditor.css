@@ -1208,7 +1208,7 @@
   background-color: var(--panel-background-color);
   margin: 0;
   white-space: pre-wrap;
-  height: 100%;
+  height: 80%;
   box-sizing: border-box;
 }
 .vditor-wysiwyg pre.vditor-reset[contenteditable='false'] {
