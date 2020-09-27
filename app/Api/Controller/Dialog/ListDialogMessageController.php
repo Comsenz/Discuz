@@ -167,11 +167,12 @@ class ListDialogMessageController extends AbstractListController
                 $query->orWhere('recipient_user_id', $actor->id);
             });
 
-        // 过滤删除数据
-        if ($dialog->sender_user_id == $actor->id) {
-            $query->where('dialog_message.created_at', '>', 'dialog.sender_deleted_at');
-        } else {
-            $query->where('dialog_message.created_at', '>', 'dialog.recipient_deleted_at');
+        // 按照登陆用户的删除情况过滤数据
+        if ($dialog->sender_user_id == $actor->id && $dialog->sender_deleted_at) {
+            $query->whereColumn('dialog_message.created_at', '>', 'dialog.sender_deleted_at');
+        }
+        if ($dialog->recipient_user_id == $actor->id && $dialog->recipient_deleted_at) {
+            $query->whereColumn('dialog_message.created_at', '>', 'dialog.recipient_deleted_at');
         }
 
         $this->dialogMessageCount = $limit > 0 ? $query->count() : null;
