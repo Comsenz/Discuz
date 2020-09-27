@@ -200,7 +200,7 @@ class AttachmentUploader
         $fullPath = $this->getFullPath();
 
         return $this->isRemote() && (bool) $this->settings->get('qcloud_cos_sign_url', 'qcloud', true)
-            ? $this->filesystem->temporaryUrl($fullPath, Carbon::now()->addHour())
+            ? $this->filesystem->temporaryUrl($fullPath, Carbon::now()->addDay())
             : $this->filesystem->url($fullPath);
     }
 }

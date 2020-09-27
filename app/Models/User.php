@@ -354,7 +354,7 @@ class User extends Model
                 $path = 'public/avatar/' . Str::after($value, '://');
 
                 $value = (bool) $settings->get('qcloud_cos_sign_url', 'qcloud', true)
-                    ? app(Filesystem::class)->disk('avatar_cos')->temporaryUrl($path, Carbon::now()->addHour())
+                    ? app(Filesystem::class)->disk('avatar_cos')->temporaryUrl($path, Carbon::now()->addDay())
                     : app(Filesystem::class)->disk('avatar_cos')->url($path);
             }
         }
