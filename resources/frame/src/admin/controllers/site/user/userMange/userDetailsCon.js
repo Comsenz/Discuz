@@ -39,6 +39,10 @@ export default {
         {
           value: 2,
           label: "审核"
+        },
+        {
+          value: 3,
+          label: "审核拒绝"
         }
       ],
       value: "",
