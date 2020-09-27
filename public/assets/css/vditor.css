@@ -282,7 +282,9 @@
   max-width: none;
   white-space: nowrap;
   opacity: 0.86;
-  width: 100%;
+}
+.vditor-panel--none .vditor-input{
+  max-width: 120px;
 }
 .vditor-panel--arrow:before {
   position: absolute;
