@@ -216,7 +216,7 @@ class CreateOrder
 
                 if ($thread && $thread->question) {
                     // 查询是否已经围观过，一个用户只允许围观一次
-                    if (!$thread->orders->isEmpty()) {
+                    if (!$thread->orders->where('type', Order::ORDER_TYPE_ONLOOKER)->isEmpty()) {
                         throw new Exception(trans('order.order_question_onlooker_seen'));
                     }
                     // 判断该问答是否允许围观
@@ -228,8 +228,8 @@ class CreateOrder
                         throw new Exception(trans('order.order_question_onlooker_unanswered'));
                     }
 
-                    // 获取后台设置的围观金额
-                    $amount = sprintf('%.2f', (float) $setting->get('site_onlooker_price')); // 站点围观单价
+                    // 主题的围观单价
+                    $amount = $thread->question->onlooker_unit_price; // 主题的围观单价
 
                     // 设置收款人
                     $payeeId = $thread->user_id; // 提问人
