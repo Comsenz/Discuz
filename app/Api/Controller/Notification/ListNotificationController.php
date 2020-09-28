@@ -159,7 +159,7 @@ class ListNotificationController extends AbstractListController
                             $item->is_question = true;
                             if (! empty($thread->question)) {
                                 $item->is_answer = $thread->question->is_answer; // 是否已回答
-                                $item->answer_content = $thread->question->getContentByType(Question::CONTENT_LENGTH); // 回答的内容
+                                $item->answer_content = $thread->question->getContentFormat(Question::CONTENT_LENGTH); // 回答的内容
                             }
                         }
                     }
