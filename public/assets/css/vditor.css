@@ -335,8 +335,8 @@
   outline: none;
 }
 .vditor-icon svg {
-  height: 13px !important;
-  width: 13px !important;
+  height: 16px !important;
+  width: 16px !important;
   float: left;
   fill: currentColor;
   pointer-events: none;
