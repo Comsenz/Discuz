@@ -62,7 +62,7 @@ class AttachmentValidator extends AbstractValidator
 
         // 验证规则
         $rules =  [
-            'type' => 'required|integer|between:0,4',
+            'type' => 'required|integer|between:0,5',
             'size' => 'bail|gt:0',
             'file' => ['bail', 'required'],
             'ext' =>  ['required_with:file', "in:{$extensions}"],
