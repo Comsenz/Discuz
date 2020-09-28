@@ -37,7 +37,7 @@ class CreateQuestionNotifyWillBeSend
         $question->beUser->notify(new Questioned($question, $actor, WechatQuestionedMessage::class, [
             'message' => $question->thread->getContentByType(Thread::CONTENT_LENGTH, true),
             'raw' => array_merge(Arr::only($question->toArray(), ['thread_id', 'price']), [
-                'actor_username' => $question->user->username,   // 提问人姓名
+                'actor_username' => $question->isAnonymousName(),   // 提问人姓名/匿名
             ]),
         ]));
     }

@@ -19,7 +19,6 @@
 namespace App\Api\Controller\Notification;
 
 use App\Api\Serializer\NotificationSerializer;
-use App\Models\Question;
 use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\NotificationRepository;
@@ -135,7 +134,7 @@ class ListNotificationController extends AbstractListController
          */
         if ($type != 'system') {
             // 获取通知里当前的用户名称和头像
-            $data->map(function ($item) use ($users, $threads, $actor, $type) {
+            $data->map(function ($item) use ($users, $threads, $actor) {
                 $user = $users->get(Arr::get($item->data, 'user_id'));
                 if (! empty($user)) {
                     $item->user_name = $user->username;
@@ -151,16 +150,13 @@ class ListNotificationController extends AbstractListController
                         $item->thread_created_at = $thread->formatDate('created_at');
                         $threadUser = $thread->user;
                         if (! empty($threadUser)) {
-                            $item->thread_username = $threadUser->username;
-                            $item->thread_user_groups = $threadUser->groups->pluck('name')->join(',');
-                        }
-                        // 附加问答查询字段
-                        if ($type == 'questioned') {
-                            $item->is_question = true;
-                            if (! empty($thread->question)) {
-                                $item->is_answer = $thread->question->is_answer; // 是否已回答
-                                $item->answer_content = $thread->question->getContentFormat(Question::CONTENT_LENGTH); // 回答的内容
+                            // 判断是否是问答、匿名提问
+                            if ($thread->type == Thread::TYPE_OF_QUESTION && ! empty($thread->question)) {
+                                $item->thread_username = $thread->question->isAnonymousName();
+                            } else {
+                                $item->thread_username = $threadUser->username;
                             }
+                            $item->thread_user_groups = $threadUser->groups->pluck('name')->join(',');
                         }
                     }
                 }

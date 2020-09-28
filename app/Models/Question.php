@@ -21,6 +21,7 @@ namespace App\Models;
 use App\Events\Question\Created;
 use App\Formatter\Formatter;
 use Carbon\Carbon;
+use Discuz\Auth\Anonymous;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -189,6 +190,22 @@ class Question extends Model
         }
 
         return $content;
+    }
+
+    /**
+     * 获取匿名用户名
+     *
+     * @return string
+     */
+    public function isAnonymousName()
+    {
+        if ($this->is_anonymous) {
+            // 实例匿名用户类
+            $anonymous = new Anonymous();
+            return $anonymous->getUsername();
+        } else {
+            return $this->user->username;
+        }
     }
 
     /**

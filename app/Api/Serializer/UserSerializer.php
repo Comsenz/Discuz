@@ -85,7 +85,7 @@ class UserSerializer extends AbstractSerializer
             'showGroups'        => $gate->allows('showGroups', $model),     // 是否显示用户组
             'registerReason'    => $model->register_reason,                 // 注册原因
             'banReason'         => '',                                      // 禁用原因
-            'denyStatus'        => (bool)$model->denyStatus,
+            'denyStatus'        => (bool) $model->denyStatus,
         ];
 
         $whitelist = [

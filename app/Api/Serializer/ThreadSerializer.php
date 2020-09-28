@@ -21,7 +21,7 @@ namespace App\Api\Serializer;
 use App\Models\Thread;
 use App\Traits\HasPaidContent;
 use Discuz\Api\Serializer\AbstractSerializer;
-use Discuz\Auth\Guest;
+use Discuz\Auth\Anonymous;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Tobscure\JsonApi\Relationship;
 
@@ -108,10 +108,14 @@ class ThreadSerializer extends AbstractSerializer
             $attributes['isOnlooker'] = $model->getAttribute('isOnlooker');
         }
 
-        // TODO Question 匿名提问
-        // if ($model->getRelation('question')) {
-        //     $model->user = new Guest;
-        // }
+        // Question 匿名提问
+        if (
+            $model->type === Thread::TYPE_OF_QUESTION
+            && $model->question->is_anonymous
+            && $model->user->id != $this->actor->id     // 非当前用户
+        ) {
+            $model->user = new Anonymous;
+        }
 
         return $attributes;
     }

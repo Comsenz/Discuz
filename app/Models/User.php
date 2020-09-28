@@ -67,6 +67,7 @@ use Illuminate\Support\Str;
  * @property Carbon $updated_at
  * @property string $identity
  * @property string $realname
+ * @property bool $denyStatus
  * @property Collection $groups
  * @property userFollow $follow
  * @property UserWallet $userWallet

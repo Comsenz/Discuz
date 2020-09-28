@@ -46,15 +46,6 @@ class NotificationSerializer extends AbstractSerializer
             ]);
         }
 
-        // 添加问答数据字段
-        $question = [];
-        if (! is_null($model->getAttribute('is_question'))) {
-            $question = [
-                'is_answer' => $model->is_answer,
-                'answer_content' => $model->answer_content,
-            ];
-        }
-
         // 新增单独赋值的字段值
         $result = array_merge($result, [
             'user_name' => $model->user_name ?: '',
@@ -64,7 +55,7 @@ class NotificationSerializer extends AbstractSerializer
             'thread_user_groups' => $model->thread_user_groups ?: '',
             'thread_created_at' => $model->thread_created_at ?: '',
             'thread_is_approved' => $model->thread_is_approved ?: 0,
-        ], $question);
+        ]);
 
         return $result;
     }
