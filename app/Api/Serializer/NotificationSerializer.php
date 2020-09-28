@@ -32,18 +32,27 @@ class NotificationSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         $result = array_merge([
-            'id'            => $model->id,
-            'type'          => $model->type,
-            'user_id'       => $model->notifiable_id,
-            'read_at'       => $this->formatDate($model->read_at),
-            'created_at'    => $this->formatDate($model->created_at),
+            'id' => $model->id,
+            'type' => $model->type,
+            'user_id' => $model->notifiable_id,
+            'read_at' => $this->formatDate($model->read_at),
+            'created_at' => $this->formatDate($model->created_at),
         ], $model->data);
 
         // 默认必须要有的字段
-        if (!array_key_exists('reply_post_id', $result)) {
+        if (! array_key_exists('reply_post_id', $result)) {
             $result = array_merge($result, [
                 'reply_post_id' => 0
             ]);
+        }
+
+        // 添加问答数据字段
+        $question = [];
+        if (! is_null($model->getAttribute('is_question'))) {
+            $question = [
+                'is_answer' => $model->is_answer,
+                'answer_content' => $model->answer_content,
+            ];
         }
 
         // 新增单独赋值的字段值
@@ -55,7 +64,7 @@ class NotificationSerializer extends AbstractSerializer
             'thread_user_groups' => $model->thread_user_groups ?: '',
             'thread_created_at' => $model->thread_created_at ?: '',
             'thread_is_approved' => $model->thread_is_approved ?: 0,
-        ]);
+        ], $question);
 
         return $result;
     }

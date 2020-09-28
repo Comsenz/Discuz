@@ -134,24 +134,32 @@ class ListNotificationController extends AbstractListController
          */
         if ($type != 'system') {
             // 获取通知里当前的用户名称和头像
-            $data->map(function ($item) use ($users, $threads, $actor) {
+            $data->map(function ($item) use ($users, $threads, $actor, $type) {
                 $user = $users->get(Arr::get($item->data, 'user_id'));
-                if (!empty($user)) {
+                if (! empty($user)) {
                     $item->user_name = $user->username;
                     $item->user_avatar = $user->avatar;
                     $item->realname = $user->realname;
                 }
                 // 查询主题相关内容
-                if (!empty($threadID = Arr::get($item->data, 'thread_id', 0))) {
+                if (! empty($threadID = Arr::get($item->data, 'thread_id', 0))) {
                     // 获取主题作者用户组
-                    if (!empty($threads->get($threadID))) {
+                    if (! empty($threads->get($threadID))) {
                         $thread = $threads->get($threadID);
                         $item->thread_is_approved = $thread->is_approved;
                         $item->thread_created_at = $thread->formatDate('created_at');
                         $threadUser = $thread->user;
-                        if (!empty($threadUser)) {
+                        if (! empty($threadUser)) {
                             $item->thread_username = $threadUser->username;
                             $item->thread_user_groups = $threadUser->groups->pluck('name')->join(',');
+                        }
+                        // 附加问答查询字段
+                        if ($type == 'questioned') {
+                            $item->is_question = true;
+                            if (! empty($thread->question)) {
+                                $item->is_answer = $thread->question->is_answer; // 是否已回答
+                                $item->answer_content = $thread->question->content; // 回答的内容
+                            }
                         }
                     }
                 }
@@ -159,9 +167,9 @@ class ListNotificationController extends AbstractListController
         } else {
             // 获取通知里当前的用户名称和头像
             $data->map(function ($item) use ($users, $threads, $actor) {
-                if (!empty($threadID = Arr::get($item, 'data.raw.thread_id', 0))) {
+                if (! empty($threadID = Arr::get($item, 'data.raw.thread_id', 0))) {
                     // 获取主题作者用户组
-                    if (!empty($threads->get($threadID))) {
+                    if (! empty($threads->get($threadID))) {
                         $thread = $threads->get($threadID);
                         $item->thread_is_approved = $thread->is_approved;
                         $item->thread_created_at = $thread->formatDate('created_at');
@@ -199,6 +207,11 @@ class ListNotificationController extends AbstractListController
         // 主题 ID
         $threadIds = collect($list)->pluck($pluck)->filter()->unique()->values();
         // 主题及其作者与作者用户组
-        $threads = Thread::with('user', 'user.groups')->whereIn('id', $threadIds)->get()->keyBy('id');
+        $with = ['user', 'user.groups'];
+        // 如果是 question 添加关联查询
+        if ($type == 'questioned') {
+            array_push($with, 'question');
+        }
+        $threads = Thread::with($with)->whereIn('id', $threadIds)->get()->keyBy('id');
     }
 }
