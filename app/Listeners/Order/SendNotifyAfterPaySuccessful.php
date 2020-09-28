@@ -54,6 +54,11 @@ class SendNotifyAfterPaySuccessful
     {
         $this->order = $event->order;
 
+        // 如果是问答提问，没有主题数据
+        if ($this->order->type == Order::ORDER_TYPE_QUESTION) {
+            return;
+        }
+
         // 判断是否是支付成功后
         if ($this->order->status != Order::ORDER_STATUS_PAID) {
             return;
