@@ -66,6 +66,7 @@ class ListThreadsController extends AbstractListController
         'user.groups',
         'deletedUser',
         'firstPost.images',
+        'firstPost.attachments',
         'firstPost.likedUsers',
         'lastThreePosts',
         'lastThreePosts.user',

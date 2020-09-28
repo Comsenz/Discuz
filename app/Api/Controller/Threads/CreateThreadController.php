@@ -38,6 +38,7 @@ class CreateThreadController extends AbstractCreateController
      */
     public $include = [
         'user',
+        'category',
         'firstPost',
         'firstPost.images',
         'threadVideo',
