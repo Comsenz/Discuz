@@ -19,6 +19,8 @@
 namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\UserFollowSerializer;
+use App\Models\Group;
+use App\Models\Permission;
 use App\Models\User;
 use App\Repositories\UserFollowRepository;
 use App\Repositories\UserRepository;
@@ -165,6 +167,22 @@ class ListUserFollowController extends AbstractListController
                 ->where(function ($query) use ($username) {
                     $query->where('users.username', 'like', "%{$username}%");
                 });
+        }
+
+        // 是否可以被提问
+        if ($canBeAsked = Arr::get($filter, 'canBeAsked')) {
+            $groupIds = Permission::query()
+                ->where('permission', 'canBeAsked')
+                ->pluck('group_id')
+                ->add(Group::ADMINISTRATOR_ID);
+
+            $query->join('group_user', 'group_user.user_id', '=', 'user_follow.' . $join_field);
+
+            if ($canBeAsked === 'yes') {
+                $query->whereIn('group_user.group_id', $groupIds);
+            } elseif ($canBeAsked === 'no') {
+                $query->whereNotIn('group_user.group_id', $groupIds);
+            }
         }
 
         foreach ((array) $sort as $field => $order) {
