@@ -22,14 +22,13 @@ use Discuz\Notifications\Messages\DatabaseMessage;
 use Illuminate\Contracts\Routing\UrlGenerator;
 
 /**
- * 内容支付通知
- * (包含: 打赏帖子/支付付费/分成)
+ * 过期通知
  *
  * @package App\MessageTemplate
  */
-class RewardedMessage extends DatabaseMessage
+class ExpiredMessage extends DatabaseMessage
 {
-    protected $tplId = 27;
+    protected $tplId = 43;
 
     protected $url;
 

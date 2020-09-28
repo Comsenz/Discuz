@@ -19,7 +19,9 @@
 namespace App\Listeners\Wallet;
 
 use App\Events\Wallet\Saved;
+use App\MessageTemplate\ExpiredMessage;
 use App\MessageTemplate\RewardedMessage;
+use App\MessageTemplate\Wechat\WechatExpiredMessage;
 use App\MessageTemplate\Wechat\WechatRewardedMessage;
 use App\Models\Order;
 use App\Models\Question;
@@ -36,7 +38,13 @@ class SendNotifyOfWalletChanges
     public function handle(Saved $event)
     {
         $user = $event->user;
+        $amount = $event->amount;
         $data = $event->data;
+
+        // 当支付了0元时，无法查到订单，不发送通知
+        if ($amount <= 0) {
+            return;
+        }
 
         // 只是收款人接收收入通知，扣款人不接受扣款通知（没有扣款通知）
         if (isset($data['change_type'])) {
@@ -61,6 +69,27 @@ class SendNotifyOfWalletChanges
                         'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
                             'actor_username' => $order->user->username,               // 发送人姓名
                             'actual_amount' => $order->calculateAuthorAmount(true),   // 获取实际金额
+                        ]),
+                    ]));
+                    break;
+                case UserWalletLog::TYPE_QUESTION_RETURN_THAW: // 9 问答返还解冻
+                    /**
+                     * 查询问答提问支付订单信息
+                     *
+                     * @var Question $question
+                     */
+                    $question = Question::query()->where('id', $data['question_id'])->first();
+
+                    /**
+                     * 计划任务触发问答过期退还冻结金额通知
+                     *
+                     * @see QuestionClearCommand 计划任务
+                     */
+                    $user->notify(new Rewarded($question, null, ExpiredMessage::class));
+                    $user->notify(new Rewarded($question, null, WechatExpiredMessage::class, [
+                        'content' => $question->thread->getContentByType(Thread::CONTENT_LENGTH, true),
+                        'raw' => array_merge(Arr::only($question->toArray(), ['id', 'thread_id']), [
+                            'model' => $question // 问答模型
                         ]),
                     ]));
                     break;

@@ -18,21 +18,20 @@
 
 namespace App\MessageTemplate\Wechat;
 
-use App\Models\Order;
+use App\Models\Question;
 use Carbon\Carbon;
 use Discuz\Notifications\Messages\DatabaseMessage;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
 
 /**
- * 内容支付通知 - 微信
- * (包含: 打赏帖子/支付付费/分成)
+ * 过期通知 - 微信
  *
  * @package App\MessageTemplate\Wechat
  */
-class WechatRewardedMessage extends DatabaseMessage
+class WechatExpiredMessage extends DatabaseMessage
 {
-    protected $tplId = 31;
+    protected $tplId = 44;
 
     protected $url;
 
@@ -48,18 +47,23 @@ class WechatRewardedMessage extends DatabaseMessage
 
     protected function contentReplaceVars($data)
     {
-        $message = Arr::get($data, 'message', '');
-        $threadId = Arr::get($data, 'raw.thread_id', 0);
-        $actualAmount = Arr::get($data, 'raw.actual_amount', 0); // 实际金额
+        $name = '';
+        $detail = '';
+        $content = Arr::get($data, 'content', ''); // 主题内容
 
-        // 获取支付类型
-        $orderName = Order::enumType(Arr::get($data, 'raw.type', 0), function ($args) {
-            return $args['value'];
-        });
+        // 问答过期通知模型数据
+        if (Arr::get($data, 'raw.model') instanceof Question) {
+            /** @var Question $question */
+            $question = Arr::get($data, 'raw.model');
+            $name = '您的问题超时未收到回答';
+            $detail = '返还金额' . $question->price;    // 解冻金额
+        }
 
-        $actorName = Arr::get($data, 'raw.actor_username', '');  // 发送人姓名
+        // 通知时间
+        $dateLine = Carbon::now()->toDateTimeString();
 
         // 主题ID为空时跳转到首页
+        $threadId = Arr::get($data, 'raw.thread_id', 0);
         if (empty($threadId)) {
             $threadUrl = $this->url->to('');
         } else {
@@ -67,12 +71,11 @@ class WechatRewardedMessage extends DatabaseMessage
         }
 
         return [
-            $actorName,
-            $actualAmount,
-            $this->strWords($message),
-            $orderName, // 1：注册，2：打赏，3：付费主题，4：付费用户组
-            Carbon::now()->toDateTimeString(),
-            $threadUrl,
+            $name,          // {username}       谁
+            $detail,        // {detail}         xx已过期
+            $content,       // {content}        内容
+            $dateLine,      // {dateline}       通知时间
+            $threadUrl,     // {redirecturl}    跳转地址
         ];
     }
 }

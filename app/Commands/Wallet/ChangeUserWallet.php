@@ -83,6 +83,8 @@ class ChangeUserWallet
 
         // TODO Wallet 支付时判断钱包金额是否充足
 
+        // TODO 未参与金额分成运算，需要在外部进行分成运算
+
         switch ($this->action) {
             case UserWallet::OPERATE_INCREASE:
                 $wallet->increment('available_amount', $this->amount);
