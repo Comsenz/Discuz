@@ -71,6 +71,7 @@ class UserSerializer extends AbstractSerializer
             'followCount'       => (int) $model->follow_count,
             'fansCount'         => (int) $model->fans_count,
             'likedCount'        => (int) $model->liked_count,
+            'questionCount'     => (int) $model->question_count,
             'signature'         => $model->signature,
             'usernameBout'      => (int) $model->username_bout,
             'status'            => $model->status,

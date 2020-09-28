@@ -58,6 +58,7 @@ use Illuminate\Support\Str;
  * @property int $follow_count
  * @property int $fans_count
  * @property int $liked_count
+ * @property int $question_count
  * @property Carbon $login_at
  * @property Carbon $avatar_at
  * @property Carbon $joined_at
@@ -519,6 +520,23 @@ class User extends Model
         }
 
         return false;
+    }
+
+    /**
+     * 刷新用户提问数量
+     * @return $this
+     */
+    public function refreshQuestionCount()
+    {
+        $this->question_count = $this->threads()
+            ->join('questions', 'threads.id', '=', 'questions.thread_id')
+            ->where('threads.is_approved', Thread::APPROVED)
+            ->where('threads.type', Thread::TYPE_OF_QUESTION)
+            ->where('questions.is_anonymous', false)
+            ->whereNull('threads.deleted_at')
+            ->count();
+
+        return $this;
     }
 
     /*
