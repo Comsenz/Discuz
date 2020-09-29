@@ -58,6 +58,7 @@ use Illuminate\Support\Str;
  * @property int $follow_count
  * @property int $fans_count
  * @property int $liked_count
+ * @property int $question_count
  * @property Carbon $login_at
  * @property Carbon $avatar_at
  * @property Carbon $joined_at
@@ -66,6 +67,7 @@ use Illuminate\Support\Str;
  * @property Carbon $updated_at
  * @property string $identity
  * @property string $realname
+ * @property bool $denyStatus
  * @property Collection $groups
  * @property userFollow $follow
  * @property UserWallet $userWallet
@@ -354,7 +356,7 @@ class User extends Model
                 $path = 'public/avatar/' . Str::after($value, '://');
 
                 $value = (bool) $settings->get('qcloud_cos_sign_url', 'qcloud', true)
-                    ? app(Filesystem::class)->disk('avatar_cos')->temporaryUrl($path, Carbon::now()->addHour())
+                    ? app(Filesystem::class)->disk('avatar_cos')->temporaryUrl($path, Carbon::now()->addDay())
                     : app(Filesystem::class)->disk('avatar_cos')->url($path);
             }
         }
@@ -519,6 +521,23 @@ class User extends Model
         }
 
         return false;
+    }
+
+    /**
+     * 刷新用户提问数量
+     * @return $this
+     */
+    public function refreshQuestionCount()
+    {
+        $this->question_count = $this->threads()
+            ->join('questions', 'threads.id', '=', 'questions.thread_id')
+            ->where('threads.is_approved', Thread::APPROVED)
+            ->where('threads.type', Thread::TYPE_OF_QUESTION)
+            ->where('questions.is_anonymous', false)
+            ->whereNull('threads.deleted_at')
+            ->count();
+
+        return $this;
     }
 
     /*

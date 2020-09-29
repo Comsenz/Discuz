@@ -354,13 +354,15 @@ class NotificationTpl extends Model
                 'content' => self::getWechatFormat([
                     'first' => '{username}向你提问',
                     'keyword1' => '{content}',
-                    'keyword2' => '{dateline}',
+                    'keyword2' => '{money}',
+                    'keyword3' => '{dateline}',
                     'remark' => '点击查看',
                     'redirect_url' => '{redirecturl}',
                 ]),
                 'vars' => serialize([
                     '{username}' => '问答人',
                     '{content}' => '主题(提问)内容',
+                    '{money}' => '问答价格',
                     '{dateline}' => '通知时间',
                     '{redirecturl}' => '跳转地址',
                 ])
@@ -392,6 +394,35 @@ class NotificationTpl extends Model
                     '{redirecturl}' => '跳转地址',
                 ])
             ],
+            43 => [
+                'status' => 1,
+                'type' => 0,
+                'type_name' => '过期通知',
+                'title' => '内容通知',
+                'content' => '',
+                'vars' => '',
+            ],
+            44 => [
+                'status' => 0,
+                'type' => 1,
+                'type_name' => '过期通知',
+                'title' => '微信内容通知',
+                'content' => self::getWechatFormat([
+                    'first' => '{username}',
+                    'keyword1' => '{detail}',
+                    'keyword2' => '{content}',
+                    'keyword3' => '{dateline}',
+                    'remark' => '点击查看',
+                    'redirect_url' => '{redirecturl}',
+                ]),
+                'vars' => serialize([
+                    '{username}' => '您的问题超时未收到回答',
+                    '{detail}' => '返还金额xx',
+                    '{content}' => '内容',
+                    '{dateline}' => '通知时间',
+                    '{redirecturl}' => '跳转地址',
+                ])
+            ]
         ];
     }
 }

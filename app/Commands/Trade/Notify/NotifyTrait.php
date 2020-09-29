@@ -50,7 +50,7 @@ trait NotifyTrait
         // 查询订单
         $this->orderInfo = Order::query()->where('status', Order::ORDER_STATUS_PENDING)->where('payment_sn', $payment_sn)->first();
 
-        if (!empty($this->orderInfo)) {
+        if (! empty($this->orderInfo)) {
             // 修改通知数据
             PayNotify::query()->where('payment_sn', $payment_sn)->update(['status' => PayNotify::NOTIFY_STATUS_RECEIVED, 'trade_no' => $trade_no]);
             // 修改订单，已支付
@@ -121,13 +121,9 @@ trait NotifyTrait
                     // 提问时不分成，因为还未回答
                     return $this->orderInfo;
                 case Order::ORDER_TYPE_ONLOOKER:
-                    // 获取站点作者分成比例
-                    $siteAuthorScale = $setting->get('site_author_scale');
-                    $authorRatio = $siteAuthorScale / 10;
-                    // 用户支付围观单价金额 * 作者分成 = 围观帖子实际金额
-                    $onlookerActualPrice = numberFormat($this->orderInfo->amount, '*', $authorRatio);
-                    // 再去和作者/答题人55平分
-                    $onlookerPrice = numberFormat($onlookerActualPrice, '/', 2); // 实际每人分红金额
+                    // 计算围观问答人/答题人分红
+                    $onlookerActualPrice = $this->orderInfo->calculateOnlookersAmount(true);
+                    $onlookerPrice = numberFormat($onlookerActualPrice, '/', 2);
 
                     // build save
                     $this->orderInfo->master_amount = numberFormat($this->orderInfo->amount, '-', $onlookerActualPrice); // 站长分成金额
@@ -264,7 +260,7 @@ trait NotifyTrait
                 $sourceUserId = $this->orderInfo->payee_id;
             }
 
-            if (!empty($userDistribution)) {
+            if (! empty($userDistribution)) {
                 $parentUserId = $userDistribution->pid; // 上级user_id
                 $user_wallet = UserWallet::query()->lockForUpdate()->find($parentUserId);
                 $user_wallet->available_amount = $user_wallet->available_amount + $bossAmount;

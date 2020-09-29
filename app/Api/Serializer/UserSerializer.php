@@ -71,6 +71,7 @@ class UserSerializer extends AbstractSerializer
             'followCount'       => (int) $model->follow_count,
             'fansCount'         => (int) $model->fans_count,
             'likedCount'        => (int) $model->liked_count,
+            'questionCount'     => (int) $model->question_count,
             'signature'         => $model->signature,
             'usernameBout'      => (int) $model->username_bout,
             'status'            => $model->status,
@@ -84,7 +85,7 @@ class UserSerializer extends AbstractSerializer
             'showGroups'        => $gate->allows('showGroups', $model),     // 是否显示用户组
             'registerReason'    => $model->register_reason,                 // 注册原因
             'banReason'         => '',                                      // 禁用原因
-            'denyStatus'        => (bool)$model->denyStatus,
+            'denyStatus'        => (bool) $model->denyStatus,
         ];
 
         $whitelist = [

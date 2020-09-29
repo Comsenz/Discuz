@@ -18,17 +18,16 @@
 
 namespace App\Commands\Order;
 
+use App\Events\Group\PaidGroup;
 use App\Exceptions\OrderException;
-use App\Models\Attachment;
+use App\Models\Group;
 use App\Models\Order;
 use App\Models\PayNotify;
 use App\Models\Question;
 use App\Models\Thread;
 use App\Models\User;
-use App\Models\Group;
 use App\Settings\SettingsRepository;
 use Discuz\Auth\AssertPermissionTrait;
-use App\Events\Group\PaidGroup;
 use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\ConnectionInterface;
@@ -121,8 +120,8 @@ class CreateOrder
                     ->first();
 
                 if ($thread) {
-                    // 判断该主题作者是否有 被打赏的权限
-                    $this->assertCan($thread->user, 'createThreadPaid');
+                    // 主题作者是否允许被打赏
+                    $this->assertCan($thread->user, 'canBeReward');
 
                     $payeeId = $thread->user_id;
                     $amount = sprintf('%.2f', (float) $this->data->get('amount'));
@@ -158,9 +157,6 @@ class CreateOrder
 
                 // 主题存在且未付过费
                 if ($thread && ! $order) {
-                    // 判断该主题作者是否有 被付费的权限
-                    $this->assertCan($thread->user, 'createThreadPaid');
-
                     $payeeId = $thread->user_id;
                     $amount = $thread->price;
 
@@ -179,6 +175,12 @@ class CreateOrder
                 if (in_array($group_id, Group::PRESET_GROUPS)) {
                     throw new OrderException('order_group_forbidden');
                 }
+
+                if (!$setting->get('site_pay_group_close')) {
+                    //权限购买开关未开启
+                    throw new OrderException('order_pay_group_closed');
+                }
+
                 /** @var Group $group */
                 $group = Group::query()->find($group_id);
                 if (
@@ -216,7 +218,7 @@ class CreateOrder
 
                 if ($thread && $thread->question) {
                     // 查询是否已经围观过，一个用户只允许围观一次
-                    if (!$thread->orders->isEmpty()) {
+                    if (!$thread->orders->where('type', Order::ORDER_TYPE_ONLOOKER)->isEmpty()) {
                         throw new Exception(trans('order.order_question_onlooker_seen'));
                     }
                     // 判断该问答是否允许围观
@@ -228,8 +230,8 @@ class CreateOrder
                         throw new Exception(trans('order.order_question_onlooker_unanswered'));
                     }
 
-                    // 获取后台设置的围观金额
-                    $amount = sprintf('%.2f', (float) $setting->get('site_onlooker_price')); // 站点围观单价
+                    // 主题的围观单价
+                    $amount = $thread->question->onlooker_unit_price; // 主题的围观单价
 
                     // 设置收款人
                     $payeeId = $thread->user_id; // 提问人
@@ -257,10 +259,7 @@ class CreateOrder
                     ->where('type', Order::ORDER_TYPE_ATTACHMENT)
                     ->exists();
 
-                if ($thread && !$order && $thread->attachment_price >0) {
-                    // 判断该主题作者是否有 被付费的权限
-                    $this->assertCan($thread->user, 'createThreadPaid');
-
+                if ($thread && ! $order && $thread->attachment_price > 0) {
                     $payeeId = $thread->user_id;
                     $amount = $thread->attachment_price;
 

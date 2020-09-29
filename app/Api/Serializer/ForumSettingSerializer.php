@@ -46,6 +46,8 @@ class ForumSettingSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
+        $actor = $this->getActor();
+
         // 获取logo完整地址
         $favicon = $this->forumField->siteUrlSplicing($this->settings->get('favicon'));
         $logo = $this->forumField->siteUrlSplicing($this->settings->get('logo'));
@@ -59,6 +61,7 @@ class ForumSettingSerializer extends AbstractSerializer
             // 站点设置
             'set_site' => [
                 'site_name' => $this->settings->get('site_name'),
+                'site_title' => $this->settings->get('site_title'),
                 'site_introduction' => $this->settings->get('site_introduction'),
                 'site_mode' => $this->settings->get('site_mode'), // pay public
                 'site_close' => (bool)$this->settings->get('site_close'),
@@ -75,6 +78,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_record_code' => $this->settings->get('site_record_code') ?: '',
                 'site_onlooker_price' => $this->settings->get('site_onlooker_price') ?: 0, // 默认围观值前端根据权限判断
                 'site_master_scale' => $this->settings->get('site_master_scale'), // 站长比例
+                'site_pay_group_close' => $this->settings->get('site_pay_group_close'), // 用户组购买开关
             ],
 
             // 注册设置
@@ -128,36 +132,47 @@ class ForumSettingSerializer extends AbstractSerializer
             // 其它信息(非setting中的信息)
             'other' => [
                 // 基础信息
-                'count_threads' => (int)$this->settings->get('thread_count'), // 统计所有主题数
-                'count_posts' => (int)$this->settings->get('post_count'), // 统计所有回复数
-                'count_users' => (int)$this->settings->get('user_count'), // 统计所有的用户
-                // 权限 permission
-                'can_upload_attachments' => $this->actor->can('attachment.create.0'),
-                'can_upload_images' => $this->actor->can('attachment.create.1'),
-                'can_create_thread' => $this->actor->can('createThread'),
-                'can_create_thread_long' => $this->actor->can('createThreadLong'),
-                'can_create_thread_video' => $this->actor->can('createThreadVideo'),
-                'can_create_thread_image' => $this->actor->can('createThreadImage'),
-                'can_create_thread_audio' => $this->actor->can('createThreadAudio'),
-                'can_create_thread_in_category' => (bool)Category::getIdsWhereCan($this->actor, 'createThread'),
-                'can_create_audio' => $this->actor->can('createAudio'),
-                'can_create_dialog' => $this->actor->can('dialog.create'),
-                'can_view_threads' => $this->actor->can('viewThreads'),
-                'can_batch_edit_threads' => $this->actor->can('thread.batchEdit'),
-                'can_view_user_list' => $this->actor->can('viewUserList'),
-                'can_edit_user_group' => $this->actor->can('user.edit.group'),
-                'can_edit_user_status' => $this->actor->can('user.edit.status'),
-                'can_create_invite' => $this->actor->can('createInvite'),
-                'can_create_thread_paid' => $this->actor->can('createThreadPaid'),
-                'create_thread_with_captcha' => ! $this->actor->isAdmin() && $this->actor->can('createThreadWithCaptcha'),
-                'publish_need_real_name' => ! $this->actor->isAdmin() && $this->actor->can('publishNeedRealName') && ! $this->actor->realname,
-                'publish_need_bind_phone' => ! $this->actor->isAdmin() && $this->actor->can('publishNeedBindPhone') && ! $this->actor->mobile,
-                'initialized_pay_password' => (bool)$this->actor->pay_password,  // 是否初始化支付密码
-                'can_invite_user_scale' => $this->actor->can('other.canInviteUserScale'),
-                'can_create_thread_goods' => $this->actor->can('createThreadGoods'), // 允许发布商品帖
-                'can_create_thread_question' => $this->actor->can('createThreadQuestion'), // 允许发布问答帖
-                'can_be_asked' => $this->actor->can('canBeAsked'), // 允许被提问
-                'can_be_onlooker' => $this->actor->can('canBeOnlooker'), // 允许被围观
+                'count_threads' => (int) $this->settings->get('thread_count'),          // 站点主题数
+                'count_posts' => (int) $this->settings->get('post_count'),              // 站点回复数
+                'count_users' => (int) $this->settings->get('user_count'),              // 站点用户数
+
+                // 管理权限
+                'can_batch_edit_threads' => $actor->can('thread.batchEdit'),            // 批量编辑主题
+                'can_edit_user_group' => $actor->can('user.edit.group'),                // 修改用户用户组
+                'can_edit_user_status' => $actor->can('user.edit.status'),              // 修改用户状态
+
+                // 查看权限
+                'can_view_threads' => $actor->can('viewThreads'),                       // 查看主题列表
+                'can_view_user_list' => $actor->can('viewUserList'),                    // 查看用户列表
+
+                // 发布权限
+                'can_create_dialog' => $actor->can('dialog.create'),                    // 发短消息
+                'can_create_invite' => $actor->can('createInvite'),                     // 发邀请
+                'can_invite_user_scale' => $actor->can('other.canInviteUserScale'),     // 发分成邀请
+                'can_create_thread_paid' => $actor->can('createThreadPaid'),            // 发付费内容
+                'can_create_thread' => $actor->can('createThread'),                     // 发布文字
+                'can_create_thread_long' => $actor->can('createThreadLong'),            // 发布长文
+                'can_create_thread_video' => $actor->can('createThreadVideo'),          // 发布视频
+                'can_create_thread_image' => $actor->can('createThreadImage'),          // 发布图片
+                'can_create_thread_audio' => $actor->can('createThreadAudio'),          // 发布语音
+                'can_create_thread_goods' => $actor->can('createThreadGoods'),          // 发布商品
+                'can_create_thread_question' => $actor->can('createThreadQuestion'),    // 发布问答
+
+                // 至少在一个分类下有发布权限
+                'can_create_thread_in_category' => (bool) Category::getIdsWhereCan($actor, 'createThread'),
+
+                // 上传权限
+                'can_upload_attachments' => $actor->can('attachment.create.0'),         // 上传附件
+                'can_upload_images' => $actor->can('attachment.create.1'),              // 上传图片
+
+                // 其他
+                'initialized_pay_password' => (bool) $actor->pay_password,              // 是否初始化支付密码
+                'can_be_reward' => $actor->can('canBeReward'),                          // 是否允许被打赏
+                'can_be_asked' => $actor->can('canBeAsked'),                            // 是否允许被提问
+                'can_be_onlooker' => $this->settings->get('site_onlooker_price') > 0 && $actor->can('canBeOnlooker'),           // 是否允许被围观
+                'create_thread_with_captcha' => ! $actor->isAdmin() && $actor->can('createThreadWithCaptcha'),                  // 发布内容需要验证码
+                'publish_need_real_name' => ! $actor->isAdmin() && $actor->can('publishNeedRealName') && ! $actor->realname,    // 发布内容需要实名认证
+                'publish_need_bind_phone' => ! $actor->isAdmin() && $actor->can('publishNeedBindPhone') && ! $actor->mobile,    // 发布内容需要绑定手机
             ],
 
             'lbs' => [
@@ -195,16 +210,16 @@ class ForumSettingSerializer extends AbstractSerializer
         }
 
         // 判断用户是否存在
-        if ($this->actor->exists) {
+        if ($actor->exists) {
 
             // 当前用户信息
             $attributes['user'] = [
-                'groups' => $this->actor->groups,
-                'register_time' => $this->formatDate($this->actor->created_at),
+                'groups' => $actor->groups,
+                'register_time' => $this->formatDate($actor->created_at),
             ];
 
             // 当前用户是否是管理员 - 补充返回数据
-            if ($this->actor->isAdmin()) {
+            if ($actor->isAdmin()) {
                 // 站点设置
                 $attributes['set_site'] += $this->forumField->getSiteSettings();
 

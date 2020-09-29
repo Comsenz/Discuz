@@ -55,6 +55,7 @@ $route->get('/signature', 'signature', ApiController\Qcloud\CreateVodUploadSigna
 |--------------------------------------------------------------------------
 */
 
+$route->get('/groups/paid', 'groups.paid', ApiController\Group\ListPaidUserGroupsController::class);
 $route->get('/groups', 'groups.list', ApiController\Group\ListGroupsController::class);
 $route->get('/groups/{id}', 'groups.resource', ApiController\Group\ResourceGroupsController::class);
 $route->post('/groups', 'groups.create', ApiController\Group\CreateGroupController::class);
@@ -321,7 +322,7 @@ $route->post('/dialog/batch', 'dialog.batchCreate', ApiController\Dialog\BatchCr
 $route->get('/dialog', 'dialog.list', ApiController\Dialog\ListDialogController::class);
 $route->post('/dialog/message', 'dialog.message.create', ApiController\Dialog\CreateDialogMessageController::class);
 $route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListDialogMessageController::class);
-
+$route->delete('/dialog/{id}', 'dialog.delete', ApiController\Dialog\DeleteDialogController::class);
 /*
 |--------------------------------------------------------------------------
 | Reports

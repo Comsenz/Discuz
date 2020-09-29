@@ -111,6 +111,14 @@ class EditThread
             $thread->timestamps = false;
         }
 
+        // 长文可以设置、编辑 附件价格
+        if (isset($attributes['attachment_price']) && $thread->type == Thread::TYPE_OF_LONG) {
+            $this->assertCan($this->actor, 'edit', $thread);
+
+            if ($thread->attachment_price =  (float) $attributes['attachment_price']) {
+                $this->assertCan($this->actor, 'createThreadPaid');
+            }
+        }
         // 非文字贴可设置价格
         if (isset($attributes['price']) && $thread->type !== Thread::TYPE_OF_TEXT) {
             $this->assertCan($this->actor, 'edit', $thread);

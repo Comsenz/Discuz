@@ -62,7 +62,7 @@ class AttachmentValidator extends AbstractValidator
 
         // 验证规则
         $rules =  [
-            'type' => 'required|integer|between:0,4',
+            'type' => 'required|integer|between:0,5',
             'size' => 'bail|gt:0',
             'file' => ['bail', 'required'],
             'ext' =>  ['required_with:file', "in:{$extensions}"],
@@ -87,10 +87,12 @@ class AttachmentValidator extends AbstractValidator
     private function getTypeName()
     {
         $type = (int) Arr::get($this->data, 'type');
-        $typeName = Arr::get(Attachment::$allowTypes, $type, head(Attachment::$allowTypes));
-        if ($type == 4) {
-            //消息类型的附件与图片相同
-            $typeName = Arr::get(Attachment::$allowTypes, 1);
+
+        // 消息 或 问答的图片按帖子图片类型验证
+        if ($type === Attachment::TYPE_OF_DIALOG_MESSAGE || $type === Attachment::TYPE_OF_ANSWER) {
+            $typeName = Arr::get(Attachment::$allowTypes, Attachment::TYPE_OF_IMAGE);
+        } else {
+            $typeName = Arr::get(Attachment::$allowTypes, $type, head(Attachment::$allowTypes));
         }
 
         return $typeName;

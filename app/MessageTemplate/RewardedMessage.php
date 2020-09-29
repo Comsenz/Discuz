@@ -23,10 +23,9 @@ use Illuminate\Contracts\Routing\UrlGenerator;
 
 /**
  * 内容支付通知
- * (包含: 打赏帖子/支付付费贴)
+ * (包含: 打赏帖子/支付付费/分成)
  *
- * Class RewardedMessage
- * @package App\MessageTemplate\Wechat
+ * @package App\MessageTemplate
  */
 class RewardedMessage extends DatabaseMessage
 {

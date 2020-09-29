@@ -34,6 +34,10 @@ export default {
         {
           value: 'mod',
           label: '审核'
+        },
+        {
+          value: 'refuse',
+          label: '审核拒绝'
         }
       ],
       value: ''

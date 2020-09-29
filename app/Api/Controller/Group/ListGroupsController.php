@@ -48,11 +48,15 @@ class ListGroupsController extends AbstractListController
 
         $isDefault = (bool) Arr::get($filter, 'isDefault', false);
         $type = Arr::get($filter, 'type', '');
+        $isPaid = Arr::get($filter, 'isPaid', '');
 
         $groups = Group::query()
             ->where('id', '<>', Group::UNPAID)
             ->when($isDefault, function (Builder $query) {
                 return $query->where('default', true);
+            })
+            ->when($isPaid != '', function (Builder $query) use ($isPaid) {
+                return $query->where('is_paid', (bool) $isPaid);
             })
             ->when($type === 'invite', function (Builder $query) use ($include,$request) {
                 // 邀请用户组关联权限不返回 分类下权限

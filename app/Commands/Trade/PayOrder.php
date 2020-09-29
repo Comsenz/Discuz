@@ -152,7 +152,11 @@ class PayOrder
                         $request = app('request');
                         UserWalletFailLogs::build(ip($request->getServerParams()), $this->actor->id);
 
-                        $fail(trans('trade.wallet_pay_password_error', ['value'=>UserWalletFailLogs::TOPLIMIT - $failCount]));
+                        if (UserWalletFailLogs::TOPLIMIT == $failCount) {
+                            throw new \Exception('pay_password_failures_times_toplimit');
+                        } else {
+                            $fail(trans('trade.wallet_pay_password_error', ['value'=>UserWalletFailLogs::TOPLIMIT - $failCount]));
+                        }
                     }
                 }
             ],

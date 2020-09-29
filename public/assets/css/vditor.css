@@ -283,6 +283,9 @@
   white-space: nowrap;
   opacity: 0.86;
 }
+.vditor-panel--none .vditor-input{
+  max-width: 103px;
+}
 .vditor-panel--arrow:before {
   position: absolute;
   width: 0;
@@ -303,9 +306,9 @@
 }
 .vditor-input {
   border: 0;
-  padding: 3px 5px;
+  padding: 6px 5px;
   background-color: var(--panel-background-color);
-  font-size: 12px;
+  font-size: 14px;
   color: var(--textarea-text-color);
 }
 .vditor-input:focus {
@@ -316,9 +319,9 @@
   color: var(--toolbar-icon-color);
   cursor: pointer;
   float: left;
-  padding: 4px 5px;
-  height: 21px;
-  width: 23px;
+  padding: 8px 5px;
+  height: 31px;
+  width: 25px;
   background-color: transparent;
   border: 0;
   box-sizing: border-box;
@@ -332,8 +335,8 @@
   outline: none;
 }
 .vditor-icon svg {
-  height: 13px !important;
-  width: 13px !important;
+  height: 16px !important;
+  width: 16px !important;
   float: left;
   fill: currentColor;
   pointer-events: none;

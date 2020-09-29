@@ -18,6 +18,7 @@
 
 namespace App\Rules\Question;
 
+use App\Models\User;
 use Discuz\Validation\AbstractRule;
 
 /**
@@ -46,7 +47,27 @@ class UserVerification extends AbstractRule
      */
     public function passes($attribute, $value)
     {
-        return $this->actor->id != $value;
+        // 不允许被提问人是自己
+        if ($this->actor->id != $value) {
+            /**
+             *  查询被提问人是否允许被提问
+             *
+             *  @var User $user
+             */
+            $user = User::query()->where('id', $value)->first();
+            if ($user->can('canBeAsked')) {
+                return true;
+            }
+
+            // 被提问用户没有权限回答
+            $this->message = 'post.post_question_ask_be_user_permission_denied';
+            return false;
+        }
+
+        // 不能向自己提问
+        $this->message = 'post.post_question_ask_yourself_fail';
+
+        return false;
     }
 
     /**
@@ -57,6 +78,6 @@ class UserVerification extends AbstractRule
     public function message()
     {
         // 不能向自己提问
-        return trans('post.post_question_ask_yourself_fail');
+        return trans($this->message);
     }
 }

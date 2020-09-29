@@ -50,6 +50,7 @@ class WechatQuestionedMessage extends DatabaseMessage
         $message = Arr::get($data, 'message', '');
         $threadId = Arr::get($data, 'raw.thread_id', 0);
         $actorName = Arr::get($data, 'raw.actor_username', '');  // 发送人姓名
+        $amount = Arr::get($data, 'raw.price', 0); // 提问价格
 
         // 主题ID为空时跳转到首页
         if (empty($threadId)) {
@@ -61,6 +62,7 @@ class WechatQuestionedMessage extends DatabaseMessage
         return [
             $actorName,
             $this->strWords($message),
+            $amount,
             Carbon::now()->toDateTimeString(),
             $threadUrl,
         ];

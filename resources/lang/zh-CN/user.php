@@ -31,8 +31,6 @@ return [
     'register_decrypt_code_failed' => '解密邀请码失败',
     'invite_decrypt_code_failed' => '邀请码格式不正确', // The payload is invalid.
 
-    'unable_to_get_location' => '无法获取地理位置',
-
     // PC
     'pc_qrcode_time_out' => '二维码已失效，扫码超时',
     'pc_qrcode_time_fail' => '扫码登陆失败',
