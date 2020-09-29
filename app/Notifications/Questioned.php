@@ -72,7 +72,7 @@ class Questioned extends System
             'answer_content' => $this->question->getContentFormat(Question::CONTENT_LENGTH), // 回答的内容
             'amount' => $this->question->price, // 提问价格
             'thread_created_at' => $this->question->thread->formatDate('created_at'),
-            'is_answer' => $this->question->is_answer, // 是否已回答
+            'is_answer' => $this->question->is_answer ?? 0, // 是否已回答 (新数据默认0未回答)
             'is_anonymous' => $this->question->is_anonymous, // 是否匿名
         ];
 
