@@ -68,11 +68,12 @@ class DeleteDialog
             $otherType = 'sender';
         }
 
-        //单一删除增加删除时间，供获取接口筛选
-        if (!$dialog->sender_deleted_at && !$dialog->recipient_deleted_at) {
-            $dialog->{$actorType . '_deleted_at'} = Carbon::now();
-        } else {
-            //双方都存在删除动作时，删除部分无效消息
+        //增加删除时间，供获取接口筛选
+        $dialog->{$actorType . '_deleted_at'} = Carbon::now();
+        $dialog->save();
+
+        //双方都存在删除动作时，删除部分无效消息
+        if ($dialog->sender_deleted_at && $dialog->recipient_deleted_at) {
             if (!$dialog->{$actorType . '_deleted_at'}) {
                 $dateTime = $dialog->{$actorType . '_deleted_at'} > $dialog->{$otherType . '_deleted_at'} ?
                     $dialog->{$otherType . '_deleted_at'} :
@@ -90,6 +91,7 @@ class DeleteDialog
                 $query->delete();
             }
         }
-        return $dialog->save();
+
+        return $dialog;
     }
 }
