@@ -122,6 +122,18 @@
         </CardRow>
       </div>
     </Card>
+    
+    <Card header="权限购买">
+      <CardRow class="card-pays" description="开启后，用户角色将可以配置价格和有效期，用户可在前台进行用户角色购买">
+        <el-switch
+          v-model="purchase"
+          active-color="#336699"
+          inactive-color="#bbbbbb"
+          @change="purchaseBtn"
+        >
+        </el-switch>
+      </CardRow>
+    </Card>
 
     <Card header="网站备案信息：">
       <div class="record-top">

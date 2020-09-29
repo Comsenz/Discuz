@@ -60,82 +60,28 @@ export default {
     }
   },
   methods: {
-    /**
-     * 允许购买权限修改
-    */
-    allowtobuy() {
-      let valueType = '';
-      if (this.value) {
-        valueType = 1;
-      } else {
-        valueType = 0;
-      }
-      this.appFetch({
-        url:'settings',
-        method:'post',
-        data:{
-          "data":[
-            {
-             "attributes":{
-              "key": 'wxpay_mchpay_close',
-              "value":valueType,
-              "tag": 'wxpay',
-             }
-            }
-           ]
-        }
-      })
-      .then(data => {
-        console.log(data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-    },
-    /**
-     * 用户组付费金额和到期时间
-    */
-    paymentAmountandDueDate() {
-      this.appFetch({
-        url: 'groups',
-        method: 'post',
-        data: {
-          data: {
-            'attributes': {
-              'name': this.$route.query.name,
-              'is_paid': this.ispad,
-              'fee': this.purchasePrice,
-              'days': this.dyedate,
-            }
-          }
-        }
-      }).then(res => {
-        this.getGroupResource();
-        console.log(res);
-      })
-    },
-    patchGroupScale() {
-      this.appFetch({
-        url: 'groups',
-        method: 'post',
-        splice: '/' + this.groupId,
-        data: {
-          data: {
-            "attributes": {
-              'name': this.$route.query.name,
-              "scale": this.scale,
-              "is_subordinate": this.is_subordinate,
-              "is_commission": this.is_commission,
-            }
-          }
-        }
-      }).then(res => {
-        if (res.errors) {
-          this.$message.error(res.errors[0].code);
-        }
-      }).catch(err => {
-      })
-    },
+    // patchGroupScale() {
+    //   this.appFetch({
+    //     url: 'groups',
+    //     method: 'post',
+    //     splice: '/' + this.groupId,
+    //     data: {
+    //       data: {
+    //         "attributes": {
+    //           'name': this.$route.query.name,
+    //           "scale": this.scale,
+    //           "is_subordinate": this.is_subordinate,
+    //           "is_commission": this.is_commission,
+    //         }
+    //       }
+    //     }
+    //   }).then(res => {
+    //     if (res.errors) {
+    //       this.$message.error(res.errors[0].code);
+    //     }
+    //   }).catch(err => {
+    //   })
+    // },
     signUpSet() {
       this.appFetch({
         url: 'forum',
@@ -159,11 +105,6 @@ export default {
           }
           if (res.readdata._data.paycenter.wxpay_close === false) {
             this.wechatPayment = true;
-          }
-          if (res.readdata._data.paycenter.wxpay_mchpay_close === 1) {
-            this.value = true;
-          } else {
-            this.value = false;
           }
         }
       })
@@ -278,10 +219,10 @@ export default {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
-          // console.log(res);
-          // this.ispad = res.data.attributes.isPaid;
-          // this.purchasePrice = res.data.attributes.fee;
-          // this.dyedate = res.data.attributes.days;
+          this.ispad = res.data.attributes.isPaid;
+          this.value = res.data.attributes.isPaid;
+          this.purchasePrice = res.data.attributes.fee;
+          this.dyedate = res.data.attributes.days;
           let data = res.readdata.permission;
           this.checked = [];
           this.scale = res.data.attributes.scale;
@@ -342,6 +283,9 @@ export default {
           data: {
             "attributes": {
               'name': this.$route.query.name,
+              'is_paid': this.value ? 1 : 0,
+              'fee': this.purchasePrice,
+              'days': this.dyedate,
               "scale": this.scale,
               "is_subordinate": this.is_subordinate,
               "is_commission": this.is_commission,

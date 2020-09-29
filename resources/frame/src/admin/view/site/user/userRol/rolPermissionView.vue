@@ -354,7 +354,7 @@
     </div>
     <!-- 其他权限 -->
     <div v-show="activeTab.name === 'other'">
-      <!-- <Card header="允许购买：">
+      <Card header="允许购买：">
         <CardRow description="允许购买" class="allow-box">
           <el-switch
             :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
@@ -365,8 +365,8 @@
           >
           </el-switch>
         </CardRow>
-      </Card> -->
-      <!-- <Card header="购买价格（元）：" v-if="value">
+      </Card>
+      <Card header="购买价格（元）：" v-if="value">
         <CardRow description="需支付的金额">
           <el-input placeholder="加入价格" type="number" v-model="purchasePrice"></el-input>
         </CardRow>
@@ -382,7 +382,7 @@
             v-model="dyedate"
           ></el-input>天后
         </CardRow>
-      </Card> -->
+      </Card>
       <Card>
         <CardRow description="允许用户裂变推广以及通过推广注册进来的用户收入是否能分成">
           <el-checkbox
