@@ -45,7 +45,7 @@ class IndexController implements RequestHandlerInterface
             }
 
             if (!$isMobile && Str::startsWith($route, '/pages')) {
-                $file = Str::replaceFirst("/pages", "/pc-pages", $route) . "index.html";
+                $file = Str::replaceFirst("/pages", "/pc-pages", $route) . "/index.html";
             }
         }
 
