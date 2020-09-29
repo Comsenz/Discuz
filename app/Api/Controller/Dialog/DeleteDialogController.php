@@ -46,7 +46,7 @@ class DeleteDialogController extends AbstractDeleteController
     /**
      * {@inheritdoc}
      */
-    protected function delete(ServerRequestInterface $request, Document $document)
+    protected function delete(ServerRequestInterface $request)
     {
         $actor = $request->getAttribute('actor');
         $id = Arr::get($request->getQueryParams(), 'id');
