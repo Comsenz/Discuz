@@ -30,7 +30,6 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Exception\InvalidParameterException;
@@ -147,9 +146,9 @@ class ResourceThreadController extends AbstractResourceController
             $this->loadOrderUsers($thread, Order::ORDER_TYPE_ONLOOKER);
         }
 
-        // 问答帖且允许围观时查询当前用户是否围观
-        if ($thread->type === Thread::TYPE_OF_QUESTION && $thread->question->is_onlooker) {
-            $this->setIsOnlookerAttribute($thread, $actor);
+        // 问答帖设置当前用户
+        if ($thread->type === Thread::TYPE_OF_QUESTION) {
+            $thread->question->setRelation('thread', $thread);
         }
 
         // 主题关联模型
@@ -246,47 +245,5 @@ class ResourceThreadController extends AbstractResourceController
             ->get();
 
         return $thread->setRelation($relation, $orderUsers->pluck('user')->filter());
-    }
-
-    /**
-     * 设置当前用户是否围观的状态
-     *
-     * @param Thread $thread
-     * @param User $actor
-     */
-    private function setIsOnlookerAttribute(Thread $thread, User $actor)
-    {
-        // 游客身份 直接未围观
-        if ($actor->isGuest()) {
-            $thread->setAttribute('isOnlooker', false);
-
-        // 作者 或 被提问者 或 管理员 直接已围观
-        } elseif ($actor->id === $thread->id || $actor->id === $thread->question->be_user_id || $actor->isAdmin()) {
-            $thread->setAttribute('isOnlooker', true);
-
-        // 根据订单查询围观状态
-        } else {
-            /**
-             * 已查询围观用户列表关联时，直接从中获取围观状态
-             *
-             * @var Collection $onlookers
-             */
-            $onlookers = $thread->getRelationValue('onlookers');
-
-            if ($onlookers && $onlookers->firstWhere('user_id', $actor->id)) {
-                $thread->setAttribute('isOnlooker', true);
-            } else {
-                // 也许匿名围观了
-                $thread->setAttribute(
-                    'isOnlooker',
-                    Order::query()
-                        ->where('thread_id', $thread->id)
-                        ->where('user_id', $actor->id)
-                        ->where('status', Order::ORDER_STATUS_PAID)
-                        ->where('type', Order::ORDER_TYPE_ONLOOKER)
-                        ->exists()
-                );
-            }
-        }
     }
 }

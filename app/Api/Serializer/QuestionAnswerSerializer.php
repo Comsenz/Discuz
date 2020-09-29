@@ -35,12 +35,12 @@ class QuestionAnswerSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
-        return [
+        $attributes = [
             'thread_id' => $model->thread_id,
             'user_id' => $model->is_anonymous ? 0 : $model->user_id, // 判断是否是匿名
             'be_user_id' => $model->be_user_id,
-            'content' => $model->content,
-            'content_html' => $model->formatContent(),
+            'content' => '',
+            'content_html' => '',
             'ip' => $model->ip,
             'port' => (int)$model->port,
             'price' => $model->price,
@@ -55,6 +55,14 @@ class QuestionAnswerSerializer extends AbstractSerializer
             'updated_at' => $this->formatDate($model->updated_at),
             'expired_at' => $this->formatDate($model->expired_at),
         ];
+
+        // 判断是否已围观来展示答案
+        if (! is_null($model->thread->onlookerState)) {
+            $attributes['content'] = $model->content;
+            $attributes['content_html'] = $model->formatContent();
+        }
+
+        return $attributes;
     }
 
     public function getId($model)

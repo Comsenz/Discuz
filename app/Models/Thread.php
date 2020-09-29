@@ -30,7 +30,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
@@ -70,6 +69,7 @@ use Illuminate\Support\Stringable;
  * @property Category $category
  * @property threadVideo $threadVideo
  * @property Question $question
+ * @property Order $onlookerState
  * @method increment($column, $amount = 1, array $extra = [])
  * @method decrement($column, $amount = 1, array $extra = [])
  */
@@ -278,6 +278,7 @@ class Thread extends Model
 
     /**
      * 刷新付费数量
+     *
      * @return $this
      */
     public function refreshPaidCount()
@@ -292,6 +293,7 @@ class Thread extends Model
 
     /**
      * 刷新打赏数量
+     *
      * @return $this
      */
     public function refreshRewardedCount()
@@ -506,6 +508,22 @@ class Thread extends Model
     }
 
     /**
+     * Define the relationship with the question's onlooker state for a particular user.
+     *
+     * @param User|null $user
+     * @return HasOne
+     */
+    public function onlookerState(User $user = null)
+    {
+        $user = $user ?: static::$stateUser;
+
+        return $this->hasOne(Order::class)
+            ->where('orders.user_id', $user ? $user->id : null)
+            ->where('orders.status', Order::ORDER_STATUS_PAID)
+            ->where('orders.type', Order::ORDER_TYPE_ONLOOKER);
+    }
+
+    /**
      * 主题对于某用户是否付费主题
      *
      * @return bool|null
@@ -552,6 +570,7 @@ class Thread extends Model
 
     /**
      * 获取附件付费状态
+     *
      * @return bool|null
      */
     public function getIsPaidAttachmentAttribute()

@@ -104,20 +104,43 @@ class ThreadSerializer extends AbstractSerializer
             $attributes['isPaidAttachment'] = $model->is_paid_attachment;
         }
 
-        if (isset($model->getAttributes()['isOnlooker'])) {
-            $attributes['isOnlooker'] = $model->getAttribute('isOnlooker');
-        }
-
-        // Question 匿名提问
-        if (
-            $model->type === Thread::TYPE_OF_QUESTION
-            && $model->question->is_anonymous
-            && $model->user->id != $this->actor->id     // 非当前用户
-        ) {
-            $model->user = new Anonymous;
-        }
+        $this->isQuestion($model);
 
         return $attributes;
+    }
+
+    public function isQuestion($model)
+    {
+        // 判断是否是问答帖
+        if ($model->type !== Thread::TYPE_OF_QUESTION) {
+            return;
+        }
+
+        /**
+         * 判断是否围观过帖子
+         */
+        if ($this->actor->isGuest()) {
+            // 游客身份 直接未围观
+            $attributes['onlookerState'] = false;
+        } elseif (
+            $this->actor->id === $model->id
+            || $this->actor->id === $model->question->be_user_id
+            || $this->actor->isAdmin()
+        ) {
+            // 作者 或 被提问者 或 管理员 直接已围观
+            $attributes['onlookerState'] = true;
+        } else {
+            // 判断其它人查询订单是否围观过
+            $attributes['onlookerState'] = (bool) $model->onlookerState;
+        }
+
+        /**
+         * 判断是否匿名问答
+         * (非当前用户不是作者)
+         */
+        if ($model->question->is_anonymous && $model->user->id != $this->actor->id) {
+            $model->user = new Anonymous;
+        }
     }
 
     /**

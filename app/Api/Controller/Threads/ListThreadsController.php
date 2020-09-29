@@ -82,6 +82,7 @@ class ListThreadsController extends AbstractListController
         'favoriteState',
         'firstPost.likeState',
         'question',
+        'onlookerState',
     ];
 
     /**
