@@ -153,7 +153,12 @@ class Rewarded extends System
             $this->initData['thread_username'] = $this->order->thread->user->username; // 必传主题用户名
             $this->initData['thread_title'] = $this->order->thread->title;
             $this->initData['thread_created_at'] = $this->order->thread->formatDate('created_at');
-            $this->initData['amount'] = $this->order->calculateAuthorAmount(true); // 支付金额 - 分成金额 (string精度问题)
+            if ($this->order->type == Order::ORDER_TYPE_ONLOOKER) {
+                // 获取实际围观分红金额
+                $this->initData['amount'] = $this->order->calculateOnlookersAmount(false);
+            } else {
+                $this->initData['amount'] = $this->order->calculateAuthorAmount(true); // 支付金额 - 分成金额 (string精度问题)
+            }
             $this->build();
         }
 
