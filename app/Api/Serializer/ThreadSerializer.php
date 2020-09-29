@@ -123,7 +123,7 @@ class ThreadSerializer extends AbstractSerializer
             // 游客身份 直接未围观
             $attributes['onlookerState'] = false;
         } elseif (
-            $this->actor->id === $model->id
+            $this->actor->id === $model->user_id
             || $this->actor->id === $model->question->be_user_id
             || $this->actor->isAdmin()
         ) {
