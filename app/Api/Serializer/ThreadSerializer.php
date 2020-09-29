@@ -104,12 +104,12 @@ class ThreadSerializer extends AbstractSerializer
             $attributes['isPaidAttachment'] = $model->is_paid_attachment;
         }
 
-        $this->isQuestion($model);
+        $this->isQuestion($attributes, $model);
 
         return $attributes;
     }
 
-    public function isQuestion($model)
+    public function isQuestion(&$attributes, $model)
     {
         // 判断是否是问答帖
         if ($model->type !== Thread::TYPE_OF_QUESTION) {
