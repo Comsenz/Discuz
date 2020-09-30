@@ -171,7 +171,7 @@ class UpdateUser
             $user->changeMobile($mobile);
         }
 
-        if (Arr::has($attributes, 'status')) {
+        if ($this->actor->id != $user->id && Arr::has($attributes, 'status')) {
             $this->assertCan($this->actor, 'edit.status', $user);
             $status = Arr::get($attributes, 'status');
             $user->changeStatus($status);
