@@ -300,10 +300,10 @@ class PostListener
 
     /**
      * 设置商品帖的关联关系
-     * @param Saved $event
+     * @param Saving $event
      * @throws Exception
      */
-    public function postGoods(Saved $event)
+    public function postGoods(Saving $event)
     {
         $post = $event->post;
         if ($post->is_first) {
