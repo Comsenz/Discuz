@@ -307,6 +307,10 @@ class PostListener
     {
         $post = $event->post;
         if ($post->is_first) {
+            if ($post->thread->type === Thread::TYPE_OF_GOODS && !Arr::has($event->data, 'post_goods_id')) {
+                throw new Exception('cannot_create_thread_without_goods');
+            }
+
             /** @var PostGoods $postGoods */
             $postGoods = PostGoods::query()
                 ->where('id', $event->data['post_goods_id'])
