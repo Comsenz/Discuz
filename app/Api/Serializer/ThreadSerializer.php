@@ -104,12 +104,16 @@ class ThreadSerializer extends AbstractSerializer
             $attributes['isPaidAttachment'] = $model->is_paid_attachment;
         }
 
-        $this->isQuestion($attributes, $model);
+        $this->isQuestion($model, $attributes);
 
         return $attributes;
     }
 
-    public function isQuestion(&$attributes, $model)
+    /**
+     * @param Thread $model
+     * @param array $attributes
+     */
+    public function isQuestion($model, &$attributes)
     {
         // 判断是否是问答帖
         if ($model->type !== Thread::TYPE_OF_QUESTION) {
@@ -123,15 +127,16 @@ class ThreadSerializer extends AbstractSerializer
             // 游客身份 直接未围观
             $attributes['onlookerState'] = false;
         } elseif (
-            $this->actor->id === $model->user_id
-            || $this->actor->id === $model->question->be_user_id
+            $model->user_id === $this->actor->id
+            || $model->question->be_user_id === $this->actor->id
             || $this->actor->isAdmin()
+            || ! is_null($model->onlookerState)
         ) {
             // 作者 或 被提问者 或 管理员 直接已围观
             $attributes['onlookerState'] = true;
         } else {
             // 判断其它人查询订单是否围观过
-            $attributes['onlookerState'] = (bool) $model->onlookerState;
+            $attributes['onlookerState'] = false;
         }
 
         /**

@@ -62,6 +62,7 @@ class QuestionAnswerSerializer extends AbstractSerializer
         if (
             $model->user_id == $actor->id
             || $model->be_user_id == $actor->id
+            || $actor->isAdmin()
             || ! is_null($model->thread->onlookerState)
         ) {
             $attributes['content'] = $model->content;
