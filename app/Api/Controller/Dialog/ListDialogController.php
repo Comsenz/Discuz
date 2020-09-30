@@ -50,6 +50,8 @@ class ListDialogController extends AbstractListController
      */
     protected $url;
 
+    protected $tablePrefix;
+
     /**
      * @var int|null
      */
@@ -79,6 +81,7 @@ class ListDialogController extends AbstractListController
     {
         $this->dialog = $dialog;
         $this->url = $url;
+        $this->tablePrefix = config('database.connections.mysql.prefix');
     }
 
     /**
@@ -129,17 +132,22 @@ class ListDialogController extends AbstractListController
     {
         $query = $this->dialog->query();
 
-        $query->select('dialog.*')
-            ->join('dialog_message', 'dialog.id', '=', 'dialog_message.dialog_id')
+        $query->select($this->tablePrefix. 'dialog.*')
+            ->join(
+                $this->tablePrefix. 'dialog_message',
+                $this->tablePrefix. 'dialog.id',
+                '=',
+                $this->tablePrefix. 'dialog_message.dialog_id'
+            )
             ->where(function ($query) use ($actor) {
-                $query->where('sender_user_id', $actor->id)
-                    ->whereRaw('`dialog_message`.`created_at` > IFNULL( `dialog`.`sender_deleted_at`, 0 )');
+                $query->where($this->tablePrefix. 'dialog.sender_user_id', $actor->id)
+                    ->whereRaw($this->tablePrefix. 'dialog_message.`created_at` > IFNULL( ' .$this->tablePrefix. 'dialog.`sender_deleted_at`, 0 )');
             })
             ->orWhere(function ($query) use ($actor) {
-                $query->where('recipient_user_id', $actor->id)
-                    ->whereRaw('`dialog_message`.`created_at` > IFNULL( `dialog`.`recipient_deleted_at`, 0 )');
+                $query->where($this->tablePrefix. 'dialog.recipient_user_id', $actor->id)
+                    ->whereRaw($this->tablePrefix. 'dialog_message.`created_at` > IFNULL( ' .$this->tablePrefix. 'dialog.`recipient_deleted_at`, 0 )');
             })
-            ->groupBy('dialog.id');
+            ->groupBy($this->tablePrefix. 'dialog.id');
 
         $this->dialogCount = $limit > 0 ? $query->count() : null;
 
