@@ -306,8 +306,8 @@ class PostListener
     public function postGoods(Saving $event)
     {
         $post = $event->post;
-        if ($post->is_first) {
-            if ($post->thread->type === Thread::TYPE_OF_GOODS && !Arr::has($event->data, 'post_goods_id')) {
+        if ($post->is_first && $post->thread->type === Thread::TYPE_OF_GOODS) {
+            if (!Arr::has($event->data, 'post_goods_id')) {
                 throw new Exception('cannot_create_thread_without_goods');
             }
 
