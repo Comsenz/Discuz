@@ -60,9 +60,6 @@ class PostListener
         $events->listen(Saving::class, [$this, 'whenPostWasSaving']);
         $events->listen(Created::class, [$this, 'whenPostWasCreated']);
 
-        // 设置主题,商品关联关系
-        $events->listen(Saving::class, [$this, 'postGoods']);
-
         // 审核回复
         $events->listen(PostWasApproved::class, [$this, 'whenPostWasApproved']);
 
@@ -89,6 +86,8 @@ class PostListener
         // #话题#
         $events->listen(Saved::class, [$this, 'threadTopic']);
 
+        // 设置主题,商品关联关系
+        $events->listen(Saved::class, [$this, 'postGoods']);
     }
 
     /**
@@ -300,20 +299,20 @@ class PostListener
 
     /**
      * 设置商品帖的关联关系
-     * @param Saving $event
+     * @param Saved $event
      * @throws Exception
      */
-    public function postGoods(Saving $event)
+    public function postGoods(Saved $event)
     {
         $post = $event->post;
         if ($post->is_first && $post->thread->type === Thread::TYPE_OF_GOODS) {
-            if (!Arr::has($event->data, 'post_goods_id')) {
+            if (!Arr::has($event->data, 'attributes.post_goods_id')) {
                 throw new Exception('cannot_create_thread_without_goods');
             }
 
             /** @var PostGoods $postGoods */
             $postGoods = PostGoods::query()
-                ->where('id', $event->data['post_goods_id'])
+                ->where('id', (int) Arr::get($event->data, 'attributes.post_goods_id'))
                 ->where('post_id', 0)
                 ->whereNull('deleted_at')
                 ->first();
