@@ -68,8 +68,6 @@ class ListDialogMessageController extends AbstractListController
      */
     public $validation;
 
-    protected $tablePrefix;
-
     /**
      * @var string[]
      */
@@ -93,7 +91,6 @@ class ListDialogMessageController extends AbstractListController
         $this->dialogMessage = $dialogMessage;
         $this->validation = $validation;
         $this->url = $url;
-        $this->tablePrefix = config('database.connections.mysql.prefix');
     }
 
     /**
@@ -161,32 +158,32 @@ class ListDialogMessageController extends AbstractListController
     {
         $query = $this->dialogMessage->query();
 
-        $query->select($this->tablePrefix. 'dialog_message.*');
+        $query->select('dialog_message.*');
         $query->where('dialog_id', $filter['dialog_id']);
 
         $query->join(
-            $this->tablePrefix. 'dialog',
-            $this->tablePrefix. 'dialog.id',
+            'dialog',
+            'dialog.id',
             '=',
-            $this->tablePrefix. 'dialog_message.dialog_id'
+            'dialog_message.dialog_id'
         )->where(function ($query) use ($actor) {
-            $query->where($this->tablePrefix. 'dialog.sender_user_id', $actor->id);
-            $query->orWhere($this->tablePrefix. 'dialog.recipient_user_id', $actor->id);
+            $query->where('dialog.sender_user_id', $actor->id);
+            $query->orWhere('dialog.recipient_user_id', $actor->id);
         });
 
         // 按照登陆用户的删除情况过滤数据
         if ($dialog->sender_user_id == $actor->id && $dialog->sender_deleted_at) {
             $query->whereColumn(
-                $this->tablePrefix. 'dialog_message.created_at',
+                'dialog_message.created_at',
                 '>',
-                $this->tablePrefix. 'dialog.sender_deleted_at'
+                'dialog.sender_deleted_at'
             );
         }
         if ($dialog->recipient_user_id == $actor->id && $dialog->recipient_deleted_at) {
             $query->whereColumn(
-                $this->tablePrefix. 'dialog_message.created_at',
+                'dialog_message.created_at',
                 '>',
-                $this->tablePrefix. 'dialog.recipient_deleted_at'
+                'dialog.recipient_deleted_at'
             );
         }
 

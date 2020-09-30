@@ -132,20 +132,20 @@ class ListDialogController extends AbstractListController
     {
         $query = $this->dialog->query();
 
-        $query->distinct($this->tablePrefix. 'dialog.id')
-            ->select($this->tablePrefix. 'dialog.*')
+        $query->distinct('dialog.id')
+            ->select('dialog.*')
             ->join(
-                $this->tablePrefix. 'dialog_message',
-                $this->tablePrefix. 'dialog.id',
+                'dialog_message',
+                'dialog.id',
                 '=',
-                $this->tablePrefix. 'dialog_message.dialog_id'
+                'dialog_message.dialog_id'
             )
             ->where(function ($query) use ($actor) {
-                $query->where($this->tablePrefix. 'dialog.sender_user_id', $actor->id)
+                $query->where('dialog.sender_user_id', $actor->id)
                     ->whereRaw($this->tablePrefix. 'dialog_message.`created_at` > IFNULL( ' .$this->tablePrefix. 'dialog.`sender_deleted_at`, 0 )');
             })
             ->orWhere(function ($query) use ($actor) {
-                $query->where($this->tablePrefix. 'dialog.recipient_user_id', $actor->id)
+                $query->where('dialog.recipient_user_id', $actor->id)
                     ->whereRaw($this->tablePrefix. 'dialog_message.`created_at` > IFNULL( ' .$this->tablePrefix. 'dialog.`recipient_deleted_at`, 0 )');
             });
 
