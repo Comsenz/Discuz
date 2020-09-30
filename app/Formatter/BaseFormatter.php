@@ -187,6 +187,10 @@ class BaseFormatter
         spl_autoload_register(function ($class) {
             if (file_exists($file = $this->cacheDir.'/'.$class.'.php')) {
                 include $file;
+            } else {
+                $this->flush();
+
+                $this->cacheFormatter();
             }
         });
 
