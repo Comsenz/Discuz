@@ -20,6 +20,7 @@ namespace App\Commands\Post;
 
 use App\Censor\Censor;
 use App\Events\Post\PostWasApproved;
+use App\Events\Post\Revising;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
 use App\Models\Post;
@@ -92,6 +93,8 @@ class EditPost
 
         if (isset($attributes['content'])) {
             $this->assertCan($this->actor, 'edit', $post);
+
+            $post->raise(new Revising($post, $this->actor, $this->data));
 
             // 敏感词校验
             $content = $censor->checkText($attributes['content']);

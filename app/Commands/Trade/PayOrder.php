@@ -142,9 +142,9 @@ class PayOrder
             'pay_password' => [
                 'sometimes',
                 'required_if:payment_type,20',
-                function ($attribute, $value, $fail) {
-                    // 使用钱包支付时验证密码
+                function ($attribute, $value, $fail) use ($failCount) {
                     if (
+                    // 使用钱包支付时验证密码
                         $this->data->get('payment_type') == Order::PAYMENT_TYPE_WALLET
                         && ! $this->actor->checkWalletPayPassword($value)
                     ) {
@@ -152,7 +152,11 @@ class PayOrder
                         $request = app('request');
                         UserWalletFailLogs::build(ip($request->getServerParams()), $this->actor->id);
 
-                        $fail(trans('trade.wallet_pay_password_error'));
+                        if (UserWalletFailLogs::TOPLIMIT == $failCount) {
+                            throw new \Exception('pay_password_failures_times_toplimit');
+                        } else {
+                            $fail(trans('trade.wallet_pay_password_error', ['value'=>UserWalletFailLogs::TOPLIMIT - $failCount]));
+                        }
                     }
                 }
             ],
@@ -185,6 +189,15 @@ class PayOrder
             case Order::ORDER_TYPE_GROUP:
                 $order_info->body = trans('order.order_type_group');
                 break;
+            case Order::ORDER_TYPE_QUESTION:
+                $order_info->body = trans('order.order_type_question');
+                break;
+            case Order::ORDER_TYPE_ONLOOKER:
+                $order_info->body = trans('order.order_type_onlooker');
+                break;
+            case Order::ORDER_TYPE_ATTACHMENT:
+                $order_info->body = trans('order.order_type_attachment');
+                break;
             default:
                 $order_info->body = '';
                 break;
@@ -195,6 +208,7 @@ class PayOrder
         if (!empty($order_info->payment_params)) {
             Order::where('order_sn', $this->order_sn)->update(['payment_type' => $this->payment_type]);
         }
+
         // 返回数据对象
         return $order_info;
     }
@@ -259,7 +273,7 @@ class PayOrder
                         break;
                 }
 
-                //订单过期时间
+                // 订单过期时间
                 $extra['time_expire'] = $time_expire;
                 break;
             case Order::PAYMENT_TYPE_WALLET: // 用户钱包支付
@@ -267,8 +281,8 @@ class PayOrder
                 break;
             default:
                 throw new TradeErrorException('payment_method_invalid', 500);
-                break;
         }
+
         return PayTrade::pay($order_info, $pay_gateway, $config, $extra); //生成支付参数
     }
 }

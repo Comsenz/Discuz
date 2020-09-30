@@ -70,13 +70,13 @@ trait HasPaidContent
 
     /**
      * 是否无权查看
-     *
+     * 没权限查看时，如果是推荐到站点首页的可以查看
      * @param Thread $thread
      * @return bool
      */
     public function cannotView(Thread $thread)
     {
-        return ! $this->actor->hasPermission('thread.viewPosts')
+        return (! $this->actor->hasPermission('thread.viewPosts') && !$thread->is_site)
             || ($thread->price > 0 && ! $thread->is_paid);
     }
 
@@ -126,7 +126,8 @@ trait HasPaidContent
     public function blurImage(Attachment $attachment)
     {
         if (
-            $attachment->type === Attachment::TYPE_OF_IMAGE
+            is_null($attachment->getAttributeValue('blur'))
+            && $attachment->type === Attachment::TYPE_OF_IMAGE
             && $attachment->post
             && $attachment->post->is_first
             && $attachment->post->thread

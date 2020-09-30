@@ -19,7 +19,16 @@
         <el-input v-model="apiKey"></el-input>
       </CardRow>
     </Card>
-
+    <Card header="已开通企业付款到零钱产品">
+      <CardRow class="card-pay" description="开通后才可使用企业向个人付款，付款资金将直接进入用户零钱的功能。否则将采用提交手机号，人工打款到微信手机账号的方式。">
+        <el-switch
+          v-model="value"
+          active-color="#336699"
+          inactive-color="#bbbbbb"
+        >
+        </el-switch>
+      </CardRow>
+    </Card>
     <!-- <Card header="iOS下开启支付功能">
       <CardRow description="开启后，iOS设备中付费模式才可正常使用，且免费模式下才可设置内容付费以及使用打赏功能">
         <el-switch

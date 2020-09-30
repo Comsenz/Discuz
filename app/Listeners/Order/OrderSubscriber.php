@@ -19,25 +19,23 @@
 namespace App\Listeners\Order;
 
 use App\Events\Order\Updated;
-use App\MessageTemplate\RewardedMessage;
-use App\MessageTemplate\RewardedScaleMessage;
-use App\MessageTemplate\Wechat\WechatRewardedMessage;
-use App\MessageTemplate\Wechat\WechatRewardedScaleMessage;
-use App\Models\Thread;
+use App\Models\Order;
 use Carbon\Carbon;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Events\Dispatcher;
-use App\Models\Order;
-use App\Notifications\Rewarded;
-use Illuminate\Support\Arr;
 
 class OrderSubscriber
 {
     public function subscribe(Dispatcher $events)
     {
-        // 订单支付成功
+        /**
+         * 订单支付成功
+         *
+         * @see SendNotifyAfterPaySuccessful 触发对应通知内容
+         */
         $events->listen(Updated::class, [$this, 'whenOrderPaid']);
+        $events->listen(Updated::class, SendNotifyAfterPaySuccessful::class);
     }
 
     /**
@@ -59,72 +57,17 @@ class OrderSubscriber
             $order->expired_at = $day ? Carbon::now()->addDays($day) : null;
             $order->user->save();
             $order->save();
-
-            // 发送分成通知
-            $this->sendScaleNotice($order, 'user');
         }
 
-        // 打赏主题的订单，支付成功后通知主题作者
+        // 打赏主题的订单
         if ($order->type == Order::ORDER_TYPE_REWARD && $order->status == Order::ORDER_STATUS_PAID) {
-            // 发送通知
-            $order->payee->notify(new Rewarded($order, $order->user, RewardedMessage::class));
-            $order->payee->notify(new Rewarded($order, $order->user, WechatRewardedMessage::class, [
-                'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
-                'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
-                    'actor_username' => $order->user->username,    // 发送人姓名
-                    'actual_amount' => $order->calculateAuthorAmount(true),      // 获取实际金额
-                ]),
-            ]));
-
-            // 发送分成通知
-            $this->sendScaleNotice($order, 'payee');
-
             // 更新主题打赏数
             $order->thread->refreshRewardedCount()->save();
         }
 
         // 更新主题付费数
         if ($order->type == Order::ORDER_TYPE_THREAD && $order->status == Order::ORDER_STATUS_PAID) {
-            // 发送通知
-            $order->payee->notify(new Rewarded($order, $order->user, RewardedMessage::class));
-            $order->payee->notify(new Rewarded($order, $order->user, WechatRewardedMessage::class, [
-                'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
-                'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
-                    'actor_username' => $order->user->username,    // 发送人姓名
-                    'actual_amount' => $order->calculateAuthorAmount(true)       // 获取实际金额
-                ]),
-            ]));
-
-            // 发送分成通知
-            $this->sendScaleNotice($order, 'payee');
-
             $order->thread->refreshPaidCount()->save();
-        }
-    }
-
-    /**
-     * 发送分成通知
-     *
-     * @param $order
-     * @param bool $type payee 打赏/付费  user 注册
-     */
-    public function sendScaleNotice($order, $type)
-    {
-        // 发送分成收入通知
-        if ($order->isScale()) {
-            // 判断是发给 收款人/付款人 的上级
-            $userDistribution = $type == 'payee' ? $order->payee->userDistribution : $order->user->userDistribution ;
-            if (!empty($userDistribution)) {
-                $parentUser = $userDistribution->parentUser;
-                $parentUser->notify(new Rewarded($order, $order->user, RewardedScaleMessage::class));
-                $parentUser->notify(new Rewarded($order, $order->user, WechatRewardedScaleMessage::class, [
-                    'message' => $type == 'payee' ? $order->thread->getContentByType(Thread::CONTENT_LENGTH, true) : '注册站点',
-                    'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
-                        'actor_username' => $order->user->username,        // 发送人姓名
-                        'boss_amount' => $order->calculateAuthorAmount(),  // 获取实际金额
-                    ]),
-                ]));
-            }
         }
     }
 }

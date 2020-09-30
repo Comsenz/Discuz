@@ -18,6 +18,7 @@ export default {
       scale: 0,                   // 提成比例
       bindPhoneDisabled: false,   // 是否开启短信验证
       wechatPayment: false,       // 是否开启微信支付
+      canBeOnlooker: false,       // 是否可以设置围观
       categoriesList: [],         // 分类列表
       activeTab: {                // 设置权限当前项
         title: '内容发布权限',
@@ -52,10 +53,36 @@ export default {
         //   title: '默认权限',
         //   name: 'default'
         // },
-      ]
+      ],
+      value: '',
+      purchasePrice: '',
+      dyedate: '',
+      ispad:'',
     }
   },
   methods: {
+    // patchGroupScale() {
+    //   this.appFetch({
+    //     url: 'groups',
+    //     method: 'post',
+    //     splice: '/' + this.groupId,
+    //     data: {
+    //       data: {
+    //         "attributes": {
+    //           'name': this.$route.query.name,
+    //           "scale": this.scale,
+    //           "is_subordinate": this.is_subordinate,
+    //           "is_commission": this.is_commission,
+    //         }
+    //       }
+    //     }
+    //   }).then(res => {
+    //     if (res.errors) {
+    //       this.$message.error(res.errors[0].code);
+    //     }
+    //   }).catch(err => {
+    //   })
+    // },
     signUpSet() {
       this.appFetch({
         url: 'forum',
@@ -64,21 +91,12 @@ export default {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
-          if (res.readdata._data.qcloud.qcloud_vod === false) {
-            this.videoDisabled = true
-          }
-          if (res.readdata._data.qcloud.qcloud_captcha === false) {
-            this.captchaDisabled = true
-          }
-          if (res.readdata._data.qcloud.qcloud_faceid === false) {
-            this.realNameDisabled = true
-          }
-          if (res.readdata._data.qcloud.qcloud_sms === false) {
-            this.bindPhoneDisabled = true
-          }
-          if (res.readdata._data.paycenter.wxpay_close === false) {
-            this.wechatPayment = true;
-          }
+          this.videoDisabled = res.readdata._data.qcloud.qcloud_vod === false;
+          this.captchaDisabled = res.readdata._data.qcloud.qcloud_captcha === false;
+          this.realNameDisabled = res.readdata._data.qcloud.qcloud_faceid === false;
+          this.bindPhoneDisabled = res.readdata._data.qcloud.qcloud_sms === false;
+          this.wechatPayment = res.readdata._data.paycenter.wxpay_close === false;
+          this.canBeOnlooker = res.readdata._data.set_site.site_onlooker_price > 0;
         }
       })
     },
@@ -171,8 +189,10 @@ export default {
       if (!this.checkNum()) {
         return;
       }
+      // this.allowtobuy();
       this.patchGroupScale();
       this.patchGroupPermission();
+      // this.paymentAmountandDueDate();
     },
 
     /*
@@ -190,6 +210,10 @@ export default {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
+          this.ispad = res.data.attributes.isPaid;
+          this.value = res.data.attributes.isPaid;
+          this.purchasePrice = res.data.attributes.fee;
+          this.dyedate = res.data.attributes.days;
           let data = res.readdata.permission;
           this.checked = [];
           this.scale = res.data.attributes.scale;
@@ -250,6 +274,9 @@ export default {
           data: {
             "attributes": {
               'name': this.$route.query.name,
+              'is_paid': this.value ? 1 : 0,
+              'fee': this.purchasePrice,
+              'days': this.dyedate,
               "scale": this.scale,
               "is_subordinate": this.is_subordinate,
               "is_commission": this.is_commission,
@@ -287,7 +314,9 @@ export default {
   },
   created() {
     this.groupId = this.$route.query.id;
-
+    this.activeTab.title = this.$route.query.title || '内容发布权限';
+    this.activeTab.name = this.$route.query.names || 'publish';
+    console.log( this.groupId);
     this.getGroupResource();
     this.signUpSet();
   },

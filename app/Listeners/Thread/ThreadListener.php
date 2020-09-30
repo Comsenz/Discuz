@@ -164,11 +164,17 @@ class ThreadListener
 
             $thread->save();
 
-            // 用户主题数
             $user = $thread->user;
-
             if ($user && $user->exists) {
-                $user->refreshThreadCount()->save();
+                // 用户主题数
+                $user->refreshThreadCount();
+
+                //用户提问数
+                if ($thread->type == Thread::TYPE_OF_QUESTION) {
+                    $user->refreshQuestionCount();
+                }
+
+                $user->save();
             }
 
             // 分类主题数

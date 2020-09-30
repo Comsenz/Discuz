@@ -33,12 +33,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property float $amount
  * @property float $master_amount
  * @property float $author_amount
+ * @property float $third_party_amount
  * @property int $be_scale
  * @property int $user_id
  * @property int $payee_id
+ * @property int $third_party_id
  * @property int $type
  * @property int $thread_id
  * @property int $group_id
+ * @property int $attachment_id
  * @property int $status
  * @property int $platform
  * @property int $payment_type
@@ -50,6 +53,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Thread $thread
  * @property User $user
  * @property User $payee
+ * @property User $thirdParty
  * @package App\Models
  */
 class Order extends Model
@@ -66,6 +70,12 @@ class Order extends Model
     const ORDER_TYPE_THREAD   = 3; //付费主题
 
     const ORDER_TYPE_GROUP    = 4; //付费用户组
+
+    const ORDER_TYPE_QUESTION = 5; // 问答提问支付
+
+    const ORDER_TYPE_ONLOOKER = 6; // 问答围观
+
+    const ORDER_TYPE_ATTACHMENT = 7; //付费附件
 
     /**
      * 订单状态
@@ -116,7 +126,7 @@ class Order extends Model
 
     /**
      * 订单类型
-     * 1：注册，2：打赏，3：付费主题，4：付费用户组
+     * 1：注册，2：打赏，3：付费主题，4：付费用户组， 5：付费附件
      *
      * @var array
      */
@@ -125,6 +135,9 @@ class Order extends Model
         2 => '打赏',
         3 => '付费主题',
         4 => '付费用户组',
+        5 => '问答回答收入',
+        6 => '问答围观收入',
+        7 => '付费附件',
     ];
 
     /**
@@ -189,7 +202,7 @@ class Order extends Model
          * 获取 站长->作者 分成
          * ( 注册付费站点时 master_amount 是0 )
          */
-        $actualAmount = number_format($this->amount - $this->master_amount, 2, '.', '');
+        $actualAmount = numberFormat($this->amount, '-', $this->master_amount);
 
         $bossAmount = 0;
         // 计算 作者->上级 分成
@@ -197,9 +210,9 @@ class Order extends Model
             $beScale = $this->be_scale / 10;
 
             // 上级实际分到金额
-            $bossAmount = number_format($actualAmount * $beScale, 2, '.', '');
+            $bossAmount = numberFormat($actualAmount, '*', $beScale);
             // 去掉上级分成 作者实际得到金额
-            $actualAmount = number_format($actualAmount - $bossAmount, 2, '.', '');
+            $actualAmount = numberFormat($actualAmount, '-', $bossAmount);
         }
 
         $this->author_amount = $actualAmount;
@@ -214,18 +227,42 @@ class Order extends Model
      */
     public function calculateMasterAmount()
     {
-        $settings = app(SettingsRepository::class);
+        $setting = app(SettingsRepository::class);
 
         // 站长作者分成配置
-        $site_author_scale = $settings->get('site_author_scale');
+        $siteAuthorScale = $setting->get('site_author_scale');
 
-        $order_amount = $this->amount; // 订单金额
-        $author_ratio = $site_author_scale / 10;
+        $orderAmount = $this->amount; // 订单金额
+        $authorRatio = $siteAuthorScale / 10;
 
-        $payee_amount = sprintf('%.2f', ($order_amount * $author_ratio));
-        $this->master_amount = $order_amount - $payee_amount; // 站长分成金额
+        $payeeAmount = sprintf('%.2f', ($orderAmount * $authorRatio));
+        $this->master_amount = $orderAmount - $payeeAmount; // 站长分成金额
 
         return $bossAmount = $this->calculateAuthorAmount(); // 作者实际分成金额
+    }
+
+    /**
+     * 计算围观问答人/答题人分红
+     *
+     * @param bool $total 是否获取分红总数
+     * @return string
+     */
+    public function calculateOnlookersAmount($total = true)
+    {
+        $setting = app(SettingsRepository::class);
+
+        // 获取站点作者分成比例
+        $siteAuthorScale = $setting->get('site_author_scale');
+        $authorRatio = $siteAuthorScale / 10;
+
+        // 用户支付围观单价金额 * 作者分成 = 围观帖子实际金额（分红总数）
+        $onlookerActualPrice = numberFormat($this->amount, '*', $authorRatio);
+        if ($total) {
+            return $onlookerActualPrice;
+        }
+
+        // 再去和作者/答题人55平分
+        return numberFormat($onlookerActualPrice, '/', 2); // 实际每人分红金额
     }
 
     /**
@@ -244,6 +281,16 @@ class Order extends Model
      * @return belongsTo
      */
     public function payee()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Define the relationship with the order's third party.
+     *
+     * @return belongsTo
+     */
+    public function thirdParty()
     {
         return $this->belongsTo(User::class);
     }

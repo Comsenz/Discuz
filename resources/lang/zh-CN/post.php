@@ -30,4 +30,10 @@ return [
     'post_goods_fail_url' => '匹配到解析地址错误',
     'post_goods_not_found_enum' => '暂不支持解析该地址内容',
     'post_goods_http_client_fail' => '请求地址失败',
+
+    'post_question_missing_parameter' => '问答缺失参数',
+    'post_question_edit_fail_answered' => '问答帖已回答后不允许修改',
+    'post_question_payment_amount_fail' => '问答支付金额异常',
+    'post_question_ask_yourself_fail' => '不能向自己提问',
+    'post_question_ask_be_user_permission_denied' => '被提问用户没有权限回答',
 ];

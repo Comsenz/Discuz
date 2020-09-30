@@ -32,6 +32,7 @@ use App\MessageTemplate\RepliedMessage;
 use App\MessageTemplate\Wechat\WechatPostMessage;
 use App\MessageTemplate\Wechat\WechatRepliedMessage;
 use App\Models\Post;
+use App\Models\PostGoods;
 use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\ThreadTopic;
@@ -42,6 +43,7 @@ use App\Traits\PostNoticesTrait;
 use Discuz\Api\Events\Serializing;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -57,6 +59,9 @@ class PostListener
         $events->listen(Saving::class, CheckPublish::class);
         $events->listen(Saving::class, [$this, 'whenPostWasSaving']);
         $events->listen(Created::class, [$this, 'whenPostWasCreated']);
+
+        // 设置主题,商品关联关系
+        $events->listen(Saving::class, [$this, 'postGoods']);
 
         // 审核回复
         $events->listen(PostWasApproved::class, [$this, 'whenPostWasApproved']);
@@ -83,6 +88,7 @@ class PostListener
 
         // #话题#
         $events->listen(Saved::class, [$this, 'threadTopic']);
+
     }
 
     /**
@@ -156,10 +162,9 @@ class PostListener
     public function whenPostWasSaved(Saved $event)
     {
         $post = $event->post;
-
-        // 刷新主题回复数、最后一条回复
         $thread = $post->thread;
 
+        // 刷新主题回复数、最后一条回复
         if ($thread && $thread->exists) {
             $thread->refreshPostCount();
             $thread->refreshLastPost();
@@ -170,6 +175,7 @@ class PostListener
         if ($replyId = $post->reply_post_id) {
             /** @var Post $replyPost */
             $replyPost = Post::query()->find($replyId);
+            $replyPost->timestamps = false;
             $replyPost->refreshReplyCount();
             $replyPost->save();
         }
@@ -290,5 +296,33 @@ class PostListener
     public function threadTopic(Saved $event)
     {
         ThreadTopic::setThreadTopic($event->post);
+    }
+
+    /**
+     * 设置商品帖的关联关系
+     * @param Saving $event
+     * @throws Exception
+     */
+    public function postGoods(Saving $event)
+    {
+        $post = $event->post;
+        if ($post->is_first && $post->thread->type === Thread::TYPE_OF_GOODS) {
+            if (!Arr::has($event->data, 'post_goods_id')) {
+                throw new Exception('cannot_create_thread_without_goods');
+            }
+
+            /** @var PostGoods $postGoods */
+            $postGoods = PostGoods::query()
+                ->where('id', $event->data['post_goods_id'])
+                ->where('post_id', 0)
+                ->whereNull('deleted_at')
+                ->first();
+            if ($postGoods) {
+                $postGoods->post_id = $post->id;
+                $postGoods->save();
+            } else {
+                throw new Exception('post_goods_illegal');
+            }
+        }
     }
 }

@@ -18,6 +18,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -30,11 +31,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property float $available_amount
  * @property float $freeze_amount
  * @property int $wallet_status
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property User $user
- * @package App\Models
- * @method truncate()
+ * @method increment($column, $amount = 1, array $extra = [])
+ * @method decrement($column, $amount = 1, array $extra = [])
  */
 class UserWallet extends Model
 {
@@ -44,16 +45,24 @@ class UserWallet extends Model
     /**
      * 操作钱包
      */
-    const OPERATE_ADD = 1;          //增加操作
+    const OPERATE_INCREASE = 1;             // 增加操作
 
-    const OPERATE_REDUCE = 2;       //减少操作
+    const OPERATE_DECREASE = 2;             // 减少操作
+
+    const OPERATE_INCREASE_FREEZE = 3;      // 增加冻结金额
+
+    const OPERATE_DECREASE_FREEZE = 4;      // 减少冻结金额
+
+    const OPERATE_FREEZE = 5;               // 冻结金额
+
+    const OPERATE_UNFREEZE = 6;             // 解冻金额
 
     /**
      * 钱包状态
      */
-    const WALLET_STATUS_NORMAL = 0; //正常
+    const WALLET_STATUS_NORMAL = 0; // 正常
 
-    const WALLET_STATUS_FROZEN = 1; //冻结提现
+    const WALLET_STATUS_FROZEN = 1; // 冻结提现
 
     /**
      * {@inheritdoc}
@@ -75,18 +84,21 @@ class UserWallet extends Model
 
     /**
      * 创建用户钱包
-     * @param  int $user_id 用户ID
+     *
+     * @param int $user_id 用户ID
      * @return UserWallet
      */
     public static function createUserWallet($user_id)
     {
-        $user_wallet                   = new static;
-        $user_wallet->user_id          = $user_id;
-        $user_wallet->available_amount = 0.00;
-        $user_wallet->freeze_amount    = 0.00;
-        $user_wallet->wallet_status    = 0;
-        $user_wallet->save();
-        return $user_wallet;
+        $wallet = new static;
+        $wallet->user_id = $user_id;
+        $wallet->available_amount = 0.00;
+        $wallet->freeze_amount = 0.00;
+        $wallet->wallet_status = 0;
+
+        $wallet->save();
+
+        return $wallet;
     }
 
     /**

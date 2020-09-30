@@ -103,12 +103,6 @@ class LoginController extends AbstractResourceController
             // 绑定公众号信息
             if ($token = Arr::get($data, 'token')) {
                 $this->bind->withToken($token, $user);
-
-                // bound
-                if (Arr::has($request->getQueryParams(), 'session_token')) {
-                    $sessionToken = Arr::get($request->getQueryParams(), 'session_token');
-                    $accessToken = $this->bound->pcLogin($sessionToken, $accessToken);
-                }
             }
 
             // 绑定小程序信息

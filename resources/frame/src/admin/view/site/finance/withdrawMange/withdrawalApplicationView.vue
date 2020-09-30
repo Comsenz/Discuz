@@ -58,11 +58,24 @@
             label="操作用户"
             width="110">
           </el-table-column>
+          
+          <el-table-column
+            :prop="_data.cash_type == 1 ? '微信零钱' : '人工打款'"
+            label="提现方式"
+            width="110">
+            <template slot-scope="scope">{{scope.row._data.cash_type == 1 ? type1 : type2}}</template>
+          </el-table-column>
 
           <el-table-column
             prop="_data.cash_apply_amount"
             label="提现金额（元）"
+            width="110">
+          </el-table-column>
+          
+          <el-table-column
+            label="收款账号"
             width="150">
+             <template slot-scope="scope">{{accountNumber(scope.row)}}</template>
           </el-table-column>
 
           <el-table-column
@@ -96,7 +109,7 @@
                 </div>
                 <el-button v-if="scope.row._data.cash_status === 1" type="text" size="small" slot="reference">审核</el-button>
               </el-popover>
-
+              <p v-else>{{auditstatus(scope.row._data.cash_status)}}</p>
               <!--<el-button v-if="scope.row._data.cash_status !== '1'" type="text" size="small">审核</el-button>-->
             </template>
           </el-table-column>

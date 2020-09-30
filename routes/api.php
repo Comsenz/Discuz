@@ -55,6 +55,7 @@ $route->get('/signature', 'signature', ApiController\Qcloud\CreateVodUploadSigna
 |--------------------------------------------------------------------------
 */
 
+$route->get('/groups/paid', 'groups.paid', ApiController\Group\ListPaidUserGroupsController::class);
 $route->get('/groups', 'groups.list', ApiController\Group\ListGroupsController::class);
 $route->get('/groups/{id}', 'groups.resource', ApiController\Group\ResourceGroupsController::class);
 $route->post('/groups', 'groups.create', ApiController\Group\CreateGroupController::class);
@@ -89,9 +90,9 @@ $route->post('/refresh-token', 'oauth2.refresh.token', ApiController\Oauth2\Refr
 |--------------------------------------------------------------------------
 */
 
-$route->get('/oauth/wechat', 'wechat.login', ApiController\Users\WechatLoginController::class);
+$route->get('/oauth/wechat', 'wechat.login', ApiController\Users\WechatLoginController::class); // 已弃用
 $route->get('/oauth/wechat/user', 'wechat.user', ApiController\Users\WechatUserController::class);
-$route->get('/oauth/wechat/pc', 'wechat.web.login', ApiController\Users\WechatWebLoginController::class);
+$route->get('/oauth/wechat/pc', 'wechat.web.login', ApiController\Users\WechatWebLoginController::class); // 已弃用
 $route->get('/oauth/wechat/pc/user', 'wechat.pc.user', ApiController\Users\WechatWebUserController::class);
 $route->get('/oauth/welink', 'welink.login', ApiController\Users\WelinkLoginController::class);
 $route->get('/oauth/wechat/web/user', 'wechat.web.user', ApiController\Users\WechatWebUserLoginController::class);
@@ -106,6 +107,7 @@ $route->get('/oauth/qq', 'qq.login', ApiController\Users\QQLoginController::clas
 $route->get('/oauth/qq/user', 'qq.user', ApiController\Users\QQUserController::class);
 $route->get('/oauth/wechat/pc/qrcode', 'wechat.pc.qrcode', ApiController\Users\WechatPcQrCodeController::class);
 $route->get('/oauth/wechat/pc/login/{session_token}', 'wechat.pc.login', ApiController\Users\WechatPcLoginController::class);
+$route->get('/oauth/wechat/qrcode/login/{session_token}', 'wechat.qrcode.login', ApiController\Users\WechatQrcodeLoginController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -189,6 +191,14 @@ $route->patch('/posts/batch', 'posts.batchUpdate', ApiController\Posts\BatchUpda
 $route->patch('/posts/{id}', 'posts.update', ApiController\Posts\UpdatePostController::class);
 $route->delete('/posts/batch/{ids}', 'posts.batchDelete', ApiController\Posts\BatchDeletePostsController::class);
 $route->delete('/posts/{id}', 'posts.delete', ApiController\Posts\DeletePostController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Question
+|--------------------------------------------------------------------------
+*/
+
+$route->post('/questions/{question_id}/answer', 'questions.answer.create', ApiController\Question\CreateQuestionAnswerController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -312,7 +322,7 @@ $route->post('/dialog/batch', 'dialog.batchCreate', ApiController\Dialog\BatchCr
 $route->get('/dialog', 'dialog.list', ApiController\Dialog\ListDialogController::class);
 $route->post('/dialog/message', 'dialog.message.create', ApiController\Dialog\CreateDialogMessageController::class);
 $route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListDialogMessageController::class);
-
+$route->delete('/dialog/{id}', 'dialog.delete', ApiController\Dialog\DeleteDialogController::class);
 /*
 |--------------------------------------------------------------------------
 | Reports

@@ -79,7 +79,8 @@ class ListUserWalletCashController extends AbstractListController
      */
     public $optionalInclude = [
         'user',
-        'userWallet'
+        'userWallet',
+        'wechat'
     ];
 
     /**
@@ -137,6 +138,8 @@ class ListUserWalletCashController extends AbstractListController
         $cash_sn         = Arr::get($filter, 'cash_sn'); //提现流水号
         $cash_status     = Arr::get($filter, 'cash_status'); //提现状态
         $cash_username   = Arr::get($filter, 'username'); //提现人
+        $cash_type       = Arr::get($filter, 'cash_type'); //提现方式
+        $cash_mobile     = Arr::get($filter, 'cash_mobile'); //提现到的手机号码
         $cash_start_time = Arr::get($filter, 'start_time'); //申请时间范围：开始
         $cash_end_time   = Arr::get($filter, 'end_time'); //申请时间范围：结束
 
@@ -147,9 +150,18 @@ class ListUserWalletCashController extends AbstractListController
         $query->when($cash_sn, function ($query) use ($cash_sn) {
             $query->where('cash_sn', $cash_sn);
         });
+
         $query->when(!is_null($cash_status), function ($query) use ($cash_status) {
             $query->where('cash_status', $cash_status);
         });
+
+        $query->when(!is_null($cash_type), function ($query) use ($cash_type) {
+            $query->where('cash_type', $cash_type);
+        });
+        $query->when($cash_mobile, function ($query) use ($cash_mobile) {
+            $query->where('cash_mobile', $cash_mobile);
+        });
+
         $query->when($cash_start_time, function ($query) use ($cash_start_time) {
             $query->where('created_at', '>=', $cash_start_time);
         });

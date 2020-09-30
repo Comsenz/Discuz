@@ -117,9 +117,8 @@ class EditCategory
         if (isset($attributes['moderators'])) {
             $category->moderators = User::query()
                 ->where('status', 0)
-                ->whereIn('moderators', (array) $attributes['moderators'])
-                ->pluck('id')
-                ->join(',');
+                ->whereIn('moderators', is_array($attributes['moderators']) ?: explode(',', $attributes['moderators']))
+                ->pluck('id');
         }
 
         $this->events->dispatch(

@@ -73,13 +73,17 @@ class ResetPayPasswordController extends AbstractResourceController
                 'bail',
                 'required',
                 'digits:6',
-                function ($attribute, $value, $fail) use ($actor,$request) {
+                function ($attribute, $value, $fail) use ($actor,$request,$failCount) {
                     // 验证支付密码
                     if (! $actor->checkWalletPayPassword($value)) {
                         //记录钱包密码错误日志
                         UserWalletFailLogs::build(ip($request->getServerParams()), $actor->id);
 
-                        $fail(trans('trade.wallet_pay_password_error'));
+                        if (UserWalletFailLogs::TOPLIMIT == $failCount) {
+                            throw new \Exception('pay_password_failures_times_toplimit');
+                        } else {
+                            $fail(trans('trade.wallet_pay_password_error', ['value'=>UserWalletFailLogs::TOPLIMIT - $failCount]));
+                        }
                     }
                 }
             ],

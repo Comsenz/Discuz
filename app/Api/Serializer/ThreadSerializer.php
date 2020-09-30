@@ -21,6 +21,7 @@ namespace App\Api\Serializer;
 use App\Models\Thread;
 use App\Traits\HasPaidContent;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Discuz\Auth\Anonymous;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Tobscure\JsonApi\Relationship;
 
@@ -61,6 +62,7 @@ class ThreadSerializer extends AbstractSerializer
             'type'              => (int) $model->type,
             'title'             => $model->title,
             'price'             => $model->price,
+            'attachmentPrice'   => $model->attachment_price,
             'freeWords'         => (int) $model->free_words,
             'viewCount'         => (int) $model->view_count,
             'postCount'         => (int) $model->post_count,
@@ -98,7 +100,52 @@ class ThreadSerializer extends AbstractSerializer
             $attributes['isPaid'] = $model->is_paid;
         }
 
+        if ($model->attachment_price > 0) {
+            $attributes['isPaidAttachment'] = $model->is_paid_attachment;
+        }
+
+        $this->isQuestion($model, $attributes);
+
         return $attributes;
+    }
+
+    /**
+     * @param Thread $model
+     * @param array $attributes
+     */
+    public function isQuestion($model, &$attributes)
+    {
+        // 判断是否是问答帖
+        if ($model->type !== Thread::TYPE_OF_QUESTION) {
+            return;
+        }
+
+        /**
+         * 判断是否围观过帖子
+         */
+        if ($this->actor->isGuest()) {
+            // 游客身份 直接未围观
+            $attributes['onlookerState'] = false;
+        } elseif (
+            $model->user_id === $this->actor->id
+            || $model->question->be_user_id === $this->actor->id
+            || $this->actor->isAdmin()
+            || ! is_null($model->onlookerState)
+        ) {
+            // 作者 或 被提问者 或 管理员 直接已围观
+            $attributes['onlookerState'] = true;
+        } else {
+            // 判断其它人查询订单是否围观过
+            $attributes['onlookerState'] = false;
+        }
+
+        /**
+         * 判断是否匿名问答
+         * (非当前用户不是作者)
+         */
+        if ($model->question->is_anonymous && $model->user->id != $this->actor->id) {
+            $model->user = new Anonymous;
+        }
     }
 
     /**
@@ -218,8 +265,31 @@ class ThreadSerializer extends AbstractSerializer
         return $this->hasOne($thread, ThreadVideoSerializer::class);
     }
 
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function threadAudio($thread)
+    {
+        return $this->hasOne($thread, ThreadVideoSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
     public function topic($thread)
     {
         return $this->hasMany($thread, TopicSerializer::class);
+    }
+
+    public function question($thread)
+    {
+        return $this->hasOne($thread, QuestionAnswerSerializer::class);
+    }
+
+    public function onlookers($thread)
+    {
+        return $this->hasMany($thread, UserSerializer::class);
     }
 }

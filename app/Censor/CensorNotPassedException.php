@@ -18,12 +18,56 @@
 
 namespace App\Censor;
 
+use Discuz\Locale\AbstractLocaleException;
 use Exception;
 
-class CensorNotPassedException extends Exception
+class CensorNotPassedException extends AbstractLocaleException
 {
-    public function __construct($message = '', $code = 500, Exception $previous = null)
+    /**
+     * CensorNotPassedException constructor.
+     * @param string $message
+     * @param array $detail
+     * @param int $code
+     * @param Exception|null $previous
+     */
+    public function __construct($message = '', array $detail = [], $code = 500, Exception $previous = null)
     {
+        $this->message = $message;
+
+        $this->code = $code;
+
+        $this->handle(func_get_args());
+
         parent::__construct($message, $code, $previous);
+    }
+
+    public function handle($args)
+    {
+        if (empty($args)) {
+            return;
+        }
+
+        // set detail array
+        $this->detail = $args;
+    }
+
+    /**
+     * 错误数组
+     *
+     * @return array
+     */
+    public function getDetail(): array
+    {
+        return $this->detail;
+    }
+
+    /**
+     * 错误信息
+     *
+     * @return string
+     */
+    public function getMessageInfo(): string
+    {
+        return $this->message;
     }
 }

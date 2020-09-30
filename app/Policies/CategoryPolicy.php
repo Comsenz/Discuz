@@ -44,6 +44,7 @@ class CategoryPolicy extends AbstractPolicy
 
         if (
             $category->exists
+            && ! $actor->isGuest()
             // && in_array($actor->id, explode(',', $category->moderators))
             && $actor->hasPermission('category' . $category->id . '.' . $ability)
         ) {

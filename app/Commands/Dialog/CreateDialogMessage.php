@@ -72,7 +72,6 @@ class CreateDialogMessage
         if ($censor->isMod) {
             throw new CensorNotPassedException('content_banned');
         }
-        /** @var Dialog $dialogRes */
         $dialogRes = $dialog->findOrFail($dialog_id, $this->actor);
 
         //在黑名单中，不能发消息

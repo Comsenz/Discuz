@@ -19,13 +19,10 @@
 namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\UserSerializer;
-use App\Models\User;
-use App\Repositories\UserFollowRepository;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Auth\Exception\NotAuthenticatedException;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Database\Eloquent\Collection;
@@ -86,19 +83,23 @@ class RecommendedUserController extends AbstractListController
 
         $cacheKey = 'users_recommendedUser';
         $cacheData = $this->cache->get($cacheKey);
-        $data_Limit = $limit * self::DATA_MULTIPLE;
-        if ($cacheData && count($cacheData) >= $data_Limit) {
+        $dataLimit = $limit * self::DATA_MULTIPLE;
+        if ($cacheData && count($cacheData) >= $dataLimit) {
             $cacheData = Arr::random($cacheData, $limit);
         } else {
             //缓存不存在、数据不够时 重新创建缓存，设置缓存数据池条数
             $cacheData = null;
         }
 
-        $users = $this->search($data_Limit, $cacheData);
+        $users = $this->search($dataLimit, $cacheData);
 
         if (!$cacheData) {
-            $this->cache->put($cacheKey, $users->pluck('id')->toArray(), 360);
-            $users = $users->random($limit);
+            if ($users->count() == $dataLimit) {
+                $this->cache->put($cacheKey, $users->pluck('id')->toArray(), 360);
+            }
+            if ($users->count() >= $limit) {
+                $users = $users->random($limit);
+            }
         }
 
         // 加载关联

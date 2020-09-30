@@ -33,7 +33,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $sort
  * @property int $property
  * @property int $thread_count
- * @property string $moderators
+ * @property array $moderators
  * @property string $ip
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -71,6 +71,23 @@ class Category extends Model
         $category->raise(new Created($category));
 
         return $category;
+    }
+
+    /**
+     * @param string $value
+     * @return array
+     */
+    public function getModeratorsAttribute($value)
+    {
+        return explode(',', $value);
+    }
+
+    /**
+     * @param $value
+     */
+    public function setModeratorsAttribute($value)
+    {
+        $this->attributes['moderators'] = is_array($value) ? implode(',', $value) : $value;
     }
 
     /**

@@ -75,7 +75,7 @@ class AttachmentSerializer extends AbstractSerializer
 
         if ($model->is_remote) {
             $url = $this->settings->get('qcloud_cos_sign_url', 'qcloud', true)
-                ? $this->filesystem->disk('attachment_cos')->temporaryUrl($model->full_path, Carbon::now()->addHour())
+                ? $this->filesystem->disk('attachment_cos')->temporaryUrl($model->full_path, Carbon::now()->addDay())
                 : $this->filesystem->disk('attachment_cos')->url($model->full_path);
         } else {
             $url = $this->filesystem->disk('attachment')->url($model->full_path);
@@ -111,11 +111,17 @@ class AttachmentSerializer extends AbstractSerializer
                         : $url;
                 }
             }
+        } elseif ($model->type == Attachment::TYPE_OF_ANSWER) {
+            $attributes['thumbUrl'] = $url;
         }
 
-        // if ($model->post && $model->post->thread->price>0 && $model->post->is_first) {
-        //     $attributes['url'] = $this->url->to('/api/attachments/'.$model->id);
-        // }
+        if (
+            $model->post &&
+            $model->post->is_first &&
+            ($model->post->thread->price > 0 || $model->post->thread->attachment_price > 0)
+        ) {
+            $attributes['url'] = $this->url->to('/api/attachments/' . $model->id) . '?t=' .Attachment::getFileToken($this->actor);
+        }
 
         return $attributes;
     }

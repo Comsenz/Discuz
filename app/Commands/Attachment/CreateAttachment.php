@@ -98,7 +98,11 @@ class CreateAttachment
     {
         $this->events = $events;
 
-        $this->assertCan($this->actor, 'attachment.create.' . $this->type);
+        $this->assertCan($this->actor, 'attachment.create.' . (int) in_array($this->type, [
+                Attachment::TYPE_OF_IMAGE,
+                Attachment::TYPE_OF_DIALOG_MESSAGE,
+                Attachment::TYPE_OF_ANSWER,
+            ]));
 
         $file = $this->file;
 
@@ -120,7 +124,7 @@ class CreateAttachment
             );
 
             // 验证
-            $validator->valid(['type' => $this->type, 'size' => $file->getSize(), 'file' => $file]);
+            $validator->valid(['type' => $this->type, 'size' => $file->getSize(), 'file' => $file, 'ext'=>$file->clientExtension()]);
 
             $this->events->dispatch(
                 new Uploading($this->actor, $file)
@@ -133,12 +137,10 @@ class CreateAttachment
                 new Uploaded($this->actor, $uploader)
             );
 
-            $filePathInfo = pathinfo($file->hashName());
-
             $attachment = Attachment::build(
                 $this->actor->id,
                 $this->type,
-                $filePathInfo['filename'] . '.' . $file->clientExtension(),
+                $uploader->fileName,
                 $uploader->getPath(),
                 $this->name ?: $file->getClientOriginalName(),
                 $file->getSize(),

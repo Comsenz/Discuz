@@ -201,6 +201,7 @@ return [
         'cash_max_sum'          => '单次提现最大金额',
         'cash_sum_limit'        => '每日提现总金额上限',
         'cash_apply_amount'     => '提现金额',
+        'site_price'            => '加入价格',
 
         // settings - watermark 水印设置
         'watermark'             => '水印开关',
@@ -231,6 +232,7 @@ return [
         'price'     => '价格',
         'captcha'   => '验证码',
         'type'      => '类型',
+        'attachment_price'   => '附件价格',
 
         // NotificationTpl
         'template_id' => '模板ID',

@@ -25,6 +25,7 @@ use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\Cache\Repository as Cache;
 
 /**
  * @property int $id
@@ -66,6 +67,8 @@ class Attachment extends Model
 
     const TYPE_OF_DIALOG_MESSAGE = 4;
 
+    const TYPE_OF_ANSWER = 5; // 回答图片
+
     const UNAPPROVED = 0;
 
     const APPROVED = 1;
@@ -80,16 +83,17 @@ class Attachment extends Model
     ];
 
     /**
-     * type：0 帖子附件 1 帖子图片 2 帖子音频 3 帖子视频 4消息图片
+     * type：0 帖子附件 1 帖子图片 2 帖子音频 3 帖子视频 4 消息图片 5 回答图片
      *
      * @var array
      */
     public static $allowTypes = [
-        'file',
-        'img',
-        'audio',
-        'video',
-        'dialogMessage',
+        self::TYPE_OF_FILE => 'file',
+        self::TYPE_OF_IMAGE => 'img',
+        self::TYPE_OF_AUDIO => 'audio',
+        self::TYPE_OF_VIDEO => 'video',
+        self::TYPE_OF_DIALOG_MESSAGE => 'dialogMessage',
+        self::TYPE_OF_ANSWER => 'answer',
     ];
 
     /**
@@ -137,6 +141,26 @@ class Attachment extends Model
         $attachment->raise(new Created($attachment));
 
         return $attachment;
+    }
+
+    public static function getFileToken($actor)
+    {
+        /** @var Cache $cache */
+        $cache = app(Cache::class);
+        $token = $cache->get('attachments_user_' . $actor->id);
+        if (!$token) {
+            $token = SessionToken::query()
+                ->where('scope', 'attachment')
+                ->where('user_id', $actor->id)
+                ->first();
+            if (!$token) {
+                $token = SessionToken::generate('attachment', null, $actor->id, 3600);
+                $token->save();
+            }
+            $token = $token->token;
+            $cache->put('attachments_user_' . $actor->id, $token, 3599);
+        }
+        return $token;
     }
 
     /**
@@ -195,4 +219,5 @@ class Attachment extends Model
     {
         return $this->belongsTo(Post::class, 'type_id');
     }
+
 }

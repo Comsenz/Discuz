@@ -132,11 +132,6 @@ class CreatePost
             // 非首帖，检查是否有权回复
             $this->assertCan($this->actor, 'reply', $thread);
 
-            // 是否有权发布音频
-            if (Arr::get($this->data, 'attributes.file_id', '')) {
-                $this->assertCan($this->actor, 'createAudio');
-            }
-
             // 回复他人
             if (! empty($this->replyPostId)) {
                 // 被回复人，确保回复在同一主题下
