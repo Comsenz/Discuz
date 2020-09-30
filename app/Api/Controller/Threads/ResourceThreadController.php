@@ -94,6 +94,7 @@ class ResourceThreadController extends AbstractResourceController
     public $mustInclude = [
         'firstPost.images',
         'firstPost.attachments',
+        'firstPost.postGoods',
     ];
 
     /**

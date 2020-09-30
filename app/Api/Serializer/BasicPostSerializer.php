@@ -193,4 +193,13 @@ class BasicPostSerializer extends AbstractSerializer
     {
         return $this->hasOne($post, UserActionLogsSerializer::class);
     }
+
+    /**
+     * @param $post
+     * @return Relationship
+     */
+    public function postGoods($post)
+    {
+        return $this->hasOne($post, PostGoodsSerializer::class);
+    }
 }

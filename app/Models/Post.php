@@ -521,6 +521,13 @@ class Post extends Model
     }
 
     /**
+     * @return HasOne
+     */
+    public function postGoods()
+    {
+        return $this->hasOne(PostGoods::class);
+    }
+    /**
      * Set the user for which the state relationship should be loaded.
      *
      * @param User $user
