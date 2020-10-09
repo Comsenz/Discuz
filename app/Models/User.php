@@ -529,12 +529,15 @@ class User extends Model
      */
     public function refreshQuestionCount()
     {
-        $this->question_count = $this->threads()
+        $this->question_count = Thread::query()
             ->join('questions', 'threads.id', '=', 'questions.thread_id')
             ->where('threads.is_approved', Thread::APPROVED)
             ->where('threads.type', Thread::TYPE_OF_QUESTION)
             ->where('questions.is_anonymous', false)
             ->whereNull('threads.deleted_at')
+            ->where(function (Builder $query) {
+                $query->where('threads.user_id', $this->id)->orWhere('questions.be_user_id', $this->id);
+            })
             ->count();
 
         return $this;

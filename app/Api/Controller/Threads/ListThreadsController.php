@@ -77,6 +77,7 @@ class ListThreadsController extends AbstractListController
         'lastDeletedLog',
         'topic',
         'question.beUser',
+        'question.beUser.groups',
     ];
 
     public $mustInclude = [
@@ -311,13 +312,20 @@ class ListThreadsController extends AbstractListController
 
         // 作者 ID
         if ($userId = Arr::get($filter, 'userId')) {
-            $query->where('threads.user_id', $userId);
+            if ($type == Thread::TYPE_OF_QUESTION && Arr::get($filter, 'answer') == 'yes') {
+                $query->join('questions', 'threads.id', '=', 'questions.thread_id')
+                    ->where(function (Builder $query) use ($userId) {
+                        $query->where('threads.user_id', $userId)->orWhere('questions.be_user_id', $userId);
+                    });
+            } else {
+                $query->where('threads.user_id', $userId);
+            }
         }
 
         // 作者用户名
         if ($username = Arr::get($filter, 'username')) {
             $query->leftJoin('users as users1', 'users1.id', '=', 'threads.user_id')
-                ->where(function ($query) use ($username) {
+                ->where(function (Builder $query) use ($username) {
                     $username = explode(',', $username);
                     foreach ($username as $name) {
                         $query->orWhere('users1.username', 'like', "%{$name}%");
@@ -422,7 +430,7 @@ class ListThreadsController extends AbstractListController
         if ($queryWord = Arr::get($filter, 'q')) {
             $query->leftJoin('posts', 'threads.id', '=', 'posts.thread_id')
                 ->where('posts.is_first', true)
-                ->where(function ($query) use ($queryWord) {
+                ->where(function (Builder $query) use ($queryWord) {
                     $queryWord = explode(',', $queryWord);
                     foreach ($queryWord as $word) {
                         $query->orWhere('threads.title', 'like', "%{$word}%");
