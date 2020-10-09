@@ -431,12 +431,14 @@ class ListThreadsController extends AbstractListController
                 });
         }
 
-        // 关注的人的文章
+        // 关注的人的帖子，不包含匿名问答帖
         $fromUserId = Arr::get($filter, 'fromUserId');
 
         if ($fromUserId && $fromUserId == $actor->id) {
             $query->join('user_follow', 'threads.user_id', '=', 'user_follow.to_user_id')
-                ->where('user_follow.from_user_id', $fromUserId);
+                ->join('questions', 'threads.id', '=', 'questions.thread_id')
+                ->where('user_follow.from_user_id', $fromUserId)
+                ->where('questions.is_anonymous', false);
         }
 
         // 话题文章
