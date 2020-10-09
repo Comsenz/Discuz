@@ -27,8 +27,8 @@ use App\MessageTemplate\GroupMessage;
 use App\MessageTemplate\Wechat\WechatGroupMessage;
 use App\Models\Group;
 use App\Models\GroupPaidUser;
-use App\Models\UserActionLogs;
 use App\Models\User;
+use App\Models\UserActionLogs;
 use App\Models\UserWechat;
 use App\Notifications\System;
 use App\Repositories\UserRepository;
@@ -265,8 +265,8 @@ class UpdateUser
                 }
             }
         }
-        $username = Arr::get($attributes, 'username');
-        if ($username && $username != $user->username) {
+
+        if ($username = Arr::get($attributes, 'username')) {
             $validator['username'] = $username;
 
             // 敏感词校验
