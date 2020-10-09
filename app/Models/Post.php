@@ -329,7 +329,7 @@ class Post extends Model
         if ($this->content !== $content) {
             $this->content = $content;
 
-            $this->raise(new Revised($this, $content, $actor));
+            $this->raise(new Revised($this, $this->getRawOriginal('content'), $actor));
         }
 
         return $this;
