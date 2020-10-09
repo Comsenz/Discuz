@@ -259,19 +259,16 @@ class PostListener
             $event->actor->username . ' 修改了内容'
         );
 
-        if ($event->post->user) {
-            // 判断是否是自己
-            if ($event->actor->id != $event->post->user->id) {
-                $build = [
-                    'message' => $event->post->content,
-                    'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'is_first'])
-                ];
-                // 系统通知
-                $event->post->user->notify(new System(PostMessage::class, $build));
+        if ($event->post->user && $event->post->user->id != $event->actor->id) {
+            $build = [
+                'message' => $event->content,
+                'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'is_first'])
+            ];
+            // 系统通知
+            $event->post->user->notify(new System(PostMessage::class, $build));
 
-                // 微信通知
-                $event->post->user->notify(new System(WechatPostMessage::class, $build));
-            }
+            // 微信通知
+            $event->post->user->notify(new System(WechatPostMessage::class, $build));
         }
     }
 
