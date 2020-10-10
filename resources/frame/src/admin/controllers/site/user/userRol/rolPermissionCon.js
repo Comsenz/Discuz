@@ -63,31 +63,10 @@ export default {
       dyedate: '',
       ispad:'',
       allowtobuy: '',
+      defaultuser: false,
     }
   },
   methods: {
-    // patchGroupScale() {
-    //   this.appFetch({
-    //     url: 'groups',
-    //     method: 'post',
-    //     splice: '/' + this.groupId,
-    //     data: {
-    //       data: {
-    //         "attributes": {
-    //           'name': this.$route.query.name,
-    //           "scale": this.scale,
-    //           "is_subordinate": this.is_subordinate,
-    //           "is_commission": this.is_commission,
-    //         }
-    //       }
-    //     }
-    //   }).then(res => {
-    //     if (res.errors) {
-    //       this.$message.error(res.errors[0].code);
-    //     }
-    //   }).catch(err => {
-    //   })
-    // },
     duedata(evn) {
       this.purchasePrice = this.purchasePrice.replace(/[^\d.]/g, '')
       .replace(/\.{2,}/g, '.')
@@ -246,7 +225,6 @@ export default {
           this.$message.error(res.errors[0].code);
         } else {
           this.ispad = res.data.attributes.isPaid;
-          this.value = res.data.attributes.isPaid;
           this.purchasePrice = res.data.attributes.fee;
           this.dyedate = res.data.attributes.days;
           let data = res.readdata.permission;
@@ -254,6 +232,13 @@ export default {
           this.scale = res.data.attributes.scale;
           this.is_subordinate = res.data.attributes.is_subordinate;
           this.is_commission = res.data.attributes.is_commission;
+          this.defaultuser = res.data.attributes.default;
+          if (res.data.attributes.default) {
+            this.value = false;
+            this.patchGroupScale();
+          } else {
+            this.value = res.data.attributes.isPaid;
+          }
           data.forEach((item) => {
             this.checked.push(item._data.permission)
           })
@@ -351,7 +336,6 @@ export default {
     this.groupId = this.$route.query.id;
     this.activeTab.title = this.$route.query.title || '内容发布权限';
     this.activeTab.name = this.$route.query.names || 'publish';
-    console.log( this.groupId);
     this.getGroupResource();
     this.signUpSet();
   },

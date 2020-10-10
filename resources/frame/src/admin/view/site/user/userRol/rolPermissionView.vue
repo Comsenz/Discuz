@@ -396,7 +396,7 @@
       <Card header="允许购买：">
         <CardRow description="允许购买" class="allow-box">
           <el-switch
-            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7' || !allowtobuy"
+            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7' || !allowtobuy || defaultuser"
             v-model="value"
             @change="fun"
             active-color="#336699"
