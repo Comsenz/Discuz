@@ -120,6 +120,12 @@ class ThreadSerializer extends AbstractSerializer
             return;
         }
 
+        // 判断问答信息是否存在
+        if (empty($model->question)) {
+            $attributes['onlookerState'] = false;
+            return;
+        }
+
         /**
          * 判断是否围观过帖子
          */

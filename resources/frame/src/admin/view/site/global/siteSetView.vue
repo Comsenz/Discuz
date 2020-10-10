@@ -119,6 +119,7 @@
           >
             加入起
             <el-input
+              class="elinput"
               style="height: 36PX;width: 80PX"
               clearable
               placeholder="天数"
