@@ -364,36 +364,7 @@
     </div>
     <!-- 其他权限 -->
     <div v-show="activeTab.name === 'other'">
-      <Card header="允许购买：">
-        <CardRow description="允许购买" class="allow-box">
-          <el-switch
-            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
-            v-model="value"
-            @change="fun"
-            active-color="#336699"
-            inactive-color="#bbbbbb"
-          >
-          </el-switch>
-        </CardRow>
-      </Card>
-      <Card header="购买价格（元）：" v-if="value">
-        <CardRow description="需支付的金额">
-          <el-input placeholder="加入价格" type="number" v-model="purchasePrice"></el-input>
-        </CardRow>
-      </Card>
-      <Card header="到期时间：" v-if="value">
-        <CardRow description="到期时间，可维持的时间">
-          加入起
-          <el-input
-            style="height: 36PX;width: 80PX"
-            clearable
-            placeholder="天数"
-            type="number"
-            v-model="dyedate"
-          ></el-input>天后
-        </CardRow>
-      </Card>
-      <Card>
+      <Card header="裂变推广：">
         <CardRow description="允许用户裂变推广以及通过推广注册进来的用户收入是否能分成">
           <el-checkbox
             v-model="is_subordinate"
@@ -416,6 +387,39 @@
               @blur="checkNum"
             ></el-input>
           </div>
+        </CardRow>
+      </Card>
+    </div>
+    <!-- 价格设置 -->
+    <div v-show="activeTab.name === 'pricesetting'">
+      <Card header="允许购买：">
+        <CardRow description="允许购买" class="allow-box">
+          <el-switch
+            :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7' || !allowtobuy"
+            v-model="value"
+            @change="fun"
+            active-color="#336699"
+            inactive-color="#bbbbbb"
+          >
+          </el-switch>
+        </CardRow>
+      </Card>
+      <Card header="购买价格（元）：" v-if="value">
+        <CardRow description="需支付的金额">
+          <el-input placeholder="加入价格" type="number" v-model="purchasePrice"  @input="addprice"></el-input>
+        </CardRow>
+      </Card>
+      <Card header="到期时间：" v-if="value">
+        <CardRow description="到期时间，可维持的时间">
+          加入起
+          <el-input
+            style="height: 36PX;width: 80PX"
+            clearable
+            placeholder="天数"
+            type="number"
+            v-model="dyedate"
+            @input="duedata"
+          ></el-input>天后
         </CardRow>
       </Card>
     </div>

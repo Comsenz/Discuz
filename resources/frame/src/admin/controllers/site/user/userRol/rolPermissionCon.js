@@ -49,6 +49,10 @@ export default {
           title: '其他设置',
           name: 'other'
         },
+        {
+          title: '价格设置',
+          name: 'pricesetting'
+        },
         // {
         //   title: '默认权限',
         //   name: 'default'
@@ -58,6 +62,7 @@ export default {
       purchasePrice: '',
       dyedate: '',
       ispad:'',
+      allowtobuy: '',
     }
   },
   methods: {
@@ -83,6 +88,12 @@ export default {
     //   }).catch(err => {
     //   })
     // },
+    duedata(evn) {
+      evn.replace(/[^/d]/g,'');
+    },
+    addprice(evn) {
+      evn.replace(/[^/d]/g,'');
+    },
     signUpSet() {
       this.appFetch({
         url: 'forum',
@@ -97,6 +108,10 @@ export default {
           this.bindPhoneDisabled = res.readdata._data.qcloud.qcloud_sms === false;
           this.wechatPayment = res.readdata._data.paycenter.wxpay_close === false;
           this.canBeOnlooker = res.readdata._data.set_site.site_onlooker_price > 0;
+          this.allowtobuy =  res.readdata._data.set_site.site_pay_group_close == '1' ? true : false;
+          if (!this.allowtobuy) {
+            this.value = false;
+          }
         }
       })
     },
@@ -187,6 +202,20 @@ export default {
 
     submitClick() {
       if (!this.checkNum()) {
+        return;
+      }
+      // if (this.purchasePrice === 0 || this.purchasePrice === '' || this.dyedate === 0 || this.dyedate === '') 
+      if (this.purchasePrice === 0) {
+        this.$message.error('价格不能为0');
+        return;
+      } else if (this.purchasePrice === '') {
+        this.$message.error('价格不能为空');
+        return;
+      } else if (this.dyedate === 0) {
+        this.$message.error('到期时间不能为0');
+        return;
+      } else if (this.dyedate === '') {
+        this.$message.error('到期时间不能为空');
         return;
       }
       // this.allowtobuy();
