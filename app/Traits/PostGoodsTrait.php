@@ -20,6 +20,7 @@ namespace App\Traits;
 
 use App\Exceptions\TranslatorException;
 use App\Models\PostGoods;
+use Exception;
 
 /**
  * 获取网址里的[商品信息]
@@ -83,7 +84,6 @@ trait PostGoodsTrait
                 break;
             default:
                 throw new TranslatorException('post_goods_not_found_regex');
-                break;
         }
     }
 
@@ -208,22 +208,30 @@ trait PostGoodsTrait
         }
     }
 
+    /**
+     * @throws Exception
+     */
     protected function wirelessShare()
     {
         // 匹配js跳转地址
         $regex = '/(?<address>(https|http):[\w\/\.\?\=\&\-]+)/i';
         if (preg_match($regex, $this->html, $match)) {
-            $response = $this->httpClient->request('GET', $match['address'], [
-                'allow_redirects' => [
-                    'max' => 100,
-                    'track_redirects' => true
-                ]
-            ]);
+            try {
+                $response = $this->httpClient->request('GET', $match['address'], [
+                    'allow_redirects' => [
+                        'max' => 100,
+                        'track_redirects' => true
+                    ]
+                ]);
+            } catch (Exception $e) {
+                // 触发淘宝频繁请求机制
+                throw new Exception(trans('post.post_goods_frequently_fail'));
+            }
 
             // 获取最终的重定向真实域名地址
             $redirects = $response->getHeader('X-Guzzle-Redirect-History');
             if (!empty($redirects)) {
-                $match['address'] = array_shift($redirects);
+                $match['address'] = end($redirects);
             }
 
             // 重新覆盖
