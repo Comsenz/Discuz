@@ -23,6 +23,7 @@ use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\NotificationRepository;
 use Discuz\Api\Controller\AbstractListController;
+use Discuz\Auth\Anonymous;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Support\Arr;
@@ -161,6 +162,8 @@ class ListNotificationController extends AbstractListController
                                     $item->user_name = $thread->question->isAnonymousName();
                                     $item->realname = $thread->question->isAnonymousName();
                                     $item->user_avatar = '';
+                                    $anonymous = new Anonymous();
+                                    $item->user_id = $anonymous->getUserId();
                                 }
                             } else {
                                 $item->thread_username = $threadUser->username;
