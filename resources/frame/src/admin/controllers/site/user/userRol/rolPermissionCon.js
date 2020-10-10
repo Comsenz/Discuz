@@ -46,12 +46,12 @@ export default {
           name: 'security'
         },
         {
-          title: '其他设置',
-          name: 'other'
-        },
-        {
           title: '价格设置',
           name: 'pricesetting'
+        },
+        {
+          title: '其他设置',
+          name: 'other'
         },
         // {
         //   title: '默认权限',
@@ -89,7 +89,13 @@ export default {
     //   })
     // },
     duedata(evn) {
-      evn.replace(/[^/d]/g,'');
+      this.purchasePrice = this.purchasePrice.replace(/[^\d.]/g, '')
+      .replace(/\.{2,}/g, '.')
+      .replace('.', '$#$')
+      .replace(/\./g, '')
+      .replace('$#$', '.')
+      .replace(/^(-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
+      .replace(/^\./g, '');
     },
     addprice(evn) {
       evn.replace(/[^/d]/g,'');

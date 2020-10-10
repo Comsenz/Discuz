@@ -412,15 +412,17 @@
       </Card>
       <Card header="到期时间：" v-if="value">
         <CardRow description="到期时间，可维持的时间">
-          加入起
+          加入起 
           <el-input
+            class="elinput"
             style="height: 36PX;width: 80PX"
             clearable
             placeholder="天数"
             type="number"
             v-model="dyedate"
             @input="duedata"
-          ></el-input>天后
+          ></el-input> 
+          天后
         </CardRow>
       </Card>
     </div>
