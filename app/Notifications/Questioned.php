@@ -42,14 +42,16 @@ class Questioned extends System
     /**
      * @var User
      */
-    public $actor;
+    public $user;
 
-    public function __construct(Question $question, User $actor, $messageClass = '', $build = [])
+    public function __construct(Question $question, User $user, $messageClass = '', $build = [])
     {
         $this->setChannelName($messageClass);
 
         $this->question = $question;
-        $this->actor = $actor;
+
+        // 提问人 / 被提问人
+        $this->user = $user;
 
         parent::__construct($messageClass, $build);
     }
@@ -64,7 +66,7 @@ class Questioned extends System
     {
         $build = [
             'question_id' => $this->question->id,
-            'user_id' => $this->question->user->id,  // 被提问人
+            'user_id' => $this->user->id,      // 被提问人/提问人
             'thread_id' => $this->question->thread_id,   // 主题ID
             'thread_username' => $this->question->isAnonymousName(), // 必传 主题用户名/匿名用户
             'thread_title' => $this->question->thread->title,
