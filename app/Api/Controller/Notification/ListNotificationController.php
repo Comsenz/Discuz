@@ -150,9 +150,13 @@ class ListNotificationController extends AbstractListController
                         $item->thread_created_at = $thread->formatDate('created_at');
                         $threadUser = $thread->user;
                         if (! empty($threadUser)) {
-                            // 判断是否是问答、匿名提问
+                            /**
+                             * 判断是否是问答、匿名提问
+                             * @var Thread $thread
+                             */
                             if ($thread->type == Thread::TYPE_OF_QUESTION && ! empty($thread->question)) {
                                 $item->thread_username = $thread->question->isAnonymousName();
+                                $item->user_name = $thread->question->isAnonymousName();
                             } else {
                                 $item->thread_username = $threadUser->username;
                             }
