@@ -109,7 +109,7 @@ trait PostGoodsTrait
         $this->getAlibabaGoodsId();
 
         // get title
-        $titleRegex = '/<h3\s*class="tb-main-title"\s*data-title="(?<title>.+)">/i';
+        $titleRegex = '/<h3\s*class="tb-main-title\s*"\s*data-title="(?<title>.+)"\s*>/i';
         if (preg_match($titleRegex, $this->html, $matchTitle)) {
             $this->goodsInfo['title'] = mb_convert_encoding($matchTitle['title'], 'UTF-8', 'GBK');
         }
@@ -121,7 +121,7 @@ trait PostGoodsTrait
         }
 
         // get price
-        $priceRegex = '/<em\s*class="tb-rmb-num">(?<price>[\d\.]{1,12})<\/em>/i';
+        $priceRegex = '/<em\s*class="tb-rmb-num\s*">(?<price>[\d\.]{1,12})<\/em>/i';
         if (preg_match($priceRegex, $this->html, $matchPrice)) {
             $this->goodsInfo['price'] = $matchPrice['price'];
         }
@@ -155,19 +155,19 @@ trait PostGoodsTrait
         }
 
         // get title
-        $JDRegex = '/<div\s*class="fn_text_wrap"\s*id="itemName">(?<title>.+)<\/div>/i';
+        $JDRegex = '/<div\s*class="fn_text_wrap\s*"\s*id="itemName"\s*>(?<title>.+)<\/div>/i';
         if (preg_match($JDRegex, $this->html, $matchTitle)) {
             $this->goodsInfo['title'] = $matchTitle['title'];
         }
 
         // get src
-        $srcRegex = '/<li\s*id="firstImgLi"\s*data-ul-child="child">\s*<img\s*id="firstImg"\s*onload=".*src="(?<src>.+\.[a-z]+)"/i';
+        $srcRegex = '/<img\s*alt="\s*商品图\s*"\s*src="(?<src>.+)"\s* class/i';
         if (preg_match($srcRegex, $this->html, $matchSrc)) {
             $this->goodsInfo['src'] = trim($matchSrc['src'], '/');
         }
 
         // get price
-        $priceRegex = '/<em>(?<price>\d+)<\/em>\s*<span\s*class="price_decimals">(?<price_point>.+)<\/span>/';
+        $priceRegex = '/<em>(?<price>\d+)<\/em>\s*<span\s*class="price_decimals\s*"\s*>(?<price_point>.+)<\/span>/';
         if (preg_match($priceRegex, $this->html, $matchPrice)) {
             $this->goodsInfo['price'] = $matchPrice['price'] . $matchPrice['price_point'];
         }
