@@ -78,6 +78,7 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
          * 查询数据库中是否存在
          */
         $postGoods = PostGoods::query();
+        $postGoods->where('post_id', 0);
         $goods = $postGoods->where('ready_content', $readyContent)->first();
         if (!empty($goods)) {
             return $goods;
@@ -115,7 +116,10 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
         if ($this->goodsType['key'] == 5) {
             $titleRegex = '/【(?<title>.*)】/i';
             if (preg_match($titleRegex, $readyContent, $matchContent)) {
-                $existGoods = PostGoods::query()->where('title', $matchContent['title'])->first();
+                $existGoods = PostGoods::query()
+                    ->where('title', $matchContent['title'])
+                    ->where('post_id', 0)
+                    ->first();
                 if (!empty($existGoods)) {
                     return $existGoods;
                 }
