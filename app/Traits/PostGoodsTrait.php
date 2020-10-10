@@ -173,12 +173,24 @@ trait PostGoodsTrait
         }
     }
 
+    /**
+     * 拼多多检测登陆机制，目前无法抓取商品内容
+     */
     protected function pdd()
     {
         // get address platformId
         $idRegex = '/goods_id=(?<platform_id>\d+)/';
         if (preg_match($idRegex, $this->address, $matchAddress)) {
             $this->goodsInfo['platform_id'] = $matchAddress['platform_id'];
+        }
+
+        // title
+        $this->goodsInfo['title'] = '拼多多商品';
+
+        // get src
+        $srcRegex = '/<meta\s*property="\s*og:image\s*"\s*content="(?<src>.+)\s*"\s*>/i';
+        if (preg_match($srcRegex, $this->html, $matchSrc)) {
+            $this->goodsInfo['src'] = $matchSrc['src']; // 拼多多默认Logo
         }
     }
 

@@ -186,7 +186,7 @@ class PostGoods extends Model
         } elseif (self::$key == 6) {
             $mode = 'File';
         } elseif (self::$key == 3) {
-            $mode = 'DoNotSend';
+            $mode = 'Guzzle';
         }
 
         return $mode ?? 'Guzzle';
