@@ -143,7 +143,7 @@ class ThreadSerializer extends AbstractSerializer
          * 判断是否匿名问答
          * (非当前用户不是作者)
          */
-        if ($model->question->is_anonymous && $model->user->id != $this->actor->id) {
+        if ($model->question && $model->question->is_anonymous && $model->user->id != $this->actor->id) {
             $model->user = new Anonymous;
         }
     }
