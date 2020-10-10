@@ -267,6 +267,7 @@ class UpdateUser
         }
 
         if ($username = Arr::get($attributes, 'username')) {
+            $this->validator->setUser($user);
             $validator['username'] = $username;
 
             // 敏感词校验
