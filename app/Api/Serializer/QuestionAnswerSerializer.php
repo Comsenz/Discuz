@@ -35,6 +35,8 @@ class QuestionAnswerSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
+        $actor = $this->getActor();
+
         $attributes = [
             'thread_id' => $model->thread_id,
             'user_id' => $model->is_anonymous ? 0 : $model->user_id, // 判断是否是匿名
@@ -57,7 +59,12 @@ class QuestionAnswerSerializer extends AbstractSerializer
         ];
 
         // 判断是否已围观来展示答案
-        if (! is_null($model->thread->onlookerState)) {
+        if (
+            $model->user_id == $actor->id
+            || $model->be_user_id == $actor->id
+            || $actor->isAdmin()
+            || ! is_null($model->thread->onlookerState)
+        ) {
             $attributes['content'] = $model->content;
             $attributes['content_html'] = $model->formatContent();
         }

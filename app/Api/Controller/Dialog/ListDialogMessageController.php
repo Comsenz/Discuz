@@ -161,18 +161,30 @@ class ListDialogMessageController extends AbstractListController
         $query->select('dialog_message.*');
         $query->where('dialog_id', $filter['dialog_id']);
 
-        $query->join('dialog', 'dialog.id', '=', 'dialog_message.dialog_id')
-            ->where(function ($query) use ($actor) {
-                $query->where('sender_user_id', $actor->id);
-                $query->orWhere('recipient_user_id', $actor->id);
-            });
+        $query->join(
+            'dialog',
+            'dialog.id',
+            '=',
+            'dialog_message.dialog_id'
+        )->where(function ($query) use ($actor) {
+            $query->where('dialog.sender_user_id', $actor->id);
+            $query->orWhere('dialog.recipient_user_id', $actor->id);
+        });
 
         // 按照登陆用户的删除情况过滤数据
         if ($dialog->sender_user_id == $actor->id && $dialog->sender_deleted_at) {
-            $query->whereColumn('dialog_message.created_at', '>', 'dialog.sender_deleted_at');
+            $query->whereColumn(
+                'dialog_message.created_at',
+                '>',
+                'dialog.sender_deleted_at'
+            );
         }
         if ($dialog->recipient_user_id == $actor->id && $dialog->recipient_deleted_at) {
-            $query->whereColumn('dialog_message.created_at', '>', 'dialog.recipient_deleted_at');
+            $query->whereColumn(
+                'dialog_message.created_at',
+                '>',
+                'dialog.recipient_deleted_at'
+            );
         }
 
         $this->dialogMessageCount = $limit > 0 ? $query->count() : null;

@@ -84,6 +84,7 @@ class ResourceThreadController extends AbstractResourceController
         'topic',
         'question',
         'question.beUser',
+        'question.beUser.groups',
         'question.images',
         'onlookers',
     ];
@@ -94,6 +95,7 @@ class ResourceThreadController extends AbstractResourceController
     public $mustInclude = [
         'firstPost.images',
         'firstPost.attachments',
+        'firstPost.postGoods',
     ];
 
     /**

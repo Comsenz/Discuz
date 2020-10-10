@@ -24,8 +24,10 @@ use App\Models\Order;
 use App\Models\Post;
 use App\Models\Thread;
 use App\Models\User;
+use App\Models\UserWalletCash;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
 use Discuz\Foundation\Support\Decomposer;
@@ -51,6 +53,9 @@ class SiteInfoController extends AbstractResourceController
      */
     protected $app;
 
+    /**
+     * @var SettingsRepository
+     */
     protected $settings;
 
     /**
@@ -65,6 +70,8 @@ class SiteInfoController extends AbstractResourceController
 
     /**
      * {@inheritdoc}
+     *
+     * @throws PermissionDeniedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -75,14 +82,25 @@ class SiteInfoController extends AbstractResourceController
         $port = $request->getUri()->getPort();
         $siteUrl = $request->getUri()->getScheme() . '://' . $request->getUri()->getHost().(in_array($port, [80, 443, null]) ? '' : ':'.$port);
 
+        // 提现分成
+        $cashCharge = UserWalletCash::query()->where('cash_status', UserWalletCash::STATUS_PAID)->sum('cash_charge');
+
+        // 注册分成
+        $amount = Order::query()->where('type', Order::ORDER_TYPE_REGISTER)->where('status', Order::ORDER_STATUS_PAID)->sum('amount');
+
+        // 站长分成
+        $masterAmount = Order::query()->where('status', Order::ORDER_STATUS_PAID)->sum('master_amount');
+
         $data = [
             'url' => $siteUrl,
             'site_id' => $this->settings->get('site_id'),
             'site_name' => $this->settings->get('site_name'),
-            'threads' => Thread::count(),
-            'posts' => Post::count(),
-            'users' => User::count(),
-            'orders' => Order::count(),
+            'site_income' => (float) Order::query()->where('status', Order::ORDER_STATUS_PAID)->sum('amount'),
+            'site_owner_income' => $cashCharge + $amount + $masterAmount,
+            'threads' => Thread::query()->count(),
+            'posts' => Post::query()->count(),
+            'users' => User::query()->count(),
+            'orders' => Order::query()->count(),
             'categories' => serialize(Category::all()->toArray())
         ];
 

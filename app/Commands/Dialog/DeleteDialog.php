@@ -25,8 +25,8 @@ use App\Repositories\DialogRepository;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Bus\Dispatcher as DispatcherBus;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class DeleteDialog
 {
@@ -74,22 +74,20 @@ class DeleteDialog
 
         //双方都存在删除动作时，删除部分无效消息
         if ($dialog->sender_deleted_at && $dialog->recipient_deleted_at) {
-            if (!$dialog->{$actorType . '_deleted_at'}) {
-                $dateTime = $dialog->{$actorType . '_deleted_at'} > $dialog->{$otherType . '_deleted_at'} ?
-                    $dialog->{$otherType . '_deleted_at'} :
-                    $dialog->{$actorType . '_deleted_at'};
+            $dateTime = $dialog->{$actorType . '_deleted_at'} > $dialog->{$otherType . '_deleted_at'} ?
+                $dialog->{$otherType . '_deleted_at'} :
+                $dialog->{$actorType . '_deleted_at'};
 
-                $query = $dialogMessages->query()
-                    ->where('dialog_id', $dialog->id)
-                    ->where('created_at', $dateTime);
-                $dialogMessage = $query->get();
+            $query = $dialogMessages->query()
+                ->where('dialog_id', $dialog->id)
+                ->where('created_at', '<', $dateTime);
+            $dialogMessage = $query->get();
+            $query->delete();
 
-                Attachment::query()
-                    ->whereIn('id', $dialogMessage->pluck('attachment_id'))
-                    ->update(['type_id'=>0]);
+            Attachment::query()
+                ->whereIn('id', $dialogMessage->pluck('attachment_id'))
+                ->update(['type_id'=>0]);
 
-                $query->delete();
-            }
         }
 
         return $dialog;
