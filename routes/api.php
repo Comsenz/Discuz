@@ -323,6 +323,7 @@ $route->get('/dialog', 'dialog.list', ApiController\Dialog\ListDialogController:
 $route->post('/dialog/message', 'dialog.message.create', ApiController\Dialog\CreateDialogMessageController::class);
 $route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListDialogMessageController::class);
 $route->delete('/dialog/{id}', 'dialog.delete', ApiController\Dialog\DeleteDialogController::class);
+
 /*
 |--------------------------------------------------------------------------
 | Reports
@@ -354,6 +355,7 @@ $route->delete('/topics/{id}', 'topics.delete', ApiController\Topic\DeleteTopicC
 $route->delete('/topics/batch/{ids}', 'topics.batchDelete', ApiController\Topic\BatchDeleteTopicController::class);
 $route->patch('/topics/{id}', 'topics.update', ApiController\Topic\UpdateTopicController::class);
 $route->patch('/topics/batch/{ids}', 'topics.batchUpdate', ApiController\Topic\BatchUpdateTopicController::class);
+
 /*
 |--------------------------------------------------------------------------
 | System
