@@ -65,6 +65,10 @@ class QuestionAnswerMakeMoney
 
         $price = $question->price;
 
+        if ($price <= 0) {
+            return;
+        }
+
         // Start Transaction
         $this->connection->beginTransaction();
         try {

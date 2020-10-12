@@ -20,13 +20,13 @@ namespace App\Api\Controller\Dialog;
 
 use App\Api\Serializer\DialogSerializer;
 use App\Commands\Dialog\DeleteDialog;
-use Discuz\Api\Controller\AbstractCreateController;
+use Discuz\Api\Controller\AbstractDeleteController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class DeleteDialogController extends AbstractCreateController
+class DeleteDialogController extends AbstractDeleteController
 {
     public $serializer = DialogSerializer::class;
 
@@ -46,7 +46,7 @@ class DeleteDialogController extends AbstractCreateController
     /**
      * {@inheritdoc}
      */
-    protected function data(ServerRequestInterface $request, Document $document)
+    protected function delete(ServerRequestInterface $request)
     {
         $actor = $request->getAttribute('actor');
         $id = Arr::get($request->getQueryParams(), 'id');

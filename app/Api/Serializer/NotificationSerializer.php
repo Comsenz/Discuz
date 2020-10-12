@@ -57,6 +57,12 @@ class NotificationSerializer extends AbstractSerializer
             'thread_is_approved' => $model->thread_is_approved ?: 0,
         ]);
 
+        // 判断是否是匿名
+        if (isset($result['is_anonymous']) && $result['is_anonymous']) {
+            $result['user_id'] = -1;
+            $result['isReal'] = false; // 全部默认未认证
+        }
+
         return $result;
     }
 

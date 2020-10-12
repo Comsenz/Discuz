@@ -29,6 +29,8 @@ use App\Trade\PayTrade;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Exception;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -109,7 +111,8 @@ class PayOrder
      * @throws PermissionDeniedException
      * @throws TradeErrorException
      * @throws ValidationException
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws BindingResolutionException
+     * @throws Exception
      */
     public function handle(Validator $validator, SettingsRepository $setting, UrlGenerator $url, UserWalletFailLogsRepository $userWalletFailLogs)
     {
@@ -125,7 +128,7 @@ class PayOrder
             $this->data->get('payment_type') == Order::PAYMENT_TYPE_WALLET
             && empty($this->actor->pay_password)
         ) {
-            throw new \Exception('uninitialized_pay_password');
+            throw new Exception('uninitialized_pay_password');
         }
 
         // 验证错误次数
@@ -134,7 +137,7 @@ class PayOrder
             $this->data->get('payment_type') == Order::PAYMENT_TYPE_WALLET
             && $failCount > UserWalletFailLogs::TOPLIMIT
         ) {
-            throw new \Exception('pay_password_failures_times_toplimit');
+            throw new Exception('pay_password_failures_times_toplimit');
         }
 
         $validator_info = $validator->make($this->data->toArray(), [
@@ -152,7 +155,11 @@ class PayOrder
                         $request = app('request');
                         UserWalletFailLogs::build(ip($request->getServerParams()), $this->actor->id);
 
-                        $fail(trans('trade.wallet_pay_password_error', ['value'=>UserWalletFailLogs::TOPLIMIT - $failCount]));
+                        if (UserWalletFailLogs::TOPLIMIT == $failCount) {
+                            throw new Exception('pay_password_failures_times_toplimit');
+                        } else {
+                            $fail(trans('trade.wallet_pay_password_error', ['value'=>UserWalletFailLogs::TOPLIMIT - $failCount]));
+                        }
                     }
                 }
             ],
@@ -166,7 +173,8 @@ class PayOrder
             UserWalletFailLogs::deleteAll($this->actor->id);
         }
 
-        $order_info = Order::where('user_id', $this->actor->id)
+        /** @var Order $order_info */
+        $order_info = Order::query()->where('user_id', $this->actor->id)
             ->where('order_sn', $this->order_sn)
             ->where('status', Order::ORDER_STATUS_PENDING)
             ->firstOrFail();
@@ -214,7 +222,7 @@ class PayOrder
      * @param array $order_info
      * @return array  $order_info 支付参数数组
      * @throws TradeErrorException
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws BindingResolutionException
      */
     public function paymentParams($order_info)
     {

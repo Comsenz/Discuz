@@ -18,6 +18,7 @@
 
 namespace App\Censor;
 
+use App\Models\Attachment;
 use App\Models\StopWord;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
@@ -308,7 +309,9 @@ class Censor
                 $tmpFile = tempnam(storage_path('/tmp'), 'checkImage');
 
                 try {
-                    $fileSize = file_put_contents($tmpFile, file_get_contents($filePathname));
+                    $fileSize = file_put_contents($tmpFile, file_get_contents(
+                        $filePathname . '?imageMogr2/thumbnail/' . Attachment::FIX_WIDTH . 'x' . Attachment::FIX_WIDTH
+                    ));
 
                     $result = $fileSize ? $easyWeChat->content_security->checkImage($tmpFile) : [];
                 } finally {

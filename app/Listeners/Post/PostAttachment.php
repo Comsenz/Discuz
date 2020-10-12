@@ -31,6 +31,7 @@ use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use s9e\TextFormatter\Utils;
 
 class PostAttachment
 {
@@ -107,13 +108,18 @@ class PostAttachment
         $post = $event->post;
         $actor = $event->actor;
 
-        // 请求中未传附件不处理
-        if (! Arr::has($event->data, 'relationships.attachments.data')) {
-            return;
+        // 请求中的附件，修改帖子附件时，传要保留的附件及新的附件，未保留的将被删除
+        $ids = array_column(Arr::get($event->data, 'relationships.attachments.data', []), 'id');
+
+        // 长文帖从内容中解析图片
+        if ($post->thread->type === Thread::TYPE_OF_LONG) {
+            $ids += Utils::getAttributeValues($post->getRawOriginal('content'), 'IMG', 'title');
         }
 
-        // 请求中的附件，修改帖子附件时，传要保留的附件及新的附件，未保留的将被删除
-        $ids = array_column(Arr::get($event->data, 'relationships.attachments.data'), 'id');
+        // 请求中未传附件不处理
+        if (! $ids) {
+            return;
+        }
 
         if ($post->wasRecentlyCreated) {
             // 未绑定的的附件

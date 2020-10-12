@@ -68,6 +68,7 @@ class ListThreadsController extends AbstractListController
         'firstPost.images',
         'firstPost.attachments',
         'firstPost.likedUsers',
+        'firstPost.postGoods',
         'lastThreePosts',
         'lastThreePosts.user',
         'lastThreePosts.replyUser',
@@ -76,12 +77,14 @@ class ListThreadsController extends AbstractListController
         'lastDeletedLog',
         'topic',
         'question.beUser',
+        'question.beUser.groups',
     ];
 
     public $mustInclude = [
         'favoriteState',
         'firstPost.likeState',
         'question',
+        'onlookerState',
     ];
 
     /**
@@ -309,13 +312,20 @@ class ListThreadsController extends AbstractListController
 
         // 作者 ID
         if ($userId = Arr::get($filter, 'userId')) {
-            $query->where('threads.user_id', $userId);
+            if ($type == Thread::TYPE_OF_QUESTION && Arr::get($filter, 'answer') == 'yes') {
+                $query->join('questions', 'threads.id', '=', 'questions.thread_id')
+                    ->where(function (Builder $query) use ($userId) {
+                        $query->where('threads.user_id', $userId)->orWhere('questions.be_user_id', $userId);
+                    });
+            } else {
+                $query->where('threads.user_id', $userId);
+            }
         }
 
         // 作者用户名
         if ($username = Arr::get($filter, 'username')) {
             $query->leftJoin('users as users1', 'users1.id', '=', 'threads.user_id')
-                ->where(function ($query) use ($username) {
+                ->where(function (Builder $query) use ($username) {
                     $username = explode(',', $username);
                     foreach ($username as $name) {
                         $query->orWhere('users1.username', 'like', "%{$name}%");
@@ -420,7 +430,7 @@ class ListThreadsController extends AbstractListController
         if ($queryWord = Arr::get($filter, 'q')) {
             $query->leftJoin('posts', 'threads.id', '=', 'posts.thread_id')
                 ->where('posts.is_first', true)
-                ->where(function ($query) use ($queryWord) {
+                ->where(function (Builder $query) use ($queryWord) {
                     $queryWord = explode(',', $queryWord);
                     foreach ($queryWord as $word) {
                         $query->orWhere('threads.title', 'like', "%{$word}%");
@@ -429,12 +439,14 @@ class ListThreadsController extends AbstractListController
                 });
         }
 
-        // 关注的人的文章
+        // 关注的人的帖子，不包含匿名问答帖
         $fromUserId = Arr::get($filter, 'fromUserId');
 
         if ($fromUserId && $fromUserId == $actor->id) {
             $query->join('user_follow', 'threads.user_id', '=', 'user_follow.to_user_id')
-                ->where('user_follow.from_user_id', $fromUserId);
+                ->join('questions', 'threads.id', '=', 'questions.thread_id')
+                ->where('user_follow.from_user_id', $fromUserId)
+                ->where('questions.is_anonymous', false);
         }
 
         // 话题文章

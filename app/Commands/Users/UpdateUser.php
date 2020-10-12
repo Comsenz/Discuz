@@ -27,8 +27,8 @@ use App\MessageTemplate\GroupMessage;
 use App\MessageTemplate\Wechat\WechatGroupMessage;
 use App\Models\Group;
 use App\Models\GroupPaidUser;
-use App\Models\UserActionLogs;
 use App\Models\User;
+use App\Models\UserActionLogs;
 use App\Models\UserWechat;
 use App\Notifications\System;
 use App\Repositories\UserRepository;
@@ -171,7 +171,7 @@ class UpdateUser
             $user->changeMobile($mobile);
         }
 
-        if (Arr::has($attributes, 'status')) {
+        if ($this->actor->id != $user->id && Arr::has($attributes, 'status')) {
             $this->assertCan($this->actor, 'edit.status', $user);
             $status = Arr::get($attributes, 'status');
             $user->changeStatus($status);
@@ -265,8 +265,9 @@ class UpdateUser
                 }
             }
         }
-        $username = Arr::get($attributes, 'username');
-        if ($username && $username != $user->username) {
+
+        if ($username = Arr::get($attributes, 'username')) {
+            $this->validator->setUser($user);
             $validator['username'] = $username;
 
             // 敏感词校验

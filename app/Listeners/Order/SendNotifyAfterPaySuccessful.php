@@ -54,8 +54,11 @@ class SendNotifyAfterPaySuccessful
     {
         $this->order = $event->order;
 
-        // 如果是问答提问，没有主题数据
-        if ($this->order->type == Order::ORDER_TYPE_QUESTION) {
+        // 不发通知：问答的提问没有主题数据；购买用户组没人可收
+        if (
+            $this->order->type == Order::ORDER_TYPE_QUESTION
+            || $this->order->type == Order::ORDER_TYPE_GROUP
+        ) {
             return;
         }
 
@@ -118,6 +121,8 @@ class SendNotifyAfterPaySuccessful
 
                 // 发送分成通知
                 $this->sendScaleNotice('payee');
+                break;
+            default:
                 break;
         }
     }

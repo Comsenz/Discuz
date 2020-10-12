@@ -109,7 +109,7 @@
                 </div>
                 <el-button v-if="scope.row._data.cash_status === 1" type="text" size="small" slot="reference">审核</el-button>
               </el-popover>
-
+              <p v-else>{{auditstatus(scope.row._data.cash_status)}}</p>
               <!--<el-button v-if="scope.row._data.cash_status !== '1'" type="text" size="small">审核</el-button>-->
             </template>
           </el-table-column>

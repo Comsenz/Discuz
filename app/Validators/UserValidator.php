@@ -23,6 +23,7 @@ use App\Rules\Captcha;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\AbstractValidator;
 use Illuminate\Validation\Factory;
+use Illuminate\Validation\Rule;
 
 class UserValidator extends AbstractValidator
 {
@@ -115,7 +116,11 @@ class UserValidator extends AbstractValidator
     protected function getRules()
     {
         $rules = [
-            'username' => 'required|max:15|unique:users',
+            'username' => [
+                'required',
+                'max:15',
+                Rule::unique('users')->ignoreModel($this->user),
+            ],
             'password' => $this->getPasswordRules(),
             'pay_password' => 'bail|sometimes|required|confirmed|digits:6',
             'pay_password_token' => 'sometimes|required|session_token:reset_pay_password',

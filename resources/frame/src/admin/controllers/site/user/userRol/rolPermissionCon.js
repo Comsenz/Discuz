@@ -46,6 +46,10 @@ export default {
           name: 'security'
         },
         {
+          title: '价格设置',
+          name: 'pricesetting'
+        },
+        {
           title: '其他设置',
           name: 'other'
         },
@@ -58,62 +62,22 @@ export default {
       purchasePrice: '',
       dyedate: '',
       ispad:'',
+      allowtobuy: '',
+      defaultuser: false,
     }
   },
   methods: {
-    /**
-     * 允许购买权限修改
-    */
-    allowtobuy() {
-      let valueType = '';
-      if (this.value) {
-        valueType = 1;
-      } else {
-        valueType = 0;
-      }
-      this.appFetch({
-        url:'settings',
-        method:'post',
-        data:{
-          "data":[
-            {
-             "attributes":{
-              "key": 'wxpay_mchpay_close',
-              "value":valueType,
-              "tag": 'wxpay',
-             }
-            }
-           ]
-        }
-      })
-      .then(data => {
-        console.log(data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    duedata(evn) {
+      this.purchasePrice = this.purchasePrice.replace(/[^\d.]/g, '')
+      .replace(/\.{2,}/g, '.')
+      .replace('.', '$#$')
+      .replace(/\./g, '')
+      .replace('$#$', '.')
+      .replace(/^(-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
+      .replace(/^\./g, '');
     },
-    /**
-     * 用户组付费金额和到期时间
-    */
-    paymentAmountandDueDate() {
-      this.appFetch({
-        url: 'groups',
-        method: 'post',
-        data: {
-          data: {
-            'attributes': {
-              'name': this.$route.query.name,
-              'is_paid': this.ispad,
-              'fee': this.purchasePrice,
-              'days': this.dyedate,
-            }
-          }
-        }
-      }).then(res => {
-        this.getGroupResource();
-        console.log(res);
-      })
+    addprice(evn) {
+      evn.replace(/[^/d]/g,'');
     },
     signUpSet() {
       this.appFetch({
@@ -129,7 +93,10 @@ export default {
           this.bindPhoneDisabled = res.readdata._data.qcloud.qcloud_sms === false;
           this.wechatPayment = res.readdata._data.paycenter.wxpay_close === false;
           this.canBeOnlooker = res.readdata._data.set_site.site_onlooker_price > 0;
-          this.value = res.readdata._data.paycenter.wxpay_mchpay_close;
+          this.allowtobuy =  res.readdata._data.set_site.site_pay_group_close == '1' ? true : false;
+          if (!this.allowtobuy) {
+            this.value = false;
+          }
         }
       })
     },
@@ -222,6 +189,20 @@ export default {
       if (!this.checkNum()) {
         return;
       }
+      // if (this.purchasePrice === 0 || this.purchasePrice === '' || this.dyedate === 0 || this.dyedate === '') 
+      if (this.purchasePrice === 0) {
+        this.$message.error('价格不能为0');
+        return;
+      } else if (this.purchasePrice === '') {
+        this.$message.error('价格不能为空');
+        return;
+      } else if (this.dyedate === 0) {
+        this.$message.error('到期时间不能为0');
+        return;
+      } else if (this.dyedate === '') {
+        this.$message.error('到期时间不能为空');
+        return;
+      }
       // this.allowtobuy();
       this.patchGroupScale();
       this.patchGroupPermission();
@@ -243,15 +224,21 @@ export default {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
-          // console.log(res);
-          // this.ispad = res.data.attributes.isPaid;
-          // this.purchasePrice = res.data.attributes.fee;
-          // this.dyedate = res.data.attributes.days;
+          this.ispad = res.data.attributes.isPaid;
+          this.purchasePrice = res.data.attributes.fee;
+          this.dyedate = res.data.attributes.days;
           let data = res.readdata.permission;
           this.checked = [];
           this.scale = res.data.attributes.scale;
           this.is_subordinate = res.data.attributes.is_subordinate;
           this.is_commission = res.data.attributes.is_commission;
+          this.defaultuser = res.data.attributes.default;
+          if (res.data.attributes.default) {
+            this.value = false;
+            this.patchGroupScale();
+          } else {
+            this.value = res.data.attributes.isPaid;
+          }
           data.forEach((item) => {
             this.checked.push(item._data.permission)
           })
@@ -307,6 +294,9 @@ export default {
           data: {
             "attributes": {
               'name': this.$route.query.name,
+              'is_paid': this.value ? 1 : 0,
+              'fee': this.purchasePrice,
+              'days': this.dyedate,
               "scale": this.scale,
               "is_subordinate": this.is_subordinate,
               "is_commission": this.is_commission,
@@ -346,7 +336,6 @@ export default {
     this.groupId = this.$route.query.id;
     this.activeTab.title = this.$route.query.title || '内容发布权限';
     this.activeTab.name = this.$route.query.names || 'publish';
-    console.log( this.groupId);
     this.getGroupResource();
     this.signUpSet();
   },

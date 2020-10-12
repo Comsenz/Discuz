@@ -141,6 +141,32 @@ export default {
       this.postReview(data);
     },
 
+    /**
+     * 审核之后的状态
+     */
+    auditstatus(status) {
+      switch (status){
+        case 2:
+          return "标记打款";
+          break;
+        case 3:
+          return "审核拒绝";
+          break;
+        case 4:
+          return "标记打款";
+          break;
+        case 5:
+          return "标记打款";
+          break;
+        case 6:
+          return "打款失败"
+          break;
+        default:
+          //获取状态失败，请刷新页面
+          return "未知状态";
+      }
+    },
+
     searchClick(){
       if (this.applicationTime == null){
         this.applicationTime = ['','']

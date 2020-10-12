@@ -118,6 +118,9 @@ class CreateThread
                 case Thread::TYPE_OF_AUDIO:
                     $content = '分享语音';
                     break;
+                case Thread::TYPE_OF_GOODS:
+                    $content = '分享商品';
+                    break;
             }
         }
 

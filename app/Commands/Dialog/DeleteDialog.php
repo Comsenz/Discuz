@@ -25,8 +25,8 @@ use App\Repositories\DialogRepository;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Bus\Dispatcher as DispatcherBus;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class DeleteDialog
 {
@@ -68,28 +68,28 @@ class DeleteDialog
             $otherType = 'sender';
         }
 
-        //单一删除增加删除时间，供获取接口筛选
-        if (!$dialog->sender_deleted_at && !$dialog->recipient_deleted_at) {
-            $dialog->{$actorType . '_deleted_at'} = Carbon::now();
-        } else {
-            //双方都存在删除动作时，删除部分无效消息
-            if (!$dialog->{$actorType . '_deleted_at'}) {
-                $dateTime = $dialog->{$actorType . '_deleted_at'} > $dialog->{$otherType . '_deleted_at'} ?
-                    $dialog->{$otherType . '_deleted_at'} :
-                    $dialog->{$actorType . '_deleted_at'};
+        //增加删除时间，供获取接口筛选
+        $dialog->{$actorType . '_deleted_at'} = Carbon::now();
+        $dialog->save();
 
-                $query = $dialogMessages->query()
-                    ->where('dialog_id', $dialog->id)
-                    ->where('created_at', $dateTime);
-                $dialogMessage = $query->get();
+        //双方都存在删除动作时，删除部分无效消息
+        if ($dialog->sender_deleted_at && $dialog->recipient_deleted_at) {
+            $dateTime = $dialog->{$actorType . '_deleted_at'} > $dialog->{$otherType . '_deleted_at'} ?
+                $dialog->{$otherType . '_deleted_at'} :
+                $dialog->{$actorType . '_deleted_at'};
 
-                Attachment::query()
-                    ->whereIn('id', $dialogMessage->pluck('attachment_id'))
-                    ->update(['type_id'=>0]);
+            $query = $dialogMessages->query()
+                ->where('dialog_id', $dialog->id)
+                ->where('created_at', '<', $dateTime);
+            $dialogMessage = $query->get();
+            $query->delete();
 
-                $query->delete();
-            }
+            Attachment::query()
+                ->whereIn('id', $dialogMessage->pluck('attachment_id'))
+                ->update(['type_id'=>0]);
+
         }
-        return $dialog->save();
+
+        return $dialog;
     }
 }

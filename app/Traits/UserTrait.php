@@ -119,7 +119,8 @@ trait UserTrait
                 ->pluck('group_id')
                 ->add(Group::ADMINISTRATOR_ID);
 
-            $query->join('group_user', 'group_user.user_id', '=', 'users.id');
+            $query->join('group_user', 'group_user.user_id', '=', 'users.id')
+                ->where('user_id', '<>', $actor->id);
 
             if ($canBeAsked === 'yes') {
                 $query->whereIn('group_user.group_id', $groupIds);
