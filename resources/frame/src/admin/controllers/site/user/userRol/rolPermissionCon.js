@@ -67,17 +67,19 @@ export default {
     }
   },
   methods: {
-    duedata(evn) {
-      this.purchasePrice = this.purchasePrice.replace(/[^\d.]/g, '')
-      .replace(/\.{2,}/g, '.')
-      .replace('.', '$#$')
-      .replace(/\./g, '')
-      .replace('$#$', '.')
-      .replace(/^(-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
-      .replace(/^\./g, '');
+    duedata:function(evn) {
+      this.duedata = evn.replace(/[^\d]/g, '');
     },
-    addprice(evn) {
-      evn.replace(/[^/d]/g,'');
+    addprice:function(evn) {
+      setTimeout(() => {
+        this.purchasePrice = evn.replace(/[^\d.]/g, '')
+          .replace(/\.{2,}/g, '.')
+          .replace('.', '$#$')
+          .replace(/\./g, '')
+          .replace('$#$', '.')
+          .replace(/^(-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
+          .replace(/^\./g, '');
+      }, 5)
     },
     signUpSet() {
       this.appFetch({

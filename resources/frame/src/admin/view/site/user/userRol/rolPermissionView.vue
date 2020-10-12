@@ -419,8 +419,8 @@
             clearable
             placeholder="天数"
             type="number"
-            v-model="dyedate"
             @input="duedata"
+            v-model="dyedate"
           ></el-input> 
           天后
         </CardRow>
