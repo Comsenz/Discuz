@@ -53,6 +53,8 @@ class SaveWalletLogToDatabase
         $amount = $event->amount;
         $data = $event->data;
 
+        $availableAmount = 0;
+        $freezeAmount = 0;
         switch ($data['action'] ?? '') {
             case UserWallet::OPERATE_INCREASE:
                 $availableAmount = $amount;
@@ -78,11 +80,16 @@ class SaveWalletLogToDatabase
                 throw new WalletException('operate_type_error');
         }
 
+        // 判断如果没有金额的变动，不记录到钱包日志中
+        if ($availableAmount == 0 && $freezeAmount == 0) {
+            return;
+        }
+
         // Create User Wallet Log
         UserWalletLog::createWalletLog(
             $user->id,                                  // 明细所属用户 id
-            $availableAmount ?? 0,                      // 变动可用金额
-            $freezeAmount ?? 0,                         // 变动冻结金额
+            $availableAmount,                           // 变动可用金额
+            $freezeAmount,                              // 变动冻结金额
             $data['change_type'],                       // 变动类型
             $data['change_desc'],                       // 变动描述
             Arr::get($data, 'cash_id', null),           // 关联提现 id
