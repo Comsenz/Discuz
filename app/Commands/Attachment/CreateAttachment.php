@@ -124,7 +124,12 @@ class CreateAttachment
             );
 
             // 验证
-            $validator->valid(['type' => $this->type, 'size' => $file->getSize(), 'file' => $file, 'ext'=>$file->clientExtension()]);
+            $validator->valid([
+                'type' => $this->type,
+                'file' => $file,
+                'size' => $file->getSize(),
+                'ext' => $file->clientExtension(),
+            ]);
 
             $this->events->dispatch(
                 new Uploading($this->actor, $file)
