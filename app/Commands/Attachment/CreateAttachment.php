@@ -107,10 +107,9 @@ class CreateAttachment
         $file = $this->file;
 
         $ext = pathinfo($file->getClientFilename(), PATHINFO_EXTENSION);
-        $ext = $ext ? ".$ext" : '';
 
         $tmpFile = tempnam(storage_path('/tmp'), 'attachment');
-        $tmpFileWithExt = $tmpFile . $ext;
+        $tmpFileWithExt = $tmpFile . ($ext ? ".$ext" : '');
 
         $file->moveTo($tmpFileWithExt);
 
@@ -124,7 +123,12 @@ class CreateAttachment
             );
 
             // 验证
-            $validator->valid(['type' => $this->type, 'size' => $file->getSize(), 'file' => $file, 'ext'=>$file->clientExtension()]);
+            $validator->valid([
+                'type' => $this->type,
+                'file' => $file,
+                'size' => $file->getSize(),
+                'ext' => strtolower($ext),
+            ]);
 
             $this->events->dispatch(
                 new Uploading($this->actor, $file)

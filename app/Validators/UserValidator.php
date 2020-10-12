@@ -119,7 +119,7 @@ class UserValidator extends AbstractValidator
             'username' => [
                 'required',
                 'max:15',
-                Rule::unique('users')->ignoreModel($this->user),
+                Rule::unique('users')->ignore($this->user ? $this->user->id : 0),
             ],
             'password' => $this->getPasswordRules(),
             'pay_password' => 'bail|sometimes|required|confirmed|digits:6',
