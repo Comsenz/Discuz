@@ -127,7 +127,7 @@ class CreateAttachment
                 'type' => $this->type,
                 'file' => $file,
                 'size' => $file->getSize(),
-                'ext' => $ext,
+                'ext' => strtolower($ext),
             ]);
 
             $this->events->dispatch(
