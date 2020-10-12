@@ -34,11 +34,6 @@ class AttachmentValidator extends AbstractValidator
     protected $settings;
 
     /**
-     * @var string
-     */
-    protected $typeName;
-
-    /**
      * @param Factory $validator
      * @param SettingsRepository $settings
      */
@@ -47,7 +42,6 @@ class AttachmentValidator extends AbstractValidator
         parent::__construct($validator);
 
         $this->settings = $settings;
-        $this->typeName = $this->getTypeName();
     }
 
     /**
@@ -55,8 +49,10 @@ class AttachmentValidator extends AbstractValidator
      */
     protected function getRules()
     {
+        $typeName = $this->getTypeName();
+
         // 文件类型
-        $extensions = Str::of($this->settings->get("support_{$this->typeName}_ext"))
+        $extensions = Str::of($this->settings->get("support_{$typeName}_ext"))
             ->explode(',')
             ->merge(['', 'bin']) // 无论如何允许上传的文件
             ->diff(['php'])      // 无论如何禁止上传的文件
@@ -83,8 +79,10 @@ class AttachmentValidator extends AbstractValidator
      */
     protected function getMessages()
     {
+        $typeName = $this->getTypeName();
+
         return [
-            'ext.in' => '文件类型错误，支持' . $this->settings->get("support_{$this->typeName}_ext"),
+            'ext.in' => '文件类型错误，支持' . $this->settings->get("support_{$typeName}_ext"),
         ];
     }
 

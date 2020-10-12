@@ -107,10 +107,9 @@ class CreateAttachment
         $file = $this->file;
 
         $ext = pathinfo($file->getClientFilename(), PATHINFO_EXTENSION);
-        $ext = $ext ? ".$ext" : '';
 
         $tmpFile = tempnam(storage_path('/tmp'), 'attachment');
-        $tmpFileWithExt = $tmpFile . $ext;
+        $tmpFileWithExt = $tmpFile . ($ext ? ".$ext" : '');
 
         $file->moveTo($tmpFileWithExt);
 
@@ -128,7 +127,7 @@ class CreateAttachment
                 'type' => $this->type,
                 'file' => $file,
                 'size' => $file->getSize(),
-                'ext' => $file->clientExtension(),
+                'ext' => $ext,
             ]);
 
             $this->events->dispatch(
