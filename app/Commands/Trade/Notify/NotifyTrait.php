@@ -115,11 +115,16 @@ trait NotifyTrait
                     $events->dispatch(
                         new PaidGroup($this->orderInfo->group_id, User::find($this->orderInfo->user_id), $this->orderInfo)
                     );
+
                     return $this->orderInfo;
 
                 case Order::ORDER_TYPE_QUESTION:
-                    // 提问时不分成，因为还未回答
+                    // 提问时，计算站长分成，以及作者实际获取金额
+                    $this->orderInfo->calculateMasterAmount();
+                    $this->orderInfo->save();
+
                     return $this->orderInfo;
+
                 case Order::ORDER_TYPE_ONLOOKER:
                     // 计算围观问答人/答题人分红
                     $onlookerActualPrice = $this->orderInfo->calculateOnlookersAmount(true);

@@ -150,6 +150,8 @@ class ListNotificationController extends AbstractListController
                         $item->thread_created_at = $thread->formatDate('created_at');
                         $threadUser = $thread->user;
                         if (! empty($threadUser)) {
+                            $item->thread_username = $threadUser->username;
+                            $item->thread_user_groups = $threadUser->groups->pluck('name')->join(',');
                             /**
                              * 判断是否是问答、匿名提问
                              * @var Thread $thread
@@ -162,10 +164,7 @@ class ListNotificationController extends AbstractListController
                                     $item->realname = $thread->question->isAnonymousName();
                                     $item->user_avatar = '';
                                 }
-                            } else {
-                                $item->thread_username = $threadUser->username;
                             }
-                            $item->thread_user_groups = $threadUser->groups->pluck('name')->join(',');
                         }
                     }
                 }
