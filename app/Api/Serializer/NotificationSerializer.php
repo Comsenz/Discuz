@@ -59,7 +59,7 @@ class NotificationSerializer extends AbstractSerializer
         ]);
 
         // 判断是否是问答帖，并且是否是匿名
-        if ($result['thread_type'] == Thread::TYPE_OF_QUESTION && $result['thread_is_anonymous']) {
+        if ($model->thread_type == Thread::TYPE_OF_QUESTION && $model->thread_is_anonymous) {
             $result['user_id'] = -1;
             $result['isReal'] = false; // 全部默认未认证
         }
