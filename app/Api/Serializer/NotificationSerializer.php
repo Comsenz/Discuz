@@ -18,6 +18,7 @@
 
 namespace App\Api\Serializer;
 
+use App\Models\Thread;
 use Discuz\Api\Serializer\AbstractSerializer;
 
 /**
@@ -57,8 +58,8 @@ class NotificationSerializer extends AbstractSerializer
             'thread_is_approved' => $model->thread_is_approved ?: 0,
         ]);
 
-        // 判断是否是匿名
-        if (isset($result['is_anonymous']) && $result['is_anonymous']) {
+        // 判断是否是问答帖，并且是否是匿名
+        if ($result['thread_type'] == Thread::TYPE_OF_QUESTION && $result['thread_is_anonymous']) {
             $result['user_id'] = -1;
             $result['isReal'] = false; // 全部默认未认证
         }

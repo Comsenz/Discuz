@@ -146,6 +146,7 @@ class ListNotificationController extends AbstractListController
                     // 获取主题作者用户组
                     if (! empty($threads->get($threadID))) {
                         $thread = $threads->get($threadID);
+                        $item->thread_type = $thread->type;
                         $item->thread_is_approved = $thread->is_approved;
                         $item->thread_created_at = $thread->formatDate('created_at');
                         $threadUser = $thread->user;
@@ -159,10 +160,12 @@ class ListNotificationController extends AbstractListController
                             if ($thread->type == Thread::TYPE_OF_QUESTION && ! empty($thread->question)) {
                                 // 匿名用户重新赋值
                                 if ($thread->question->is_anonymous) {
+                                    $item->thread_is_anonymous = $thread->question->is_anonymous;
                                     $item->thread_username = $thread->question->isAnonymousName();
                                     $item->user_name = $thread->question->isAnonymousName();
                                     $item->realname = $thread->question->isAnonymousName();
                                     $item->user_avatar = '';
+                                    $item->thread_user_groups = '';
                                 }
                             }
                         }
