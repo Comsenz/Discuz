@@ -50,6 +50,7 @@ use Illuminate\Support\Stringable;
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property Carbon expired_at
+ * @property Carbon answered_at
  * @property User $user
  * @property User $beUser
  * @property Thread $thread
@@ -105,6 +106,7 @@ class Question extends Model
         'created_at',
         'updated_at',
         'expired_at',
+        'answered_at',
     ];
 
     /**

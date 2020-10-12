@@ -56,6 +56,7 @@ class QuestionAnswerSerializer extends AbstractSerializer
             'created_at' => $this->formatDate($model->created_at),
             'updated_at' => $this->formatDate($model->updated_at),
             'expired_at' => $this->formatDate($model->expired_at),
+            'answered_at' => $this->formatDate($model->answered_at),
         ];
 
         // 判断是否已围观来展示答案
