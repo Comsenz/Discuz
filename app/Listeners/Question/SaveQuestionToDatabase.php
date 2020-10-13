@@ -141,7 +141,7 @@ class SaveQuestionToDatabase
                         $walletLog = UserWalletLog::query()->where([
                             'user_id' => $actor->id,
                             'order_id' => $order->id,
-                            'change_type' => UserWalletLog::TYPE_EXPEND_QUESTION,
+                            'change_type' => UserWalletLog::TYPE_QUESTION_FREEZE,
                         ])->first();
 
                         $walletLog->question_id = $question->id;

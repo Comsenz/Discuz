@@ -5,6 +5,10 @@ return [
     'wallet_status_error'     => '钱包状态不存在',
     'available_amount_error' => '钱包可用金额不足',
     'status_cash_freeze'     => '钱包已冻结提现',
+
+    'question_freeze_desc'   => '问答冻结',
+    'question_return_thaw_desc'  => '问答返还解冻',
+
     'cash_freeze_desc'       => '提现冻结',
     'cash_sum_limit'       => '超出每日提现金额限制',
     'cash_interval_time'       => '提现处于限制间隔天数内',
@@ -13,9 +17,6 @@ return [
     'cash_review_failure'           => '审核不通过，退回',
     'operate_forbidden' => '非法操作',
     'pem_notexist' => '证书不存在，请先上传证书',
-    'question_freeze_desc'   => '问答冻结',
-    'question_thaw_desc'     => '问答解冻',
-    'question_return_thaw_desc'  => '问答返还解冻',
 
     // user_wallet_log
     'detail_type_does_not_exist' => '钱包明细类型',

@@ -88,8 +88,8 @@ class WalletPayNotify
                     $change_type_lang = 'wallet.expend_group';
                     break;
                 case Order::ORDER_TYPE_QUESTION:
-                    $change_type = UserWalletLog::TYPE_EXPEND_QUESTION;
-                    $change_type_lang = 'wallet.expend_question';
+                    $change_type = UserWalletLog::TYPE_QUESTION_FREEZE;
+                    $change_type_lang = 'wallet.question_freeze_desc';
                     // 钱包&钱包日志 增加冻结金额数
                     $userWallet->freeze_amount = $userWallet->freeze_amount + $this->data['amount'];
                     $freezeAmount = $this->data['amount'];
