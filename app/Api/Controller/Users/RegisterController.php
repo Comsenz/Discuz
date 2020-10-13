@@ -102,9 +102,11 @@ class RegisterController extends AbstractCreateController
             $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $user);
         }
 
-        if ($mobile = Arr::get($attributes, 'mobile')) {
-            $this->bind->mobile($mobile, $user);
+        //绑定手机号
+        if ($mobileToken = Arr::get($attributes, 'mobileToken')) {
+            $this->bind->mobile($mobileToken, $user);
         }
+
         // 注册后的登录检查
         $this->events->dispatch(new RegisteredCheck($user));
 

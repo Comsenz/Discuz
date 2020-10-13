@@ -19,6 +19,7 @@
 namespace App\User;
 
 use App\Models\SessionToken;
+use App\Models\User;
 use App\Models\UserUcenter;
 use App\Models\UserWechat;
 use App\Repositories\MobileCodeRepository;
@@ -150,5 +151,28 @@ class Bind
         $wechatUser->save();
 
         return $wechatUser;
+    }
+
+    /**
+     * 绑定手机号
+     * @param $mobileToken
+     * @param $user
+     * @throws Exception
+     */
+    public function mobile($mobileToken, $user)
+    {
+        $session = SessionToken::get($mobileToken);
+        if ($session && $session->payload[0]) {
+            $usedCount = User::query()->where('mobile', $session->payload[0])->count();
+            if ($usedCount) {
+                throw new Exception('mobile_is_already_bind');
+            }
+            if (!$user->mobile) {
+                $user->changeMobile($session->payload[0]);
+                $user->save();
+            } else {
+                throw new Exception('user_has_mobile');
+            }
+        }
     }
 }

@@ -21,7 +21,6 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\TokenSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Events\Users\Logind;
-use App\Models\SessionToken;
 use App\Models\User;
 use App\Passport\Repositories\UserRepository;
 use App\User\Bind;
@@ -120,18 +119,9 @@ class LoginController extends AbstractResourceController
             }
 
             // 绑定手机号
-            if (Arr::has($data, 'mobileToken')) {
-                $session = SessionToken::get(Arr::get($data, 'mobileToken'));
-                $usedCount = User::query()->where('mobile', $session->payload[0])->count();
-                if ($usedCount) {
-                    throw new Exception('mobile_is_already_bind');
-                }
-                if (!$user->mobile) {
-                    $user->changeMobile($session->payload[0]);
-                    $user->save();
-                } else {
-                    throw new Exception('user_has_mobile');
-                }
+
+            if ($mobileToken = Arr::get($data, 'mobileToken')) {
+                $this->bind->mobile($mobileToken, $user);
             }
 
             $this->events->dispatch(new Logind($user));
