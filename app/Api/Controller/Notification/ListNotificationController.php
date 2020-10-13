@@ -26,6 +26,7 @@ use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -134,7 +135,7 @@ class ListNotificationController extends AbstractListController
          */
         if ($type != 'system') {
             // 获取通知里当前的用户名称和头像
-            $data->map(function ($item) use ($users, $threads, $actor) {
+            $data->map(function ($item) use ($users, $threads, $actor, $type) {
                 $user = $users->get(Arr::get($item->data, 'user_id'));
                 if (! empty($user)) {
                     $item->user_name = $user->username;
@@ -158,15 +159,31 @@ class ListNotificationController extends AbstractListController
                              * @var Thread $thread
                              */
                             if ($thread->type == Thread::TYPE_OF_QUESTION && ! empty($thread->question)) {
-                                // 匿名用户重新赋值
-                                if ($thread->question->is_anonymous) {
-                                    $item->thread_is_anonymous = $thread->question->is_anonymous;
-                                    $item->thread_username = $thread->question->isAnonymousName();
-                                    $item->user_name = $thread->question->isAnonymousName();
-                                    $item->realname = $thread->question->isAnonymousName();
-                                    $item->user_avatar = '';
-                                    $item->thread_user_groups = '';
+                                // 判断如果当前触发通知人又是匿名问答人，就准备匿名用户
+                                if ($user->id == $thread->user_id && $thread->question->is_anonymous) {
+                                    // 判断如果是匿名人，但是不是推送的 问答提问通知、也不是财务通知，其余通知都不匿名
+                                    if (Str::contains($type, ['questioned', 'rewarded'])) {
+                                        $item->user_name = $thread->question->isAnonymousName();
+                                        $item->realname = $thread->question->isAnonymousName();
+                                        $item->user_avatar = '';
+                                        $item->is_anonymous = true;
+                                    } elseif (Str::contains($type, ['related'])) {
+                                        /**
+                                         * 判断如果是 @通知 ，当匿名贴@指定人时，指定人看到的通知应该是匿名人@他
+                                         * (只用是否是首贴区分@的来自类型)
+                                         */
+                                        $postId = Arr::get($item->data, 'post_id');
+                                        if ($postId == $thread->firstPost->id) {
+                                            $item->user_name = $thread->question->isAnonymousName();
+                                            $item->realname = $thread->question->isAnonymousName();
+                                            $item->user_avatar = '';
+                                            $item->is_anonymous = true;
+                                        }
+                                    }
                                 }
+                                // 匿名主题信息全都匿名
+                                $item->thread_username = $thread->question->isAnonymousName();
+                                $item->thread_user_groups = '';
                             }
                         }
                     }
@@ -215,7 +232,7 @@ class ListNotificationController extends AbstractListController
         // 主题 ID
         $threadIds = collect($list)->pluck($pluck)->filter()->unique()->values();
         // 主题及其作者与作者用户组
-        $with = ['user', 'user.groups'];
+        $with = ['user', 'user.groups', 'firstPost'];
         // 如果是 question 添加关联查询
         if ($type == 'questioned') {
             array_push($with, 'question');

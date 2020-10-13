@@ -214,6 +214,7 @@ class ListUserWalletLogsController extends AbstractListController
         $log_start_time = Arr::get($filter, 'start_time'); //变动时间范围：开始
         $log_end_time = Arr::get($filter, 'end_time'); //变动时间范围：结束
         $log_source_user_id = Arr::get($filter, 'source_user_id');
+        $log_change_type_exclude = Arr::get($filter, 'change_type_exclude');//排除变动类型
 
         $query->when($log_user, function ($query) use ($log_user) {
             $query->where('user_id', $log_user);
@@ -224,6 +225,10 @@ class ListUserWalletLogsController extends AbstractListController
         $query->when(!is_null($log_change_type), function ($query) use ($log_change_type) {
             $log_change_type = explode(',', $log_change_type);
             $query->whereIn('change_type', $log_change_type);
+        });
+        $query->when(!is_null($log_change_type_exclude), function ($query) use ($log_change_type_exclude) {
+            $log_change_type_exclude = explode(',', $log_change_type_exclude);
+            $query->whereNotIn('change_type', $log_change_type_exclude);
         });
         $query->when($log_start_time, function ($query) use ($log_start_time) {
             $query->where('created_at', '>=', $log_start_time);

@@ -19,8 +19,8 @@
 namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\TokenSerializer;
-use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\AutoRegisterUser;
+use App\Commands\Users\GenJwtToken;
 use App\Events\Users\Logind;
 use App\Exceptions\NoUserException;
 use App\Models\User;
@@ -117,7 +117,9 @@ class WechatMiniProgramLoginController extends AbstractResourceController
                 $wechatUser->setRelation('user', $user);
                 $wechatUser->save();
             } else {
-                throw new NoUserException();
+                $noUserException = new NoUserException();
+                $noUserException->setUser(['username' => $wechatUser->nickname, 'headimgurl'=>$wechatUser->headimgurl]);
+                throw $noUserException;
             }
         }
 

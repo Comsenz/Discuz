@@ -24,9 +24,11 @@ use App\Api\Serializer\UserSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\RegisterPhoneUser;
 use App\Events\Users\Logind;
+use App\Exceptions\NoUserException;
 use App\Exceptions\TranslatorException;
 use App\MessageTemplate\Wechat\WechatRegisterMessage;
 use App\Models\MobileCode;
+use App\Models\SessionToken;
 use App\Models\User;
 use App\Models\UserWalletFailLogs;
 use App\Notifications\System;
@@ -34,14 +36,12 @@ use App\Repositories\MobileCodeRepository;
 use App\User\Bind;
 use App\Validators\UserValidator;
 use Discuz\Api\Client;
-use Discuz\Auth\Exception\LoginFailedException;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\EventsDispatchTrait;
 use Exception;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Events\Dispatcher as Events;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -94,8 +94,8 @@ class VerifyMobile
 
     /**
      * @return mixed
-     * @throws LoginFailedException
      * @throws PermissionDeniedException
+     * @throws NoUserException
      */
     protected function login()
     {
@@ -115,7 +115,12 @@ class VerifyMobile
             $this->mobileCode->setRelation('user', $user);
         } elseif (is_null($this->mobileCode->user) && !Arr::get($this->params, 'register', 0)) {
             //没用户且不需要自动注册 抛出异常
-            throw new ModelNotFoundException();
+            $token = SessionToken::generate('mobile', [$this->mobileCode->mobile], null, 3600);
+            $token->save();
+
+            $noUserException = new NoUserException();
+            $noUserException->setToken($token);
+            throw $noUserException;
         }
 
         //公众号绑定

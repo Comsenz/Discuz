@@ -21,11 +21,13 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\TokenSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Events\Users\Logind;
+use App\Models\User;
 use App\Passport\Repositories\UserRepository;
 use App\User\Bind;
 use App\User\Bound;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Foundation\Application;
+use Discuz\Socialite\Exception\SocialiteException;
 use Exception;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Events\Dispatcher as Events;
@@ -80,13 +82,15 @@ class LoginController extends AbstractResourceController
      * @param Document $document
      * @return array|mixed
      * @throws ValidationException
-     * @throws \Discuz\Socialite\Exception\SocialiteException
+     * @throws SocialiteException
+     * @throws Exception
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $data = Arr::get($request->getParsedBody(), 'data.attributes', []);
 
         $this->validator->make($data, [
+            'mobileToken' => 'filled',
             'username' => 'required',
             'password' => 'required',
         ])->validate();
@@ -98,6 +102,7 @@ class LoginController extends AbstractResourceController
         $accessToken = json_decode($response->getBody());
 
         if ($response->getStatusCode() === 200) {
+            /** @var User $user */
             $user = $this->app->make(UserRepository::class)->getUser();
 
             // 绑定公众号信息
@@ -111,6 +116,12 @@ class LoginController extends AbstractResourceController
             $encryptedData = Arr::get($data, 'encryptedData');
             if ($js_code && $iv  && $encryptedData) {
                 $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $user);
+            }
+
+            // 绑定手机号
+
+            if ($mobileToken = Arr::get($data, 'mobileToken')) {
+                $this->bind->mobile($mobileToken, $user);
             }
 
             $this->events->dispatch(new Logind($user));
