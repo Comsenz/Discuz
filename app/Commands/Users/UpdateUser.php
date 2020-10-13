@@ -157,15 +157,12 @@ class UpdateUser
             }
         }
 
-        if (Arr::has($attributes, 'mobile')) {
+        if (($mobile = Arr::get($attributes, 'mobile')) && $mobile != $user->mobile) {
             $this->assertCan($this->actor, 'edit.mobile', $user);
-            $mobile = Arr::get($attributes, 'mobile');
-            // 传空的话不需要验证
-            if (!empty($mobile)) {
-                // 判断(除自己)手机号是否已经被绑定
-                if (User::query()->where('mobile', $mobile)->whereNotIn('id', [$user->id])->exists()) {
-                    throw new \Exception('mobile_is_already_bind');
-                }
+
+            // 手机号是否已绑定
+            if (User::query()->where('mobile', $mobile)->where('id', '<>', $user->id)->exists()) {
+                throw new \Exception('mobile_is_already_bind');
             }
 
             $user->changeMobile($mobile);
@@ -266,8 +263,7 @@ class UpdateUser
             }
         }
 
-        if ($username = Arr::get($attributes, 'username')) {
-            $this->validator->setUser($user);
+        if (($username = Arr::get($attributes, 'username')) && $username != $user->username) {
             $validator['username'] = $username;
 
             // 敏感词校验
