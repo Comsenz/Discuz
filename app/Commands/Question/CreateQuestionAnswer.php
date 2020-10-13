@@ -24,6 +24,7 @@ use App\Events\Question\Saved;
 use App\Events\Question\Saving;
 use App\Models\Question;
 use App\Models\User;
+use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
@@ -101,6 +102,7 @@ class CreateQuestionAnswer
         $question->ip = $this->ip;
         $question->port = $this->port;
         $question->is_answer = Question::TYPE_OF_ANSWERED;
+        $question->answered_at = Carbon::now();
 
         $this->events->dispatch(
             new Saving($question, $this->actor, $this->data)

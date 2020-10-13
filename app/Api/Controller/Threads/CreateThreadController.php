@@ -45,6 +45,16 @@ class CreateThreadController extends AbstractCreateController
     ];
 
     /**
+     * {@inheritdoc}
+     */
+    public $optionalInclude = [
+        'question',
+        'question.beUser',
+        'question.beUser.groups',
+        'question.images',
+    ];
+
+    /**
      * @var Dispatcher
      */
     protected $bus;
