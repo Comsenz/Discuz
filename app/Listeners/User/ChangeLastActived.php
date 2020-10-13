@@ -79,25 +79,7 @@ class ChangeLastActived
         if (! $user->groups->count()) {
             $user->groups()->attach(Group::MEMBER_ID);
         } else {
-            //检查到期付费用户组
-            $groups = $user->groups()->where('is_paid', Group::IS_PAID)->get();
 
-            if ($groups->count()) {
-                $now = Carbon::now();
-                foreach ($groups as $group => $group_item) {
-                    if (empty($group_item->pivot->expiration_time)) {
-                        //免费组变为收费组
-                        $this->events->dispatch(
-                            new PaidGroup($group_item->id, $user)
-                        );
-                    } elseif ($group_item->pivot->expiration_time < $now) {
-                        GroupPaidUser::where('group_id', $group_item->pivot->group_id)
-                            ->where('user_id', $group_item->pivot->user_id)
-                            ->update(['deleted_at' => $now, 'delete_type' => GroupPaidUser::DELETE_TYPE_EXPIRE]);
-                        $user->groups()->detach($group_item);
-                    }
-                }
-            }
         }
 
         // 更新用户最后登录时间
