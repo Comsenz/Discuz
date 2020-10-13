@@ -87,7 +87,9 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             ['js_code' => 'required','iv' => 'required','encryptedData' => 'required']
         )->validate();
 
-        $wechatUser = $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, new User(), true);
+        $actor = $request->getAttribute('actor');
+        $user = !$actor->isGuest() ? $actor : new User();
+        $wechatUser = $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $user, true);
         $this->settings->get('');
         if ($wechatUser->user_id) {
             //已绑定的用户登陆
