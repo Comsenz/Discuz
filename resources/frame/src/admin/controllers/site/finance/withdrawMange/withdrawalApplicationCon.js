@@ -116,7 +116,16 @@ export default {
           return '';
         }
       } else {
-        return num.user._data.originalMobile;
+        return num._data.cash_mobile;
+      }
+    },
+    toexamine(num) {
+      console.log(num);
+      if (num._data.cash_status == 1 && num._data.cash_type === 1) {
+        return true;
+      }
+      if (num._data.cash_status == 1 && num._data.cash_type === 0) {
+        return false;
       }
     },
     noReviewClick(id){
@@ -141,6 +150,12 @@ export default {
       this.postReview(data);
     },
 
+    reviewClicks(id){
+      let data = {id:[]};
+      data.id.push(id);
+      data.status = 5;
+      this.postReview(data);
+    },
     /**
      * 审核之后的状态
      */
@@ -213,6 +228,7 @@ export default {
         }else {
           this.tableData = [];
           this.tableData = res.readdata;
+          console.log(this.tableData);
           this.total = res.meta.total;
           this.pageCount = res.meta.pageCount;
         }
