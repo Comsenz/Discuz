@@ -341,7 +341,8 @@ $route->delete('/reports/batch/{ids}', 'reports.batchDelete', ApiController\Repo
 |--------------------------------------------------------------------------
 */
 
-$route->post('/analysis/goods', 'analysis.goods.url', ApiController\Analysis\ResourceAnalysisGoodsController::class);
+$route->post('/goods/analysis', 'goods.analysis', ApiController\Analysis\ResourceAnalysisGoodsController::class);
+$route->get('/goods/{id}', 'goods.resource', ApiController\Analysis\ResourceGoodsController::class);
 
 /*
 |--------------------------------------------------------------------------
