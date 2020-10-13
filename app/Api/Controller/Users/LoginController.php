@@ -21,6 +21,7 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\TokenSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Events\Users\Logind;
+use App\Models\SessionToken;
 use App\Models\User;
 use App\Passport\Repositories\UserRepository;
 use App\User\Bind;
@@ -90,7 +91,7 @@ class LoginController extends AbstractResourceController
         $data = Arr::get($request->getParsedBody(), 'data.attributes', []);
 
         $this->validator->make($data, [
-            'mobile' => 'filled|regex:/^1[3456789][0-9]{9}$/',
+            'mobileToken' => 'filled',
             'username' => 'required',
             'password' => 'required',
         ])->validate();
@@ -119,13 +120,14 @@ class LoginController extends AbstractResourceController
             }
 
             // 绑定手机号
-            if ($mobile = Arr::get($data, 'mobile')) {
-                $usedCount = User::query()->where('mobile', $mobile)->count();
+            if (Arr::has($data, 'mobileToken')) {
+                $session = SessionToken::get(Arr::get($data, 'mobileToken'));
+                $usedCount = User::query()->where('mobile', $session->payload[0])->count();
                 if ($usedCount) {
                     throw new Exception('mobile_is_already_bind');
                 }
                 if (!$user->mobile) {
-                    $user->changeMobile($mobile);
+                    $user->changeMobile($session->payload[0]);
                     $user->save();
                 } else {
                     throw new Exception('user_has_mobile');
