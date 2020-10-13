@@ -166,6 +166,7 @@ class ListNotificationController extends AbstractListController
                                         $item->user_name = $thread->question->isAnonymousName();
                                         $item->realname = $thread->question->isAnonymousName();
                                         $item->user_avatar = '';
+                                        $item->is_anonymous = true;
                                     } elseif (Str::contains($type, ['related'])) {
                                         /**
                                          * 判断如果是 @通知 ，当匿名贴@指定人时，指定人看到的通知应该是匿名人@他
@@ -176,11 +177,11 @@ class ListNotificationController extends AbstractListController
                                             $item->user_name = $thread->question->isAnonymousName();
                                             $item->realname = $thread->question->isAnonymousName();
                                             $item->user_avatar = '';
+                                            $item->is_anonymous = true;
                                         }
                                     }
                                 }
                                 // 匿名主题信息全都匿名
-                                $item->thread_is_anonymous = $thread->question->is_anonymous;
                                 $item->thread_username = $thread->question->isAnonymousName();
                                 $item->thread_user_groups = '';
                             }
