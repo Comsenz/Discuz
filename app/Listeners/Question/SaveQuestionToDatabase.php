@@ -115,7 +115,6 @@ class SaveQuestionToDatabase
                         'price' => $price,
                         'onlooker_unit_price' => (float) $this->settings->get('site_onlooker_price', 'default', 0),
                         'is_onlooker' => $actor->can('canBeOnlooker') ? Arr::get($questionData, 'is_onlooker', true) : false,
-                        'is_anonymous' => Arr::get($data, 'attributes.is_anonymous', false),
                         'expired_at' => Carbon::today()->addDays(Question::EXPIRED_DAY),
                     ];
                     $question = Question::build($build);

@@ -160,13 +160,13 @@ class ListNotificationController extends AbstractListController
                              */
                             if ($thread->type == Thread::TYPE_OF_QUESTION && ! empty($thread->question)) {
                                 // 判断如果当前触发通知人又是匿名问答人，就准备匿名用户
-                                if ($user->id == $thread->user_id && $thread->question->is_anonymous) {
+                                if ($user->id == $thread->user_id && $thread->is_anonymous) {
                                     // 判断如果是匿名人，但是不是推送的 问答提问通知、也不是财务通知，其余通知都不匿名
                                     if (Str::contains($type, ['questioned', 'rewarded'])) {
-                                        $item->user_name = $thread->question->isAnonymousName();
-                                        $item->realname = $thread->question->isAnonymousName();
+                                        $item->user_name = $thread->isAnonymousName();
+                                        $item->realname = $thread->isAnonymousName();
                                         $item->user_avatar = '';
-                                        $item->is_anonymous = true;
+                                        $item->isAnonymous = true;
                                     } elseif (Str::contains($type, ['related'])) {
                                         /**
                                          * 判断如果是 @通知 ，当匿名贴@指定人时，指定人看到的通知应该是匿名人@他
@@ -174,15 +174,15 @@ class ListNotificationController extends AbstractListController
                                          */
                                         $postId = Arr::get($item->data, 'post_id');
                                         if ($postId == $thread->firstPost->id) {
-                                            $item->user_name = $thread->question->isAnonymousName();
-                                            $item->realname = $thread->question->isAnonymousName();
+                                            $item->user_name = $thread->isAnonymousName();
+                                            $item->realname = $thread->isAnonymousName();
                                             $item->user_avatar = '';
-                                            $item->is_anonymous = true;
+                                            $item->isAnonymous = true;
                                         }
                                     }
                                 }
                                 // 匿名主题信息全都匿名
-                                $item->thread_username = $thread->question->isAnonymousName();
+                                $item->thread_username = $thread->isAnonymousName();
                                 $item->thread_user_groups = '';
                             }
                         }

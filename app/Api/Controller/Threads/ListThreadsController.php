@@ -444,9 +444,8 @@ class ListThreadsController extends AbstractListController
 
         if ($fromUserId && $fromUserId == $actor->id) {
             $query->join('user_follow', 'threads.user_id', '=', 'user_follow.to_user_id')
-                ->join('questions', 'threads.id', '=', 'questions.thread_id')
                 ->where('user_follow.from_user_id', $fromUserId)
-                ->where('questions.is_anonymous', false);
+                ->where('threads.is_anonymous', false);
         }
 
         // 话题文章

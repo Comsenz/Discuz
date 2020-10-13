@@ -78,6 +78,7 @@ class ThreadSerializer extends AbstractSerializer
             'isSticky'          => (bool) $model->is_sticky,
             'isEssence'         => (bool) $model->is_essence,
             'isSite'            => (bool) $model->is_site,
+            'isAnonymous'       => (bool) $model->is_anonymous,
             'canViewPosts'      => $gate->allows('viewPosts', $model),
             'canReply'          => $gate->allows('reply', $model),
             'canApprove'        => $gate->allows('approve', $model),
@@ -149,7 +150,7 @@ class ThreadSerializer extends AbstractSerializer
          * 判断是否匿名问答
          * (非当前用户不是作者)
          */
-        if ($model->question->is_anonymous && $model->user->id != $this->actor->id) {
+        if ($model->is_anonymous && $model->user->id != $this->actor->id) {
             $model->user = new Anonymous;
         }
     }
