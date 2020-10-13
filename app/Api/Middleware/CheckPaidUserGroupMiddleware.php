@@ -36,7 +36,7 @@ class CheckPaidUserGroupMiddleware implements MiddlewareInterface
     {
         $actor = $request->getAttribute('actor');
 
-        if ($actor->groups->count()) {
+        if ($actor->groups->count() && !$actor->isGuest()) {
             //检查到期付费用户组
             $groups = $actor->groups()->where('is_paid', Group::IS_PAID)->get();
 
