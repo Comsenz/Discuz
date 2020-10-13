@@ -20,6 +20,7 @@ namespace App\Api\Middleware;
 
 use App\Events\Group\PaidGroup;
 use App\Models\Group;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Carbon;
 use App\Models\GroupPaidUser;
 use Psr\Http\Message\ResponseInterface;
@@ -29,6 +30,13 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class CheckPaidUserGroupMiddleware implements MiddlewareInterface
 {
+    public $events;
+
+    public function __construct(Dispatcher $events)
+    {
+        $this->events = $events;
+    }
+
     /**
      * @inheritDoc
      */
