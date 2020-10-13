@@ -90,7 +90,7 @@ class LoginController extends AbstractResourceController
         $data = Arr::get($request->getParsedBody(), 'data.attributes', []);
 
         $this->validator->make($data, [
-            'mobile' => 'filled|regex:/^1[345789][0-9]{9}$/',
+            'mobile' => 'filled|regex:/^1[3456789][0-9]{9}$/',
             'username' => 'required',
             'password' => 'required',
         ])->validate();
