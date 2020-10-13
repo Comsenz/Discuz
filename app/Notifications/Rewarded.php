@@ -187,7 +187,7 @@ class Rewarded extends System
      */
     public function noticeByQuestion()
     {
-        $this->initData['user_id'] = $this->question->user; // 解冻退回用户
+        $this->initData['user_id'] = $this->question->user->id; // 解冻退回用户
         $this->initData['thread_id'] = $this->question->thread->id;
         $this->initData['thread_username'] = $this->question->thread->user->username;
         $this->initData['thread_title'] = $this->question->thread->title;
