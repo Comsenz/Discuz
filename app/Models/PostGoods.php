@@ -202,9 +202,11 @@ class PostGoods extends Model
 
     public function getImagePathAttribute($value)
     {
-        // imagePath add to urlPrefix
-        if (substr($value, 0, 7) !== 'http://' && substr($value, 0, 8) !== 'https://') {
-            $value = 'https://' . $value;
+        if (!empty($value)) {
+            // imagePath add to urlPrefix
+            if (substr($value, 0, 7) !== 'http://' && substr($value, 0, 8) !== 'https://') {
+                $value = 'https://' . $value;
+            }
         }
 
         return $value;

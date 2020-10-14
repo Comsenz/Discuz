@@ -25,6 +25,7 @@ use App\Traits\PostGoodsTrait;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use GuzzleHttp\Client;
+use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -47,10 +48,19 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
     public $optionalInclude = ['user', 'post'];
 
     /**
-     * ResourceInviteController constructor.
+     * @var UrlGenerator
      */
-    public function __construct()
+    protected $url;
+
+    /**
+     * ResourceInviteController constructor.
+     *
+     * @param UrlGenerator $url
+     */
+    public function __construct(UrlGenerator $url)
     {
+        $this->url = $url;
+
         $config = [
             'timeout' => 30,
         ];
@@ -147,6 +157,11 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
         }
 
         /**
+         * init GoodsInfo
+         */
+        $this->initGoods();
+
+        /**
          * Get GoodsInfo
          * @see PostGoodsTrait
          */
@@ -183,5 +198,39 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
         $goods->save();
 
         return $goods;
+    }
+
+    protected function initGoods()
+    {
+        switch ($this->goodsType['key']) {
+            case 0: // 淘宝
+            case 5: // 淘宝口令粘贴值
+                $this->goodsInfo['title'] = '淘宝商品';
+                $this->goodsInfo['src'] = $this->getDefaultIconUrl('taobao.svg');
+                break;
+            case 1: // 天猫
+                $this->goodsInfo['title'] = '天猫商品';
+                $this->goodsInfo['src'] = $this->getDefaultIconUrl('tmall.svg');
+                break;
+            case 2: // 京东
+            case 6: // 京东粘贴值H5域名
+                $this->goodsInfo['title'] = '京东商品';
+                $this->goodsInfo['src'] = $this->getDefaultIconUrl('jd.svg');
+                break;
+            case 3: // 拼多多H5
+                $this->goodsInfo['title'] = '拼多多商品';
+                $this->goodsInfo['src'] = $this->getDefaultIconUrl('pdd.svg');
+                break;
+            case 4: // 有赞
+            case 7: // 有赞粘贴值
+                $this->goodsInfo['title'] = '有赞商品';
+                $this->goodsInfo['src'] = $this->getDefaultIconUrl('youzan.svg');
+                break;
+        }
+    }
+
+    protected function getDefaultIconUrl($imgName)
+    {
+        return $this->url->to('/images/goods/' . $imgName);
     }
 }
