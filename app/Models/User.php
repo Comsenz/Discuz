@@ -394,7 +394,29 @@ class User extends Model
     {
         $this->thread_count = $this->threads()
             ->where('is_approved', Thread::APPROVED)
+            ->where('is_anonymous', false)
             ->whereNull('deleted_at')
+            ->count();
+
+        return $this;
+    }
+
+    /**
+     * 刷新用户问答数，包括提问与回答
+     *
+     * @return $this
+     */
+    public function refreshQuestionCount()
+    {
+        $this->question_count = Thread::query()
+            ->join('questions', 'threads.id', '=', 'questions.thread_id')
+            ->where('threads.type', Thread::TYPE_OF_QUESTION)
+            ->where('threads.is_approved', Thread::APPROVED)
+            ->where('threads.is_anonymous', false)
+            ->whereNull('threads.deleted_at')
+            ->where(function (Builder $query) {
+                $query->where('threads.user_id', $this->id)->orWhere('questions.be_user_id', $this->id);
+            })
             ->count();
 
         return $this;
@@ -521,26 +543,6 @@ class User extends Model
         }
 
         return false;
-    }
-
-    /**
-     * 刷新用户提问数量
-     * @return $this
-     */
-    public function refreshQuestionCount()
-    {
-        $this->question_count = Thread::query()
-            ->join('questions', 'threads.id', '=', 'questions.thread_id')
-            ->where('threads.is_approved', Thread::APPROVED)
-            ->where('threads.type', Thread::TYPE_OF_QUESTION)
-            ->where('threads.is_anonymous', false)
-            ->whereNull('threads.deleted_at')
-            ->where(function (Builder $query) {
-                $query->where('threads.user_id', $this->id)->orWhere('questions.be_user_id', $this->id);
-            })
-            ->count();
-
-        return $this;
     }
 
     /*

@@ -320,6 +320,11 @@ class ListThreadsController extends AbstractListController
             } else {
                 $query->where('threads.user_id', $userId);
             }
+
+            // 非本人或管理员不能查看该用户的匿名帖
+            if ($userId != $actor->id || ! $actor->isAdmin()) {
+                $query->where('is_anonymous', false);
+            }
         }
 
         // 作者用户名
@@ -331,6 +336,11 @@ class ListThreadsController extends AbstractListController
                         $query->orWhere('users1.username', 'like', "%{$name}%");
                     }
                 });
+
+            // 非管理员不能查看这些用户的匿名帖
+            if (! $actor->isAdmin()) {
+                $query->where('is_anonymous', false);
+            }
         }
 
         // 操作删除者 ID
