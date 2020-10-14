@@ -8,10 +8,26 @@ import "../config/languageConfig";
 
 import 'element-ui/lib/theme-chalk/index.css'; //引入element样式
 import './extend/viewBase/elementuiInit'; //引入element组件
-
 import Echarts from 'echarts'; //引入Echarts
-
 import VueI18n from 'vue-i18n'
+import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
+import "../config/appConfigInit"; //appConfig 对象进一步处理加工，如放在vue原型中
+import "commonHelper"; //公共函数封装
+import browserDb from "webDbHelper"; //公共函数封装
+import appStore from "./admin/store/index"; //vuex 初始化
+import dayjs from 'dayjs'; //导入文件 momnet时间转换
+import 'dayjs/locale/zh-cn';
+import utils from "./common/urlGet"; //获取url参数
+import VueLazyload from 'vue-lazyload'; //图片懒加载
+import 'lrz'; //图片压缩
+import wx from 'weixin-js-sdk';
+import welinkH5 from '../static/js/hwh5-cloudonline';
+/* start 设置引入的模板路径 start */
+import RConfig from "./admin/viewConfig/tpl"; //获取路由对象
+import "axiosHelper"; //ajax 请求封装
+/* end 设置引入的模板路径 end */
+import axios from 'axios';
+
 Vue.use(VueI18n);
 
 const i18n = new VueI18n({
@@ -22,45 +38,17 @@ const i18n = new VueI18n({
   }
 });
 
-import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
-// import '../../frame/src/template/default/controllers/m_site/common/tcaptcha'; //引入腾讯验证码
-
-import "../config/appConfigInit";			//appConfig 对象进一步处理加工，如放在vue原型中
-import "commonHelper";						//公共函数封装
-
-import browserDb from "webDbHelper";						//公共函数封装
-import appStore from "./admin/store/index";							//vuex 初始化
-import dayjs from 'dayjs';                  //导入文件 momnet时间转换
 var relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.extend(relativeTime)
 var isSameOrBefore = require('dayjs/plugin/isSameOrBefore')
 dayjs.extend(isSameOrBefore)
-import 'dayjs/locale/zh-cn';
 dayjs.locale('zh-cn');//时间转换-需要汉化
-import utils from "./common/urlGet";         //获取url参数
-import VueLazyload from 'vue-lazyload';       //图片懒加载
-import 'lrz';     //图片压缩
-
-
-import wx from 'weixin-js-sdk';
 Vue.prototype.$wx = wx;
 
-import welinkH5 from '../static/js/hwh5-cloudonline';
 Vue.prototype.$welinkH5 = welinkH5;
 
-import commonHeader from './template/default/view/m_site/common/loginSignUpHeader/loginSignUpHeader.vue';
-Vue.component('commonHeader', commonHeader);
-
-
-/* start 设置引入的模板路径 start */
-import RConfig from "./admin/viewConfig/tpl";					//获取路由对象
 Vue.prototype.$rconfig = RConfig;
 
-import "axiosHelper";							//ajax 请求封装
-
-/* end 设置引入的模板路径 end */
-
-import axios from 'axios';
 Vue.prototype.axios = axios;
 Vue.prototype.$dayjs = dayjs;//时间转换-赋值使用
 Vue.config.devtools = process.env.NODE_ENV === "development";
