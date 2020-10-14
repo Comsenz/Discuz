@@ -33,6 +33,7 @@ use App\Settings\SettingsRepository;
 use App\User\Bound;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Socialite\Factory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
@@ -79,7 +80,9 @@ abstract class AbstractWechatUserController extends AbstractResourceController
      * @param Document $document
      * @return mixed
      * @throws NoUserException
-     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @throws PermissionDeniedException
+     * @throws Exception
+     * @throws \Exception
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -111,13 +114,14 @@ abstract class AbstractWechatUserController extends AbstractResourceController
             // 站点关闭
             $this->assertPermission((bool)$this->settings->get('register_close'));
 
-            // 自动注册
-            if (Arr::get($request->getQueryParams(), 'register', 0)) {
-                if (!$wechatUser) {
-                    $wechatUser = new UserWechat();
-                }
-                $wechatUser->setRawAttributes($this->fixData($wxuser->getRaw(), $actor));
+            // 更新微信用户信息
+            if (!$wechatUser) {
+                $wechatUser = new UserWechat();
+            }
+            $wechatUser->setRawAttributes($this->fixData($wxuser->getRaw(), $actor));
 
+            // 自动注册
+            if (Arr::get($request->getQueryParams(), 'register', 0) && $actor->isGuest()) {
                 $data['code'] = Arr::get($request->getQueryParams(), 'inviteCode');
                 $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
                 $data['register_reason'] = trans('user.register_by_wechat_h5');
@@ -135,10 +139,13 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                     $user->notify(new System(WechatRegisterMessage::class));
                 }
             } else {
-                if (!$actor->isGuest()) {
-                    //登陆用户添加微信绑定关系
-                    $wechatUser = new UserWechat();
-                    $wechatUser->setRawAttributes($this->fixData($wxuser->getRaw(), $actor));
+                // 换绑删除绑定原关系
+                if (Arr::get($request->getQueryParams(), 'rebind', 0)) {
+                    $actor->wechat && $actor->wechat->delete();
+                }
+
+                if (!$actor->isGuest() && is_null($actor->wechat)) {
+                    // 登陆用户且没有绑定||换绑微信 添加微信绑定关系
                     $wechatUser->user_id = $actor->id;
                     $wechatUser->save();
                 }
