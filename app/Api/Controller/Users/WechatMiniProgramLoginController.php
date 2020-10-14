@@ -94,6 +94,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
         if (Arr::get($attributes, 'rebind', 0)) {
             $actor->wechat && $actor->wechat->delete();
         }
+
         // 绑定小程序
         $wechatUser = $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $user, true);
 
