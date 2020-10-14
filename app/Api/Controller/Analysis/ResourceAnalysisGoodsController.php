@@ -157,15 +157,15 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
         }
 
         /**
-         * init GoodsInfo
-         */
-        $this->initGoods();
-
-        /**
          * Get GoodsInfo
          * @see PostGoodsTrait
          */
         $this->{$this->goodsType['value']}();
+
+        /**
+         * check GoodsInfo
+         */
+        $this->checkGoods();
 
         // Build
         $build = [
@@ -200,31 +200,31 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
         return $goods;
     }
 
-    protected function initGoods()
+    protected function checkGoods()
     {
         switch ($this->goodsType['key']) {
             case 0: // 淘宝
             case 5: // 淘宝口令粘贴值
-                $this->goodsInfo['title'] = '淘宝商品';
-                $this->goodsInfo['src'] = $this->getDefaultIconUrl('taobao.svg');
+                $this->goodsInfo['title'] ?: $this->goodsInfo['title'] = '淘宝商品';
+                $this->goodsInfo['src'] ?: $this->goodsInfo['src'] = $this->getDefaultIconUrl('taobao.svg');
                 break;
             case 1: // 天猫
-                $this->goodsInfo['title'] = '天猫商品';
-                $this->goodsInfo['src'] = $this->getDefaultIconUrl('tmall.svg');
+                $this->goodsInfo['title'] ?: $this->goodsInfo['title'] = '天猫商品';
+                $this->goodsInfo['src'] ?: $this->goodsInfo['src'] = $this->getDefaultIconUrl('tmall.svg');
                 break;
             case 2: // 京东
             case 6: // 京东粘贴值H5域名
-                $this->goodsInfo['title'] = '京东商品';
-                $this->goodsInfo['src'] = $this->getDefaultIconUrl('jd.svg');
+                $this->goodsInfo['title'] ?: $this->goodsInfo['title'] = '京东商品';
+                $this->goodsInfo['src'] ?: $this->goodsInfo['src'] = $this->getDefaultIconUrl('jd.svg');
                 break;
             case 3: // 拼多多H5
-                $this->goodsInfo['title'] = '拼多多商品';
-                $this->goodsInfo['src'] = $this->getDefaultIconUrl('pdd.svg');
+                $this->goodsInfo['title'] ?: $this->goodsInfo['title'] = '拼多多商品';
+                $this->goodsInfo['src'] ?: $this->goodsInfo['src'] = $this->getDefaultIconUrl('pdd.svg');
                 break;
             case 4: // 有赞
             case 7: // 有赞粘贴值
-                $this->goodsInfo['title'] = '有赞商品';
-                $this->goodsInfo['src'] = $this->getDefaultIconUrl('youzan.svg');
+                $this->goodsInfo['title'] ?: $this->goodsInfo['title'] = '有赞商品';
+                $this->goodsInfo['src'] ?: $this->goodsInfo['src'] = $this->getDefaultIconUrl('youzan.svg');
                 break;
         }
     }
