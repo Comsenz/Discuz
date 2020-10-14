@@ -184,9 +184,6 @@ trait PostGoodsTrait
             $this->goodsInfo['platform_id'] = $matchAddress['platform_id'];
         }
 
-        // title
-        $this->goodsInfo['title'] = '拼多多商品';
-
         // get src
         $srcRegex = '/<meta\s*property="\s*og:image\s*"\s*content="(?<src>.+)\s*"\s*>/i';
         if (preg_match($srcRegex, $this->html, $matchSrc)) {
