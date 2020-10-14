@@ -38,6 +38,7 @@ use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\EventsDispatchTrait;
 use Discuz\SpecialChar\SpecialCharServer;
+use Exception;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -85,9 +86,9 @@ class UpdateUser
 
     /**
      * @return mixed
-     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @throws PermissionDeniedException
      * @throws TranslatorException
-     * @throws \Exception
+     * @throws Exception
      */
     public function __invoke()
     {
@@ -157,12 +158,16 @@ class UpdateUser
             }
         }
 
-        if (($mobile = Arr::get($attributes, 'mobile')) && $mobile != $user->mobile) {
+        if (Arr::has($attributes, 'mobile')) {
             $this->assertCan($this->actor, 'edit.mobile', $user);
 
+            $mobile = Arr::get($attributes, 'mobile');
+
             // 手机号是否已绑定
-            if (User::query()->where('mobile', $mobile)->where('id', '<>', $user->id)->exists()) {
-                throw new \Exception('mobile_is_already_bind');
+            if (! empty($mobile)) {
+                if (User::query()->where('mobile', $mobile)->where('id', '<>', $user->id)->exists()) {
+                    throw new Exception('mobile_is_already_bind');
+                }
             }
 
             $user->changeMobile($mobile);
