@@ -30,6 +30,7 @@ use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Http\DiscuzResponseFactory;
+use GuzzleHttp\Client as HttpClient;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
@@ -38,7 +39,6 @@ use Intervention\Image\ImageManager;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use GuzzleHttp\Client as HttpClient;
 
 class ResourceAttachmentController implements RequestHandlerInterface
 {
@@ -106,23 +106,28 @@ class ResourceAttachmentController implements RequestHandlerInterface
             }
             $response = $httpClient->get($url);
             if ($response->getStatusCode() == 200) {
-                //下载
-                $header = [
-                    'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
-                ];
-
-                //预览
                 if ($page) {
-                    $header = [
-                        'X-Total-Page' => $response->getHeader('X-Total-Page'),
-                        'Content-Type' => $response->getHeader('Content-Type'),
+                    //预览
+                    $data = [
+                        'data' => [
+                            'X-Total-Page' => $response->getHeader('X-Total-Page')[0],
+                            'Content-Type' => $response->getHeader('Content-Type')[0],
+                            'image' => base64_encode($response->getBody())
+                        ],
                     ];
+                    return DiscuzResponseFactory::JsonResponse($data);
+                } else {
+                    //下载
+                    $header = [
+                        'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
+                    ];
+
+                    return DiscuzResponseFactory::FileStreamResponse(
+                        $response->getBody(),
+                        200,
+                        $header
+                    );
                 }
-                return DiscuzResponseFactory::FileStreamResponse(
-                    $response->getBody(),
-                    200,
-                    $header
-                );
             } else {
                 throw new ModelNotFoundException();
             }
