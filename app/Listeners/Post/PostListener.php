@@ -307,12 +307,19 @@ class PostListener
                 throw new Exception('cannot_create_thread_without_goods');
             }
 
+            $goodsId = (int) Arr::get($event->data, 'attributes.post_goods_id');
+
+            /**
+             * 每个商品绑定一个 Post
+             * @var PostGoods $goods
+             */
+            $goods = PostGoods::query()->where('post_id', $post->id)->first();
+            if (!empty($goods) && $goods->id != $goodsId) {
+                $goods->delete();
+            }
+
             /** @var PostGoods $postGoods */
-            $postGoods = PostGoods::query()
-                ->where('id', (int) Arr::get($event->data, 'attributes.post_goods_id'))
-                ->where('post_id', 0)
-                ->whereNull('deleted_at')
-                ->first();
+            $postGoods = PostGoods::query()->where('id', $goodsId)->where('post_id', 0)->whereNull('deleted_at')->first();
             if ($postGoods) {
                 $postGoods->post_id = $post->id;
                 $postGoods->save();
