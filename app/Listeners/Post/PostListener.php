@@ -287,6 +287,7 @@ class PostListener
 
     /**
      * 解析话题、创建话题、存储话题主题关系、修改话题主题数/阅读数
+     *
      * @param Saved $event
      */
     public function threadTopic(Saved $event)
@@ -296,6 +297,7 @@ class PostListener
 
     /**
      * 设置商品帖的关联关系
+     *
      * @param Saved $event
      * @throws Exception
      */
@@ -303,18 +305,19 @@ class PostListener
     {
         $post = $event->post;
         if ($post->is_first && $post->thread->type === Thread::TYPE_OF_GOODS) {
-            if (!Arr::has($event->data, 'attributes.post_goods_id')) {
-                throw new Exception('cannot_create_thread_without_goods');
+            if (! Arr::has($event->data, 'attributes.post_goods_id')) {
+                return;
             }
 
             $goodsId = (int) Arr::get($event->data, 'attributes.post_goods_id');
 
             /**
              * 每个商品绑定一个 Post
+             *
              * @var PostGoods $goods
              */
             $goods = PostGoods::query()->where('post_id', $post->id)->first();
-            if (!empty($goods) && $goods->id != $goodsId) {
+            if (! empty($goods) && $goods->id != $goodsId) {
                 $goods->delete();
             }
 
