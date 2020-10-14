@@ -321,8 +321,8 @@ class ListThreadsController extends AbstractListController
                 $query->where('threads.user_id', $userId);
             }
 
-            // 非本人或管理员不能查看该用户的匿名帖
-            if ($userId != $actor->id || ! $actor->isAdmin()) {
+            // 不是本人 并且 不是管理员不能查看该用户的匿名帖
+            if ($userId != $actor->id && ! $actor->isAdmin()) {
                 $query->where('is_anonymous', false);
             }
         }
@@ -337,7 +337,7 @@ class ListThreadsController extends AbstractListController
                     }
                 });
 
-            // 非管理员不能查看这些用户的匿名帖
+            // 不是管理员不能查看这些用户的匿名帖
             if (! $actor->isAdmin()) {
                 $query->where('is_anonymous', false);
             }
