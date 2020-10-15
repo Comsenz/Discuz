@@ -221,6 +221,11 @@ class BaseFormatter
                 $configurator->HTMLElements->allowAttribute($element, $attr);
             }
         }
+        
+        $configurator->HTMLElements->allowUnsafeElement('source');
+        $configurator->HTMLElements->allowUnsafeAttribute('source', 'src');
+        $configurator->HTMLElements->allowUnsafeAttribute('source', 'type');
+        
     }
 
     protected function confUserMention($configurator)
