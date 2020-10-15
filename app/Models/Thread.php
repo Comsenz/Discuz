@@ -287,7 +287,7 @@ class Thread extends Model
     public function refreshPaidCount()
     {
         $this->paid_count = $this->orders()
-            ->where('type', Order::ORDER_TYPE_THREAD)
+            ->whereIn('type', [Order::ORDER_TYPE_THREAD, Order::ORDER_TYPE_ATTACHMENT])
             ->where('status', Order::ORDER_STATUS_PAID)
             ->count();
 
