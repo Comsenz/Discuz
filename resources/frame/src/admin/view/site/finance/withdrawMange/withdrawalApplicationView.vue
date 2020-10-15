@@ -111,8 +111,8 @@
                   <el-button v-if="scope.row._data.cash_type === 1" type="text" size="small" slot="reference">审核</el-button>
                 </el-popover>
                 <div v-else>
-                  <p @click="noReviewClick(scope.row._data.id)">审核拒绝</p>
-                  <p @click="reviewClicks(scope.row._data.id)">标记打款</p>
+                  <p class="toexaminebtn" @click="noReviewClick(scope.row._data.id)">审核拒绝</p>
+                  <p class="toexaminebtn" @click="reviewClicks(scope.row._data.id)">标记打款</p>
                 </div>
               </div>
               <p v-else>{{auditstatus(scope.row._data.cash_status)}}</p>
