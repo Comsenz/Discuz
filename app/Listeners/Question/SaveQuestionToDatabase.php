@@ -137,14 +137,16 @@ class SaveQuestionToDatabase
                          * @var Order $order
                          * @var UserWalletLog $walletLog
                          */
-                        $walletLog = UserWalletLog::query()->where([
-                            'user_id' => $actor->id,
-                            'order_id' => $order->id,
-                            'change_type' => UserWalletLog::TYPE_QUESTION_FREEZE,
-                        ])->first();
+                        if ($order->payment_type == Order::PAYMENT_TYPE_WALLET) {
+                            $walletLog = UserWalletLog::query()->where([
+                                'user_id' => $actor->id,
+                                'order_id' => $order->id,
+                                'change_type' => UserWalletLog::TYPE_QUESTION_FREEZE,
+                            ])->first();
 
-                        $walletLog->question_id = $question->id;
-                        $walletLog->save();
+                            $walletLog->question_id = $question->id;
+                            $walletLog->save();
+                        }
                     }
 
                     $this->connection->commit();
