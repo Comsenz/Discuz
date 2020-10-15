@@ -111,7 +111,6 @@ class ResourceAttachmentController implements RequestHandlerInterface
                     $data = [
                         'data' => [
                             'X-Total-Page' => $response->getHeader('X-Total-Page')[0],
-                            'Content-Type' => $response->getHeader('Content-Type')[0],
                             'image' => 'data:image/jpeg;base64,'.base64_encode($response->getBody())
                         ],
                     ];
