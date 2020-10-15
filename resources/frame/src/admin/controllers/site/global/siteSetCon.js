@@ -33,7 +33,6 @@ export default {
       askPrice: "", // 问答围观价格
       purchase: false, // 权限购买
       purchaseNum: 0,
-      askPrice: "", // 问答围观价格
       numberimg: [
         {
           imageUrl: "",
