@@ -41,6 +41,7 @@ class CreateThreadController extends AbstractCreateController
         'category',
         'firstPost',
         'firstPost.images',
+        'firstPost.postGoods',
         'threadVideo',
     ];
 
