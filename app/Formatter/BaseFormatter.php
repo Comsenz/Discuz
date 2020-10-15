@@ -51,6 +51,13 @@ class BaseFormatter
     protected static $actor;
 
     protected $app;
+    
+    protected $allowHtmlElements = [
+        'source' => ['src', 'type'],
+        'video' => ['controls', 'width', 'height'],
+        'span' => ['class'],
+        'blockquote' => ['class']
+    ];
 
     /**
      * @param UrlGenerator $url
@@ -208,14 +215,12 @@ class BaseFormatter
 
     protected function confHtml($configurator)
     {
-        $configurator->HTMLElements->allowElement('blockquote');
-        $configurator->HTMLElements->allowAttribute('blockquote', 'class');
-        $configurator->HTMLElements->allowElement('span');
-        $configurator->HTMLElements->allowAttribute('span', 'class');
-        $configurator->HTMLElements->allowElement('video');
-        $configurator->HTMLElements->allowAttribute('video', 'width');
-        $configurator->HTMLElements->allowAttribute('video', 'height');
-        $configurator->HTMLElements->allowAttribute('video', 'controls');
+        foreach($this->allowHtmlElements as $element => $attrs) {
+            $configurator->HTMLElements->allowElement($element);
+            foreach($attrs as $attr) {
+                $configurator->HTMLElements->allowAttribute($element, $attr);
+            }
+        }
     }
 
     protected function confUserMention($configurator)
