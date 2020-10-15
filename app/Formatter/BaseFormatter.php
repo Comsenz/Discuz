@@ -212,6 +212,10 @@ class BaseFormatter
         $configurator->HTMLElements->allowAttribute('blockquote', 'class');
         $configurator->HTMLElements->allowElement('span');
         $configurator->HTMLElements->allowAttribute('span', 'class');
+        $configurator->HTMLElements->allowElement('video');
+        $configurator->HTMLElements->allowAttribute('video', 'width');
+        $configurator->HTMLElements->allowAttribute('video', 'height');
+        $configurator->HTMLElements->allowAttribute('video', 'controls');
     }
 
     protected function confUserMention($configurator)
