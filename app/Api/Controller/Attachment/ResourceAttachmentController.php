@@ -112,7 +112,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
                         'data' => [
                             'X-Total-Page' => $response->getHeader('X-Total-Page')[0],
                             'Content-Type' => $response->getHeader('Content-Type')[0],
-                            'image' => base64_encode($response->getBody())
+                            'image' => 'data:image/jpeg;base64,'.base64_encode($response->getBody())
                         ],
                     ];
                     return DiscuzResponseFactory::JsonResponse($data);
