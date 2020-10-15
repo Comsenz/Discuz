@@ -321,8 +321,8 @@ class ListThreadsController extends AbstractListController
                 $query->where('threads.user_id', $userId);
             }
 
-            // 不是本人 并且 不是管理员不能查看该用户的匿名帖
-            if ($userId != $actor->id && ! $actor->isAdmin()) {
+            // 不是本人不能查看该用户的匿名帖
+            if ($userId != $actor->id) {
                 $query->where('is_anonymous', false);
             }
         }
@@ -337,10 +337,8 @@ class ListThreadsController extends AbstractListController
                     }
                 });
 
-            // 不是管理员不能查看这些用户的匿名帖
-            if (! $actor->isAdmin()) {
-                $query->where('is_anonymous', false);
-            }
+            // 不能查看这些用户的匿名帖
+            $query->where('is_anonymous', false);
         }
 
         // 操作删除者 ID
