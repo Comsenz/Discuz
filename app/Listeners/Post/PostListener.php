@@ -317,8 +317,12 @@ class PostListener
              * @var PostGoods $goods
              */
             $goods = PostGoods::query()->where('post_id', $post->id)->first();
-            if (! empty($goods) && $goods->id != $goodsId) {
-                $goods->delete();
+            if (! empty($goods)) {
+                if ($goods->id != $goodsId) {
+                    $goods->delete();
+                } else {
+                    return;
+                }
             }
 
             /** @var PostGoods $postGoods */
