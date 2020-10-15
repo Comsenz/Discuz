@@ -2,105 +2,116 @@
  * 角色权限编辑
  */
 
-import Card from '../../../../view/site/common/card/card';
-import CardRow from '../../../../view/site/common/card/cardRow';
+import Card from "../../../../view/site/common/card/card";
+import CardRow from "../../../../view/site/common/card/cardRow";
 
 export default {
-  data: function () {
+  data: function() {
     return {
-      groupId: 0,                 // 用户组 ID
-      checked: [],                // 选中的权限
-      videoDisabled: false,       // 是否开启云点播
-      captchaDisabled: false,     // 是否开启验证码
-      realNameDisabled: false,    // 是否开启实名认证
-      is_subordinate: false,      // 是否开启推广下线
-      is_commission: false,       // 是否开启分成
-      scale: 0,                   // 提成比例
-      bindPhoneDisabled: false,   // 是否开启短信验证
-      wechatPayment: false,       // 是否开启微信支付
-      canBeOnlooker: false,       // 是否可以设置围观
-      categoriesList: [],         // 分类列表
-      activeTab: {                // 设置权限当前项
-        title: '内容发布权限',
-        name: 'publish'
+      groupId: 0, // 用户组 ID
+      checked: [], // 选中的权限
+      videoDisabled: false, // 是否开启云点播
+      captchaDisabled: false, // 是否开启验证码
+      realNameDisabled: false, // 是否开启实名认证
+      is_subordinate: false, // 是否开启推广下线
+      is_commission: false, // 是否开启分成
+      scale: 0, // 提成比例
+      bindPhoneDisabled: false, // 是否开启短信验证
+      wechatPayment: false, // 是否开启微信支付
+      canBeOnlooker: false, // 是否可以设置围观
+      categoriesList: [], // 分类列表
+      activeTab: {
+        // 设置权限当前项
+        title: "内容发布权限",
+        name: "publish"
       },
-      menuData: [                 // 设置权限
+      menuData: [
+        // 设置权限
         {
-          title: '内容发布权限',
-          name: 'publish'
+          title: "内容发布权限",
+          name: "publish"
         },
         {
-          title: '内容分类权限',
-          name: 'category'
+          title: "内容分类权限",
+          name: "category"
         },
         {
-          title: '前台操作权限',
-          name: 'operate'
+          title: "前台操作权限",
+          name: "operate"
         },
         {
-          title: '前台管理权限',
-          name: 'manage'
+          title: "前台管理权限",
+          name: "manage"
         },
         {
-          title: '安全设置',
-          name: 'security'
+          title: "安全设置",
+          name: "security"
         },
         {
-          title: '价格设置',
-          name: 'pricesetting'
+          title: "价格设置",
+          name: "pricesetting"
         },
         {
-          title: '其他设置',
-          name: 'other'
-        },
+          title: "其他设置",
+          name: "other"
+        }
         // {
         //   title: '默认权限',
         //   name: 'default'
         // },
       ],
-      value: '',
-      purchasePrice: '',
-      dyedate: '',
-      ispad:'',
-      allowtobuy: '',
-      defaultuser: false,
-    }
+      value: "",
+      purchasePrice: "",
+      dyedate: "",
+      ispad: "",
+      allowtobuy: "",
+      defaultuser: false
+    };
   },
   methods: {
-    duedata:function(evn) {
-      this.duedata = evn.replace(/[^\d]/g, '');
+    duedata: function(evn) {
+      this.duedata = evn.replace(/[^\d]/g, "");
     },
-    addprice:function(evn) {
+    addprice: function(evn) {
       setTimeout(() => {
-        this.purchasePrice = evn.replace(/[^\d.]/g, '')
-          .replace(/\.{2,}/g, '.')
-          .replace('.', '$#$')
-          .replace(/\./g, '')
-          .replace('$#$', '.')
-          .replace(/^(-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
-          .replace(/^\./g, '');
-      }, 5)
+        this.purchasePrice = evn
+          .replace(/[^\d.]/g, "")
+          .replace(/\.{2,}/g, ".")
+          .replace(".", "$#$")
+          .replace(/\./g, "")
+          .replace("$#$", ".")
+          .replace(/^(-)*(\d+)\.(\d\d).*$/, "$1$2.$3")
+          .replace(/^\./g, "");
+      }, 5);
     },
     signUpSet() {
       this.appFetch({
-        url: 'forum',
-        method: 'get',
+        url: "forum",
+        method: "get"
       }).then(res => {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
           this.videoDisabled = res.readdata._data.qcloud.qcloud_vod === false;
-          this.captchaDisabled = res.readdata._data.qcloud.qcloud_captcha === false;
-          this.realNameDisabled = res.readdata._data.qcloud.qcloud_faceid === false;
-          this.bindPhoneDisabled = res.readdata._data.qcloud.qcloud_sms === false;
-          this.wechatPayment = res.readdata._data.paycenter.wxpay_close === false;
-          this.canBeOnlooker = res.readdata._data.set_site.site_onlooker_price > 0;
-          this.allowtobuy =  res.readdata._data.set_site.site_pay_group_close == '1' ? true : false;
+          this.captchaDisabled =
+            res.readdata._data.qcloud.qcloud_captcha === false;
+          this.realNameDisabled =
+            res.readdata._data.qcloud.qcloud_faceid === false;
+          this.bindPhoneDisabled =
+            res.readdata._data.qcloud.qcloud_sms === false;
+          this.wechatPayment =
+            res.readdata._data.paycenter.wxpay_close === false;
+          this.canBeOnlooker =
+            res.readdata._data.set_site.site_onlooker_price > 0;
+          this.allowtobuy =
+            res.readdata._data.set_site.site_pay_group_close == "1"
+              ? true
+              : false;
           if (!this.allowtobuy) {
             this.value = false;
           }
         }
-      })
+      });
     },
 
     /**
@@ -108,8 +119,8 @@ export default {
      */
     getCategories() {
       this.appFetch({
-        url: 'categories',
-        method: 'get',
+        url: "categories",
+        method: "get"
       }).then(res => {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
@@ -126,7 +137,7 @@ export default {
             this.categoriesList.push(category);
           });
         }
-      })
+      });
     },
 
     /**
@@ -184,25 +195,26 @@ export default {
       });
 
       category.checkAll = checkedCount === categoryPermissions.length;
-      category.isIndeterminate = checkedCount > 0 && checkedCount < categoryPermissions.length;
+      category.isIndeterminate =
+        checkedCount > 0 && checkedCount < categoryPermissions.length;
     },
 
     submitClick() {
       if (!this.checkNum()) {
         return;
       }
-      // if (this.purchasePrice === 0 || this.purchasePrice === '' || this.dyedate === 0 || this.dyedate === '') 
+      // if (this.purchasePrice === 0 || this.purchasePrice === '' || this.dyedate === 0 || this.dyedate === '')
       if (this.purchasePrice === 0) {
-        this.$message.error('价格不能为0');
+        this.$message.error("价格不能为0");
         return;
-      } else if (this.purchasePrice === '') {
-        this.$message.error('价格不能为空');
+      } else if (this.purchasePrice === "") {
+        this.$message.error("价格不能为空");
         return;
       } else if (this.dyedate === 0) {
-        this.$message.error('到期时间不能为0');
+        this.$message.error("到期时间不能为0");
         return;
-      } else if (this.dyedate === '') {
-        this.$message.error('到期时间不能为空');
+      } else if (this.dyedate === "") {
+        this.$message.error("到期时间不能为空");
         return;
       }
       // this.allowtobuy();
@@ -212,105 +224,109 @@ export default {
     },
 
     /*
-    * 接口请求
-    * */
+     * 接口请求
+     * */
     getGroupResource() {
       this.appFetch({
         url: "groups",
-        method: 'get',
-        splice: '/' + this.groupId,
+        method: "get",
+        splice: "/" + this.groupId,
         data: {
-          include: ['permission', 'categoryPermissions']
+          include: ["permission", "categoryPermissions"]
         }
-      }).then(res => {
-        if (res.errors) {
-          this.$message.error(res.errors[0].code);
-        } else {
-          this.ispad = res.data.attributes.isPaid;
-          this.purchasePrice = res.data.attributes.fee;
-          this.dyedate = res.data.attributes.days;
-          let data = res.readdata.permission;
-          this.checked = [];
-          this.scale = res.data.attributes.scale;
-          this.is_subordinate = res.data.attributes.is_subordinate;
-          this.is_commission = res.data.attributes.is_commission;
-          this.defaultuser = res.data.attributes.default;
-          if (res.data.attributes.default) {
-            this.value = false;
-            this.patchGroupScale();
-          } else {
-            this.value = res.data.attributes.isPaid;
-          }
-          data.forEach((item) => {
-            this.checked.push(item._data.permission)
-          })
-          this.getCategories();
-        }
-      }).catch(err => {
       })
+        .then(res => {
+          if (res.errors) {
+            this.$message.error(res.errors[0].code);
+          } else {
+            this.ispad = res.data.attributes.isPaid;
+            this.purchasePrice = res.data.attributes.fee;
+            this.dyedate = res.data.attributes.days;
+            let data = res.readdata.permission;
+            this.checked = [];
+            this.scale = res.data.attributes.scale;
+            this.is_subordinate = res.data.attributes.is_subordinate;
+            this.is_commission = res.data.attributes.is_commission;
+            this.defaultuser = res.data.attributes.default;
+            if (res.data.attributes.default) {
+              this.value = false;
+              this.patchGroupScale();
+            } else {
+              this.value = res.data.attributes.isPaid;
+            }
+            data.forEach(item => {
+              this.checked.push(item._data.permission);
+            });
+            this.getCategories();
+          }
+        })
+        .catch(err => {});
     },
     patchGroupPermission() {
       let checked = this.checked;
       if (this.is_commission || this.is_subordinate) {
-        if (checked.indexOf('other.canInviteUserScale') === -1) {
-          checked.push('other.canInviteUserScale');
+        if (checked.indexOf("other.canInviteUserScale") === -1) {
+          checked.push("other.canInviteUserScale");
         }
       } else {
         checked.forEach((item, index) => {
-          if (item === 'other.canInviteUserScale') {
+          if (item === "other.canInviteUserScale") {
             checked.splice(index, 1);
           }
-        })
+        });
       }
+      console.log(checked, "参数~~~~~~~~~~~~~~");
       this.appFetch({
-        url: 'groupPermission',
-        method: 'post',
+        url: "groupPermission",
+        method: "post",
         data: {
           data: {
-            "attributes": {
-              "groupId": this.groupId,
-              "permissions": checked
+            attributes: {
+              groupId: this.groupId,
+              permissions: checked
             }
           }
         }
-      }).then(res => {
-        if (res.errors) {
-          this.$message.error(res.errors[0].code);
-        } else {
-          this.$message({
-            showClose: true,
-            message: '提交成功',
-            type: 'success'
-          });
-        }
-      }).catch(err => {
       })
+        .then(res => {
+          if (res.errors) {
+            this.$message.error(res.errors[0].code);
+          } else {
+            this.$message({
+              showClose: true,
+              message: "提交成功",
+              type: "success"
+            });
+          }
+        })
+        .catch(err => {});
     },
 
     patchGroupScale() {
       this.appFetch({
-        url: 'groups',
-        method: 'PATCH',
-        splice: '/' + this.groupId,
+        url: "groups",
+        method: "PATCH",
+        splice: "/" + this.groupId,
         data: {
           data: {
-            "attributes": {
-              'name': this.$route.query.name,
-              'is_paid': this.value ? 1 : 0,
-              'fee': this.purchasePrice,
-              'days': this.dyedate,
-              "scale": this.scale,
-              "is_subordinate": this.is_subordinate,
-              "is_commission": this.is_commission,
+            attributes: {
+              name: this.$route.query.name,
+              is_paid: this.value ? 1 : 0,
+              fee: this.purchasePrice,
+              days: this.dyedate,
+              scale: this.scale,
+              is_subordinate: this.is_subordinate,
+              is_commission: this.is_commission
             }
           }
         }
-      }).then(res => {
-        if (res.errors) {
-          this.$message.error(res.errors[0].code);
-        }
-      }).catch(err => {
       })
+        .then(res => {
+          if (res.errors) {
+            this.$message.error(res.errors[0].code);
+          }
+        })
+        .catch(err => {});
     },
 
     handlePromotionChange(value) {
@@ -336,8 +352,8 @@ export default {
   },
   created() {
     this.groupId = this.$route.query.id;
-    this.activeTab.title = this.$route.query.title || '内容发布权限';
-    this.activeTab.name = this.$route.query.names || 'publish';
+    this.activeTab.title = this.$route.query.title || "内容发布权限";
+    this.activeTab.name = this.$route.query.names || "publish";
     this.getGroupResource();
     this.signUpSet();
   },
@@ -345,4 +361,4 @@ export default {
     Card,
     CardRow
   }
-}
+};
