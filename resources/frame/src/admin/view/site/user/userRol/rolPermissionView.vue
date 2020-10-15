@@ -100,9 +100,7 @@
       </Card>
 
       <Card>
-        <CardRow
-          description="允许发布问答，只有在开启微信支付且允许发布付费内容时才能设置提问价格"
-        >
+        <CardRow description="允许发布商品帖">
           <el-checkbox
             v-model="checked"
             label="createThreadGoods"
