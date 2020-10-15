@@ -26,6 +26,7 @@ return [
 
     // goods商品解析
     'post_goods_not_found_address' => '未匹配到地址格式',
+    'post_goods_does_not_resolve' => '域名地址不在解析范围内',
     'post_goods_not_found_regex' => '未匹配到地址信息',
     'post_goods_fail_url' => '匹配到解析地址错误',
     'post_goods_not_found_enum' => '暂不支持解析该地址内容',

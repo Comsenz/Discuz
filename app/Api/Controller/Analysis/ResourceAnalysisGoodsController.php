@@ -52,6 +52,18 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
      */
     protected $url;
 
+    protected $allowDomain = [
+        'taobao.com',
+        'tmall.com',
+        'detail.tmall.com',
+        'jd.com',
+        'm.jd.com',
+        'yangkeduo.com',
+        'youzan.com',
+        'm.youzan.com',
+        'tb.cn',
+    ];
+
     /**
      * ResourceInviteController constructor.
      *
@@ -100,6 +112,14 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
             throw new TranslatorException('post_goods_not_found_address');
         }
         $this->address = $matchAddress['address'];
+
+        // Validator Address
+        $domainRegex = '/https:\/\/(([^:\/]*?)\.(?<url>.+?\.(cn|com)))/i';
+        if (preg_match($domainRegex, $this->address, $domainUrl)) {
+            if (! in_array($domainUrl['url'], $this->allowDomain)) {
+                throw new TranslatorException('post_goods_does_not_resolve');
+            }
+        }
 
         // Regular Expression Url
         $extractionUrlRegex = '/(https|http):\/\/(?<url>[0-9a-z.]+)/i';
