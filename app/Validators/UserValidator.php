@@ -115,7 +115,16 @@ class UserValidator extends AbstractValidator
     protected function getRules()
     {
         $rules = [
-            'username' => 'required|max:15|unique:users',
+            'username' => [
+                'required',
+                'max:15',
+                'unique:users',
+                function ($attribute, $value, $fail) {
+                    if ($value === '匿名用户') {
+                        $fail('无效的用户名。');
+                    }
+                },
+            ],
             'password' => $this->getPasswordRules(),
             'pay_password' => 'bail|sometimes|required|confirmed|digits:6',
             'pay_password_token' => 'sometimes|required|session_token:reset_pay_password',
