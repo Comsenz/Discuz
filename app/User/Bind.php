@@ -57,9 +57,10 @@ class Bind
     /**
      * @param $token
      * @param $user
+     * @param int $rebind 是否更换绑定
      * @throws Exception
      */
-    public function withToken($token, $user)
+    public function withToken($token, $user, $rebind)
     {
         $session = SessionToken::get($token);
         $scope = Arr::get($session, 'scope');
@@ -69,6 +70,13 @@ class Bind
             if (!$wechatUser) {
                 $wechat = UserWechat::where($this->platform[$scope], $openid)->first();
             }
+
+            // 换绑时删除原双向关系（登陆用户绑定微信，微信绑定的用户）
+            if ($rebind) {
+                $wechatUser && $wechatUser->delete();
+                $wechat && $wechat->delete();
+            }
+
             // 已经存在绑定，抛出异常
             if ($wechatUser || !$wechat || $wechat->user_id) {
                 throw new Exception('account_has_been_bound');
@@ -99,14 +107,16 @@ class Bind
      * @param $js_code
      * @param $iv
      * @param $encryptedData
+     * @param int $rebind 更换绑定关系
      * @param $user
-     * @param bool $isMiniProgramLogin 小程序调取时传true，可以正常更新userwechat数据并返回供绑定用户无感登陆使用
+     * @param bool $isMiniProgramLogin 小程序登陆时调取时传true，可以正常更新userwechat数据并返回供绑定用户无感登陆使用
      * @return UserWechat
      * @throws DecryptException
      * @throws InvalidConfigException
      * @throws SocialiteException
+     * @throws Exception
      */
-    public function bindMiniprogram($js_code, $iv, $encryptedData, $user, $isMiniProgramLogin = false)
+    public function bindMiniprogram($js_code, $iv, $encryptedData, $rebind, $user, $isMiniProgramLogin = false)
     {
         $app = $this->miniProgram();
         //获取小程序登陆session key
@@ -123,6 +133,12 @@ class Bind
         $wechatUser = UserWechat::when($unionid, function ($query, $unionid) {
             return $query->where('unionid', $unionid);
         })->orWhere('min_openid', $openid)->first();
+
+        // 换绑时删除原双向关系（登陆用户绑定微信，微信绑定的用户）
+        if ($rebind) {
+            $user->wechat && $user->wechat->delete();
+            $wechatUser && $wechatUser->delete();
+        }
 
         // 非无感模式，用户、微信已经存在绑定关系，抛出异常
         if ($this->settings->get('register_type') != 2 && !$isMiniProgramLogin) {
