@@ -140,8 +140,8 @@ class Bind
             $wechatUser && $wechatUser->delete();
         }
 
-        // 非无感模式，用户、微信已经存在绑定关系，抛出异常
-        if ($this->settings->get('register_type') != 2 && !$isMiniProgramLogin) {
+        // 非无感模式且非小程序抽屉授权登陆时，用户、微信已经存在绑定关系，抛出异常
+        if ($this->settings->get('register_type') != 2 && (!$isMiniProgramLogin || $user)) {
             if (!is_null($user->wechat) || ($wechatUser && $wechatUser->user_id)) {
                 throw new Exception('account_has_been_bound');
             }
