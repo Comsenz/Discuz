@@ -203,24 +203,25 @@ export default {
       if (!this.checkNum()) {
         return;
       }
-      // if (this.purchasePrice === 0 || this.purchasePrice === '' || this.dyedate === 0 || this.dyedate === '')
-      if (this.purchasePrice === 0) {
-        this.$message.error("价格不能为0");
-        return;
-      } else if (this.purchasePrice === "") {
-        this.$message.error("价格不能为空");
-        return;
-      } else if (this.dyedate === 0) {
-        this.$message.error("到期时间不能为0");
-        return;
-      } else if (this.dyedate === "") {
-        this.$message.error("到期时间不能为空");
-        return;
+      if (this.value) {
+        if (this.purchasePrice == 0) {
+          this.$message.error("价格不能为0");
+          return;
+        } else if (this.purchasePrice == " ") {
+          this.$message.error("价格不能为空");
+          return;
+        } else if (this.dyedate == 0) {
+          this.$message.error("到期时间不能为0");
+          return;
+        } else if (this.dyedate == " ") {
+          this.$message.error("到期时间不能为空");
+          return;
+        } else {
+          this.patchGroupScale();
+        }
+      } else {
+        this.patchGroupScale();
       }
-      // this.allowtobuy();
-      this.patchGroupScale();
-      this.patchGroupPermission();
-      // this.paymentAmountandDueDate();
     },
 
     /*
@@ -324,6 +325,8 @@ export default {
         .then(res => {
           if (res.errors) {
             this.$message.error(res.errors[0].code);
+          } else {
+            this.patchGroupPermission();
           }
         })
         .catch(err => {});
