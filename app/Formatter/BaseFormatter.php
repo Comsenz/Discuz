@@ -53,8 +53,7 @@ class BaseFormatter
     protected $app;
     
     protected $allowHtmlElements = [
-        'source' => ['src', 'type'],
-        'video' => ['controls', 'width', 'height'],
+        'video' => ['src', 'controls', 'width', 'height'],
         'span' => ['class'],
         'blockquote' => ['class']
     ];
@@ -215,17 +214,12 @@ class BaseFormatter
 
     protected function confHtml($configurator)
     {
-        foreach($this->allowHtmlElements as $element => $attrs) {
+        foreach $this->allowHtmlElements as $element => $attrs) {
             $configurator->HTMLElements->allowElement($element);
-            foreach($attrs as $attr) {
+            foreach ($attrs as $attr) {
                 $configurator->HTMLElements->allowAttribute($element, $attr);
             }
         }
-        
-        $configurator->HTMLElements->allowUnsafeElement('source');
-        $configurator->HTMLElements->allowUnsafeAttribute('source', 'src');
-        $configurator->HTMLElements->allowUnsafeAttribute('source', 'type');
-        
     }
 
     protected function confUserMention($configurator)
