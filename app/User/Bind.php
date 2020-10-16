@@ -134,10 +134,11 @@ class Bind
             return $query->where('unionid', $unionid);
         })->orWhere('min_openid', $openid)->first();
 
-        // 换绑时删除原双向关系（登陆用户绑定微信，微信绑定的用户）
-        if ($rebind) {
-            $user->wechat && $user->wechat->delete();
-            $wechatUser && $wechatUser->delete();
+        // 非无感模式 且 非小程序抽屉授权登陆时，用户、微信已经存在绑定关系，抛出异常
+        if ($this->settings->get('register_type') != 2 && (!$isMiniProgramLogin || !$user->isGuest())) {
+            if (!is_null($user->wechat) || ($wechatUser && $wechatUser->user_id)) {
+                throw new Exception('account_has_been_bound');
+            }
         }
 
         // 非无感模式且非小程序抽屉授权登陆时，用户、微信已经存在绑定关系，抛出异常

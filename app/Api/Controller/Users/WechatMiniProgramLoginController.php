@@ -23,12 +23,12 @@ use App\Commands\Users\AutoRegisterUser;
 use App\Commands\Users\GenJwtToken;
 use App\Events\Users\Logind;
 use App\Exceptions\NoUserException;
-use App\Models\User;
 use App\Settings\SettingsRepository;
 use App\User\Bind;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Discuz\Auth\Guest;
 use Discuz\Socialite\Exception\SocialiteException;
 use Discuz\Wechat\EasyWechatTrait;
 use Exception;
@@ -88,7 +88,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
         )->validate();
 
         $actor = $request->getAttribute('actor');
-        $user = !$actor->isGuest() ? $actor : new User();
+        $user = !$actor->isGuest() ? $actor : new Guest();
 
         // 绑定小程序
         $rebind = Arr::get($attributes, 'rebind', 0);
