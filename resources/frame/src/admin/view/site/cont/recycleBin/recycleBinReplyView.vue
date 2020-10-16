@@ -91,14 +91,14 @@
             </el-radio-group>
           </div>
 
-          <!--<a slot="longText" class="recycle-bin-reply-table__long-text" v-if="items.thread._data.isLongArticle" :href="'/pages/topic/index?id=' + items._data.id" >
+          <!--<a slot="longText" class="recycle-bin-reply-table__long-text" v-if="items.thread._data.isLongArticle" :href="'/topic/index?id=' + items._data.id" >
             {{items.thread._data.title}}
             <span  class="iconfont" :class="parseInt(items.thread._data.price) > 0?'iconmoney':'iconchangwen'" ></span>
           </a>-->
 
           <div class="recycle-bin-reply-table__main" slot="main">
-            <!--<a :href="'/pages/topic/index?id=' + items._data.id" style="color: #333333;" target="_blank" v-html="items._data.contentHtml"></a>-->
-            <a class="recycle-bin-reply-table__main__cont-text" :href="'/pages/topic/index?id=' + items.thread._data.id" target="_blank" v-html="items._data.contentHtml"></a>
+            <!--<a :href="'/topic/index?id=' + items._data.id" style="color: #333333;" target="_blank" v-html="items._data.contentHtml"></a>-->
+            <a class="recycle-bin-reply-table__main__cont-text" :href="'/topic/index?id=' + items.thread._data.id" target="_blank" v-html="items._data.contentHtml"></a>
             <div class="recycle-bin-reply-table__main__cont-imgs">
               <p class="recycle-bin-reply-table__main__cont-imgs-p" v-for="(item,index) in items.images" :key="index">
                 <img  v-lazy="item._data.thumbUrl" @click="imgShowClick(items.images,index)" :alt="item._data.fileName">
