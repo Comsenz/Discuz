@@ -122,7 +122,7 @@ class UserValidator extends AbstractValidator
             'register_reason' => 'filled|max:50',
             'groupId' => 'required',
             'realname' => 'required',
-            'identity' => ['required', 'regex:/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/'],
+            'identity' => ['required', 'regex:/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/', 'unique:users'],
             'captcha' => ['sometimes', new Captcha],
         ];
 
