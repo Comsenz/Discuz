@@ -105,9 +105,11 @@ class LoginController extends AbstractResourceController
             /** @var User $user */
             $user = $this->app->make(UserRepository::class)->getUser();
 
+            $rebind = Arr::get($data, 'rebind', 0);
+
             // 绑定公众号信息
             if ($token = Arr::get($data, 'token')) {
-                $this->bind->withToken($token, $user);
+                $this->bind->withToken($token, $user, $rebind);
             }
 
             // 绑定小程序信息
@@ -115,11 +117,10 @@ class LoginController extends AbstractResourceController
             $iv = Arr::get($data, 'iv');
             $encryptedData = Arr::get($data, 'encryptedData');
             if ($js_code && $iv  && $encryptedData) {
-                $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $user);
+                $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $rebind, $user);
             }
 
             // 绑定手机号
-
             if ($mobileToken = Arr::get($data, 'mobileToken')) {
                 $this->bind->mobile($mobileToken, $user);
             }

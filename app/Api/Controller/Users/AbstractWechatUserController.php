@@ -140,10 +140,6 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                 }
             } else {
                 // 换绑删除绑定原关系
-                if (Arr::get($request->getQueryParams(), 'rebind', 0)) {
-                    $actor->wechat && $actor->wechat->delete();
-                }
-
                 if (!$actor->isGuest() && is_null($actor->wechat)) {
                     // 登陆用户且没有绑定||换绑微信 添加微信绑定关系
                     $wechatUser->user_id = $actor->id;
