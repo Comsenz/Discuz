@@ -35,6 +35,7 @@ use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Socialite\Factory;
+use Exception;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Events\Dispatcher as Events;
@@ -82,7 +83,6 @@ abstract class AbstractWechatUserController extends AbstractResourceController
      * @throws NoUserException
      * @throws PermissionDeniedException
      * @throws Exception
-     * @throws \Exception
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -139,12 +139,16 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                     $user->notify(new System(WechatRegisterMessage::class));
                 }
             } else {
-                // 换绑删除绑定原关系
                 if (!$actor->isGuest() && is_null($actor->wechat)) {
                     // 登陆用户且没有绑定||换绑微信 添加微信绑定关系
                     $wechatUser->user_id = $actor->id;
                     $wechatUser->save();
                 }
+            }
+        } else {
+            // 登陆用户调取接口时，抛出异常
+            if (!$actor->isGuest()) {
+                throw new Exception('account_has_been_bound');
             }
         }
 
