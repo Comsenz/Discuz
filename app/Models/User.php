@@ -394,7 +394,7 @@ class User extends Model
     {
         $this->thread_count = $this->threads()
             ->where('is_approved', Thread::APPROVED)
-            ->where('is_anonymous', false)
+            ->where('type', '<>', Thread::TYPE_OF_QUESTION)
             ->whereNull('deleted_at')
             ->count();
 
