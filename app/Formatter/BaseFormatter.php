@@ -51,7 +51,7 @@ class BaseFormatter
     protected static $actor;
 
     protected $app;
-    
+
     protected $allowHtmlElements = [
         'video' => ['src', 'controls', 'width', 'height'],
         'span' => ['class'],
@@ -214,7 +214,7 @@ class BaseFormatter
 
     protected function confHtml($configurator)
     {
-        foreach $this->allowHtmlElements as $element => $attrs) {
+        foreach ($this->allowHtmlElements as $element => $attrs) {
             $configurator->HTMLElements->allowElement($element);
             foreach ($attrs as $attr) {
                 $configurator->HTMLElements->allowAttribute($element, $attr);
