@@ -147,7 +147,7 @@ class Bind
             $user->wechat && $user->wechat->delete();
         }
 
-        if (!$wechatUser) {
+        if (!$wechatUser || !$wechatUser->exists) {
             $wechatUser = UserWechat::build([]);
         }
 
