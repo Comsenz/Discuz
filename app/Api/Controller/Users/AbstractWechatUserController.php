@@ -34,6 +34,7 @@ use App\User\Bound;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Discuz\Auth\Guest;
 use Discuz\Contracts\Socialite\Factory;
 use Exception;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -109,6 +110,11 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
         /** @var UserWechat $wechatUser */
         $wechatUser = UserWechat::where($this->getType(), $wxuser->getId())->orWhere('unionid', Arr::get($wxuser->getRaw(), 'unionid'))->first();
+
+        // 换绑时直接返回token供后续操作使用
+        if ($rebind = Arr::get($request->getQueryParams(), 'rebind', 0)) {
+            $this->error($wxuser, new Guest(), $wechatUser);
+        }
 
         if (!$wechatUser || !$wechatUser->user) {
             // 站点关闭
