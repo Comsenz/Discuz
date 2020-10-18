@@ -43,7 +43,7 @@ class NoUserExceptionHandler implements ExceptionHandlerInterface
      *
      * @param \Exception $e
      *
-     * @return \Tobscure\JsonApi\Exception\Handler\ResponseBag
+     * @return ResponseBag
      */
     public function handle(Exception $e)
     {
@@ -51,7 +51,7 @@ class NoUserExceptionHandler implements ExceptionHandlerInterface
         $status = 400;
         $error = [
             'status' => $status,
-            'code' => 'no_bind_user',
+            'code' => $e->getCode() ?: 'no_bind_user',
             'token' => $e->getToken(),
             'user' => $e->getUser()
         ];

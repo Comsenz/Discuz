@@ -46,4 +46,9 @@ class NoUserException extends Exception
     {
         return $this->user;
     }
+
+    public function setCode($code)
+    {
+        $this->code = $code;
+    }
 }

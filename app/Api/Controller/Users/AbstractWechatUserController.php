@@ -113,7 +113,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
         // 换绑时直接返回token供后续操作使用
         if ($rebind = Arr::get($request->getQueryParams(), 'rebind', 0)) {
-            $this->error($wxuser, new Guest(), $wechatUser);
+            $this->error($wxuser, new Guest(), $wechatUser, $rebind);
         }
 
         if (!$wechatUser || !$wechatUser->user) {
@@ -196,10 +196,11 @@ abstract class AbstractWechatUserController extends AbstractResourceController
      * @param $wxuser
      * @param $actor
      * @param UserWechat $wechatUser
+     * @param int $rebind 换绑时返回新的code供前端使用
      * @return mixed
      * @throws NoUserException
      */
-    private function error($wxuser, $actor, $wechatUser)
+    private function error($wxuser, $actor, $wechatUser, $rebind = null)
     {
         $rawUser = $wxuser->getRaw();
 
@@ -220,6 +221,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
         $noUserException = new NoUserException();
         $noUserException->setToken($token);
         $noUserException->setUser(Arr::only($wechatUser->toArray(), ['nickname', 'headimgurl']));
+        $rebind && $noUserException->setCode('rebind_mp_wechat');
         throw $noUserException;
     }
 
