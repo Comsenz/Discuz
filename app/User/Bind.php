@@ -141,6 +141,12 @@ class Bind
             }
         }
 
+        // 换绑时删除原双向关系（微信绑定的用户.登陆用户绑定微信）
+        if ($rebind) {
+            $wechatUser && $wechatUser->delete();
+            $user->wechat && $user->wechat->delete();
+        }
+
         if (!$wechatUser) {
             $wechatUser = UserWechat::build([]);
         }
