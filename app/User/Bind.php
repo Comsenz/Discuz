@@ -73,8 +73,14 @@ class Bind
 
             // 换绑时删除原双向关系（登陆用户绑定微信，微信绑定的用户）
             if ($rebind) {
-                $wechatUser && $wechatUser->delete();
-                $wechat && $wechat->delete();
+                if ($wechatUser) {
+                    $wechatUser->user_id = null;
+                    $wechatUser->save();
+                }
+                if ($wechat) {
+                    $wechat->user_id = null;
+                    $wechat->save();
+                }
             }
 
             // 已经存在绑定，抛出异常
