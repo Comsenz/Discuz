@@ -58,11 +58,6 @@ class QuestionAnswerSerializer extends AbstractSerializer
             'answered_at' => $this->formatDate($model->answered_at),
         ];
 
-        // 前端用作判断是否渲染答案
-        if ($model->price == 0 && $model->onlooker_unit_price == 0) {
-            $attributes['is_onlooker'] = true;
-        }
-
         // 判断是否已围观来展示答案
         if (
             $model->user_id == $actor->id
