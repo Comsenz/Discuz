@@ -14,6 +14,7 @@ export default {
       pageNum: 1,
       pageLimit: 20,
       total: 0
+      // pageCount: 0
     };
   },
   created() {
@@ -37,7 +38,7 @@ export default {
           } else {
             this.tableData = res.readdata;
             this.total = res.meta.total;
-            this.pageCount = res.meta.pageCount;
+            // this.pageCount = res.meta.pageCount;
           }
         })
         .catch(err => {});
@@ -80,6 +81,7 @@ export default {
       return (this.pageNum - 1) * this.pageLimit + $index + 1;
     },
     handleCurrentChange(val) {
+      console.log("val~~~", val);
       this.pageNum = val;
       this.getNoticeList();
     },
