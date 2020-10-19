@@ -474,8 +474,7 @@
               $router.history.current.query.id === '1' ||
                 $router.history.current.query.id === '7'
             "
-            >编辑用户状态</el-checkbox
-          >
+            >编辑用户状态</el-checkbox>
         </CardRow>
       </Card>
     </div>
