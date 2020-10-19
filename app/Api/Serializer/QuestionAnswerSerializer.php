@@ -59,7 +59,7 @@ class QuestionAnswerSerializer extends AbstractSerializer
         ];
 
         // 前端用作判断是否渲染答案
-        if ($model->onlooker_unit_price == 0) {
+        if ($model->price == 0 && $model->onlooker_unit_price == 0) {
             $attributes['is_onlooker'] = true;
         }
 
