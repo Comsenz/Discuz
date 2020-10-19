@@ -312,7 +312,7 @@ class ListThreadsController extends AbstractListController
 
         // 作者 ID
         if ($userId = Arr::get($filter, 'userId')) {
-            if (is_int($type) && $type == Thread::TYPE_OF_QUESTION && Arr::get($filter, 'answer') == 'yes') {
+            if (is_numeric($type) && $type == Thread::TYPE_OF_QUESTION && Arr::get($filter, 'answer') == 'yes') {
                 $query->join('questions', 'threads.id', '=', 'questions.thread_id')
                     ->where(function (Builder $query) use ($userId) {
                         $query->where('threads.user_id', $userId)->orWhere('questions.be_user_id', $userId);
