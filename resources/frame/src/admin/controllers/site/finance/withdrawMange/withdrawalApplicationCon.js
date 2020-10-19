@@ -71,7 +71,10 @@ export default {
 
       total:0,                    //总数
       pageCount:0,                //总页数
-      currentPaga:1               //第几页
+      currentPaga:1,               //第几页
+      openid: '',
+      type1: '微信零钱',
+      type2: '人工打款',
     }
   },
   methods:{
@@ -105,7 +108,26 @@ export default {
           return "未知状态";
       }
     },
-
+    accountNumber(num) {
+      if (num._data.cash_type === 1) {
+        if (num.wechat) {
+          return num.wechat._data.mp_openid || num.wechat._data.min_openid;
+        } else {
+          return '';
+        }
+      } else {
+        return num._data.cash_mobile;
+      }
+    },
+    toexamine(num) {
+      console.log(num);
+      if (num._data.cash_status == 1 && num._data.cash_type === 1) {
+        return true;
+      }
+      if (num._data.cash_status == 1 && num._data.cash_type === 0) {
+        return false;
+      }
+    },
     noReviewClick(id){
       let data = {id:[]};
       this.$MessageBox.prompt('', '提示', {
@@ -126,6 +148,38 @@ export default {
       data.id.push(id);
       data.status = 2;
       this.postReview(data);
+    },
+
+    reviewClicks(id){
+      let data = {id:[]};
+      data.id.push(id);
+      data.status = 5;
+      this.postReview(data);
+    },
+    /**
+     * 审核之后的状态
+     */
+    auditstatus(status) {
+      switch (status){
+        case 2:
+          return "标记打款";
+          break;
+        case 3:
+          return "审核拒绝";
+          break;
+        case 4:
+          return "标记打款";
+          break;
+        case 5:
+          return "标记打款";
+          break;
+        case 6:
+          return "打款失败"
+          break;
+        default:
+          //获取状态失败，请刷新页面
+          return "未知状态";
+      }
     },
 
     searchClick(){
@@ -159,7 +213,7 @@ export default {
         url:'reflect',
         method:'get',
         data:{
-          include:['user','userWallet'],
+          include:['user','userWallet', 'wechat'],
           'filter[cash_status]':this.statusSelect,
           'page[number]':this.currentPaga,
           'page[size]':10,
@@ -174,7 +228,7 @@ export default {
         }else {
           this.tableData = [];
           this.tableData = res.readdata;
-
+          console.log(this.tableData);
           this.total = res.meta.total;
           this.pageCount = res.meta.pageCount;
         }

@@ -32,6 +32,7 @@ use App\MessageTemplate\RepliedMessage;
 use App\MessageTemplate\Wechat\WechatPostMessage;
 use App\MessageTemplate\Wechat\WechatRepliedMessage;
 use App\Models\Post;
+use App\Models\PostGoods;
 use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\ThreadTopic;
@@ -42,6 +43,7 @@ use App\Traits\PostNoticesTrait;
 use Discuz\Api\Events\Serializing;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -83,6 +85,9 @@ class PostListener
 
         // #话题#
         $events->listen(Saved::class, [$this, 'threadTopic']);
+
+        // 设置主题,商品关联关系
+        $events->listen(Saved::class, [$this, 'postGoods']);
     }
 
     /**
@@ -254,19 +259,16 @@ class PostListener
             $event->actor->username . ' 修改了内容'
         );
 
-        if ($event->post->user) {
-            // 判断是否是自己
-            if ($event->actor->id != $event->post->user->id) {
-                $build = [
-                    'message' => $event->post->content,
-                    'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'is_first'])
-                ];
-                // 系统通知
-                $event->post->user->notify(new System(PostMessage::class, $build));
+        if ($event->post->user && $event->post->user->id != $event->actor->id) {
+            $build = [
+                'message' => $event->content,
+                'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'is_first'])
+            ];
+            // 系统通知
+            $event->post->user->notify(new System(PostMessage::class, $build));
 
-                // 微信通知
-                $event->post->user->notify(new System(WechatPostMessage::class, $build));
-            }
+            // 微信通知
+            $event->post->user->notify(new System(WechatPostMessage::class, $build));
         }
     }
 
@@ -285,10 +287,52 @@ class PostListener
 
     /**
      * 解析话题、创建话题、存储话题主题关系、修改话题主题数/阅读数
+     *
      * @param Saved $event
      */
     public function threadTopic(Saved $event)
     {
         ThreadTopic::setThreadTopic($event->post);
+    }
+
+    /**
+     * 设置商品帖的关联关系
+     *
+     * @param Saved $event
+     * @throws Exception
+     */
+    public function postGoods(Saved $event)
+    {
+        $post = $event->post;
+        if ($post->is_first && $post->thread->type === Thread::TYPE_OF_GOODS) {
+            if (! Arr::has($event->data, 'attributes.post_goods_id')) {
+                return;
+            }
+
+            $goodsId = (int) Arr::get($event->data, 'attributes.post_goods_id');
+
+            /**
+             * 每个商品绑定一个 Post
+             *
+             * @var PostGoods $goods
+             */
+            $goods = PostGoods::query()->where('post_id', $post->id)->first();
+            if (! empty($goods)) {
+                if ($goods->id != $goodsId) {
+                    $goods->delete();
+                } else {
+                    return;
+                }
+            }
+
+            /** @var PostGoods $postGoods */
+            $postGoods = PostGoods::query()->where('id', $goodsId)->where('post_id', 0)->whereNull('deleted_at')->first();
+            if ($postGoods) {
+                $postGoods->post_id = $post->id;
+                $postGoods->save();
+            } else {
+                throw new Exception('post_goods_illegal');
+            }
+        }
     }
 }

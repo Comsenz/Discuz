@@ -22,6 +22,7 @@ use App\Api\Serializer\ThreadSerializer;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\Thread;
+use App\Models\User;
 use App\Repositories\PostRepository;
 use App\Repositories\ThreadRepository;
 use Discuz\Api\Controller\AbstractResourceController;
@@ -59,8 +60,7 @@ class ResourceThreadController extends AbstractResourceController
         'user',
         'firstPost',
         'threadVideo',
-        'firstPost.images',
-        'firstPost.attachments',
+        'threadAudio',
         'posts',
         'posts.user',
         'posts.replyUser',
@@ -82,6 +82,20 @@ class ResourceThreadController extends AbstractResourceController
         'posts.mentionUsers',
         'firstPost.mentionUsers',
         'topic',
+        'question',
+        'question.beUser',
+        'question.beUser.groups',
+        'question.images',
+        'onlookers',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public $mustInclude = [
+        'firstPost.images',
+        'firstPost.attachments',
+        'firstPost.postGoods',
     ];
 
     /**
@@ -101,9 +115,10 @@ class ResourceThreadController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $threadId = Arr::get($request->getQueryParams(), 'id');
+        /** @var User $actor */
         $actor = $request->getAttribute('actor');
-        $include = array_merge($this->extractInclude($request), ['firstPost.images', 'firstPost.attachments']);
+        $threadId = Arr::get($request->getQueryParams(), 'id');
+        $include = $this->extractInclude($request);
 
         $thread = $this->threads->findOrFail($threadId, $actor);
 
@@ -126,6 +141,16 @@ class ResourceThreadController extends AbstractResourceController
         // 特殊关联：付费用户
         if (in_array('paidUsers', $include)) {
             $this->loadOrderUsers($thread, Order::ORDER_TYPE_THREAD);
+        }
+
+        // 特殊关联：围观用户
+        if (in_array('onlookers', $include)) {
+            $this->loadOrderUsers($thread, Order::ORDER_TYPE_ONLOOKER);
+        }
+
+        // 问答帖设置当前用户
+        if ($thread->type === Thread::TYPE_OF_QUESTION) {
+            $thread->question->setRelation('thread', $thread);
         }
 
         // 主题关联模型
@@ -191,8 +216,8 @@ class ResourceThreadController extends AbstractResourceController
     }
 
     /**
-     * @param $thread
-     * @param $type
+     * @param Thread $thread
+     * @param int $type
      * @return Thread
      */
     private function loadOrderUsers(Thread $thread, $type)
@@ -203,6 +228,10 @@ class ResourceThreadController extends AbstractResourceController
                 break;
             case Order::ORDER_TYPE_THREAD:
                 $relation = 'paidUsers';
+                $type = [Order::ORDER_TYPE_THREAD, Order::ORDER_TYPE_ATTACHMENT];
+                break;
+            case Order::ORDER_TYPE_ONLOOKER:
+                $relation = 'onlookers';
                 break;
             default:
                 return $thread;
@@ -211,7 +240,7 @@ class ResourceThreadController extends AbstractResourceController
         $orderUsers = Order::with('user')
             ->where('thread_id', $thread->id)
             ->where('status', Order::ORDER_STATUS_PAID)
-            ->where('type', $type)
+            ->whereIn('type', is_array($type) ? $type : [$type])
             ->where('is_anonymous', false)
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc')

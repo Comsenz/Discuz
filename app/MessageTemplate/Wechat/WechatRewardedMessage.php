@@ -26,9 +26,8 @@ use Illuminate\Support\Arr;
 
 /**
  * 内容支付通知 - 微信
- * (包含: 打赏帖子/支付付费贴)
+ * (包含: 打赏帖子/支付付费/分成)
  *
- * Class WechatLikedMessage
  * @package App\MessageTemplate\Wechat
  */
 class WechatRewardedMessage extends DatabaseMessage
@@ -64,7 +63,7 @@ class WechatRewardedMessage extends DatabaseMessage
         if (empty($threadId)) {
             $threadUrl = $this->url->to('');
         } else {
-            $threadUrl = $this->url->to('/pages/topic/index?id=' . $threadId);
+            $threadUrl = $this->url->to('/topic/index?id=' . $threadId);
         }
 
         return [

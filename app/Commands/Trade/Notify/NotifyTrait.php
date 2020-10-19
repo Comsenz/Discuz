@@ -50,7 +50,7 @@ trait NotifyTrait
         // 查询订单
         $this->orderInfo = Order::query()->where('status', Order::ORDER_STATUS_PENDING)->where('payment_sn', $payment_sn)->first();
 
-        if (!empty($this->orderInfo)) {
+        if (! empty($this->orderInfo)) {
             // 修改通知数据
             PayNotify::query()->where('payment_sn', $payment_sn)->update(['status' => PayNotify::NOTIFY_STATUS_RECEIVED, 'trade_no' => $trade_no]);
             // 修改订单，已支付
@@ -69,6 +69,7 @@ trait NotifyTrait
                     return $this->orderInfo;
 
                 case Order::ORDER_TYPE_REWARD:
+                case Order::ORDER_TYPE_ATTACHMENT:
                 case Order::ORDER_TYPE_THREAD:
                     // 站长作者分成配置
                     $site_author_scale = $setting->get('site_author_scale');
@@ -114,6 +115,66 @@ trait NotifyTrait
                     $events->dispatch(
                         new PaidGroup($this->orderInfo->group_id, User::find($this->orderInfo->user_id), $this->orderInfo)
                     );
+
+                    return $this->orderInfo;
+
+                case Order::ORDER_TYPE_QUESTION:
+                    // 提问时，计算站长分成，以及作者实际获取金额
+                    $this->orderInfo->calculateMasterAmount();
+                    $this->orderInfo->save();
+
+                    return $this->orderInfo;
+
+                case Order::ORDER_TYPE_ONLOOKER:
+                    // 计算围观问答人/答题人分红
+                    $onlookerActualPrice = $this->orderInfo->calculateOnlookersAmount(true);
+                    $onlookerPrice = numberFormat($onlookerActualPrice, '/', 2);
+
+                    // build save
+                    $this->orderInfo->master_amount = numberFormat($this->orderInfo->amount, '-', $onlookerActualPrice); // 站长分成金额
+                    $this->orderInfo->author_amount = $onlookerPrice; // 作者分成金额
+                    $this->orderInfo->third_party_amount = $onlookerPrice; // 第三者收益金额
+                    $this->orderInfo->save();
+
+                    // 收款人钱包可用金额增加
+                    $userWallet = UserWallet::query()->lockForUpdate()->find($this->orderInfo->payee_id);
+                    $userWallet->available_amount = numberFormat($userWallet->available_amount, '+', $onlookerPrice);
+                    $userWallet->save();
+                    // 第三者钱包可用金额增加
+                    $thirdPartyWallet = UserWallet::query()->lockForUpdate()->find($this->orderInfo->third_party_id);
+                    $thirdPartyWallet->available_amount = numberFormat($thirdPartyWallet->available_amount, '+', $onlookerPrice);
+                    $thirdPartyWallet->save();
+
+                    // 钱包明细记录类型
+                    $payeeOrderDetail = $this->orderByDetailType();
+
+                    // 添加提问人钱包明细
+                    UserWalletLog::createWalletLog(
+                        $this->orderInfo->payee_id,  // 明细所属用户 id
+                        $onlookerPrice,              // 变动可用金额
+                        0,                           // 变动冻结金额
+                        $payeeOrderDetail['change_type'], // 36 问答围观收入
+                        trans($payeeOrderDetail['change_type_lang']),
+                        null,                   // 关联提现ID
+                        $this->orderInfo->id    // 订单ID
+                    );
+                    // 添加答题人明细
+                    UserWalletLog::createWalletLog(
+                        $this->orderInfo->third_party_id,  // 第三者收益人 id (答题人)
+                        $onlookerPrice,         // 变动可用金额
+                        0,                      // 变动冻结金额
+                        $payeeOrderDetail['change_type'], // 36 问答围观收入
+                        trans($payeeOrderDetail['change_type_lang']),
+                        null,                   // 关联提现ID
+                        $this->orderInfo->id    // 订单ID
+                    );
+
+                    // 添加围观帖 围观总金额&围观总人数
+                    $question = $this->orderInfo->thread->question;
+                    $question->onlooker_price = numberFormat($question->onlooker_price, '+', $this->orderInfo->amount);
+                    $question->onlooker_number = $question->onlooker_number + 1;
+                    $question->save();
+
                     return $this->orderInfo;
 
                 default:
@@ -159,6 +220,20 @@ trait NotifyTrait
                     $change_type_lang = 'wallet.income_scale_register';
                 }
                 break;
+            case Order::ORDER_TYPE_ONLOOKER:
+                // 问答围观收入
+                $change_type = UserWalletLog::TYPE_INCOME_ONLOOKER_REWARD;
+                $change_type_lang = 'wallet.income_onlooker_reward';
+                break;
+            case Order::ORDER_TYPE_ATTACHMENT: // 付费附件
+                if ($scale) {
+                    $change_type = UserWalletLog::TYPE_INCOME_SCALE_ATTACHMENT;
+                    $change_type_lang = 'wallet.income_scale_attachment';
+                } else {
+                    $change_type = UserWalletLog::TYPE_INCOME_ATTACHMENT;
+                    $change_type_lang = 'wallet.income_attachment';
+                }
+                break;
             default:
                 $change_type = $this->orderInfo->type;
                 $change_type_lang = '';
@@ -190,7 +265,7 @@ trait NotifyTrait
                 $sourceUserId = $this->orderInfo->payee_id;
             }
 
-            if (!empty($userDistribution)) {
+            if (! empty($userDistribution)) {
                 $parentUserId = $userDistribution->pid; // 上级user_id
                 $user_wallet = UserWallet::query()->lockForUpdate()->find($parentUserId);
                 $user_wallet->available_amount = $user_wallet->available_amount + $bossAmount;

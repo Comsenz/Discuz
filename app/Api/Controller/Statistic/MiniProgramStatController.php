@@ -18,6 +18,7 @@
 
 namespace App\Api\Controller\Statistic;
 
+use Discuz\Http\DiscuzResponseFactory;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -32,13 +33,25 @@ class MiniProgramStatController implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $body = $request->getBody();
         $client = $this->getHttpClient();
-        return $client->post('https://h5.udrig.com/app/wx/v1', [
-            'body' => $body,
-            'headers' => [
-                'Content-Type' => 'application/json'
-            ]
-        ]);
+
+        try {
+            $body = $request->getBody();
+            $client->post('https://h5.udrig.com/app/wx/v1', [
+                'body' => $body,
+                'headers' => [
+                    'Content-Type' => 'application/json'
+                ]
+            ]);
+        } catch (\Exception $e) {
+        }
+
+        try {
+            $body = $request->getParsedBody();
+            $client->get('https://discuzq-0gxi1bn2969fa48d.service.tcloudbase.com/access?pt=mp-weixin&dn=' . $body[0]['app']['channel']);
+        } catch (\Exception $e) {
+        }
+
+        return DiscuzResponseFactory::JsonResponse(['status' => "ok"]);
     }
 }

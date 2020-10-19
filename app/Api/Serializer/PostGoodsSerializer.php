@@ -37,6 +37,8 @@ class PostGoodsSerializer extends AbstractSerializer
             'status' => $model->status,
             'ready_content' => $model->ready_content,
             'detail_content' => $model->detail_content,
+            'created_at' => $this->formatDate($model->created_at),
+            'updated_at' => $this->formatDate($model->updated_at),
         ];
     }
 

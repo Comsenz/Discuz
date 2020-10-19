@@ -231,14 +231,12 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
      */
     public function processingPicture(Attachment $model, $callback = [])
     {
-        $path = Str::finish($model->file_path, '/') . $model->attachment;
-
         if ($model->is_remote) {
             $url = $this->settings->get('qcloud_cos_sign_url', 'qcloud', true)
-                ? $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addHour())
-                : $this->filesystem->disk('attachment_cos')->url($path);
+                ? $this->filesystem->disk('attachment_cos')->temporaryUrl($model->full_path, Carbon::now()->addDay())
+                : $this->filesystem->disk('attachment_cos')->url($model->full_path);
         } else {
-            $url = $this->filesystem->disk('attachment')->url($path);
+            $url = $this->filesystem->disk('attachment')->url($model->full_path);
         }
 
         $callback([
@@ -360,7 +358,7 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
      */
     public function videoFormatter($threadId, $assetUrl)
     {
-        $toUrl = $this->url->to('/pages/topic/index?id=' . $threadId);
+        $toUrl = $this->url->to('/topic/index?id=' . $threadId);
 
         $str = '<p style="text-align: center;">
                     <a target="_blank" href="%s" tab="outerlink" data-linktype="2">

@@ -49,7 +49,6 @@ class ListPostsController extends AbstractListController
     public $include = [
         'user',
         'replyUser',
-        'thread',
         'images',
     ];
 
@@ -66,6 +65,14 @@ class ListPostsController extends AbstractListController
         'lastThreeComments.images',
         'deletedUser',
         'lastDeletedLog',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public $mustInclude = [
+        'thread',
+        'likeState',
     ];
 
     /**
@@ -123,12 +130,7 @@ class ListPostsController extends AbstractListController
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-
-        /**
-         * thread 解决查询付费状态 N + 1 问题
-         * likeState 解决查询点赞状态 N + 1 问题
-         */
-        $include = array_merge($this->extractInclude($request), ['thread', 'likeState']);
+        $include = $this->extractInclude($request);
 
         $posts = $this->search($actor, $filter, $sort, $limit, $offset);
 

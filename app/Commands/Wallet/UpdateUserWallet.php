@@ -89,7 +89,7 @@ class UpdateUserWallet
         $operate_reason = trim($operate_reason);
         $wallet_status  = Arr::get($this->data, 'wallet_status');
         if (!is_null($operate_type)) {
-            if (!in_array($operate_type, [UserWallet::OPERATE_ADD, UserWallet::OPERATE_REDUCE])) {
+            if (!in_array($operate_type, [UserWallet::OPERATE_INCREASE, UserWallet::OPERATE_DECREASE])) {
                 throw new WalletException('operate_type_error');
             }
         }
@@ -105,13 +105,13 @@ class UpdateUserWallet
         try {
             $user_wallet = UserWallet::lockForUpdate()->findOrFail($this->user_id);
             switch ($operate_type) {
-                case UserWallet::OPERATE_ADD: //增加
+                case UserWallet::OPERATE_INCREASE: //增加
                     $change_type = UserWalletLog::TYPE_INCOME_ARTIFICIAL;
                     if (!strlen($operate_reason)) {
                         $operate_reason = app('translator')->get('wallet.income_artificial');
                     }
                     break;
-                case UserWallet::OPERATE_REDUCE: //减少
+                case UserWallet::OPERATE_DECREASE: //减少
                     if ($user_wallet->available_amount - $operate_amount < 0) {
                         throw new Exception('available_amount_error');
                     }

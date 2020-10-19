@@ -83,7 +83,9 @@ class CreateThreadVideo
         $this->events = $events;
         $this->settings = $settings;
 
-        $fileId = Arr::get($this->data, 'attributes.file_id', '');
+        $attributes = Arr::get($this->data, 'attributes', []);
+
+        $fileId = Arr::get($attributes, 'file_id', '');
 
         /** @var ThreadVideo $threadVideo */
         $threadVideo = ThreadVideo::query()->where('thread_id', 0)->where('file_id', $fileId)->firstOrNew();
@@ -92,11 +94,17 @@ class CreateThreadVideo
         $threadVideo->thread_id = $this->thread->id ?? 0;
         $threadVideo->post_id = 0;  // 暂时用不到了
         $threadVideo->type = $this->type;
-        $threadVideo->status = ThreadVideo::VIDEO_STATUS_TRANSCODING;
         $threadVideo->file_id = $fileId;
-        $threadVideo->file_name = Arr::get($this->data, 'attributes.file_name', '');
-        $threadVideo->media_url = Arr::get($this->data, 'attributes.media_url', '');
-        $threadVideo->cover_url = Arr::get($this->data, 'attributes.cover_url', '');
+        $threadVideo->file_name = Arr::get($attributes, 'file_name', $threadVideo->file_name ?? '');
+        $threadVideo->media_url = Arr::get($attributes, 'media_url', $threadVideo->media_url ?? '');
+        $threadVideo->cover_url = Arr::get($attributes, 'cover_url', $threadVideo->cover_url ?? '');
+
+        // 视频转码中，音频无需转码
+        if ($threadVideo->type === ThreadVideo::TYPE_OF_VIDEO) {
+            $threadVideo->status = ThreadVideo::VIDEO_STATUS_TRANSCODING;
+        } else {
+            $threadVideo->status = ThreadVideo::VIDEO_STATUS_SUCCESS;
+        }
 
         $threadVideo->save();
 

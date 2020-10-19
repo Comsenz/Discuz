@@ -48,14 +48,13 @@ class WalletPayNotify
      * @param SettingsRepository $setting
      * @return array
      * @throws ErrorException
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function handle(ConnectionInterface $connection, Dispatcher $events, SettingsRepository $setting)
     {
         $log = app('payLog');
         try {
             $log->info('notify', $this->data);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             goto todo;
         }
 
@@ -67,9 +66,8 @@ class WalletPayNotify
         $connection->beginTransaction();
         try {
             // 从钱包余额中扣除订单金额
-            $userWallet = UserWallet::lockForUpdate()->find($this->data['user_id']);
+            $userWallet = UserWallet::query()->lockForUpdate()->find($this->data['user_id']);
             $userWallet->available_amount = $userWallet->available_amount - $this->data['amount'];
-            $userWallet->save();
 
             // 记录钱包变更明细
             switch ($this->data['type']) {
@@ -89,22 +87,39 @@ class WalletPayNotify
                     $change_type = UserWalletLog::TYPE_EXPEND_GROUP;
                     $change_type_lang = 'wallet.expend_group';
                     break;
+                case Order::ORDER_TYPE_QUESTION:
+                    $change_type = UserWalletLog::TYPE_QUESTION_FREEZE;
+                    $change_type_lang = 'wallet.question_freeze_desc';
+                    // 钱包&钱包日志 增加冻结金额数
+                    $userWallet->freeze_amount = $userWallet->freeze_amount + $this->data['amount'];
+                    $freezeAmount = $this->data['amount'];
+                    break;
+                case Order::ORDER_TYPE_ONLOOKER:
+                    $change_type = UserWalletLog::TYPE_EXPEND_ONLOOKER;
+                    $change_type_lang = 'wallet.expend_onlooker';
+                    break;
+                case Order::ORDER_TYPE_ATTACHMENT:
+                    $change_type = UserWalletLog::TYPE_EXPEND_ATTACHMENT;
+                    $change_type_lang = 'wallet.expend_attachment';
+                    break;
                 default:
                     $change_type = $this->data['type'];
                     $change_type_lang = '';
             }
 
+            $userWallet->save();
+
             UserWalletLog::createWalletLog(
                 $this->data['user_id'],
                 -$this->data['amount'],
-                0,
+                $freezeAmount ?? 0,
                 $change_type,
                 trans($change_type_lang),
                 null,
                 $this->data['id']
             );
 
-            //支付成功处理
+            // 支付成功处理
             $order_info = $this->paymentSuccess($payment_sn, $trade_no, $setting, $events);
 
             if ($order_info) {

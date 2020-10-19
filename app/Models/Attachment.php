@@ -25,6 +25,7 @@ use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\Cache\Repository as Cache;
 
 /**
  * @property int $id
@@ -37,6 +38,9 @@ use Illuminate\Support\Str;
  * @property int $is_approved
  * @property string $attachment
  * @property string $file_path
+ * @property string $full_path
+ * @property string $thumb_path
+ * @property string $blur_path
  * @property string $file_name
  * @property int $file_size
  * @property string $file_type
@@ -63,6 +67,8 @@ class Attachment extends Model
 
     const TYPE_OF_DIALOG_MESSAGE = 4;
 
+    const TYPE_OF_ANSWER = 5; // 回答图片
+
     const UNAPPROVED = 0;
 
     const APPROVED = 1;
@@ -77,16 +83,17 @@ class Attachment extends Model
     ];
 
     /**
-     * type：0 帖子附件 1 帖子图片 2 帖子音频 3 帖子视频 4消息图片
+     * type：0 帖子附件 1 帖子图片 2 帖子音频 3 帖子视频 4 消息图片 5 回答图片
      *
      * @var array
      */
     public static $allowTypes = [
-        'file',
-        'img',
-        'audio',
-        'video',
-        'dialogMessage',
+        self::TYPE_OF_FILE => 'file',
+        self::TYPE_OF_IMAGE => 'img',
+        self::TYPE_OF_AUDIO => 'audio',
+        self::TYPE_OF_VIDEO => 'video',
+        self::TYPE_OF_DIALOG_MESSAGE => 'dialogMessage',
+        self::TYPE_OF_ANSWER => 'answer',
     ];
 
     /**
@@ -136,15 +143,61 @@ class Attachment extends Model
         return $attachment;
     }
 
+    public static function getFileToken($actor)
+    {
+        /** @var Cache $cache */
+        $cache = app(Cache::class);
+        $token = $cache->get('attachments_user_' . $actor->id);
+        if (!$token) {
+            $token = SessionToken::query()
+                ->where('scope', 'attachment')
+                ->where('user_id', $actor->id)
+                ->first();
+            if (!$token) {
+                $token = SessionToken::generate('attachment', null, $actor->id, 3600);
+                $token->save();
+            }
+            $token = $token->token;
+            $cache->put('attachments_user_' . $actor->id, $token, 3599);
+        }
+        return $token;
+    }
+
     /**
-     * 获取替换缩略图名称
-     *
-     * @param $imgPath
+     * @param string $value
      * @return string
      */
-    public static function replaceThumb($imgPath)
+    public function getFilePathAttribute($value)
     {
-        return Str::replaceLast('.', '_thumb.', $imgPath);
+        return Str::finish($value, '/');
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullPathAttribute()
+    {
+        return $this->file_path . $this->attachment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getThumbPathAttribute()
+    {
+        return $this->file_path . Str::replaceLast('.', '_thumb.', $this->attachment);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlurPathAttribute()
+    {
+        $parts = explode('.', $this->attachment);
+
+        $parts[0] = md5($parts[0]);
+
+        return $this->file_path . implode('_blur.', $parts);
     }
 
     /**
@@ -166,4 +219,5 @@ class Attachment extends Model
     {
         return $this->belongsTo(Post::class, 'type_id');
     }
+
 }

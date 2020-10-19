@@ -170,10 +170,11 @@ export default {
           this.$message.error(res.errors[0].code);
         }else {
           this.tableData = res.readdata;
+          // console.log(this.tableData);
           this.alternateLength = res.readdata.length;
           this.tableData.forEach((item) => {
             this.groupName = item._data.isDisplay;
-            console.log(this.groupName)
+            // console.log(this.groupName)
             if (item._data.default == 1) {
               this.radio = item._data.id;
               this.alternateRadio = item._data.id;

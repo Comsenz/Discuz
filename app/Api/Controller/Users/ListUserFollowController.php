@@ -19,6 +19,8 @@
 namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\UserFollowSerializer;
+use App\Models\Group;
+use App\Models\Permission;
 use App\Models\User;
 use App\Repositories\UserFollowRepository;
 use App\Repositories\UserRepository;
@@ -28,6 +30,7 @@ use Discuz\Auth\Exception\NotAuthenticatedException;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Exception\InvalidParameterException;
@@ -72,6 +75,10 @@ class ListUserFollowController extends AbstractListController
      */
     public $include = [];
 
+    public $sort = ['createdAt' => 'desc'];
+
+    public $sortFields = ['createdAt', 'users.createdAt'];
+
     /**
      * @param UserFollowRepository $userFollow
      * @param UrlGenerator $url
@@ -102,8 +109,9 @@ class ListUserFollowController extends AbstractListController
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
         $include = $this->extractInclude($request);
+        $sort = $this->extractSort($request);
 
-        $userFollow = $this->search($actor, $filter, $limit, $offset);
+        $userFollow = $this->search($actor, $filter, $sort, $limit, $offset);
 
         $document->addPaginationLinks(
             $this->url->route('follow.list'),
@@ -126,15 +134,16 @@ class ListUserFollowController extends AbstractListController
     /**
      * @param User $actor
      * @param array $filter
+     * @param $sort
      * @param null $limit
      * @param int $offset
      * @return Collection
      */
-    public function search(User $actor, $filter, $limit = null, $offset = 0)
+    public function search(User $actor, $filter, $sort, $limit = null, $offset = 0)
     {
         $join_field = '';
         $user = '';
-        $query = $this->userFollow->query();
+        $query = $this->userFollow->query()->select('user_follow.*')->distinct();
 
         $type = (int) Arr::get($filter, 'type', 1);
         $username = Arr::get($filter, 'username');
@@ -158,6 +167,29 @@ class ListUserFollowController extends AbstractListController
                 ->where(function ($query) use ($username) {
                     $query->where('users.username', 'like', "%{$username}%");
                 });
+        }
+
+        // 是否可以被提问
+        if ($canBeAsked = Arr::get($filter, 'canBeAsked')) {
+            $groupIds = Permission::query()
+                ->where('permission', 'canBeAsked')
+                ->pluck('group_id')
+                ->add(Group::ADMINISTRATOR_ID);
+
+            $query->join('group_user', 'group_user.user_id', '=', 'user_follow.' . $join_field);
+
+            if ($canBeAsked === 'yes') {
+                $query->whereIn('group_user.group_id', $groupIds);
+            } elseif ($canBeAsked === 'no') {
+                $query->whereNotIn('group_user.group_id', $groupIds);
+            }
+        }
+
+        foreach ((array) $sort as $field => $order) {
+            if ($field == 'users.createdAt') {
+                $query->join('users', 'users.id', '=', 'user_follow.'.$join_field);
+            }
+            $query->orderBy(Str::snake($field), $order);
         }
 
         $this->userFollowCount = $limit > 0 ? $query->count() : null;

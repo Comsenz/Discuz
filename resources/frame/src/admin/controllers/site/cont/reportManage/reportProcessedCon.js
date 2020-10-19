@@ -88,7 +88,7 @@ export default {
         if(threadID === 0){
           href = '/pagthreadIDes/profile/index?userId=' + userID;
         }else{
-          href = '/pages/topic/index?id=' + threadID;
+          href = '/topic/index?id=' + threadID;
         }
       }else{
         href = '/pages/topic/comment?threadId=' + threadID + '&commentId=' + postID;

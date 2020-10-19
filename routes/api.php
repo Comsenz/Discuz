@@ -55,6 +55,7 @@ $route->get('/signature', 'signature', ApiController\Qcloud\CreateVodUploadSigna
 |--------------------------------------------------------------------------
 */
 
+$route->get('/groups/paid', 'groups.paid', ApiController\Group\ListPaidUserGroupsController::class);
 $route->get('/groups', 'groups.list', ApiController\Group\ListGroupsController::class);
 $route->get('/groups/{id}', 'groups.resource', ApiController\Group\ResourceGroupsController::class);
 $route->post('/groups', 'groups.create', ApiController\Group\CreateGroupController::class);
@@ -97,7 +98,7 @@ $route->get('/oauth/welink', 'welink.login', ApiController\Users\WelinkLoginCont
 $route->get('/oauth/wechat/web/user', 'wechat.web.user', ApiController\Users\WechatWebUserLoginController::class);
 $route->get('/oauth/wechat/web/user/event', 'wechat.web.user.event', ApiController\Users\WechatWebUserLoginEventController::class);
 $route->post('/oauth/wechat/web/user/event', 'wechat.web.user.postevent', ApiController\Users\WechatWebUserLoginPostEventController::class);
-$route->get('/oauth/wechat/web/user/serach', 'wechat.web.user.search', ApiController\Users\WechatWebUserLoginSearchController::class);
+$route->get('/oauth/wechat/web/user/search', 'wechat.web.user.search', ApiController\Users\WechatWebUserLoginSearchController::class);
 $route->post('/oauth/wechat/miniprogram', 'wechat.miniprogram.login', ApiController\Users\WechatMiniProgramLoginController::class);
 $route->get('/oauth/wechat/miniprogram/code', 'wechat.mini.program.code', ApiController\Wechat\WechatMiniProgramCodeController::class);
 $route->get('/oauth/wechat/qy', 'wechat.qy.login', ApiController\Users\WechatQyLoginController::class);
@@ -190,6 +191,14 @@ $route->patch('/posts/batch', 'posts.batchUpdate', ApiController\Posts\BatchUpda
 $route->patch('/posts/{id}', 'posts.update', ApiController\Posts\UpdatePostController::class);
 $route->delete('/posts/batch/{ids}', 'posts.batchDelete', ApiController\Posts\BatchDeletePostsController::class);
 $route->delete('/posts/{id}', 'posts.delete', ApiController\Posts\DeletePostController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Question
+|--------------------------------------------------------------------------
+*/
+
+$route->post('/questions/{question_id}/answer', 'questions.answer.create', ApiController\Question\CreateQuestionAnswerController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -314,6 +323,7 @@ $route->get('/dialog', 'dialog.list', ApiController\Dialog\ListDialogController:
 $route->post('/dialog/message', 'dialog.message.create', ApiController\Dialog\CreateDialogMessageController::class);
 $route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListDialogMessageController::class);
 $route->delete('/dialog/{id}', 'dialog.delete', ApiController\Dialog\DeleteDialogController::class);
+
 /*
 |--------------------------------------------------------------------------
 | Reports
@@ -331,7 +341,11 @@ $route->delete('/reports/batch/{ids}', 'reports.batchDelete', ApiController\Repo
 |--------------------------------------------------------------------------
 */
 
+
+$route->post('/goods/analysis', 'goods.analysis', ApiController\Analysis\ResourceAnalysisGoodsController::class);
+$route->get('/goods/{id}', 'goods.resource', ApiController\Analysis\ResourceGoodsController::class);
 $route->post('/analysis/goods', 'analysis.goods.url', ApiController\Analysis\ResourceAnalysisGoodsController::class);
+
 
 /*
 |--------------------------------------------------------------------------
@@ -345,6 +359,7 @@ $route->delete('/topics/{id}', 'topics.delete', ApiController\Topic\DeleteTopicC
 $route->delete('/topics/batch/{ids}', 'topics.batchDelete', ApiController\Topic\BatchDeleteTopicController::class);
 $route->patch('/topics/{id}', 'topics.update', ApiController\Topic\UpdateTopicController::class);
 $route->patch('/topics/batch/{ids}', 'topics.batchUpdate', ApiController\Topic\BatchUpdateTopicController::class);
+
 /*
 |--------------------------------------------------------------------------
 | System

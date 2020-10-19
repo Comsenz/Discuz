@@ -34,6 +34,8 @@ class UserWalletCashSerializer extends AbstractSerializer
             'cash_actual_amount' => $model->cash_actual_amount,
             'cash_apply_amount' => $model->cash_apply_amount,
             'cash_status' => $model->cash_status,
+            'cash_type' => $model->cash_type,
+            'cash_mobile' => $model->cash_mobile,
             'remark' => $model->remark,
             'trade_no' => $model->trade_no,
             'error_code' => $model->error_code,
@@ -60,5 +62,14 @@ class UserWalletCashSerializer extends AbstractSerializer
     protected function userWallet($cash)
     {
         return $this->hasOne($cash, UserWalletSerializer::class);
+    }
+
+    /**
+     * @param $cash
+     * @return Relationship
+     */
+    protected function wechat($cash)
+    {
+        return $this->hasOne($cash->user, UserWechatSerializer::class);
     }
 }

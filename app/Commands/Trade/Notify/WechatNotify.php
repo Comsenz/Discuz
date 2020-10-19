@@ -22,6 +22,7 @@ use App\Trade\Config\GatewayConfig;
 use App\Trade\NotifyTrade;
 use App\Trade\QueryTrade;
 use App\Settings\SettingsRepository;
+use Exception;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Discuz\Foundation\EventsDispatchTrait;
@@ -47,6 +48,9 @@ class WechatNotify
 
     /**
      * 执行命令
+     * @param SettingsRepository $setting
+     * @param ConnectionInterface $connection
+     * @param Dispatcher $events
      * @return mixed 返回给支付平台数据
      */
     public function handle(SettingsRepository $setting, ConnectionInterface $connection, Dispatcher $events)
@@ -59,7 +63,7 @@ class WechatNotify
                 $log = app('payLog');
                 try {
                     $log->info('notify', $notify_result);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     goto todo;
                 }
 

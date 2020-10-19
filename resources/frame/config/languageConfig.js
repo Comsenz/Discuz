@@ -51,7 +51,7 @@ const config = {
   tencent_vod_error : '腾讯云云点播配置错误',
   tencent_qcloud_sms_app_error : '腾讯云短信配置错误',
   tencent_vod_taskflow_gif_error : '动图封面任务流名称错误',
-
+  uninitialized_pay_password: '未设置支付密码',
 };
 
 Vue.prototype.getLang = function (key) {

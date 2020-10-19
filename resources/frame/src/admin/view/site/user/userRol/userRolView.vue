@@ -30,10 +30,17 @@
           </el-switch>
             </template>
           </el-table-column>
+          
+          <!-- <el-table-column
+            width="100">
+            <template slot-scope="scope">
+              <el-button v-if="scope.row._data.id !== '7' && scope.row._data.id !== '1'" :disabled="addStatus && tableData.length-1 === scope.$index" type="text" @click="$router.push({path:'/admin/rol-permission',query:{id:scope.row._data.id,name:scope.row._data.name,title:'其他设置',names:'other'}})">允许购买</el-button>
+            </template>
+          </el-table-column> -->
 
           <el-table-column>
             <template slot-scope="scope">
-              <el-button v-if="scope.row._data.id !== '1'" :disabled="addStatus && tableData.length-1 === scope.$index" type="text" @click="$router.push({path:'/admin/rol-permission',query:{id:scope.row._data.id,name:scope.row._data.name}})">设置权限</el-button>
+              <el-button v-if="scope.row._data.id !== '1'" :disabled="addStatus && tableData.length-1 === scope.$index" type="text" @click="$router.push({path:'/admin/rol-permission',query:{id:scope.row._data.id,name:scope.row._data.name}})">设置</el-button>
               <el-button v-if="scope.row._data.id !== '1' && scope.row._data.id !== '6' && scope.row._data.id !== '7' && scope.row._data.id !== '10' && scope.row._data.default !== 1" @click="singleDelete(scope.$index,scope.row._data.id)" type="text">删除</el-button>
             </template>
           </el-table-column>

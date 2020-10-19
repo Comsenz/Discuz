@@ -58,11 +58,24 @@
             label="操作用户"
             width="110">
           </el-table-column>
+          
+          <el-table-column
+            :prop="_data.cash_type == 1 ? '微信零钱' : '人工打款'"
+            label="提现方式"
+            width="110">
+            <template slot-scope="scope">{{scope.row._data.cash_type == 1 ? type1 : type2}}</template>
+          </el-table-column>
 
           <el-table-column
             prop="_data.cash_apply_amount"
             label="提现金额（元）"
+            width="110">
+          </el-table-column>
+          
+          <el-table-column
+            label="收款账号"
             width="150">
+             <template slot-scope="scope">{{accountNumber(scope.row)}}</template>
           </el-table-column>
 
           <el-table-column
@@ -82,21 +95,27 @@
             label="操作"
             show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-popover
-                width="100"
-                placement="top"
-                v-if="scope.row._data.cash_status === 1"
-                :ref="`popover-${scope.$index}`">
-                <p>确定通过该提现吗？</p>
-                <div style="text-align: right; margin: 10PX 0 0 0 ">
-                  <el-button type="danger" size="mini" @click="noReviewClick(scope.row._data.id);scope._self.$refs[`popover-${scope.$index}`].doClose()">
-                    不通过
-                  </el-button>
-                  <el-button type="primary" size="mini" @click="reviewClick(scope.row._data.id);scope._self.$refs[`popover-${scope.$index}`].doClose()" >通过</el-button>
+              <div v-if="scope.row._data.cash_status === 1">
+                <el-popover
+                  width="100"
+                  placement="top"
+                  v-if="scope.row._data.cash_type === 1"
+                  :ref="`popover-${scope.$index}`">
+                  <p>确定通过该提现吗？</p>
+                  <div style="text-align: right; margin: 10PX 0 0 0 ">
+                    <el-button type="danger" size="mini" @click="noReviewClick(scope.row._data.id);scope._self.$refs[`popover-${scope.$index}`].doClose()">
+                      不通过
+                    </el-button>
+                    <el-button type="primary" size="mini" @click="reviewClick(scope.row._data.id);scope._self.$refs[`popover-${scope.$index}`].doClose()" >通过</el-button>
+                  </div>
+                  <el-button v-if="scope.row._data.cash_type === 1" type="text" size="small" slot="reference">审核</el-button>
+                </el-popover>
+                <div v-else>
+                  <p class="toexaminebtn" @click="noReviewClick(scope.row._data.id)">审核拒绝</p>
+                  <p class="toexaminebtn" @click="reviewClicks(scope.row._data.id)">标记打款</p>
                 </div>
-                <el-button v-if="scope.row._data.cash_status === 1" type="text" size="small" slot="reference">审核</el-button>
-              </el-popover>
-
+              </div>
+              <p v-else>{{auditstatus(scope.row._data.cash_status)}}</p>
               <!--<el-button v-if="scope.row._data.cash_status !== '1'" type="text" size="small">审核</el-button>-->
             </template>
           </el-table-column>

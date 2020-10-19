@@ -73,14 +73,12 @@ class AttachmentSerializer extends AbstractSerializer
     {
         $this->paidContent($model);
 
-        $path = Str::finish($model->file_path, '/') . $model->attachment;
-
         if ($model->is_remote) {
             $url = $this->settings->get('qcloud_cos_sign_url', 'qcloud', true)
-                ? $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addHour())
-                : $this->filesystem->disk('attachment_cos')->url($path);
+                ? $this->filesystem->disk('attachment_cos')->temporaryUrl($model->full_path, Carbon::now()->addDay())
+                : $this->filesystem->disk('attachment_cos')->url($model->full_path);
         } else {
-            $url = $this->filesystem->disk('attachment')->url($path);
+            $url = $this->filesystem->disk('attachment')->url($model->full_path);
         }
 
         $attributes = [
@@ -108,16 +106,22 @@ class AttachmentSerializer extends AbstractSerializer
                         . 'imageMogr2/thumbnail/' . Attachment::FIX_WIDTH . 'x' . Attachment::FIX_WIDTH;
                 } else {
                     // 缩略图不存在时使用原图
-                    $attributes['thumbUrl'] = $this->filesystem->disk('attachment')->exists(
-                        Str::replaceLast('.', '_thumb.', $path)
-                    ) ? Str::replaceLast('.', '_thumb.', $url) : $url;
+                    $attributes['thumbUrl'] = $this->filesystem->disk('attachment')->exists($model->thumb_path)
+                        ? Str::replaceLast('.', '_thumb.', $url)
+                        : $url;
                 }
             }
+        } elseif ($model->type == Attachment::TYPE_OF_ANSWER) {
+            $attributes['thumbUrl'] = $url;
         }
 
-        // if ($model->post && $model->post->thread->price>0 && $model->post->is_first) {
-        //     $attributes['url'] = $this->url->to('/api/attachments/'.$model->id);
-        // }
+        if (
+            $model->post &&
+            $model->post->is_first &&
+            ($model->post->thread->price > 0 || $model->post->thread->attachment_price > 0)
+        ) {
+            $attributes['url'] = $this->url->to('/api/attachments/' . $model->id) . '?t=' .Attachment::getFileToken($this->actor);
+        }
 
         return $attributes;
     }

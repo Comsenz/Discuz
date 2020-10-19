@@ -13,7 +13,6 @@ const VERSION = new Date().getTime();
 module.exports = {
   devtool: "#source-map",
   entry: {
-    app: resolve("src/h5-main.js"),
     admin: resolve("src/admin-main.js")
   },
   externals: {

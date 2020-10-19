@@ -24,6 +24,7 @@ use App\Events\Thread\Hidden;
 use App\Events\Thread\Restored;
 use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadWasApproved;
+use App\Events\Thread\ThreadWasCategorized;
 use App\Listeners\User\CheckPublish;
 use App\Models\Post;
 use App\Models\PostMod;
@@ -51,6 +52,9 @@ class ThreadListener
 
         // 审核主题
         $events->listen(ThreadWasApproved::class, [$this, 'whenThreadWasApproved']);
+
+        // 分类主题
+        $events->listen(ThreadWasCategorized::class, [$this, 'whenThreadWasCategorized']);
 
         // 隐藏/还原主题
         $events->listen(Hidden::class, [$this, 'whenThreadWasHidden']);
@@ -101,6 +105,15 @@ class ThreadListener
         $action = UserActionLogs::$behavior[$thread->is_approved] ?? ('unknown' . $thread->is_approved);
 
         UserActionLogs::writeLog($event->actor, $thread, $action, $event->data['message'] ?? '');
+    }
+
+    /**
+     * @param ThreadWasCategorized $event
+     */
+    public function whenThreadWasCategorized(ThreadWasCategorized $event)
+    {
+        $event->newCategory->refreshThreadCount()->save();
+        $event->oldCategory && $event->oldCategory->refreshThreadCount()->save();
     }
 
     /**
@@ -164,11 +177,17 @@ class ThreadListener
 
             $thread->save();
 
-            // 用户主题数
             $user = $thread->user;
-
             if ($user && $user->exists) {
-                $user->refreshThreadCount()->save();
+                // 用户主题数
+                $user->refreshThreadCount();
+
+                //用户提问数
+                if ($thread->type == Thread::TYPE_OF_QUESTION) {
+                    $user->refreshQuestionCount();
+                }
+
+                $user->save();
             }
 
             // 分类主题数

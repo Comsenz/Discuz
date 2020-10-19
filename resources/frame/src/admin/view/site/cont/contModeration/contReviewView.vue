@@ -98,7 +98,7 @@
           slot="longText"
           class="cont-review-table__long-text"
           v-if="items._data.type === 1"
-          :href="'/pages/topic/index?id=' + items._data.id"
+          :href="'/topic/index?id=' + items._data.id"
         >
           {{items._data.title}}
           <span
@@ -110,7 +110,7 @@
         <div class="cont-review-table__main" slot="main">
           <a
             class="cont-review-table__main__cont-text"
-            :href="'/pages/topic/index?id=' + items._data.id"
+            :href="'/topic/index?id=' + items._data.id"
             target="_blank"
             :style="{'display':(items.threadVideo ? 'inline':'block')}"
             v-html="items.firstPost && items.firstPost._data.contentHtml"

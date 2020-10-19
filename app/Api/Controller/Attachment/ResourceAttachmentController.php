@@ -22,12 +22,15 @@ use App\Api\Serializer\AttachmentSerializer;
 use App\Exceptions\OrderException;
 use App\Models\Attachment;
 use App\Models\Order;
+use App\Models\SessionToken;
+use App\Models\User;
 use App\Repositories\AttachmentRepository;
 use App\Settings\SettingsRepository;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Http\DiscuzResponseFactory;
+use GuzzleHttp\Client as HttpClient;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
@@ -36,7 +39,6 @@ use Intervention\Image\ImageManager;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use GuzzleHttp\Client as HttpClient;
 
 class ResourceAttachmentController implements RequestHandlerInterface
 {
@@ -65,6 +67,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
     /**
      * @param AttachmentRepository $attachments
      * @param SettingsRepository $settings
+     * @param Filesystem $filesystem
      */
     public function __construct(AttachmentRepository $attachments, SettingsRepository $settings, Filesystem $filesystem)
     {
@@ -85,36 +88,45 @@ class ResourceAttachmentController implements RequestHandlerInterface
     {
         $attachmentId = Arr::get($request->getQueryParams(), 'id');
         $page = (int)Arr::get($request->getQueryParams(), 'page');
-        $actor = $request->getAttribute('actor');
+        $t =  Arr::get($request->getQueryParams(), 't', '');
+        $token = SessionToken::get($t);
+        if ($token) {
+            $user = $token->user;
+        } else {
+            throw new PermissionDeniedException();
+        }
 
-        $attachment = $this->getAttachment($attachmentId, $actor);
+        $attachment = $this->getAttachment($attachmentId, $user);
 
         if ($attachment->is_remote) {
             $httpClient = new HttpClient();
-            $path = Str::finish($attachment->file_path, '/') . $attachment->attachment;
-            $url = $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addHour());
+            $url = $this->filesystem->disk('attachment_cos')->temporaryUrl($attachment->full_path, Carbon::now()->addDay());
             if ($page) {
                 $url .= '&ci-process=doc-preview&page='.$page;
             }
             $response = $httpClient->get($url);
             if ($response->getStatusCode() == 200) {
-                //下载
-                $header = [
-                    'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
-                ];
-
-                //预览
                 if ($page) {
-                    $header = [
-                        'X-Total-Page' => $response->getHeader('X-Total-Page'),
-                        'Content-Type' => $response->getHeader('Content-Type'),
+                    //预览
+                    $data = [
+                        'data' => [
+                            'X-Total-Page' => $response->getHeader('X-Total-Page')[0],
+                            'image' => 'data:image/jpeg;base64,'.base64_encode($response->getBody())
+                        ],
                     ];
+                    return DiscuzResponseFactory::JsonResponse($data);
+                } else {
+                    //下载
+                    $header = [
+                        'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
+                    ];
+
+                    return DiscuzResponseFactory::FileStreamResponse(
+                        $response->getBody(),
+                        200,
+                        $header
+                    );
                 }
-                return DiscuzResponseFactory::FileStreamResponse(
-                    $response->getBody(),
-                    200,
-                    $header
-                );
             } else {
                 throw new ModelNotFoundException();
             }
@@ -150,8 +162,8 @@ class ResourceAttachmentController implements RequestHandlerInterface
     }
 
     /**
-     * @param $attachmentId
-     * @param $actor
+     * @param int $attachmentId
+     * @param User $actor
      * @return Attachment|null
      * @throws OrderException
      * @throws PermissionDeniedException
@@ -160,20 +172,31 @@ class ResourceAttachmentController implements RequestHandlerInterface
     {
         $attachment = $this->attachments->findOrFail($attachmentId, $actor);
 
-        $this->assertCan($actor, 'view.' . $attachment->type, $attachment);
-
         // 附件是否被绑定到帖子上
         $post = $attachment->post;
-        if ($post->deleted_at && ! $actor->isAdmin()) {
-            return null;
+        if (!$attachment->post || ($post->deleted_at && ! $actor->isAdmin())) {
+            throw new PermissionDeniedException();
         }
 
         // 主题是否收费
         $thread = $post->thread;
-        if ($thread->price > 0 && ! $actor->isAdmin()) {
-            $order = Order::where('user_id', $actor->id)
+        if ($thread->price > 0 && ! $actor->isAdmin() && $thread->user_id != $actor->id) {
+            $order = Order::query()->where('user_id', $actor->id)
                 ->where('thread_id', $thread->id)
-                ->where('type', Order::ORDER_TYPE_REWARD)
+                ->where('type', Order::ORDER_TYPE_THREAD)
+                ->where('status', Order::ORDER_STATUS_PAID)
+                ->exists();
+
+            if (! $order) {
+                throw new OrderException('order_post_not_found');
+            }
+        }
+
+        // 主题附件是否付费
+        if ($thread->attachment_price > 0 && ! $actor->isAdmin() && $thread->user_id != $actor->id) {
+            $order = Order::query()->where('user_id', $actor->id)
+                ->where('thread_id', $thread->id)
+                ->where('type', Order::ORDER_TYPE_ATTACHMENT)
                 ->where('status', Order::ORDER_STATUS_PAID)
                 ->exists();
 

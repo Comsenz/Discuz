@@ -44,8 +44,10 @@ class PaidGroup
     public $operator;
 
     /**
+     * @param $group_id
+     * @param User $user
      * @param Order $order
-     * @param User $actor
+     * @param User|null $operator
      */
     public function __construct($group_id, User $user, Order $order = null, User $operator = null)
     {

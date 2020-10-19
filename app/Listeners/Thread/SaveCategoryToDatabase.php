@@ -19,6 +19,7 @@
 namespace App\Listeners\Thread;
 
 use App\Events\Thread\Saving;
+use App\Events\Thread\ThreadWasCategorized;
 use App\Exceptions\CategoryNotFoundException;
 use App\Models\Category;
 use Discuz\Auth\AssertPermissionTrait;
@@ -50,6 +51,10 @@ class SaveCategoryToDatabase
             // 如果接收到可用的分类，则设置分类
             /** @var Category $category */
             if ($category = Category::query()->where('id', $categoryId)->first()) {
+                $thread->raise(
+                    new ThreadWasCategorized($thread, $actor, $category, $thread->category)
+                );
+
                 $thread->category_id = $category->id;
             } else {
                 throw new CategoryNotFoundException;

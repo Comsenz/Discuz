@@ -9,6 +9,7 @@ return [
     'clear:avatar' => '清理本地/COS未使用的头像',
     'clear:attachment' => '清理本地/COS未使用的附件',
     'clear:video' => '清理未发布的主题视频',
+    'clear:question' => '返还过期未回答的问答金额',
 
     // upgrade
     'upgrade:avatar' => '更新用户头像信息',

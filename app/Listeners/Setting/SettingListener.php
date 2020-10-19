@@ -29,17 +29,20 @@ class SettingListener
      */
     public function subscribe(Dispatcher $events)
     {
-        // Local Service
+        // Local Services
         $events->listen(Saving::class, ChangeSiteMode::class);                  // 站点模式
         $events->listen(Saving::class, CheckWatermark::class);                  // 水印设置
 
-        // Third Party Services
+        // Wechat Services
         $events->listen(Saving::class, CheckOffiaccount::class);                // 微信公众号
         $events->listen(Saving::class, CheckMiniprogram::class);                // 微信小程序
         $events->listen(Saving::class, CheckWxpay::class);                      // 微信支付
+
+        // Qcloud Services
         $events->listen(Saving::class, CheckCaptcha::class);                    // 腾讯云验证码
         $events->listen(Saving::class, CheckCos::class);                        // 腾讯云对象存储 COS
 
+        // When the settings are saved
         $events->listen(Saved::class, ClearDisabledPermission::class);
         $events->listen(Saved::class, ClearDisabledSettings::class);
         $events->listen(Saved::class, QcloudSettingReport::class);

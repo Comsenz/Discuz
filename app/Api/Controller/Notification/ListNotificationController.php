@@ -26,6 +26,7 @@ use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -134,24 +135,64 @@ class ListNotificationController extends AbstractListController
          */
         if ($type != 'system') {
             // 获取通知里当前的用户名称和头像
-            $data->map(function ($item) use ($users, $threads, $actor) {
+            $data->map(function ($item) use ($users, $threads, $actor, $type) {
                 $user = $users->get(Arr::get($item->data, 'user_id'));
-                if (!empty($user)) {
+                if (! empty($user)) {
                     $item->user_name = $user->username;
                     $item->user_avatar = $user->avatar;
                     $item->realname = $user->realname;
                 }
+                // 判断是否是楼中楼，查询用户名
+                if (Arr::has($item->data, 'reply_post_user_id') && Arr::get($item->data, 'reply_post_user_id') != 0) {
+                    $replyPostUser = $users->get(Arr::get($item->data, 'reply_post_user_id'));
+                    if (! empty($replyPostUser)) {
+                        $item->reply_post_user_name = $replyPostUser->username;
+                    }
+                }
+
                 // 查询主题相关内容
-                if (!empty($threadID = Arr::get($item->data, 'thread_id', 0))) {
+                if (! empty($threadID = Arr::get($item->data, 'thread_id', 0))) {
                     // 获取主题作者用户组
-                    if (!empty($threads->get($threadID))) {
+                    if (! empty($threads->get($threadID))) {
                         $thread = $threads->get($threadID);
+                        $item->thread_type = $thread->type;
                         $item->thread_is_approved = $thread->is_approved;
                         $item->thread_created_at = $thread->formatDate('created_at');
                         $threadUser = $thread->user;
-                        if (!empty($threadUser)) {
+                        if (! empty($threadUser)) {
                             $item->thread_username = $threadUser->username;
                             $item->thread_user_groups = $threadUser->groups->pluck('name')->join(',');
+                            /**
+                             * 判断是否是问答、匿名提问
+                             * @var Thread $thread
+                             */
+                            if ($thread->type == Thread::TYPE_OF_QUESTION && ! empty($thread->question)) {
+                                // 判断如果当前触发通知人又是匿名问答人，就准备匿名用户
+                                if ($user->id == $thread->user_id && $thread->is_anonymous) {
+                                    // 判断如果是匿名人，但是不是推送的 问答提问通知、也不是财务通知，其余通知都不匿名
+                                    if (Str::contains($type, ['questioned', 'rewarded'])) {
+                                        $item->user_name = $thread->isAnonymousName();
+                                        $item->realname = $thread->isAnonymousName();
+                                        $item->user_avatar = '';
+                                        $item->isAnonymous = true;
+                                    } elseif (Str::contains($type, ['related'])) {
+                                        /**
+                                         * 判断如果是 @通知 ，当匿名贴@指定人时，指定人看到的通知应该是匿名人@他
+                                         * (只用是否是首贴区分@的来自类型)
+                                         */
+                                        $postId = Arr::get($item->data, 'post_id');
+                                        if ($postId == $thread->firstPost->id) {
+                                            $item->user_name = $thread->isAnonymousName();
+                                            $item->realname = $thread->isAnonymousName();
+                                            $item->user_avatar = '';
+                                            $item->isAnonymous = true;
+                                        }
+                                    }
+                                }
+                                // 匿名主题信息全都匿名
+                                $item->thread_username = $thread->isAnonymousName();
+                                $item->thread_user_groups = '';
+                            }
                         }
                     }
                 }
@@ -159,9 +200,9 @@ class ListNotificationController extends AbstractListController
         } else {
             // 获取通知里当前的用户名称和头像
             $data->map(function ($item) use ($users, $threads, $actor) {
-                if (!empty($threadID = Arr::get($item, 'data.raw.thread_id', 0))) {
+                if (! empty($threadID = Arr::get($item, 'data.raw.thread_id', 0))) {
                     // 获取主题作者用户组
-                    if (!empty($threads->get($threadID))) {
+                    if (! empty($threads->get($threadID))) {
                         $thread = $threads->get($threadID);
                         $item->thread_is_approved = $thread->is_approved;
                         $item->thread_created_at = $thread->formatDate('created_at');
@@ -193,12 +234,20 @@ class ListNotificationController extends AbstractListController
         $list = $data->pluck('data');
 
         // 用户 IDs
-        $userIds = collect($list)->pluck('user_id')->filter()->unique()->values();
-        $users = User::whereIn('id', $userIds)->get()->keyBy('id');
+        $collectList = collect($list);
+        $userIds = $collectList->pluck('user_id');
+        $replyUserId = $collectList->pluck('reply_post_user_id');
+        $userIds = $userIds->merge($replyUserId)->filter()->unique()->values();
+        $users = User::query()->whereIn('id', $userIds)->get()->keyBy('id');
 
         // 主题 ID
         $threadIds = collect($list)->pluck($pluck)->filter()->unique()->values();
         // 主题及其作者与作者用户组
-        $threads = Thread::with('user', 'user.groups')->whereIn('id', $threadIds)->get()->keyBy('id');
+        $with = ['user', 'user.groups', 'firstPost'];
+        // 如果是 question 添加关联查询
+        if ($type == 'questioned') {
+            array_push($with, 'question');
+        }
+        $threads = Thread::with($with)->whereIn('id', $threadIds)->get()->keyBy('id');
     }
 }

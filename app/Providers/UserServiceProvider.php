@@ -19,6 +19,7 @@
 namespace App\Providers;
 
 use App\Listeners\User\UserListener;
+use App\Listeners\Wallet\WalletListener;
 use App\Models\User;
 use App\Models\UserWalletCash;
 use App\Models\UserWechat;
@@ -34,6 +35,7 @@ class UserServiceProvider extends AbstractServiceProvider
         $events = $this->app->make('events');
 
         $events->subscribe(UserListener::class);
+        $events->subscribe(WalletListener::class);
 
         User::observe(UserObserver::class);
         UserWechat::observe(UserWechatObserver::class);

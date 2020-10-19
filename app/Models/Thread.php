@@ -22,6 +22,7 @@ use App\Events\Thread\Hidden;
 use App\Events\Thread\Restored;
 use Carbon\Carbon;
 use DateTime;
+use Discuz\Auth\Anonymous;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\SpecialChar\SpecialCharServer;
@@ -42,6 +43,7 @@ use Illuminate\Support\Stringable;
  * @property int $type
  * @property string $title
  * @property float $price
+ * @property float $attachment_price
  * @property int $free_words
  * @property int $post_count
  * @property int $view_count
@@ -57,15 +59,21 @@ use Illuminate\Support\Stringable;
  * @property int $deleted_user_id
  * @property int $is_approved
  * @property bool|null $is_paid
+ * @property bool|null $is_paid_attachment
  * @property bool $is_sticky
  * @property bool $is_essence
  * @property bool $is_site
+ * @property bool $is_anonymous
  * @property Post $firstPost
- * @property Topic|Collection $topic
+ * @property Collection $topic
+ * @property Collection $orders
  * @property User $user
  * @property Category $category
  * @property threadVideo $threadVideo
- * @package App\Models
+ * @property Question $question
+ * @property Order $onlookerState
+ * @method increment($column, $amount = 1, array $extra = [])
+ * @method decrement($column, $amount = 1, array $extra = [])
  */
 class Thread extends Model
 {
@@ -81,6 +89,10 @@ class Thread extends Model
     const TYPE_OF_IMAGE = 3;
 
     const TYPE_OF_AUDIO = 4;
+
+    const TYPE_OF_QUESTION = 5;
+
+    const TYPE_OF_GOODS = 6;
 
     const UNAPPROVED = 0;
 
@@ -102,6 +114,7 @@ class Thread extends Model
         'free_words' => 'integer',
         'is_sticky' => 'boolean',
         'is_essence' => 'boolean',
+        'is_anonymous' => 'boolean',
     ];
 
     /**
@@ -126,6 +139,8 @@ class Thread extends Model
      * @var Collection
      */
     protected static $userHasPaidThreads;
+
+    protected static $userHasPaidThreadAttachments;
 
     /**
      * datetime 时间转换
@@ -266,12 +281,13 @@ class Thread extends Model
 
     /**
      * 刷新付费数量
+     *
      * @return $this
      */
     public function refreshPaidCount()
     {
         $this->paid_count = $this->orders()
-            ->where('type', Order::ORDER_TYPE_THREAD)
+            ->whereIn('type', [Order::ORDER_TYPE_THREAD, Order::ORDER_TYPE_ATTACHMENT])
             ->where('status', Order::ORDER_STATUS_PAID)
             ->count();
 
@@ -280,6 +296,7 @@ class Thread extends Model
 
     /**
      * 刷新打赏数量
+     *
      * @return $this
      */
     public function refreshRewardedCount()
@@ -387,6 +404,21 @@ class Thread extends Model
     }
 
     /**
+     * 查询主题下某一种交易类型
+     * （交易类型：1注册、2打赏、3付费主题、4付费用户组、5问答提问支付、6问答付费围观、7付费附件）
+     *
+     * @param int $type
+     * @param bool $more
+     * @return Collection|Order|Model
+     */
+    public function ordersByType($type, $more = true)
+    {
+        $query = $this->orders()->where('type', $type);
+
+        return $more ? $query->get() : $query->first();
+    }
+
+    /**
      * Define the relationship with the thread's operation Log.
      */
     public function logs()
@@ -409,6 +441,11 @@ class Thread extends Model
         return $this->hasOne(ThreadVideo::class)->where('type', ThreadVideo::TYPE_OF_VIDEO);
     }
 
+    public function threadAudio()
+    {
+        return $this->hasOne(ThreadVideo::class)->where('type', ThreadVideo::TYPE_OF_AUDIO);
+    }
+
     public function topic()
     {
         return $this->belongsToMany(Topic::class)->withPivot('created_at');
@@ -417,6 +454,21 @@ class Thread extends Model
     public function threadTopic()
     {
         return $this->hasMany(ThreadTopic::class);
+    }
+
+    public function question()
+    {
+        return $this->hasOne(Question::class);
+    }
+
+    /**
+     * 获取匿名用户名
+     *
+     * @return string
+     */
+    public function isAnonymousName()
+    {
+        return $this->is_anonymous ? (new Anonymous)->getUsername() : $this->user->username;
     }
 
     /**
@@ -431,17 +483,27 @@ class Thread extends Model
 
         // 当前用户对于传入主题列表是否付费
         if ($threads) {
-            $orders = Order::query()
-                ->whereIn('thread_id', $threads->pluck('id'))
-                ->where('user_id', $user->id)
-                ->where('status', Order::ORDER_STATUS_PAID)
-                ->where('type', Order::ORDER_TYPE_THREAD)
-                ->pluck('thread_id');
+            foreach ([Order::ORDER_TYPE_THREAD, Order::ORDER_TYPE_ATTACHMENT] as $type) {
+                $data = [];
+                $orders = Order::query()
+                    ->whereIn('thread_id', $threads->pluck('id'))
+                    ->where('user_id', $user->id)
+                    ->where('status', Order::ORDER_STATUS_PAID)
+                    ->where('type', $type)
+                    ->pluck('thread_id');
 
-            static::$userHasPaidThreads[$user->id] = $threads->keyBy('id')
-                ->map(function ($thread) use ($orders) {
-                    return $orders->contains($thread->id);
-                });
+                $data[$user->id] = $threads->keyBy('id')
+                    ->map(function ($thread) use ($orders) {
+                        return $orders->contains($thread->id);
+                    });
+                if ($type == Order::ORDER_TYPE_THREAD) {
+                    // 主题付费数据
+                    static::$userHasPaidThreads = $data;
+                } elseif ($type == Order::ORDER_TYPE_ATTACHMENT) {
+                    // 主题附件付费数据
+                    static::$userHasPaidThreadAttachments = $data;
+                }
+            }
         }
     }
 
@@ -459,7 +521,23 @@ class Thread extends Model
     }
 
     /**
-     * 主题对于某用户是否付费
+     * Define the relationship with the question's onlooker state for a particular user.
+     *
+     * @param User|null $user
+     * @return HasOne
+     */
+    public function onlookerState(User $user = null)
+    {
+        $user = $user ?: static::$stateUser;
+
+        return $this->hasOne(Order::class)
+            ->where('orders.user_id', $user ? $user->id : null)
+            ->where('orders.status', Order::ORDER_STATUS_PAID)
+            ->where('orders.type', Order::ORDER_TYPE_ONLOOKER);
+    }
+
+    /**
+     * 主题对于某用户是否付费主题
      *
      * @return bool|null
      */
@@ -498,9 +576,53 @@ class Thread extends Model
             ->where('status', Order::ORDER_STATUS_PAID)
             ->where('type', Order::ORDER_TYPE_THREAD)
             ->exists();
-
         static::$userHasPaidThreads[$user->id][$this->id] = $isPaid;
 
         return $isPaid;
+    }
+
+    /**
+     * 获取附件付费状态
+     *
+     * @return bool|null
+     */
+    public function getIsPaidAttachmentAttribute()
+    {
+        $user = static::$stateUser;
+
+        // 必须有用户
+        if (! $user) {
+            throw new \RuntimeException('You must set the user with setStateUser()');
+        }
+
+        // 非付费主题返回 null
+        if ($this->attachment_price <= 0) {
+            return null;
+        }
+
+        // 用户不存在返回 false
+        if (! $user->exists) {
+            return false;
+        }
+
+        // 作者本人 或 管理员 返回 true
+        if ($this->user_id === $user->id || $user->isAdmin()) {
+            return true;
+        }
+
+        // 是否已缓存付费状态（为避免 N + 1 问题）
+        if (isset(static::$userHasPaidThreadAttachments[$user->id][$this->id])) {
+            return static::$userHasPaidThreadAttachments[$user->id][$this->id];
+        }
+
+        $isPaidAttachment = Order::query()
+            ->where('user_id', $user->id)
+            ->where('thread_id', $this->id)
+            ->where('status', Order::ORDER_STATUS_PAID)
+            ->where('type', Order::ORDER_TYPE_ATTACHMENT)
+            ->exists();
+        static::$userHasPaidThreadAttachments[$user->id][$this->id] = $isPaidAttachment;
+
+        return $isPaidAttachment;
     }
 }

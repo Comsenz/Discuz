@@ -281,14 +281,14 @@ export default {
       //编辑：/reply-to-topic  隐藏传入内容，带id
       //回帖：replyId
       let routeData = this.$router.resolve({
-        path: "/pages/topic/index?id=" + id,
+        path: "/topic/index?id=" + id,
       });
       window.open(routeData.href, '_blank');
     },
 
     editClick(id){
       let routeData = this.$router.resolve({
-        path: `/pages/topic/post?operating=edit&threadId=${id}`
+        path: `/topic/post?operating=edit&threadId=${id}`
       });
       window.open(routeData.href, '_blank');
     },

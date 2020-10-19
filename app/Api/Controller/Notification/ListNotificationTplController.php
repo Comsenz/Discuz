@@ -22,38 +22,47 @@ use App\Api\Serializer\NotificationTplSerializer;
 use App\Models\NotificationTpl;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class ListNotificationTplController extends AbstractListController
 {
     use AssertPermissionTrait;
 
+    /**
+     * {@inheritdoc}
+     */
     public $serializer = NotificationTplSerializer::class;
-
-    protected $tpl;
-
-    public function __construct(NotificationTpl $tpl)
-    {
-        $this->tpl = $tpl;
-    }
 
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
-     * @return mixed
-     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @return Collection
+     * @throws PermissionDeniedException
+     * @throws InvalidParameterException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $actor = $request->getAttribute('actor');
-        $this->assertPermission($actor->isAdmin());
+        $this->assertAdmin($request->getAttribute('actor'));
+
+        $limit = $this->extractLimit($request);
+        $offset = $this->extractOffset($request);
 
         $type = Arr::get($request->getQueryParams(), 'type', 0);
 
-        $tpl = $this->tpl->where('type', $type)->get();
+        $query = NotificationTpl::query()->where('type', $type);
 
-        return $tpl;
+        $total = $query->count();
+
+        $document->setMeta([
+            'total' => $total,
+            'pageCount' => ceil($total / $limit),
+        ]);
+
+        return $query->skip($offset)->take($limit)->get();
     }
 }

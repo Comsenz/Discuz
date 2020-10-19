@@ -23,6 +23,7 @@ use App\Console\Commands\AvatarClearCommand;
 use App\Console\Commands\FinanceCreateCommand;
 use App\Console\Commands\InviteExpireCommand;
 use App\Console\Commands\QueryWechatOrderConmmand;
+use App\Console\Commands\QuestionClearCommand;
 use Discuz\Console\Kernel as ConsoleKernel;
 use Illuminate\Console\Scheduling\Schedule;
 
@@ -34,6 +35,7 @@ class Kernel extends ConsoleKernel
         AttachmentClearCommand::class,
         QueryWechatOrderConmmand::class,
         InviteExpireCommand::class,
+        QuestionClearCommand::class,
     ];
 
     /**
@@ -51,5 +53,6 @@ class Kernel extends ConsoleKernel
         // 维护清理
         $schedule->command('clear:attachment')->daily();
         $schedule->command('clear:video')->daily();
+        $schedule->command('clear:question')->daily();
     }
 }

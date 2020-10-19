@@ -219,6 +219,10 @@ class Post extends Model
      */
     public function formatContent()
     {
+        if (empty($this->attributes['content'])) {
+            return $this->attributes['content'];
+        }
+
         return static::$formatter->render($this->attributes['content']);
     }
 
@@ -323,9 +327,11 @@ class Post extends Model
     public function revise($content, User $actor)
     {
         if ($this->content !== $content) {
+            $rawContent = $this->content;
+
             $this->content = $content;
 
-            $this->raise(new Revised($this, $actor));
+            $this->raise(new Revised($this, $rawContent, $actor));
         }
 
         return $this;
@@ -516,6 +522,13 @@ class Post extends Model
         return $this->belongsToMany(User::class, 'post_mentions_user', 'post_id', 'mentions_user_id');
     }
 
+    /**
+     * @return HasOne
+     */
+    public function postGoods()
+    {
+        return $this->hasOne(PostGoods::class);
+    }
     /**
      * Set the user for which the state relationship should be loaded.
      *

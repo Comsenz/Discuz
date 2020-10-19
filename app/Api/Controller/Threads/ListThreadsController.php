@@ -28,6 +28,7 @@ use App\Repositories\ThreadRepository;
 use App\Repositories\TopicRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -35,6 +36,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class ListThreadsController extends AbstractListController
 {
@@ -52,6 +54,7 @@ class ListThreadsController extends AbstractListController
         'user',
         'firstPost',
         'threadVideo',
+        'threadAudio',
         'lastPostedUser',
         'category',
     ];
@@ -65,6 +68,7 @@ class ListThreadsController extends AbstractListController
         'firstPost.images',
         'firstPost.attachments',
         'firstPost.likedUsers',
+        'firstPost.postGoods',
         'lastThreePosts',
         'lastThreePosts.user',
         'lastThreePosts.replyUser',
@@ -72,6 +76,15 @@ class ListThreadsController extends AbstractListController
         'paidUsers',
         'lastDeletedLog',
         'topic',
+        'question.beUser',
+        'question.beUser.groups',
+    ];
+
+    public $mustInclude = [
+        'favoriteState',
+        'firstPost.likeState',
+        'question',
+        'onlookerState',
     ];
 
     /**
@@ -127,20 +140,27 @@ class ListThreadsController extends AbstractListController
     }
 
     /**
-     * {@inheritdoc}
+     * @param ServerRequestInterface $request
+     * @param Document $document
+     * @return Collection|mixed
+     * @throws InvalidParameterException
+     * @throws PermissionDeniedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
 
-        $this->assertCan($actor, 'viewThreads');
-
+        // 获取推荐到站点信息页数据时 不检查权限
         $filter = $this->extractFilter($request);
+        if (Arr::get($filter, 'isSite', '') !== 'yes') {
+            $this->assertCan($actor, 'viewThreads');
+        }
+
         $sort = $this->extractSort($request);
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-        $include = array_merge($this->extractInclude($request), ['favoriteState', 'firstPost.likeState']);
+        $include = $this->extractInclude($request);
 
         $threads = $this->search($actor, $filter, $sort, $limit, $offset);
 
@@ -268,7 +288,6 @@ class ListThreadsController extends AbstractListController
      * @param Builder $query
      * @param array $filter
      * @param User $actor
-     * @throws \Exception
      */
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
@@ -293,18 +312,33 @@ class ListThreadsController extends AbstractListController
 
         // 作者 ID
         if ($userId = Arr::get($filter, 'userId')) {
-            $query->where('threads.user_id', $userId);
+            if (is_numeric($type) && $type == Thread::TYPE_OF_QUESTION && Arr::get($filter, 'answer') == 'yes') {
+                $query->join('questions', 'threads.id', '=', 'questions.thread_id')
+                    ->where(function (Builder $query) use ($userId) {
+                        $query->where('threads.user_id', $userId)->orWhere('questions.be_user_id', $userId);
+                    });
+            } else {
+                $query->where('threads.user_id', $userId);
+            }
+
+            // 不是本人不能查看该用户的匿名帖
+            if ($userId != $actor->id) {
+                $query->where('is_anonymous', false);
+            }
         }
 
         // 作者用户名
         if ($username = Arr::get($filter, 'username')) {
             $query->leftJoin('users as users1', 'users1.id', '=', 'threads.user_id')
-                ->where(function ($query) use ($username) {
+                ->where(function (Builder $query) use ($username) {
                     $username = explode(',', $username);
                     foreach ($username as $name) {
                         $query->orWhere('users1.username', 'like', "%{$name}%");
                     }
                 });
+
+            // 不能查看这些用户的匿名帖
+            $query->where('is_anonymous', false);
         }
 
         // 操作删除者 ID
@@ -378,6 +412,7 @@ class ListThreadsController extends AbstractListController
 
         // 待审核
         $isApproved = Arr::get($filter, 'isApproved');
+
         if ($isApproved === '1') {
             $query->where('threads.is_approved', Thread::APPROVED);
         } elseif ($actor->hasPermission('thread.approvePosts')) {
@@ -403,7 +438,7 @@ class ListThreadsController extends AbstractListController
         if ($queryWord = Arr::get($filter, 'q')) {
             $query->leftJoin('posts', 'threads.id', '=', 'posts.thread_id')
                 ->where('posts.is_first', true)
-                ->where(function ($query) use ($queryWord) {
+                ->where(function (Builder $query) use ($queryWord) {
                     $queryWord = explode(',', $queryWord);
                     foreach ($queryWord as $word) {
                         $query->orWhere('threads.title', 'like', "%{$word}%");
@@ -412,11 +447,13 @@ class ListThreadsController extends AbstractListController
                 });
         }
 
-        // 关注的人的文章
+        // 关注的人的帖子，不包含匿名问答帖
         $fromUserId = Arr::get($filter, 'fromUserId');
+
         if ($fromUserId && $fromUserId == $actor->id) {
             $query->join('user_follow', 'threads.user_id', '=', 'user_follow.to_user_id')
-                ->where('user_follow.from_user_id', $fromUserId);
+                ->where('user_follow.from_user_id', $fromUserId)
+                ->where('threads.is_anonymous', false);
         }
 
         // 话题文章
@@ -431,18 +468,14 @@ class ListThreadsController extends AbstractListController
         }
 
         // 附近的帖
-        if ($location = Arr::get($filter, 'location')) {
-            $location = explode(',', $location, 3);
-            $longitude = (float) Arr::get($location, 0, 0);     // 经度
-            $latitude = (float) Arr::get($location, 1, 0);      // 纬度
-            $distance = abs(Arr::get($location, 2, 5));         // 距离
+        $location = explode(',', Arr::get($filter, 'location'), 3);
+        $longitude = (float) Arr::get($location, 0, 0);     // 经度
+        $latitude = (float) Arr::get($location, 1, 0);      // 纬度
+        $distance = abs(Arr::get($location, 2, 5));         // 距离
 
+        if ($longitude && $latitude && $distance) {
             // 距离不能超过 100km
             $distance = $distance > 100 ? 5 : $distance;
-
-            if (! ($longitude && $latitude && $distance)) {
-                throw new \Exception('unable_to_get_location', 404);
-            }
 
             // 地球平均半径 6371km
             $raw = Str::replaceArray('?', [$latitude, $longitude, $latitude], '6371 * acos(
@@ -582,6 +615,7 @@ class ListThreadsController extends AbstractListController
                 break;
             case Order::ORDER_TYPE_THREAD:
                 $relation = 'paidUsers';
+                $type = [Order::ORDER_TYPE_THREAD, Order::ORDER_TYPE_ATTACHMENT];
                 break;
             default:
                 return $threads;
@@ -605,7 +639,7 @@ class ListThreadsController extends AbstractListController
             ->whereRaw('(' . $subSql . ') < ?', [$limit])
             ->whereIn('a.thread_id', $threadIds)
             ->where('a.status', Order::ORDER_STATUS_PAID)
-            ->where('a.type', $type)
+            ->whereIn('a.type', is_array($type) ? $type : [$type])
             ->where('a.is_anonymous', false)
             ->orderBy('a.created_at', 'desc')
             ->orderBy('a.id', 'desc')

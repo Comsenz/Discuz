@@ -26,13 +26,17 @@ use App\Events\Users\Logind;
 use App\Exceptions\NoUserException;
 use App\MessageTemplate\Wechat\WechatRegisterMessage;
 use App\Models\SessionToken;
+use App\Models\User;
 use App\Models\UserWechat;
 use App\Notifications\System;
 use App\Settings\SettingsRepository;
 use App\User\Bound;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
+use Discuz\Auth\Guest;
 use Discuz\Contracts\Socialite\Factory;
+use Exception;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Events\Dispatcher as Events;
@@ -78,7 +82,8 @@ abstract class AbstractWechatUserController extends AbstractResourceController
      * @param Document $document
      * @return mixed
      * @throws NoUserException
-     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @throws PermissionDeniedException
+     * @throws Exception
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -100,22 +105,29 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
         $wxuser = $driver->user();
 
+        /** @var User $actor */
         $actor = $request->getAttribute('actor');
 
         /** @var UserWechat $wechatUser */
         $wechatUser = UserWechat::where($this->getType(), $wxuser->getId())->orWhere('unionid', Arr::get($wxuser->getRaw(), 'unionid'))->first();
 
+        // 换绑时直接返回token供后续操作使用
+        if ($rebind = Arr::get($request->getQueryParams(), 'rebind', 0)) {
+            $this->error($wxuser, new Guest(), $wechatUser, $rebind);
+        }
+
         if (!$wechatUser || !$wechatUser->user) {
             // 站点关闭
             $this->assertPermission((bool)$this->settings->get('register_close'));
 
-            // 自动注册
-            if (Arr::get($request->getQueryParams(), 'register', 0)) {
-                if (!$wechatUser) {
-                    $wechatUser = new UserWechat();
-                }
-                $wechatUser->setRawAttributes($this->fixData($wxuser->getRaw(), $actor));
+            // 更新微信用户信息
+            if (!$wechatUser) {
+                $wechatUser = new UserWechat();
+            }
+            $wechatUser->setRawAttributes($this->fixData($wxuser->getRaw(), $actor));
 
+            // 自动注册
+            if (Arr::get($request->getQueryParams(), 'register', 0) && $actor->isGuest()) {
                 $data['code'] = Arr::get($request->getQueryParams(), 'inviteCode');
                 $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
                 $data['register_reason'] = trans('user.register_by_wechat_h5');
@@ -132,6 +144,17 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                     // 在注册绑定微信后 发送注册微信通知
                     $user->notify(new System(WechatRegisterMessage::class));
                 }
+            } else {
+                if (!$actor->isGuest() && is_null($actor->wechat)) {
+                    // 登陆用户且没有绑定||换绑微信 添加微信绑定关系
+                    $wechatUser->user_id = $actor->id;
+                    $wechatUser->save();
+                }
+            }
+        } else {
+            // 登陆用户调取接口时，抛出异常
+            if (!$actor->isGuest()) {
+                throw new Exception('account_has_been_bound');
             }
         }
 
@@ -173,10 +196,11 @@ abstract class AbstractWechatUserController extends AbstractResourceController
      * @param $wxuser
      * @param $actor
      * @param UserWechat $wechatUser
+     * @param int $rebind 换绑时返回新的code供前端使用
      * @return mixed
      * @throws NoUserException
      */
-    private function error($wxuser, $actor, $wechatUser)
+    private function error($wxuser, $actor, $wechatUser, $rebind = null)
     {
         $rawUser = $wxuser->getRaw();
 
@@ -197,6 +221,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
         $noUserException = new NoUserException();
         $noUserException->setToken($token);
         $noUserException->setUser(Arr::only($wechatUser->toArray(), ['nickname', 'headimgurl']));
+        $rebind && $noUserException->setCode('rebind_mp_wechat');
         throw $noUserException;
     }
 

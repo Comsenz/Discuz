@@ -42,6 +42,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string error_message
  * @property int cash_status
  * @property string remark
+ * @property string cash_type
+ * @property string cash_mobile
  * @property Carbon $created_at
  */
 class UserWalletCash extends Model
@@ -100,6 +102,13 @@ class UserWalletCash extends Model
     const REFUNDS_STATUS_YES = 1; //已返款
 
     /**
+     * 提现转账类型
+     */
+    const TRANSFER_TYPE_MANUAL = 0;//人工转账
+
+    const TRANSFER_TYPE_MCH = 1;//微信企业付款
+
+    /**
      * datetime 时间转换
      *
      * @param $timeAt
@@ -118,6 +127,8 @@ class UserWalletCash extends Model
      * @param $cash_actual_amount
      * @param $cash_apply_amount
      * @param $remark
+     * @param $cash_type
+     * @param $cash_mobile
      * @return UserWalletCash [type]                 [description]
      */
     public static function createCash(
@@ -126,7 +137,9 @@ class UserWalletCash extends Model
         $cash_charge,
         $cash_actual_amount,
         $cash_apply_amount,
-        $remark
+        $remark,
+        $cash_type,
+        $cash_mobile
     ) {
         $cash = new static;
         $cash->user_id = $user_id;
@@ -135,6 +148,8 @@ class UserWalletCash extends Model
         $cash->cash_actual_amount = $cash_actual_amount;
         $cash->cash_apply_amount = $cash_apply_amount;
         $cash->remark = $remark;
+        $cash->cash_type = $cash_type;
+        $cash->cash_mobile = $cash_mobile;
         $cash->trade_no = '';
         $cash->error_code = '';
         $cash->error_message = '';
@@ -226,5 +241,15 @@ class UserWalletCash extends Model
     public function userWallet()
     {
         return $this->belongsTo(UserWallet::class, 'user_id', 'user_id');
+    }
+
+    /**
+     * Define the relationship with the cash record's wechat.
+     *
+     * @return belongsTo
+     */
+    public function wechat()
+    {
+        return $this->belongsTo(UserWechat::class, 'user_id', 'user_id');
     }
 }
