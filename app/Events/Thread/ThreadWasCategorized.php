@@ -18,10 +18,11 @@
 
 namespace App\Events\Thread;
 
+use App\Models\Category;
 use App\Models\Thread;
 use App\Models\User;
 
-class Saving
+class ThreadWasCategorized
 {
     /**
      * @var Thread
@@ -34,19 +35,26 @@ class Saving
     public $actor;
 
     /**
-     * @var array
+     * @var Category
      */
-    public $data;
+    public $newCategory;
+
+    /**
+     * @var Category
+     */
+    public $oldCategory;
 
     /**
      * @param Thread $thread
      * @param User $actor
-     * @param array $data
+     * @param Category $newCategory
+     * @param Category|null $oldCategory
      */
-    public function __construct(Thread $thread, User $actor, array $data = [])
+    public function __construct(Thread $thread, User $actor, Category $newCategory, Category $oldCategory = null)
     {
         $this->thread = $thread;
         $this->actor = $actor;
-        $this->data = $data;
+        $this->newCategory = $newCategory;
+        $this->oldCategory = $oldCategory;
     }
 }
