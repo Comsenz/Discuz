@@ -102,10 +102,9 @@ class SaveQuestionToDatabase
                 $isOnlooker = Arr::get($questionData, 'is_onlooker', true); // 获取帖子是否允许围观
 
                 // get unit price
-                if ($siteOnlookerPrice = (float) $this->settings->get('site_onlooker_price', 'default', 0) > 0) {
-                    if ($isOnlooker) {
-                        $onlookerUnitPrice = $siteOnlookerPrice;
-                    }
+                $siteOnlookerPrice = (float) $this->settings->get('site_onlooker_price', 'default', 0);
+                if ($siteOnlookerPrice > 0 && $isOnlooker) {
+                    $onlookerUnitPrice = $siteOnlookerPrice;
                 }
 
                 // Start Transaction
