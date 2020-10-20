@@ -360,7 +360,7 @@ class User extends Model
             }
         }
 
-        return $value. '?' . Carbon::parse($this->avatar_at)->timestamp;
+        return $value ? $value . '?' . Carbon::parse($this->avatar_at)->timestamp : '';
     }
 
     public function getMobileAttribute($value)
