@@ -347,8 +347,7 @@ class User extends Model
     {
         if ($value) {
             if (strpos($value, '://') === false) {
-                $value = app(UrlGenerator::class)->to('/storage/avatars/' . $value)
-                    . '?' . Carbon::parse($this->avatar_at)->timestamp;
+                $value = app(UrlGenerator::class)->to('/storage/avatars/' . $value);
             } else {
                 /** @var SettingsRepository $settings */
                 $settings = app(SettingsRepository::class);
@@ -361,7 +360,7 @@ class User extends Model
             }
         }
 
-        return $value;
+        return $value ? $value . '?' . Carbon::parse($this->avatar_at)->timestamp : '';
     }
 
     public function getMobileAttribute($value)
