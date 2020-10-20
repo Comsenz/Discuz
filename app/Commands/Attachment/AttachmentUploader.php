@@ -92,7 +92,7 @@ class AttachmentUploader
     {
         $this->file = $file;
 
-        $this->fileName = Str::random(40) . '.' . $this->file->clientExtension();
+        $this->fileName = Str::random(40) . '.' . $this->file->getClientOriginalExtension();
 
         $this->put($type, $this->file, $this->fileName, $this->path, $options);
     }
