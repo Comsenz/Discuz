@@ -18,6 +18,7 @@
 
 namespace App\Api\Serializer;
 
+use App\Models\PostGoods;
 use Discuz\Api\Serializer\AbstractSerializer;
 
 class PostGoodsSerializer extends AbstractSerializer
@@ -34,6 +35,7 @@ class PostGoodsSerializer extends AbstractSerializer
             'image_path' => $model->image_path,
             'price' => $model->price,
             'type' => $model->type,
+            'type_name' => PostGoods::enumTypeName($model->type),
             'status' => $model->status,
             'ready_content' => $model->ready_content,
             'detail_content' => $model->detail_content,
