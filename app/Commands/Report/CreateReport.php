@@ -92,7 +92,11 @@ class CreateReport
         ])->exists();
 
         if ($exists) {
-            // 合并理由
+            /**
+             * 合并理由
+             *
+             * @var Report $report
+             */
             $report = $query->first();
             $report->reason = $report->reason .= '、' . $reason;
         } else {
