@@ -16,6 +16,11 @@
         ></el-input>
       </CardRow>
     </Card>
+    <Card header="站点keywords：">
+      <CardRow description="你的Discuz!Q 站点的keywords">
+        <el-input placeholder="站点keywords" v-model="siteKeywords"></el-input>
+      </CardRow>
+    </Card>
     <Card header="站点首页标题：">
       <CardRow description="你的Discuz! Q 站点的首页标题">
         <el-input placeholder="站点首页标题" v-model="siteTitle"></el-input>

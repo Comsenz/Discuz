@@ -24,7 +24,6 @@ use App\Models\User;
 use App\Validators\ReportValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\NotAuthenticatedException;
-use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
@@ -89,10 +88,15 @@ class CreateReport
             'user_id' => $userId,
             'thread_id' => $threadId,
             'post_id' => $postId,
+            'status' => 0
         ])->exists();
 
         if ($exists) {
-            // 合并理由
+            /**
+             * 合并理由
+             *
+             * @var Report $report
+             */
             $report = $query->first();
             $report->reason = $report->reason .= '、' . $reason;
         } else {
