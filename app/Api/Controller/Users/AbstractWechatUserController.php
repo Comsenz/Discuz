@@ -153,7 +153,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
             }
         } else {
             // 登陆用户已绑定微信时调取接口时，抛出异常
-            if (!$actor->isGuest() && $wechatUser->user_id) {
+            if (!$actor->isGuest() && $wechatUser->mp_openid) {
                 throw new Exception('account_has_been_bound');
             }
 
