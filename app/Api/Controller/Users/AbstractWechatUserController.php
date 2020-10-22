@@ -117,9 +117,6 @@ abstract class AbstractWechatUserController extends AbstractResourceController
         }
 
         if (!$wechatUser || !$wechatUser->user) {
-            // 站点关闭
-            $this->assertPermission((bool)$this->settings->get('register_close'));
-
             // 更新微信用户信息
             if (!$wechatUser) {
                 $wechatUser = new UserWechat();
@@ -128,6 +125,11 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
             // 自动注册
             if (Arr::get($request->getQueryParams(), 'register', 0) && $actor->isGuest()) {
+                // 站点关闭注册
+                if (!(bool)$this->settings->get('register_close')) {
+                    throw new PermissionDeniedException('register_close');
+                }
+
                 $data['code'] = Arr::get($request->getQueryParams(), 'inviteCode');
                 $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
                 $data['register_reason'] = trans('user.register_by_wechat_h5');
