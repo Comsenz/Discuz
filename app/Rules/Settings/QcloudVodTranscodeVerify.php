@@ -71,7 +71,7 @@ class QcloudVodTranscodeVerify extends BaseQcloud
 
             $res = $this->DescribeTranscodeTemplates($value);
         } catch (TencentCloudSDKException $e) {
-            throw new TranslatorException('tencent_vod_error', [$e->getCode()]);
+            throw new TranslatorException('tencent_vod_error', [$e->getErrorCode()]);
         }
         if ($res->TotalCount == 0) {
             throw new TencentCloudSDKException('tencent_vod_transcode_error');
