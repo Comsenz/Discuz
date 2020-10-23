@@ -155,12 +155,12 @@ abstract class AbstractWechatUserController extends AbstractResourceController
             }
         } else {
             // 登陆用户和微信绑定不同时，微信已绑定用户，抛出异常
-            if ($actor->id != $wechatUser->user_id) {
+            if (!$actor->isGuest() && $actor->id != $wechatUser->user_id) {
                 throw new Exception('account_has_been_bound');
             }
 
             // 登陆用户和微信绑定相同，更新微信信息
-            $wechatUser->setRawAttributes($this->fixData($wxuser->getRaw(), $actor));
+            $wechatUser->setRawAttributes($this->fixData($wxuser->getRaw(), $wechatUser->user));
             $wechatUser->save();
         }
 
