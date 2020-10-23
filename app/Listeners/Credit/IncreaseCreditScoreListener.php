@@ -8,6 +8,7 @@ use App\Events\Credit\IncreaseCreditScore;
 use App\Models\CreditScoreRule;
 use App\Models\UserCreditScoreLog;
 use App\Models\UserCreditScoreStatistics;
+use Carbon\Carbon;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\ConnectionInterface;
 use Psr\Log\LoggerInterface;
@@ -47,7 +48,7 @@ class IncreaseCreditScoreListener
             }
 
             //是否可以加积分
-            $isCan = $this->isCanIncreaseCreditScore($uid, $rule);
+            $isCan = $this->isCanIncreaseCreditScore($uid, $rid, $rule);
             if(!$isCan) {
                 return;
             }
@@ -88,18 +89,34 @@ class IncreaseCreditScoreListener
     }
 
 
-    protected function isCanIncreaseCreditScore($uid, CreditScoreRule $rule)
+    /**
+     * 判断是否可以加积分
+     * @param $uid
+     * @param $rid
+     * @param CreditScoreRule $rule
+     * @return bool
+     */
+    protected function isCanIncreaseCreditScore($uid, $rid, CreditScoreRule $rule)
     {
         $isCan = false;
-        $last = UserCreditScoreLog::where('uid', $uid)->latest()->first();
+        $last = UserCreditScoreLog::query()
+            ->where('uid', $uid)
+            ->where('rid', $rid)
+            ->latest()
+            ->first();
+
+        //未查到最后一次加积分记录，则为首次加
+        if($last == null) {
+            return true;
+        }
+        //管理员改了规则，重新计算
+        if($last->cycle_type != $rule->cycle_type) {
+            return  true;
+        }
         switch ($rule->cycle_type) {
             //不限，随便加,直到达到奖励次数上限(如果有设置限制次数)
             case 0:
-                if($last->cycle_type != $rule->cycle_type) {
-                    $isCan = true;
-                    break;
-                }
-                if($rule->reward_num == 0 || UserCreditScoreLog::where('uid', $uid)->count() <= $rule->reward_num) {
+                if($rule->reward_num == 0 || UserCreditScoreLog::query()->where('uid', $uid)->where('rid', $rid)->count() <= $rule->reward_num) {
                     $isCan = true;
                 }
                 break;
@@ -109,14 +126,49 @@ class IncreaseCreditScoreListener
                 break;
             //每天
             case 2:
+                $tomorrow = Carbon::tomorrow()->toDateTime();
+                $today = Carbon::today()->toDateTime();
+                //查询当天当前用户当前规则下已经奖励了几次
+                $count = UserCreditScoreLog::query()
+                    ->where('uid', $uid)
+                    ->where('rid', $rid)
+                    ->where('created_at', '<', $tomorrow)
+                    ->where('created_at', '>', $today)
+                    ->count();
+                //当天奖励次数小于设置次数可以再加
+                if($count < $rule->reward_num) {
+                    $isCan = true;
+                    break;
+                }
+                break;
+            //周期，3小时时间间隔,4分钟时间间隔
+            default :
+                //间隔时间，单位秒
+                $intervalTime = $rule->interval_time;
+                //最后一次记录的加记录时间戳
+                $lastTime = Carbon::parse($last->created_at)->getTimestamp();
+                //当前时间
+                $now = Carbon::now()->getTimestamp();
+                //已经过了一轮间隔，重新开始加积分
+                if($now > $lastTime + $intervalTime) {
+                    $isCan = true;
+                    break;
+                }
+                //查询当天当前用户当前规则下已经奖励了几次
+                $count = UserCreditScoreLog::query()
+                    ->where('uid', $uid)
+                    ->where('rid', $rid)
+                    ->where('created_at', '>', Carbon::parse($now-$intervalTime)->toDateTime())
+                    ->where('created_at', '<', Carbon::parse($now)->toDateTime())
+                    ->count();
+                //当天奖励次数小于设置次数可以再加
+                if($count < $rule->reward_num) {
+                    $isCan = true;
+                    break;
+                }
+                break;
 
-                break;
-            //周期，小时时间间隔
-            case 3:
-                break;
-            //周期，分钟时间间隔
-            case 4:
-                break;
+
         }
         return $isCan;
     }

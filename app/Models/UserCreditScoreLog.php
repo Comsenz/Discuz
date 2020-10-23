@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property $cycle_type
  * @property $interval_time
  * @property $reward_num
- * @method static where($key, $val)
  * @method static create(array $array)
  * @method truncate()
  * Class UserCreditScoreLog
@@ -45,6 +44,8 @@ class UserCreditScoreLog extends Model
         'score',
         'type'
     ];
+
+
 
     /**
      * Define the relationship with the order's owner.
