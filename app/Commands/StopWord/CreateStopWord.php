@@ -77,6 +77,8 @@ class CreateStopWord
         $stopWord = StopWord::build(
             Arr::get($this->data, 'attributes.ugc'),
             Arr::get($this->data, 'attributes.username'),
+            Arr::get($this->data, 'attributes.signature'),
+            Arr::get($this->data, 'attributes.dialog'),
             Arr::get($this->data, 'attributes.find'),
             Arr::get($this->data, 'attributes.replacement'),
             $this->actor

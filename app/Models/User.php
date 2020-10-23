@@ -73,7 +73,7 @@ use Illuminate\Support\Str;
  * @property UserWallet $userWallet
  * @property UserWechat $wechat
  * @property UserDistribution $userDistribution
- * @package App\Models
+ * @property User $deny
  * @method truncate()
  * @method hasAvatar()
  */

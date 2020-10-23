@@ -32,7 +32,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $recipient_deleted_at
  * @property Carbon $updated_at
  * @property Carbon $created_at
- * @package App\Models
+ * @property User $sender
+ * @property User $recipient
+ * @property DialogMessage $dialogMessage
  */
 class Dialog extends Model
 {

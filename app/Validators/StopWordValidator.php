@@ -30,6 +30,8 @@ class StopWordValidator extends AbstractValidator
         return [
             'ugc' => 'required|in:{IGNORE},{MOD},{BANNED},{REPLACE}',
             'username' => 'required|in:{IGNORE},{MOD},{BANNED}',
+            'signature' => 'required|in:{IGNORE},{BANNED}',
+            'dialog' => 'required|in:{IGNORE},{BANNED}',
             'find' => 'required|string|unique:stop_words,find|between:1,200',
             'replacement' => 'string|between:1,200',
         ];

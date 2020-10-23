@@ -22,7 +22,11 @@ use App\Models\Attachment;
 use App\Models\StopWord;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
+use Discuz\Qcloud\QcloudManage;
 use Discuz\Wechat\EasyWechatTrait;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -31,24 +35,9 @@ class Censor
     use EasyWechatTrait;
 
     /**
-     * 忽略、不处理
+     * @var array
      */
-    const IGNORE = '{IGNORE}';
-
-    /**
-     * 审核
-     */
-    const MOD = '{MOD}';
-
-    /**
-     * 禁用
-     */
-    const BANNED = '{BANNED}';
-
-    /**
-     * 替换
-     */
-    const REPLACE = '{REPLACE}';
+    public $allowTypes = ['ugc', 'username', 'signature', 'dialog'];
 
     /**
      * 是否合法（放入待审核）
@@ -101,9 +90,11 @@ class Censor
     /**
      * Check text information.
      *
-     * @param $content
-     * @param string $type 'ugc' or 'username'
+     * @param string $content
+     * @param string $type
      * @return string
+     * @throws GuzzleException
+     * @throws InvalidConfigException
      */
     public function checkText($content, $type = 'ugc')
     {
@@ -112,7 +103,7 @@ class Censor
         }
 
         // 本地敏感词校验（暂时无此开关，默认开启）
-        if ((bool) $this->setting->get('censor', 'default', true)) {
+        if ($this->setting->get('censor', 'default', true)) {
             $content = $this->localStopWordsCheck($content, $type);
         }
 
@@ -120,14 +111,14 @@ class Censor
          * 腾讯云敏感词校验
          * 小程序敏感词校验
          */
-        if ((bool) $this->setting->get('qcloud_cms_text', 'qcloud', false)) {
+        if ($this->setting->get('qcloud_cms_text', 'qcloud', false)) {
             // 判断是否大于 5000 字
             if (($length = Str::of($content)->length()) > 5000) {
                 $content = $this->overrunContent($length, $content);
             } else {
                 $content = $this->tencentCloudCheck($content);
             }
-        } elseif ((bool) $this->setting->get('miniprogram_close', 'wx_miniprogram', false)) {
+        } elseif ($this->setting->get('miniprogram_close', 'wx_miniprogram', false)) {
             $content = $this->miniProgramCheck($content);
         }
 
@@ -170,15 +161,15 @@ class Censor
 
     /**
      * @param string $content
-     * @param string $type 'ugc' or 'username'
+     * @param string $type
      * @return string
      */
-    public function localStopWordsCheck($content, $type)
+    public function localStopWordsCheck(string $content, string $type)
     {
         // 处理指定类型非忽略的敏感词
         StopWord::query()
-            ->when(in_array($type, ['ugc', 'username']), function ($query) use ($type) {
-                return $query->where($type, '<>', self::IGNORE);
+            ->when(in_array($type, $this->allowTypes), function (Builder $query) use ($type) {
+                return $query->where($type, '<>', StopWord::IGNORE)->where($type, '<>', '');
             })
             ->cursor()
             ->tapEach(function ($word) use (&$content, $type) {
@@ -188,16 +179,16 @@ class Censor
                 // 将 {n} 转换为 .{0,n}（当 n 为 0 - 99 时）
                 $find = preg_replace('/\\\{(\d{1,2})\\\}/', '.{0,${1}}', $find);
 
-                if ($word->{$type} === self::REPLACE) {
+                if ($word->{$type} === StopWord::REPLACE) {
                     $content = preg_replace($find, $word->replacement, $content);
                 } else {
                     if (preg_match($find, $content, $matches)) {
-                        if ($word->{$type} === self::MOD) {
+                        if ($word->{$type} === StopWord::MOD) {
                             // 记录触发的审核词
                             array_push($this->wordMod, head($matches));
 
                             $this->isMod = true;
-                        } elseif ($word->{$type} === self::BANNED) {
+                        } elseif ($word->{$type} === StopWord::BANNED) {
                             throw new CensorNotPassedException('content_banned');
                         }
                     }
@@ -220,7 +211,7 @@ class Censor
         $qcloud = $this->app->make('qcloud');
 
         /**
-         * @property \Discuz\Qcloud\QcloudManage
+         * @property QcloudManage
          * @see 文本内容安全文档 https://cloud.tencent.com/document/product/1124/46976
          */
         $result = $qcloud->service('cms')->TextModeration($content);
@@ -257,6 +248,8 @@ class Censor
     /**
      * @param string $content
      * @return string
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function miniProgramCheck($content)
     {
@@ -280,6 +273,8 @@ class Censor
      *
      * @param string $filePathname 图片绝对路径
      * @param bool $isRemote 是否是远程图片
+     * @throws GuzzleException
+     * @throws InvalidConfigException
      */
     public function checkImage($filePathname, $isRemote = false)
     {
@@ -294,7 +289,7 @@ class Censor
 
             /**
              * TODO: 如果config配置图片不是放在本地这里需要修改base64为 传输 FileUrl地址路径
-             * @property \Discuz\Qcloud\QcloudManage
+             * @property QcloudManage
              */
             $result = $this->app->make('qcloud')->service('cms')->ImageModeration($params);
             $data = Arr::get($result, 'Data', []);
@@ -335,12 +330,12 @@ class Censor
      * 检验身份证号码和姓名是否真实
      *
      * @param string $identity 身份证号码
-     * @param string $realname 姓名
+     * @param string $realName 姓名
      * @return array
      */
-    public function checkReal(string $identity, string $realname)
+    public function checkReal(string $identity, string $realName)
     {
         $qcloud = $this->app->make('qcloud');
-        return $qcloud->service('faceid')->idCardVerification($identity, $realname);
+        return $qcloud->service('faceid')->idCardVerification($identity, $realName);
     }
 }
