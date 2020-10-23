@@ -22,6 +22,7 @@ use App\Censor\Censor;
 use App\Commands\Post\CreatePost;
 use App\Events\Thread\Created;
 use App\Events\Thread\Saving;
+use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\User;
@@ -193,6 +194,7 @@ class CreateThread
                 new CreatePost($thread->id, $this->actor, $this->data, $this->ip, $this->port)
             );
         } catch (Exception $e) {
+            Post::query()->where('thread_id', $thread->id)->delete();
             $thread->delete();
             throw $e;
         }
