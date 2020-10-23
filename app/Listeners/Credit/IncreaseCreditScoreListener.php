@@ -15,6 +15,12 @@ use Psr\Log\LoggerInterface;
 
 class IncreaseCreditScoreListener
 {
+    //加积分
+    CONST PLUS = 1;
+    //减积分
+    CONST MINUS = 2;
+
+
     protected $bus;
 
     protected $db;
@@ -41,17 +47,20 @@ class IncreaseCreditScoreListener
                 throw new \Exception('action is not found');
             }
             $rid = $rule->id;
-            $type = 1;
+            $type = self::PLUS;
             //不为true 则需要减积分
             if(!$event->isIncrease) {
-                $type = 2;
+                $type = self::MINUS;
             }
 
-            //是否可以加积分
-            $isCan = $this->isCanIncreaseCreditScore($uid, $rid, $rule);
-            if(!$isCan) {
-                return;
+            if($type == self::PLUS) {
+                //是否可以加积分
+                $isCan = $this->isCanIncreaseCreditScore($uid, $rid, $rule);
+                if(!$isCan) {
+                    return;
+                }
             }
+
             $data['uid'] = $uid;
             $data['rid'] = $rid;
             $data['cycle_type'] = $rule->cycle_type;
@@ -66,11 +75,11 @@ class IncreaseCreditScoreListener
             $static = UserCreditScoreStatistics::where('uid', $uid)->first();
             if($static == null) {
                 //统计表中无数据，此时删除发帖统计积分等于0
-                $score = $type == 2 ? 0 : $rule->score;
+                $score = $type == self::MINUS ? 0 : $rule->score;
                 UserCreditScoreStatistics::create(['uid' => $uid, 'sum_score' => $score]);
             } else {
                 $score = $static->sum_score + $rule->score;
-                if($type == 2) {
+                if($type == self::MINUS) {
                     //积分逻辑，不能为负数
                     $score = $static->sum_score - $rule->score;
                     if($score < 0) {
@@ -154,7 +163,7 @@ class IncreaseCreditScoreListener
                     $isCan = true;
                     break;
                 }
-                //查询当天当前用户当前规则下已经奖励了几次
+                //查询当前用户当前规则下已经奖励了几次
                 $count = UserCreditScoreLog::query()
                     ->where('uid', $uid)
                     ->where('rid', $rid)
