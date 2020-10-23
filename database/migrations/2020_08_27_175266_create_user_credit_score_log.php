@@ -21,6 +21,7 @@ class CreateUserCreditScoreLog extends Migration
             $table->unsignedInteger('interval_time')->default(0)->comment('时间间隔，单位：秒，cycle_type 为 3或4时候有值');
             $table->unsignedInteger('reward_num')->default(0)->comment('奖励次数，cycle_type=1时，奖励次数为0');
             $table->unsignedInteger('score')->default(0)->comment('当前规则奖励的积分数量');
+            $table->unsignedInteger('type')->default(1)->comment('1: 加积分；2：减积分');
             $table->dateTime('updated_at')->comment('修改时间');
             $table->dateTime('created_at')->comment('创建时间');
         });

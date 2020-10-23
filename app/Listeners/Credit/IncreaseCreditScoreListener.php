@@ -8,9 +8,9 @@ use App\Events\Credit\IncreaseCreditScore;
 use App\Models\CreditScoreRule;
 use App\Models\UserCreditScoreLog;
 use App\Models\UserCreditScoreStatistics;
-use Carbon\Carbon;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\ConnectionInterface;
+use Psr\Log\LoggerInterface;
 
 class IncreaseCreditScoreListener
 {
@@ -18,10 +18,13 @@ class IncreaseCreditScoreListener
 
     protected $db;
 
-    public function __construct(Dispatcher $bus, ConnectionInterface $db)
+    protected $logger;
+
+    public function __construct(Dispatcher $bus, ConnectionInterface $db, LoggerInterface $logger)
     {
         $this->bus = $bus;
         $this->db = $db;
+        $this->logger = $logger;
     }
 
     /**
@@ -37,6 +40,11 @@ class IncreaseCreditScoreListener
                 throw new \Exception('action is not found');
             }
             $rid = $rule->id;
+            $type = 1;
+            //不为true 则需要减积分
+            if(!$event->isIncrease) {
+                $type = 2;
+            }
 
             //是否可以加积分
             $isCan = $this->isCanIncreaseCreditScore($uid, $rule);
@@ -49,22 +57,32 @@ class IncreaseCreditScoreListener
             $data['interval_time'] = $rule->interval_time;
             $data['reward_num'] = $rule->reward_num;
             $data['score'] = $rule->score;
+            $data['type'] = $type;
 
             //记录当前用户规则积分日志
             UserCreditScoreLog::create($data);
             /** 积分统计表增加积分, 计算积分，并写入 */
             $static = UserCreditScoreStatistics::where('uid', $uid)->first();
             if($static == null) {
-                $score = $rule->score;
+                //统计表中无数据，此时删除发帖统计积分等于0
+                $score = $type == 2 ? 0 : $rule->score;
                 UserCreditScoreStatistics::create(['uid' => $uid, 'sum_score' => $score]);
             } else {
                 $score = $static->sum_score + $rule->score;
+                if($type == 2) {
+                    //积分逻辑，不能为负数
+                    $score = $static->sum_score - $rule->score;
+                    if($score < 0) {
+                        $score = 0;
+                    }
+                }
+
                 $static->sum_score = $score;
                 $static->save();
             }
 
         } catch (\Exception $e) {
-            dd($e->getMessage(), $e->getTrace());
+            $this->logger->error("increase error:", ['msg'=>$e->getMessage()]);
         }
         return;
     }

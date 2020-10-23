@@ -18,7 +18,11 @@
 
 namespace App\Providers;
 
+
+use App\Events\DenyUsers\Saved as DenyUserSaved;
+
 use App\Events\Credit\IncreaseCreditScore;
+
 use App\Events\Group\Created as GroupCreated;
 use App\Events\Group\Deleted as GroupDeleted;
 use App\Events\Group\PaidGroup;
@@ -105,9 +109,10 @@ class EventServiceProvider extends BaseEventServiceProvider
         PaidGroup::class => [
             PaidGroupOrder::class
         ],
-        IncreaseCreditScore::class => [
-            IncreaseCreditScoreListener::class
-        ]
+
+        WillSerializeData::class => [
+            ReplaceContentAttachUrl::class,
+        ],
     ];
 
     protected $subscribe = [

@@ -20,13 +20,17 @@ class IncreaseCreditScore
      */
     public $actor;
 
+    public $isIncrease;
+
     /**
      * @param string $action
      * @param User $actor
+     * @param bool $isIncrease
      */
-    public function __construct($action, User $actor)
+    public function __construct($action, User $actor, bool $isIncrease = true)
     {
         $this->actor = $actor;
         $this->action = $action;
+        $this->isIncrease = $isIncrease;
     }
 }

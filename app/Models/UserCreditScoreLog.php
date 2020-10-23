@@ -42,7 +42,8 @@ class UserCreditScoreLog extends Model
         'cycle_type',
         'interval_time',
         'reward_num',
-        'score'
+        'score',
+        'type'
     ];
 
     /**

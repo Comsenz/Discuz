@@ -150,6 +150,7 @@ return [
         App\Providers\UserServiceProvider::class,
         App\Providers\DialogMessageServiceProvider::class,
         App\Providers\QuestionServiceProvider::class,
+        App\Providers\IncreaseCreditScoreServiceProviders::class,
     ],
     'sms' => [
         // HTTP 请求的超时时间（秒）
