@@ -88,6 +88,12 @@ export default {
           if (data.errors) {
             this.$message.error(data.errors[0].code);
           } else {
+            // 微信支付关闭时置灰付费模式
+            if (data.readdata._data.paycenter.wxpay_close == false) {
+              this.disabled = true;
+            } else {
+              this.disabled = false;
+            }
             this.siteName = data.readdata._data.set_site.site_name;
             this.siteIntroduction =
               data.readdata._data.set_site.site_introduction;
@@ -200,12 +206,6 @@ export default {
                 this.radio2 = "2";
               }
               this.siteCloseMsg = data.readdata._data.set_site.site_close_msg;
-              // 微信支付关闭时置灰付费模式
-              if (data.readdata._data.paycenter.wxpay_close == false) {
-                this.disabled = true;
-              } else {
-                this.disabled = false;
-              }
             }
             this.sitePrice = data.readdata._data.set_site.site_price;
             this.siteExpire = data.readdata._data.set_site.site_expire;
@@ -234,12 +234,6 @@ export default {
               this.radio2 = "2";
             }
             this.siteCloseMsg = data.readdata._data.set_site.site_close_msg;
-            // 微信支付关闭时置灰付费模式
-            if (data.readdata._data.paycenter.wxpay_close == false) {
-              this.disabled = true;
-            } else {
-              this.disabled = false;
-            }
           }
         })
         .catch(error => {});
