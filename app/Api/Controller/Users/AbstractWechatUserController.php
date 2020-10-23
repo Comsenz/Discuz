@@ -34,6 +34,7 @@ use App\User\Bound;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Discuz\Auth\Guest;
 use Discuz\Contracts\Socialite\Factory;
 use Exception;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -110,10 +111,12 @@ abstract class AbstractWechatUserController extends AbstractResourceController
         /** @var UserWechat $wechatUser */
         $wechatUser = UserWechat::where($this->getType(), $wxuser->getId())->orWhere('unionid', Arr::get($wxuser->getRaw(), 'unionid'))->first();
 
-        if (!$wechatUser || !$wechatUser->user) {
-            // 站点关闭
-            $this->assertPermission((bool)$this->settings->get('register_close'));
+        // 换绑时直接返回token供后续操作使用
+        if ($rebind = Arr::get($request->getQueryParams(), 'rebind', 0)) {
+            $this->error($wxuser, new Guest(), $wechatUser, $rebind);
+        }
 
+        if (!$wechatUser || !$wechatUser->user) {
             // 更新微信用户信息
             if (!$wechatUser) {
                 $wechatUser = new UserWechat();
@@ -122,6 +125,11 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
             // 自动注册
             if (Arr::get($request->getQueryParams(), 'register', 0) && $actor->isGuest()) {
+                // 站点关闭注册
+                if (!(bool)$this->settings->get('register_close')) {
+                    throw new PermissionDeniedException('register_close');
+                }
+
                 $data['code'] = Arr::get($request->getQueryParams(), 'inviteCode');
                 $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
                 $data['register_reason'] = trans('user.register_by_wechat_h5');
@@ -146,10 +154,14 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                 }
             }
         } else {
-            // 登陆用户调取接口时，抛出异常
-            if (!$actor->isGuest()) {
+            // 登陆用户和微信绑定不同时，微信已绑定用户，抛出异常
+            if (!$actor->isGuest() && $actor->id != $wechatUser->user_id) {
                 throw new Exception('account_has_been_bound');
             }
+
+            // 登陆用户和微信绑定相同，更新微信信息
+            $wechatUser->setRawAttributes($this->fixData($wxuser->getRaw(), $wechatUser->user));
+            $wechatUser->save();
         }
 
         if ($wechatUser && $wechatUser->user) {
@@ -190,10 +202,11 @@ abstract class AbstractWechatUserController extends AbstractResourceController
      * @param $wxuser
      * @param $actor
      * @param UserWechat $wechatUser
+     * @param int $rebind 换绑时返回新的code供前端使用
      * @return mixed
      * @throws NoUserException
      */
-    private function error($wxuser, $actor, $wechatUser)
+    private function error($wxuser, $actor, $wechatUser, $rebind = null)
     {
         $rawUser = $wxuser->getRaw();
 
@@ -214,6 +227,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
         $noUserException = new NoUserException();
         $noUserException->setToken($token);
         $noUserException->setUser(Arr::only($wechatUser->toArray(), ['nickname', 'headimgurl']));
+        $rebind && $noUserException->setCode('rebind_mp_wechat');
         throw $noUserException;
     }
 

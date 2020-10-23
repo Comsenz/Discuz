@@ -44,6 +44,11 @@ class NotificationSerializer extends AbstractSerializer
             $result = array_merge($result, [
                 'reply_post_id' => 0
             ]);
+        } else {
+            // 返回楼中楼数据
+            $result = array_merge($result, [
+                'reply_post_user_name' => $model->reply_post_user_name
+            ]);
         }
 
         // 新增单独赋值的字段值

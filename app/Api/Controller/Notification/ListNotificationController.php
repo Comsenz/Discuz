@@ -142,6 +142,14 @@ class ListNotificationController extends AbstractListController
                     $item->user_avatar = $user->avatar;
                     $item->realname = $user->realname;
                 }
+                // 判断是否是楼中楼，查询用户名
+                if (Arr::has($item->data, 'reply_post_user_id') && Arr::get($item->data, 'reply_post_user_id') != 0) {
+                    $replyPostUser = $users->get(Arr::get($item->data, 'reply_post_user_id'));
+                    if (! empty($replyPostUser)) {
+                        $item->reply_post_user_name = $replyPostUser->username;
+                    }
+                }
+
                 // 查询主题相关内容
                 if (! empty($threadID = Arr::get($item->data, 'thread_id', 0))) {
                     // 获取主题作者用户组
@@ -226,8 +234,11 @@ class ListNotificationController extends AbstractListController
         $list = $data->pluck('data');
 
         // 用户 IDs
-        $userIds = collect($list)->pluck('user_id')->filter()->unique()->values();
-        $users = User::whereIn('id', $userIds)->get()->keyBy('id');
+        $collectList = collect($list);
+        $userIds = $collectList->pluck('user_id');
+        $replyUserId = $collectList->pluck('reply_post_user_id');
+        $userIds = $userIds->merge($replyUserId)->filter()->unique()->values();
+        $users = User::query()->whereIn('id', $userIds)->get()->keyBy('id');
 
         // 主题 ID
         $threadIds = collect($list)->pluck($pluck)->filter()->unique()->values();

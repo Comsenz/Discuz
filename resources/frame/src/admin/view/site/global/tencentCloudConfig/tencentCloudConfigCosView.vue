@@ -28,6 +28,15 @@
           ></el-switch>
         </CardRow>
       </Card>
+      <Card header="启用文档预览：">
+        <CardRow description="开启服务前，请先在对象存储中开启文档能力。启用后对于当前对象存储中的文档资源，可实现文档资源预览。">
+          <el-switch
+            v-model="cosDocPreview"
+            active-color="#336699"
+            inactive-color="#bbbbbb"
+          ></el-switch>
+        </CardRow>
+      </Card>
       <Card class="footer-btn">
         <el-button type="primary" size="medium" @click="submission">提交</el-button>
       </Card>

@@ -99,6 +99,13 @@ class SaveQuestionToDatabase
                 $questionData['actor'] = $actor;
                 $this->questionValidator->valid($questionData);
                 $price = Arr::get($questionData, 'price');
+                $isOnlooker = Arr::get($questionData, 'is_onlooker', true); // 获取帖子是否允许围观
+
+                // get unit price
+                $siteOnlookerPrice = (float) $this->settings->get('site_onlooker_price', 'default', 0);
+                if ($siteOnlookerPrice > 0 && $isOnlooker) {
+                    $onlookerUnitPrice = $siteOnlookerPrice;
+                }
 
                 // Start Transaction
                 $this->connection->beginTransaction();
@@ -113,8 +120,8 @@ class SaveQuestionToDatabase
                         'user_id' => $actor->id,
                         'be_user_id' => Arr::get($questionData, 'be_user_id'),
                         'price' => $price,
-                        'onlooker_unit_price' => (float) $this->settings->get('site_onlooker_price', 'default', 0),
-                        'is_onlooker' => $actor->can('canBeOnlooker') ? Arr::get($questionData, 'is_onlooker', true) : false,
+                        'onlooker_unit_price' => $onlookerUnitPrice ?? 0,
+                        'is_onlooker' => $actor->can('canBeOnlooker') ? $isOnlooker : false,
                         'expired_at' => Carbon::today()->addDays(Question::EXPIRED_DAY),
                     ];
                     $question = Question::build($build);

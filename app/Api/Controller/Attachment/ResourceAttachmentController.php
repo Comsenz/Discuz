@@ -104,7 +104,15 @@ class ResourceAttachmentController implements RequestHandlerInterface
             if ($page) {
                 $url .= '&ci-process=doc-preview&page='.$page;
             }
-            $response = $httpClient->get($url);
+            try {
+                $response = $httpClient->get($url);
+            } catch (\Exception $e) {
+                if (Str::contains($e->getMessage(), 'FunctionNotEnabled')) {
+                    throw new \Exception('qcloud_file_preview_unset');
+                } else {
+                    throw new ModelNotFoundException();
+                }
+            }
             if ($response->getStatusCode() == 200) {
                 if ($page) {
                     //预览

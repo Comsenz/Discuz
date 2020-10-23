@@ -60,7 +60,7 @@ class QcloudVodCoverTemplateVerify extends BaseQcloud
         try {
             $res = $this->describeSnapshotByTimeOffsetTemplates($value);
         } catch (TencentCloudSDKException $e) {
-            throw new TranslatorException('tencent_vod_error', [$e->getCode()]);
+            throw new TranslatorException('tencent_vod_error', [$e->getErrorCode()]);
         }
         if ($res->TotalCount == 0) {
             throw new TencentCloudSDKException('qcloud_vod_cover_template_not_found');
