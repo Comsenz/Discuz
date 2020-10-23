@@ -27,8 +27,8 @@ use App\MessageTemplate\GroupMessage;
 use App\MessageTemplate\Wechat\WechatGroupMessage;
 use App\Models\Group;
 use App\Models\GroupPaidUser;
-use App\Models\UserActionLogs;
 use App\Models\User;
+use App\Models\UserActionLogs;
 use App\Models\UserWechat;
 use App\Notifications\System;
 use App\Repositories\UserRepository;
@@ -38,6 +38,7 @@ use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\EventsDispatchTrait;
 use Discuz\SpecialChar\SpecialCharServer;
+use Exception;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -85,9 +86,9 @@ class UpdateUser
 
     /**
      * @return mixed
-     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @throws PermissionDeniedException
      * @throws TranslatorException
-     * @throws \Exception
+     * @throws Exception
      */
     public function __invoke()
     {
@@ -159,19 +160,20 @@ class UpdateUser
 
         if (Arr::has($attributes, 'mobile')) {
             $this->assertCan($this->actor, 'edit.mobile', $user);
+
             $mobile = Arr::get($attributes, 'mobile');
-            // 传空的话不需要验证
-            if (!empty($mobile)) {
-                // 判断(除自己)手机号是否已经被绑定
-                if (User::query()->where('mobile', $mobile)->whereNotIn('id', [$user->id])->exists()) {
-                    throw new \Exception('mobile_is_already_bind');
+
+            // 手机号是否已绑定
+            if (! empty($mobile)) {
+                if (User::query()->where('mobile', $mobile)->where('id', '<>', $user->id)->exists()) {
+                    throw new Exception('mobile_is_already_bind');
                 }
             }
 
             $user->changeMobile($mobile);
         }
 
-        if (Arr::has($attributes, 'status')) {
+        if ($this->actor->id != $user->id && Arr::has($attributes, 'status')) {
             $this->assertCan($this->actor, 'edit.status', $user);
             $status = Arr::get($attributes, 'status');
             $user->changeStatus($status);
@@ -265,8 +267,8 @@ class UpdateUser
                 }
             }
         }
-        $username = Arr::get($attributes, 'username');
-        if ($username && $username != $user->username) {
+
+        if (($username = Arr::get($attributes, 'username')) && $username != $user->username) {
             $validator['username'] = $username;
 
             // 敏感词校验
@@ -289,17 +291,13 @@ class UpdateUser
         }
 
         if (Arr::has($attributes, 'signature')) {
-            // 可为空
-            $signature = Arr::get($attributes, 'signature');
+            if ($signature = Arr::get($attributes, 'signature')) {
+                // 敏感词校验
+                $this->censor->checkText($signature, 'signature');
 
-            // 敏感词校验
-            $this->censor->checkText($signature);
-            if ($this->censor->isMod) {
-                throw new TranslatorException('user_signature_censor_error');
+                // 过滤内容
+                $signature = $this->specialChar->purify($signature);
             }
-
-            // 过滤内容
-            $signature = $this->specialChar->purify($signature);
 
             if (Str::of($signature)->length() > 140) {
                 throw new TranslatorException('user_signature_limit_error');

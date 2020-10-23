@@ -39,7 +39,7 @@ class QuestionAnswerSerializer extends AbstractSerializer
 
         $attributes = [
             'thread_id' => $model->thread_id,
-            'user_id' => $model->is_anonymous ? 0 : $model->user_id, // 判断是否是匿名
+            'user_id' => $model->thread->is_anonymous ? 0 : $model->user_id, // 判断是否是匿名
             'be_user_id' => $model->be_user_id,
             'content' => '',
             'content_html' => '',
@@ -52,10 +52,10 @@ class QuestionAnswerSerializer extends AbstractSerializer
             'is_onlooker' => (bool)$model->is_onlooker,
             'is_answer' => $model->is_answer,
             'is_approved' => $model->is_approved,
-            'is_anonymous' => $model->is_anonymous,
             'created_at' => $this->formatDate($model->created_at),
             'updated_at' => $this->formatDate($model->updated_at),
             'expired_at' => $this->formatDate($model->expired_at),
+            'answered_at' => $this->formatDate($model->answered_at),
         ];
 
         // 判断是否已围观来展示答案
@@ -64,6 +64,7 @@ class QuestionAnswerSerializer extends AbstractSerializer
             || $model->be_user_id == $actor->id
             || $actor->isAdmin()
             || ! is_null($model->thread->onlookerState)
+            || $model->onlooker_unit_price == 0
         ) {
             $attributes['content'] = $model->content;
             $attributes['content_html'] = $model->formatContent();

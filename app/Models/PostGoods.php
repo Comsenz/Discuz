@@ -53,6 +53,14 @@ class PostGoods extends Model
     public static $key;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
      * 允许的域名
      *  0淘宝 1天猫 2京东 3拼多多H5 4有赞 5淘宝口令粘贴值 6京东粘贴值H5域名 7有赞粘贴值
      *
@@ -67,6 +75,22 @@ class PostGoods extends Model
         5 => 'm.tb',        // 淘宝口令粘贴值
         6 => 'm.jd',        // 京东粘贴值H5域名
         7 => 'youzan',      // 有赞粘贴值
+    ];
+
+    /**
+     * 来源链接的商户名
+     *
+     * @var string[]
+     */
+    protected static $typeName = [
+        0 => '淘宝',
+        5 => '淘宝',
+        1 => '天猫',
+        2 => '京东',
+        6 => '京东',
+        3 => '拼多多',
+        4 => '有赞',
+        7 => '有赞',
     ];
 
     /**
@@ -113,19 +137,37 @@ class PostGoods extends Model
     }
 
     /**
+     * 获取对应链接类型商户名
+     *
+     * @param int $type 解析类型
+     * @param string $suffix 后缀拼接
+     * @return string
+     */
+    public static function enumTypeName(int $type, string $suffix = '') : string
+    {
+        $typeName = static::$typeName;
+
+        if (isset($typeName[$type])) {
+            return $typeName[$type] . $suffix;
+        }
+
+        return '未知';
+    }
+
+    /**
      * 根据 值/类型 判断是否存在
      *
      * @param $mixed
      * @param callable|null $callback 回调 值/字符串 内容
      * @return bool
      */
-    public static function enumType($mixed, callable $callback = null) : bool
+    public static function enumType($mixed, callable $callback = null): bool
     {
         $domain = static::$domainName;
 
         if (is_numeric($mixed)) {
             self::$key = $mixed;
-            if ($result = array_key_exists($mixed, $domain) && !is_null($callback)) {
+            if ($result = array_key_exists($mixed, $domain) && ! is_null($callback)) {
                 $callback(['key' => $mixed, 'value' => $domain[$mixed]]);
             }
         } elseif (is_string($mixed)) {
@@ -161,7 +203,7 @@ class PostGoods extends Model
         foreach ($mixed as $key => $item) {
             if ($item == 'm') {
                 $name = $mixed[$key + 1];
-                $mixed[$key + 1] = $item . '.' .$name;
+                $mixed[$key + 1] = $item . '.' . $name;
                 $mixed = Arr::except($mixed, [$key]);
                 break;
             }
@@ -186,7 +228,7 @@ class PostGoods extends Model
         } elseif (self::$key == 6) {
             $mode = 'File';
         } elseif (self::$key == 3) {
-            $mode = 'DoNotSend';
+            $mode = 'Guzzle';
         }
 
         return $mode ?? 'Guzzle';
@@ -194,9 +236,11 @@ class PostGoods extends Model
 
     public function getImagePathAttribute($value)
     {
-        // imagePath add to urlPrefix
-        if (substr($value, 0, 7) !== 'http://' && substr($value, 0, 8) !== 'https://') {
-            $value = 'https://' . $value;
+        if (! empty($value)) {
+            // imagePath add to urlPrefix
+            if (substr($value, 0, 7) !== 'http://' && substr($value, 0, 8) !== 'https://') {
+                $value = 'https://' . $value;
+            }
         }
 
         return $value;

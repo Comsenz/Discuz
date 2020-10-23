@@ -44,6 +44,11 @@ class NotificationSerializer extends AbstractSerializer
             $result = array_merge($result, [
                 'reply_post_id' => 0
             ]);
+        } else {
+            // 返回楼中楼数据
+            $result = array_merge($result, [
+                'reply_post_user_name' => $model->reply_post_user_name
+            ]);
         }
 
         // 新增单独赋值的字段值
@@ -56,6 +61,13 @@ class NotificationSerializer extends AbstractSerializer
             'thread_created_at' => $model->thread_created_at ?: '',
             'thread_is_approved' => $model->thread_is_approved ?: 0,
         ]);
+
+        // 判断是否要匿名
+        if (isset($model->isAnonymous) && $model->isAnonymous) {
+            $result['user_id'] = -1;
+            $result['isReal'] = false; // 全部默认未认证
+            $result['isAnonymous'] = $model->isAnonymous;
+        }
 
         return $result;
     }

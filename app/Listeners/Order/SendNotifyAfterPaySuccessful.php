@@ -54,8 +54,11 @@ class SendNotifyAfterPaySuccessful
     {
         $this->order = $event->order;
 
-        // 如果是问答提问，没有主题数据
-        if ($this->order->type == Order::ORDER_TYPE_QUESTION) {
+        // 不发通知：问答的提问没有主题数据；购买用户组没人可收
+        if (
+            $this->order->type == Order::ORDER_TYPE_QUESTION
+            || $this->order->type == Order::ORDER_TYPE_GROUP
+        ) {
             return;
         }
 
@@ -64,7 +67,10 @@ class SendNotifyAfterPaySuccessful
             return;
         }
 
-        $this->setBuild();
+        // 除了站点注册，其余获取主题信息
+        if ($this->order->type != Order::ORDER_TYPE_REGISTER) {
+            $this->setBuild();
+        }
 
         switch ($this->order->type) {
             case Order::ORDER_TYPE_REGISTER: // 付费加入站点
@@ -119,6 +125,8 @@ class SendNotifyAfterPaySuccessful
                 // 发送分成通知
                 $this->sendScaleNotice('payee');
                 break;
+            default:
+                break;
         }
     }
 
@@ -152,8 +160,8 @@ class SendNotifyAfterPaySuccessful
          */
         if ($this->order->isScale()) {
             // 判断是发给 收款人/付款人 的上级
-            $userDistribution = $type == 'payee' ? $this->order->payee->userDistribution : $this->order->user->userDistribution ;
-            if (!empty($userDistribution)) {
+            $userDistribution = $type == 'payee' ? $this->order->payee->userDistribution : $this->order->user->userDistribution;
+            if (! empty($userDistribution)) {
                 $parentUser = $userDistribution->parentUser;
                 $parentUser->notify(new Rewarded($this->order, $this->order->user, RewardedScaleMessage::class));
                 $parentUser->notify(new Rewarded($this->order, $this->order->user, WechatRewardedScaleMessage::class, [

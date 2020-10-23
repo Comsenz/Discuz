@@ -22,6 +22,7 @@ use App\Events\Thread\Hidden;
 use App\Events\Thread\Restored;
 use Carbon\Carbon;
 use DateTime;
+use Discuz\Auth\Anonymous;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\SpecialChar\SpecialCharServer;
@@ -62,6 +63,7 @@ use Illuminate\Support\Stringable;
  * @property bool $is_sticky
  * @property bool $is_essence
  * @property bool $is_site
+ * @property bool $is_anonymous
  * @property Post $firstPost
  * @property Collection $topic
  * @property Collection $orders
@@ -112,6 +114,7 @@ class Thread extends Model
         'free_words' => 'integer',
         'is_sticky' => 'boolean',
         'is_essence' => 'boolean',
+        'is_anonymous' => 'boolean',
     ];
 
     /**
@@ -284,7 +287,7 @@ class Thread extends Model
     public function refreshPaidCount()
     {
         $this->paid_count = $this->orders()
-            ->where('type', Order::ORDER_TYPE_THREAD)
+            ->whereIn('type', [Order::ORDER_TYPE_THREAD, Order::ORDER_TYPE_ATTACHMENT])
             ->where('status', Order::ORDER_STATUS_PAID)
             ->count();
 
@@ -456,6 +459,16 @@ class Thread extends Model
     public function question()
     {
         return $this->hasOne(Question::class);
+    }
+
+    /**
+     * 获取匿名用户名
+     *
+     * @return string
+     */
+    public function isAnonymousName()
+    {
+        return $this->is_anonymous ? (new Anonymous)->getUsername() : $this->user->username;
     }
 
     /**

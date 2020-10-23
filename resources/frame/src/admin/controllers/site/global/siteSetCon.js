@@ -11,6 +11,7 @@ export default {
       fullscreenLoading: false,
       siteName: "",
       siteIntroduction: "",
+      siteKeywords: "",
       siteTitle: "",
       siteMode: "1", //站点模式选择
       sitePrice: "",
@@ -33,7 +34,6 @@ export default {
       askPrice: "", // 问答围观价格
       purchase: false, // 权限购买
       purchaseNum: 0,
-      askPrice: "", // 问答围观价格
       numberimg: [
         {
           imageUrl: "",
@@ -89,9 +89,16 @@ export default {
           if (data.errors) {
             this.$message.error(data.errors[0].code);
           } else {
+            // 微信支付关闭时置灰付费模式
+            if (data.readdata._data.paycenter.wxpay_close == false) {
+              this.disabled = true;
+            } else {
+              this.disabled = false;
+            }
             this.siteName = data.readdata._data.set_site.site_name;
             this.siteIntroduction =
               data.readdata._data.set_site.site_introduction;
+            this.siteKeywords = data.readdata._data.set_site.site_keywords;
             this.siteMode = data.readdata._data.set_site.site_mode;
             this.numberimg[0].imageUrl = data.readdata._data.set_site.site_logo;
             this.numberimg[1].imageUrl =
@@ -135,6 +142,7 @@ export default {
               this.siteName = data.readdata._data.set_site.site_name;
               this.siteIntroduction =
                 data.readdata._data.set_site.site_introduction;
+              this.siteKeywords = data.readdata._data.set_site.site_keywords;
               this.siteTitle = data.readdata._data.set_site.site_title;
               this.siteMode = data.readdata._data.set_site.site_mode;
               this.numberimg[0].imageUrl =
@@ -201,12 +209,6 @@ export default {
                 this.radio2 = "2";
               }
               this.siteCloseMsg = data.readdata._data.set_site.site_close_msg;
-              // 微信支付关闭时置灰付费模式
-              if (data.readdata._data.paycenter.wxpay_close == false) {
-                this.disabled = true;
-              } else {
-                this.disabled = false;
-              }
             }
             this.sitePrice = data.readdata._data.set_site.site_price;
             this.siteExpire = data.readdata._data.set_site.site_expire;
@@ -235,12 +237,6 @@ export default {
               this.radio2 = "2";
             }
             this.siteCloseMsg = data.readdata._data.set_site.site_close_msg;
-            // 微信支付关闭时置灰付费模式
-            if (data.readdata._data.paycenter.wxpay_close == false) {
-              this.disabled = true;
-            } else {
-              this.disabled = false;
-            }
           }
         })
         .catch(error => {});
@@ -419,6 +415,13 @@ export default {
               attributes: {
                 key: "site_introduction",
                 value: this.siteIntroduction ? this.siteIntroduction : "",
+                tag: "default"
+              }
+            },
+            {
+              attributes: {
+                key: "site_keywords",
+                value: this.siteKeywords ? this.siteKeywords : "",
                 tag: "default"
               }
             },

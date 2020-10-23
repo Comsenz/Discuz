@@ -18,6 +18,7 @@
 
 namespace App\Rules\Settings;
 
+use App\Exceptions\TranslatorException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use TencentCloud\Common\Credential;
 use TencentCloud\Common\Exception\TencentCloudSDKException;
@@ -67,6 +68,7 @@ class QcloudSMSVerify extends BaseQcloud
      * @param mixed $value
      * @return bool
      * @throws TencentCloudSDKException
+     * @throws TranslatorException
      */
     public function passes($attribute, $value)
     {
@@ -99,7 +101,7 @@ class QcloudSMSVerify extends BaseQcloud
             // Result data is string can print_r($str)
             $str = $resp->toJsonString();
         } catch (TencentCloudSDKException $e) {
-            throw new TencentCloudSDKException('tencent_qcloud_sms_app_error');
+            throw new TranslatorException('tencent_qcloud_sms_app_error', [$e->getErrorCode()]);
         }
 
         return true;

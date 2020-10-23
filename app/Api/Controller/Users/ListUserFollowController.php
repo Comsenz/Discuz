@@ -143,7 +143,7 @@ class ListUserFollowController extends AbstractListController
     {
         $join_field = '';
         $user = '';
-        $query = $this->userFollow->query();
+        $query = $this->userFollow->query()->select('user_follow.*')->distinct();
 
         $type = (int) Arr::get($filter, 'type', 1);
         $username = Arr::get($filter, 'username');

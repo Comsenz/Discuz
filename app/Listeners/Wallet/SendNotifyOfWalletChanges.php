@@ -67,8 +67,8 @@ class SendNotifyOfWalletChanges
                     $user->notify(new Rewarded($order, $user, WechatRewardedMessage::class, [
                         'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
                         'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
-                            'actor_username' => $order->user->username,               // 发送人姓名
-                            'actual_amount' => $order->calculateAuthorAmount(true),   // 获取实际金额
+                            'actor_username' => $order->user->username,   // 发送人姓名
+                            'actual_amount' => $order->author_amount,     // 获取作者实际金额
                         ]),
                     ]));
                     break;

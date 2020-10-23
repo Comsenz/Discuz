@@ -78,6 +78,8 @@ class ThreadSerializer extends AbstractSerializer
             'isSticky'          => (bool) $model->is_sticky,
             'isEssence'         => (bool) $model->is_essence,
             'isSite'            => (bool) $model->is_site,
+            'isAnonymous'       => (bool) $model->is_anonymous,
+            'canBeReward'       => $model->price == 0 && $model->user->can('canBeReward'),
             'canViewPosts'      => $gate->allows('viewPosts', $model),
             'canReply'          => $gate->allows('reply', $model),
             'canApprove'        => $gate->allows('approve', $model),
@@ -120,6 +122,12 @@ class ThreadSerializer extends AbstractSerializer
             return;
         }
 
+        // 判断问答信息是否存在
+        if (empty($model->question)) {
+            $attributes['onlookerState'] = false;
+            return;
+        }
+
         /**
          * 判断是否围观过帖子
          */
@@ -135,15 +143,20 @@ class ThreadSerializer extends AbstractSerializer
             // 作者 或 被提问者 或 管理员 直接已围观
             $attributes['onlookerState'] = true;
         } else {
-            // 判断其它人查询订单是否围观过
-            $attributes['onlookerState'] = false;
+            // 判断是否是免费的问答免费的围观，直接等于围观过
+            if ($model->question->price == 0 && $model->question->onlooker_unit_price == 0) {
+                $attributes['onlookerState'] = true;
+            } else {
+                // 判断其它人查询订单是否围观过
+                $attributes['onlookerState'] = false;
+            }
         }
 
         /**
          * 判断是否匿名问答
          * (非当前用户不是作者)
          */
-        if ($model->question->is_anonymous && $model->user->id != $this->actor->id) {
+        if ($model->is_anonymous && $model->user->id != $this->actor->id) {
             $model->user = new Anonymous;
         }
     }

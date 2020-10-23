@@ -52,6 +52,12 @@ class BaseFormatter
 
     protected $app;
 
+    protected $allowHtmlElements = [
+        'video' => ['src', 'controls', 'width', 'height'],
+        'span' => ['class'],
+        'blockquote' => ['class']
+    ];
+
     /**
      * @param UrlGenerator $url
      * @param CacheManager $cache
@@ -187,6 +193,10 @@ class BaseFormatter
         spl_autoload_register(function ($class) {
             if (file_exists($file = $this->cacheDir.'/'.$class.'.php')) {
                 include $file;
+            } else {
+                $this->flush();
+
+                $this->cacheFormatter();
             }
         });
 
@@ -204,10 +214,12 @@ class BaseFormatter
 
     protected function confHtml($configurator)
     {
-        $configurator->HTMLElements->allowElement('blockquote');
-        $configurator->HTMLElements->allowAttribute('blockquote', 'class');
-        $configurator->HTMLElements->allowElement('span');
-        $configurator->HTMLElements->allowAttribute('span', 'class');
+        foreach ($this->allowHtmlElements as $element => $attrs) {
+            $configurator->HTMLElements->allowElement($element);
+            foreach ($attrs as $attr) {
+                $configurator->HTMLElements->allowAttribute($element, $attr);
+            }
+        }
     }
 
     protected function confUserMention($configurator)

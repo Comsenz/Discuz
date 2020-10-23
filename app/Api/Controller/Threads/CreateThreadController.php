@@ -41,7 +41,18 @@ class CreateThreadController extends AbstractCreateController
         'category',
         'firstPost',
         'firstPost.images',
+        'firstPost.postGoods',
         'threadVideo',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public $optionalInclude = [
+        'question',
+        'question.beUser',
+        'question.beUser.groups',
+        'question.images',
     ];
 
     /**

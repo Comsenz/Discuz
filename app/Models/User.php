@@ -73,7 +73,7 @@ use Illuminate\Support\Str;
  * @property UserWallet $userWallet
  * @property UserWechat $wechat
  * @property UserDistribution $userDistribution
- * @package App\Models
+ * @property User $deny
  * @method truncate()
  * @method hasAvatar()
  */
@@ -347,8 +347,7 @@ class User extends Model
     {
         if ($value) {
             if (strpos($value, '://') === false) {
-                $value = app(UrlGenerator::class)->to('/storage/avatars/' . $value)
-                    . '?' . Carbon::parse($this->avatar_at)->timestamp;
+                $value = app(UrlGenerator::class)->to('/storage/avatars/' . $value);
             } else {
                 /** @var SettingsRepository $settings */
                 $settings = app(SettingsRepository::class);
@@ -361,7 +360,7 @@ class User extends Model
             }
         }
 
-        return $value;
+        return $value ? $value . '?' . Carbon::parse($this->avatar_at)->timestamp : '';
     }
 
     public function getMobileAttribute($value)
@@ -394,7 +393,28 @@ class User extends Model
     {
         $this->thread_count = $this->threads()
             ->where('is_approved', Thread::APPROVED)
+            ->where('type', '<>', Thread::TYPE_OF_QUESTION)
             ->whereNull('deleted_at')
+            ->count();
+
+        return $this;
+    }
+
+    /**
+     * 刷新用户问答数，包括提问与回答
+     *
+     * @return $this
+     */
+    public function refreshQuestionCount()
+    {
+        $this->question_count = Thread::query()
+            ->join('questions', 'threads.id', '=', 'questions.thread_id')
+            ->where('threads.type', Thread::TYPE_OF_QUESTION)
+            ->where('threads.is_approved', Thread::APPROVED)
+            ->whereNull('threads.deleted_at')
+            ->where(function (Builder $query) {
+                $query->where('threads.user_id', $this->id)->orWhere('questions.be_user_id', $this->id);
+            })
             ->count();
 
         return $this;
@@ -521,23 +541,6 @@ class User extends Model
         }
 
         return false;
-    }
-
-    /**
-     * 刷新用户提问数量
-     * @return $this
-     */
-    public function refreshQuestionCount()
-    {
-        $this->question_count = $this->threads()
-            ->join('questions', 'threads.id', '=', 'questions.thread_id')
-            ->where('threads.is_approved', Thread::APPROVED)
-            ->where('threads.type', Thread::TYPE_OF_QUESTION)
-            ->where('questions.is_anonymous', false)
-            ->whereNull('threads.deleted_at')
-            ->count();
-
-        return $this;
     }
 
     /*

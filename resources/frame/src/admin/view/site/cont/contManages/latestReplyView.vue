@@ -58,7 +58,7 @@
             </a> -->
 
             <div class="latest-reply-theme__table-main" slot="main">
-              <a class="latest-reply-theme__table-main__cont-text" :href="'/pages/topic/index?id=' + items.thread._data.id" target="_blank" v-html="items._data.contentHtml"></a>
+              <a class="latest-reply-theme__table-main__cont-text" :href="'/topic/index?id=' + items.thread._data.id" target="_blank" v-html="items._data.contentHtml"></a>
               <div class="latest-reply-theme__table-main__cont-imgs">
                 <p class="latest-reply-theme__table-main__cont-imgs-p"  v-for="(item,index) in items.images" :key="index">
                   <img  v-lazy="item._data.thumbUrl" @click="imgShowClick(items.images,index)" :alt="item._data.fileName">

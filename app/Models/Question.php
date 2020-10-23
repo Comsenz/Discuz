@@ -21,7 +21,6 @@ namespace App\Models;
 use App\Events\Question\Created;
 use App\Formatter\Formatter;
 use Carbon\Carbon;
-use Discuz\Auth\Anonymous;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,11 +44,11 @@ use Illuminate\Support\Stringable;
  * @property int $onlooker_number
  * @property bool $is_onlooker
  * @property int $is_answer
- * @property bool $is_anonymous
  * @property int $is_approved
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property Carbon expired_at
+ * @property Carbon answered_at
  * @property User $user
  * @property User $beUser
  * @property Thread $thread
@@ -85,7 +84,6 @@ class Question extends Model
         'onlooker_number',
         'is_onlooker',
         'is_answer',
-        'is_anonymous',
         'is_approved',
         'expired_at',
     ];
@@ -95,7 +93,6 @@ class Question extends Model
      */
     protected $casts = [
         'is_onlooker' => 'boolean',
-        'is_anonymous' => 'boolean',
     ];
 
     /**
@@ -105,6 +102,7 @@ class Question extends Model
         'created_at',
         'updated_at',
         'expired_at',
+        'answered_at',
     ];
 
     /**
@@ -190,22 +188,6 @@ class Question extends Model
         }
 
         return $content;
-    }
-
-    /**
-     * 获取匿名用户名
-     *
-     * @return string
-     */
-    public function isAnonymousName()
-    {
-        if ($this->is_anonymous) {
-            // 实例匿名用户类
-            $anonymous = new Anonymous();
-            return $anonymous->getUsername();
-        } else {
-            return $this->user->username;
-        }
     }
 
     /**

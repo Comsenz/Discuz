@@ -164,11 +164,13 @@ class Post extends Model
      */
     public function getSummaryTextAttribute()
     {
-        $content = strip_tags($this->formatContent());
+        $content = Str::of(strip_tags($this->formatContent()));
 
-        return $content
-            ? Str::of($content)->substr(0, self::SUMMARY_LENGTH)->finish(self::SUMMARY_END_WITH)->__toString()
-            : '';
+        if ($content->length() > self::SUMMARY_LENGTH) {
+            $content = $content->substr(0, self::SUMMARY_LENGTH)->finish(self::SUMMARY_END_WITH);
+        }
+
+        return $content->__toString();
     }
 
     /**
@@ -327,9 +329,11 @@ class Post extends Model
     public function revise($content, User $actor)
     {
         if ($this->content !== $content) {
+            $rawContent = $this->content;
+
             $this->content = $content;
 
-            $this->raise(new Revised($this, $actor));
+            $this->raise(new Revised($this, $rawContent, $actor));
         }
 
         return $this;

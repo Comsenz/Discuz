@@ -65,8 +65,11 @@ class OrderSubscriber
             $order->thread->refreshRewardedCount()->save();
         }
 
-        // 更新主题付费数
-        if ($order->type == Order::ORDER_TYPE_THREAD && $order->status == Order::ORDER_STATUS_PAID) {
+        // 更新主题付费数(主题付费、附件付费)
+        if (
+            ($order->type == Order::ORDER_TYPE_THREAD || $order->type == Order::ORDER_TYPE_ATTACHMENT) &&
+            $order->status == Order::ORDER_STATUS_PAID
+        ) {
             $order->thread->refreshPaidCount()->save();
         }
     }

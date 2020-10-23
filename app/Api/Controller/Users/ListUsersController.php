@@ -121,7 +121,7 @@ class ListUsersController extends AbstractListController
      */
     public function search($actor, $filter, $sort, $limit = null, $offset = 0)
     {
-        $query = $this->users->query()->whereVisibleTo($actor);
+        $query = $this->users->query()->select('users.*')->distinct()->whereVisibleTo($actor);
 
         $this->applyFilters($query, $filter, $actor);
 

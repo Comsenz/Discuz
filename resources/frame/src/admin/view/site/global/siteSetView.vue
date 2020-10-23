@@ -16,6 +16,11 @@
         ></el-input>
       </CardRow>
     </Card>
+    <Card header="站点keywords：">
+      <CardRow description="你的Discuz!Q 站点的keywords">
+        <el-input placeholder="站点keywords" v-model="siteKeywords"></el-input>
+      </CardRow>
+    </Card>
     <Card header="站点首页标题：">
       <CardRow description="你的Discuz! Q 站点的首页标题">
         <el-input placeholder="站点首页标题" v-model="siteTitle"></el-input>
@@ -119,6 +124,7 @@
           >
             加入起
             <el-input
+              class="elinput"
               style="height: 36PX;width: 80PX"
               clearable
               placeholder="天数"
@@ -160,7 +166,7 @@
     <Card header="问答围观价格：">
       <div class="record-top">
         <CardRow
-          description="问答围观的价格，平台先分成，剩下的提问者和回答者对半分"
+          description="问答围观的价格，平台先分成，剩下的提问者和回答者对半分，不填或为0时不允许设置围观"
         >
           <el-input v-model="askPrice"></el-input>
         </CardRow>

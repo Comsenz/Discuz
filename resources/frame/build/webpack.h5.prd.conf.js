@@ -25,7 +25,6 @@ module.exports = {
   mode: "production",
   devtool: false,
   entry: {
-    app: resolve("src/h5-main.js"),
     admin: resolve("src/admin-main.js")
   },
   externals: {

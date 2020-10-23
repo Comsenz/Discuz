@@ -85,13 +85,13 @@
             </el-radio-group>
           </div>
 
-          <a slot="longText" class="recycle-bin-table__long-text" v-if="items._data.type === 1" :href="'/pages/topic/index?id=' + items._data.id" target="_blank">
+          <a slot="longText" class="recycle-bin-table__long-text" v-if="items._data.type === 1" :href="'/topic/index?id=' + items._data.id" target="_blank">
             {{items._data.title}}
             <span  class="iconfont" :class="parseInt(items._data.price) > 0?'iconmoney':'iconchangwen'" ></span>
           </a>
 
           <div class="recycle-bin-table__main" slot="main">
-            <a class="recycle-bin-table__main__cont-text" :href="'/pages/topic/index?id=' + items._data.id" target="_blank" :style="{'display':(items.threadVideo ? 'inline':'block')}" v-html="items.firstPost._data.contentHtml"></a>
+            <a class="recycle-bin-table__main__cont-text" :href="'/topic/index?id=' + items._data.id" target="_blank" :style="{'display':(items.threadVideo ? 'inline':'block')}" v-html="items.firstPost._data.contentHtml"></a>
             <span class="iconfont iconvideo" v-if="items.threadVideo"></span>
             <div class="recycle-bin-table__main__cont-imgs">
               <p class="recycle-bin-table__main__cont-imgs-p" v-for="(item,index) in items.firstPost.images" :key="item._data.thumbUrl">

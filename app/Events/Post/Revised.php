@@ -29,17 +29,24 @@ class Revised
     public $post;
 
     /**
+     * @var string
+     */
+    public $content;
+
+    /**
      * @var User
      */
     public $actor;
 
     /**
      * @param Post $post
+     * @param string $content
      * @param User|null $actor
      */
-    public function __construct(Post $post, User $actor = null)
+    public function __construct(Post $post, string $content, User $actor = null)
     {
         $this->post = $post;
+        $this->content = $content;
         $this->actor = $actor;
     }
 }

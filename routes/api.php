@@ -323,6 +323,7 @@ $route->get('/dialog', 'dialog.list', ApiController\Dialog\ListDialogController:
 $route->post('/dialog/message', 'dialog.message.create', ApiController\Dialog\CreateDialogMessageController::class);
 $route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListDialogMessageController::class);
 $route->delete('/dialog/{id}', 'dialog.delete', ApiController\Dialog\DeleteDialogController::class);
+
 /*
 |--------------------------------------------------------------------------
 | Reports
@@ -340,7 +341,8 @@ $route->delete('/reports/batch/{ids}', 'reports.batchDelete', ApiController\Repo
 |--------------------------------------------------------------------------
 */
 
-$route->post('/analysis/goods', 'analysis.goods.url', ApiController\Analysis\ResourceAnalysisGoodsController::class);
+$route->post('/goods/analysis', 'goods.analysis', ApiController\Analysis\ResourceAnalysisGoodsController::class);
+$route->get('/goods/{id}', 'goods.resource', ApiController\Analysis\ResourceGoodsController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -354,6 +356,7 @@ $route->delete('/topics/{id}', 'topics.delete', ApiController\Topic\DeleteTopicC
 $route->delete('/topics/batch/{ids}', 'topics.batchDelete', ApiController\Topic\BatchDeleteTopicController::class);
 $route->patch('/topics/{id}', 'topics.update', ApiController\Topic\UpdateTopicController::class);
 $route->patch('/topics/batch/{ids}', 'topics.batchUpdate', ApiController\Topic\BatchUpdateTopicController::class);
+
 /*
 |--------------------------------------------------------------------------
 | System

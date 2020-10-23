@@ -358,7 +358,7 @@ class OffIAccountThreadsReprintController implements RequestHandlerInterface
      */
     public function videoFormatter($threadId, $assetUrl)
     {
-        $toUrl = $this->url->to('/pages/topic/index?id=' . $threadId);
+        $toUrl = $this->url->to('/topic/index?id=' . $threadId);
 
         $str = '<p style="text-align: center;">
                     <a target="_blank" href="%s" tab="outerlink" data-linktype="2">

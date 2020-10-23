@@ -39,6 +39,8 @@ class StopWordSerializer extends AbstractSerializer
         return [
             'ugc'         => $model->ugc,
             'username'    => $model->username,
+            'signature'   => $model->signature,
+            'dialog'      => $model->dialog,
             'find'        => $model->find,
             'replacement' => $model->replacement,
             'created_at'  => $this->formatDate($model->created_at),

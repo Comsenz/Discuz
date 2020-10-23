@@ -19,6 +19,7 @@
 namespace App\User;
 
 use App\Models\SessionToken;
+use App\Models\User;
 use App\Models\UserUcenter;
 use App\Models\UserWechat;
 use App\Repositories\MobileCodeRepository;
@@ -56,9 +57,10 @@ class Bind
     /**
      * @param $token
      * @param $user
+     * @param int $rebind 是否更换绑定
      * @throws Exception
      */
-    public function withToken($token, $user)
+    public function withToken($token, $user, $rebind)
     {
         $session = SessionToken::get($token);
         $scope = Arr::get($session, 'scope');
@@ -68,6 +70,19 @@ class Bind
             if (!$wechatUser) {
                 $wechat = UserWechat::where($this->platform[$scope], $openid)->first();
             }
+
+            // 换绑时删除原双向关系（登陆用户绑定微信，微信绑定的用户）
+            if ($rebind) {
+                if ($wechatUser) {
+                    $wechatUser->user_id = null;
+                    $wechatUser->save();
+                }
+                if ($wechat) {
+                    $wechat->user_id = null;
+                    $wechat->save();
+                }
+            }
+
             // 已经存在绑定，抛出异常
             if ($wechatUser || !$wechat || $wechat->user_id) {
                 throw new Exception('account_has_been_bound');
@@ -98,14 +113,16 @@ class Bind
      * @param $js_code
      * @param $iv
      * @param $encryptedData
+     * @param int $rebind 更换绑定关系
      * @param $user
-     * @param bool $isMiniProgramLogin 小程序调取时传true，可以正常更新userwechat数据并返回供绑定用户无感登陆使用
+     * @param bool $isMiniProgramLogin 小程序登陆时调取时传true，可以正常更新userwechat数据并返回供绑定用户无感登陆使用
      * @return UserWechat
      * @throws DecryptException
      * @throws InvalidConfigException
      * @throws SocialiteException
+     * @throws Exception
      */
-    public function bindMiniprogram($js_code, $iv, $encryptedData, $user, $isMiniProgramLogin = false)
+    public function bindMiniprogram($js_code, $iv, $encryptedData, $rebind, $user, $isMiniProgramLogin = false)
     {
         $app = $this->miniProgram();
         //获取小程序登陆session key
@@ -123,14 +140,24 @@ class Bind
             return $query->where('unionid', $unionid);
         })->orWhere('min_openid', $openid)->first();
 
-        // 非无感模式，用户、微信已经存在绑定关系，抛出异常
-        if ($this->settings->get('register_type') != 2 && !$isMiniProgramLogin) {
-            if (!is_null($user->wechat) || ($wechatUser && $wechatUser->user_id)) {
-                throw new Exception('account_has_been_bound');
+        // 换绑时删除原双向关系（微信绑定的用户.登陆用户绑定微信）
+        if ($rebind) {
+            $wechatUser && $wechatUser->delete();
+            $user->wechat && $user->wechat->delete();
+        } else {
+            // 非无感模式 且 非小程序抽屉授权登陆时，用户、微信已经存在绑定关系，抛出异常
+            if ($this->settings->get('register_type') != 2 && (!$isMiniProgramLogin || !$user->isGuest())) {
+                if (
+                    (!is_null($user->wechat) && $user->wechat->min_openid) ||
+                    ($wechatUser && $wechatUser->user_id && $user->id != $wechatUser->user_id) ||
+                    ($wechatUser && $wechatUser->user_id && $wechatUser->min_openid)
+                ) {
+                    throw new Exception('account_has_been_bound');
+                }
             }
         }
 
-        if (!$wechatUser) {
+        if (!$wechatUser || !$wechatUser->exists) {
             $wechatUser = UserWechat::build([]);
         }
 
@@ -150,5 +177,28 @@ class Bind
         $wechatUser->save();
 
         return $wechatUser;
+    }
+
+    /**
+     * 绑定手机号
+     * @param $mobileToken
+     * @param $user
+     * @throws Exception
+     */
+    public function mobile($mobileToken, $user)
+    {
+        $session = SessionToken::get($mobileToken);
+        if ($session && $session->payload[0]) {
+            $usedCount = User::query()->where('mobile', $session->payload[0])->count();
+            if ($usedCount) {
+                throw new Exception('mobile_is_already_bind');
+            }
+            if (!$user->mobile) {
+                $user->changeMobile($session->payload[0]);
+                $user->save();
+            } else {
+                throw new Exception('user_has_mobile');
+            }
+        }
     }
 }

@@ -19,16 +19,16 @@
 namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\TokenSerializer;
-use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\AutoRegisterUser;
+use App\Commands\Users\GenJwtToken;
 use App\Events\Users\Logind;
 use App\Exceptions\NoUserException;
-use App\Models\User;
 use App\Settings\SettingsRepository;
 use App\User\Bind;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Discuz\Auth\Guest;
 use Discuz\Socialite\Exception\SocialiteException;
 use Discuz\Wechat\EasyWechatTrait;
 use Exception;
@@ -87,8 +87,13 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             ['js_code' => 'required','iv' => 'required','encryptedData' => 'required']
         )->validate();
 
-        $wechatUser = $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, new User(), true);
-        $this->settings->get('');
+        $actor = $request->getAttribute('actor');
+        $user = !$actor->isGuest() ? $actor : new Guest();
+
+        // 绑定小程序
+        $rebind = Arr::get($attributes, 'rebind', 0);
+        $wechatUser = $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $rebind, $user, true);
+
         if ($wechatUser->user_id) {
             //已绑定的用户登陆
             $user = $wechatUser->user;
@@ -117,7 +122,9 @@ class WechatMiniProgramLoginController extends AbstractResourceController
                 $wechatUser->setRelation('user', $user);
                 $wechatUser->save();
             } else {
-                throw new NoUserException();
+                $noUserException = new NoUserException();
+                $noUserException->setUser(['username' => $wechatUser->nickname, 'headimgurl'=>$wechatUser->headimgurl]);
+                throw $noUserException;
             }
         }
 

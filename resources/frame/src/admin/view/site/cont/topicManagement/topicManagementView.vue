@@ -96,6 +96,7 @@
           :numbertopic="items._data.thread_count"
           :heatNumber="items._data.view_count"
           :key="items._data.id"
+          :userId ="items._data.user_id"
         >
           <div class="cont-manage-theme__table-side" slot="side">
             <!-- <el-checkbox

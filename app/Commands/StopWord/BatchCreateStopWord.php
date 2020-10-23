@@ -33,26 +33,6 @@ class BatchCreateStopWord
     use EventsDispatchTrait;
 
     /**
-     * 忽略、不处理
-     */
-    const IGNORE = '{IGNORE}';
-
-    /**
-     * 审核
-     */
-    const MOD = '{MOD}';
-
-    /**
-     * 禁用
-     */
-    const BANNED = '{BANNED}';
-
-    /**
-     * 替换
-     */
-    const REPLACE = '{REPLACE}';
-
-    /**
      * The user performing the action.
      *
      * @var User
@@ -88,7 +68,7 @@ class BatchCreateStopWord
 
         $overwrite = Arr::get($this->data, 'overwrite', false);
 
-        $result = collect(Arr::get($this->data, 'words'))
+        return collect(Arr::get($this->data, 'words'))
             ->unique()
             ->map(function ($word) {
                 return $this->parseWord($word);
@@ -98,7 +78,7 @@ class BatchCreateStopWord
             ->when($overwrite, function ($collection) {
                 return $collection->map(function ($word) {
                     $word['user_id'] = $this->actor->id;
-                    $stopWord = StopWord::updateOrCreate(['find' => $word['find']], $word);
+                    $stopWord = StopWord::query()->updateOrCreate(['find' => $word['find']], $word);
                     if ($stopWord->wasRecentlyCreated) {
                         return 'created';
                     } elseif ($stopWord->wasChanged()) {
@@ -110,7 +90,7 @@ class BatchCreateStopWord
             }, function ($collection) {
                 return $collection->map(function ($word) {
                     $word['user_id'] = $this->actor->id;
-                    $stopWord = StopWord::firstOrCreate(['find' => $word['find']], $word);
+                    $stopWord = StopWord::query()->firstOrCreate(['find' => $word['find']], $word);
                     if ($stopWord->wasRecentlyCreated) {
                         return 'created';
                     } elseif ($stopWord->wasChanged()) {
@@ -121,8 +101,6 @@ class BatchCreateStopWord
                 });
             })
             ->countBy();
-
-        return $result;
     }
 
     /**
@@ -152,35 +130,38 @@ class BatchCreateStopWord
                 return [];
             }
 
-            // 区分 ugc 与 username
-            $method = [self::IGNORE, self::MOD, self::BANNED, self::REPLACE];
+            // 区分 ugc username signature dialog
             if (strpos($replacement, '|') === false) {
-                if (in_array($replacement, $method)) {
+                if (in_array($replacement, StopWord::$allowTypes)) {
                     $ugc = $replacement;
                     $replacement = '**';
                 } else {
-                    $ugc = self::REPLACE;
+                    $ugc = StopWord::REPLACE;
                 }
 
-                $username = self::IGNORE;
+                $username = StopWord::IGNORE;
+                $signature = StopWord::IGNORE;
+                $dialog = StopWord::IGNORE;
             } else {
-                list($ugc, $username) = array_map('trim', explode('|', $replacement));
+                list($ugc, $username, $signature, $dialog) = array_map('trim', explode('|', $replacement));
 
-                if (! in_array($ugc, $method)) {
+                if (! in_array($ugc, StopWord::$allowTypes)) {
                     $replacement = $ugc;
-                    $ugc = self::REPLACE;
+                    $ugc = StopWord::REPLACE;
                 }
 
-                $method = [self::IGNORE, self::MOD, self::BANNED];
-                if (! in_array($username, $method)) {
-                    $username = self::IGNORE;
+                if (! in_array($username, [StopWord::MOD, StopWord::BANNED])) {
+                    $username = StopWord::IGNORE;
                 }
+
+                $signature = $signature === StopWord::BANNED ? StopWord::BANNED : StopWord::IGNORE;
+                $dialog = $dialog === StopWord::BANNED ? StopWord::BANNED : StopWord::IGNORE;
 
                 $replacement = strpos($replacement, '|') === false ? $replacement : '**';
             }
 
             // 返回一组可用数据
-            return compact('ugc', 'username', 'find', 'replacement');
+            return compact('ugc', 'username', 'signature', 'dialog', 'find', 'replacement');
         } else {
             return [];
         }

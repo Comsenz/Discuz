@@ -22,6 +22,7 @@ use App\Censor\Censor;
 use App\Commands\Post\CreatePost;
 use App\Events\Thread\Created;
 use App\Events\Thread\Saving;
+use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\User;
@@ -157,6 +158,9 @@ class CreateThread
             }
         }
 
+        // 是否匿名
+        $thread->is_anonymous = (bool) Arr::get($this->data, 'attributes.is_anonymous', false);
+
         // 经纬度及地理位置
         $thread->longitude = (float)Arr::get($this->data, 'attributes.longitude', 0);
         $thread->latitude = (float)Arr::get($this->data, 'attributes.latitude', 0);
@@ -190,6 +194,7 @@ class CreateThread
                 new CreatePost($thread->id, $this->actor, $this->data, $this->ip, $this->port)
             );
         } catch (Exception $e) {
+            Post::query()->where('thread_id', $thread->id)->delete();
             $thread->delete();
             throw $e;
         }

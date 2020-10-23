@@ -39,8 +39,6 @@ class Saving
     public $data;
 
     /**
-     * Saving constructor.
-     *
      * @param Thread $thread
      * @param User $actor
      * @param array $data

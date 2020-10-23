@@ -19,7 +19,6 @@
 namespace App\Commands\Dialog;
 
 use App\Censor\Censor;
-use App\Censor\CensorNotPassedException;
 use App\Models\Attachment;
 use App\Models\Dialog;
 use App\Models\DialogMessage;
@@ -28,6 +27,9 @@ use App\Repositories\DialogRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
@@ -59,6 +61,16 @@ class CreateDialogMessage
         $this->attributes = $attributes;
     }
 
+    /**
+     * @param DialogRepository $dialog
+     * @param Dispatcher $events
+     * @param Censor $censor
+     * @return DialogMessage
+     * @throws PermissionDeniedException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
+     * @throws Exception
+     */
     public function handle(DialogRepository $dialog, Dispatcher $events, Censor $censor)
     {
         $this->events = $events;
@@ -68,10 +80,9 @@ class CreateDialogMessage
         $dialog_id = Arr::get($this->attributes, 'dialog_id');
 
         //敏感词检查
-        $message_text = trim($censor->checkText(Arr::get($this->attributes, 'message_text')));
-        if ($censor->isMod) {
-            throw new CensorNotPassedException('content_banned');
-        }
+        $message_text = trim($censor->checkText(Arr::get($this->attributes, 'message_text'), 'dialog'));
+
+        /** @var Dialog $dialogRes */
         $dialogRes = $dialog->findOrFail($dialog_id, $this->actor);
 
         //在黑名单中，不能发消息
@@ -97,7 +108,7 @@ class CreateDialogMessage
                     ->where('id', $attachment_id)
                     ->first();
             if (!$attachment) {
-                throw new \Exception('attachments_error');
+                throw new Exception('attachments_error');
             }
         }
 

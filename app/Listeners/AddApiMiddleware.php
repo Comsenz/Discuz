@@ -23,6 +23,7 @@ use App\Api\Middleware\FakeHttpMethods;
 use App\Api\Middleware\OperationLogMiddleware;
 use Discuz\Api\Events\ConfigMiddleware;
 use Discuz\Foundation\Application;
+use App\Api\Middleware\CheckPaidUserGroupMiddleware;
 
 class AddApiMiddleware
 {
@@ -38,5 +39,6 @@ class AddApiMiddleware
         $event->pipe->pipe($this->app->make(ClearSessionMiddleware::class));
         $event->pipe->pipe($this->app->make(FakeHttpMethods::class));
         $event->pipe->pipe($this->app->make(OperationLogMiddleware::class));
+        $event->pipe->pipe($this->app->make(CheckPaidUserGroupMiddleware::class));
     }
 }

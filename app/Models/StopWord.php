@@ -30,11 +30,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $user_id
  * @property string $ugc
  * @property string $username
+ * @property string $signature
+ * @property string $dialog
  * @property string $find
  * @property string $replacement
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @package App\Models
  */
 class StopWord extends Model
 {
@@ -42,27 +43,61 @@ class StopWord extends Model
     use ScopeVisibilityTrait;
 
     /**
+     * 忽略、不处理
+     */
+    const IGNORE = '{IGNORE}';
+
+    /**
+     * 审核
+     */
+    const MOD = '{MOD}';
+
+    /**
+     * 禁用
+     */
+    const BANNED = '{BANNED}';
+
+    /**
+     * 替换
+     */
+    const REPLACE = '{REPLACE}';
+
+    /**
+     * @var string[]
+     */
+    public static $allowTypes = [
+        self::IGNORE,
+        self::MOD,
+        self::BANNED,
+        self::REPLACE,
+    ];
+
+    /**
      * @var array
      */
-    protected $fillable = ['user_id', 'ugc', 'username', 'find', 'replacement'];
+    protected $fillable = ['user_id', 'ugc', 'username', 'signature', 'dialog', 'find', 'replacement'];
 
     /**
      * Create a new stop word.
      *
      * @param string $ugc
      * @param string $username
+     * @param string $signature
+     * @param string $dialog
      * @param string $find
      * @param string $replacement
      * @param User $user
      * @return static
      */
-    public static function build($ugc, $username, $find, $replacement, $user)
+    public static function build($ugc, $username, $signature, $dialog, $find, $replacement, $user)
     {
         $stopWord = new static;
 
         $stopWord->user_id = $user->id;
         $stopWord->ugc = $ugc;
         $stopWord->username = $username;
+        $stopWord->signature = $signature;
+        $stopWord->dialog = $dialog;
         $stopWord->find = $find;
         $stopWord->replacement = $replacement;
 

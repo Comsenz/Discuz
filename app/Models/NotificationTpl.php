@@ -31,13 +31,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $content
  * @property string $vars
  * @property string $template_id
- * @package App\Models
- * @method static find($id)
- * @method static where($where)
- * @method static insert($id)
- * @method static insertGetId($id)
- * @method static count()
- * @method truncate()
  */
 class NotificationTpl extends Model
 {
