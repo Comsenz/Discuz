@@ -85,8 +85,8 @@ class UpdateNotificationTplController extends AbstractResourceController
                     ])->validate();
                 }
 
-                if ($template_id = Arr::get($attributes, 'template_id')) {
-                    $notificationTpl->template_id = $template_id;
+                if (Arr::has($attributes, 'template_id')) {
+                    $notificationTpl->template_id = Arr::get($attributes, 'template_id');
                 }
                 break;
         }
