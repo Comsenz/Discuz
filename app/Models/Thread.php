@@ -64,6 +64,7 @@ use Illuminate\Support\Stringable;
  * @property bool $is_essence
  * @property bool $is_site
  * @property bool $is_anonymous
+ * @property bool $is_display
  * @property Post $firstPost
  * @property Collection $topic
  * @property Collection $orders
@@ -115,6 +116,7 @@ class Thread extends Model
         'is_sticky' => 'boolean',
         'is_essence' => 'boolean',
         'is_anonymous' => 'boolean',
+        'is_display' => 'boolean',
     ];
 
     /**

@@ -161,6 +161,9 @@ class CreateThread
         // 是否匿名
         $thread->is_anonymous = (bool) Arr::get($this->data, 'attributes.is_anonymous', false);
 
+        // 是否显示
+        $thread->is_display = $thread->type !== Thread::TYPE_OF_QUESTION;
+
         // 经纬度及地理位置
         $thread->longitude = (float)Arr::get($this->data, 'attributes.longitude', 0);
         $thread->latitude = (float)Arr::get($this->data, 'attributes.latitude', 0);

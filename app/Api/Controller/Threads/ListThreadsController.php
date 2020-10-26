@@ -519,6 +519,15 @@ class ListThreadsController extends AbstractListController
             }
         }
 
+        // 不展示筛选，默认不传筛选显示的帖子
+        if ($isDisplay = Arr::get($filter, 'isDisplay')) {
+            if ($isDisplay == 'yes') {
+                $query->where('threads.is_display', true);
+            } elseif ($isDisplay == 'no') {
+                $query->where('threads.is_display', false);
+            }
+        }
+
     }
 
     /**
