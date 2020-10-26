@@ -310,7 +310,8 @@ class Censor
 
                 try {
                     $fileSize = file_put_contents($tmpFile, file_get_contents(
-                        $filePathname . '?imageMogr2/thumbnail/' . Attachment::FIX_WIDTH . 'x' . Attachment::FIX_WIDTH
+                        $filePathname . (strpos($filePathname, '?') === false ? '?' : '&')
+                        . 'imageMogr2/thumbnail/' . Attachment::FIX_WIDTH . 'x' . Attachment::FIX_WIDTH
                     ));
 
                     $result = $fileSize ? $easyWeChat->content_security->checkImage($tmpFile) : [];
