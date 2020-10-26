@@ -18,6 +18,7 @@
 
 namespace App\Rules\Settings;
 
+use App\Exceptions\TranslatorException;
 use Discuz\Validation\AbstractRule;
 use TencentCloud\Common\Credential;
 use TencentCloud\Common\Exception\TencentCloudSDKException;
@@ -48,6 +49,7 @@ class QcloudSecretVerify extends AbstractRule
      * @param mixed $qcloudSecretId
      * @return bool|void
      * @throws TencentCloudSDKException
+     * @throws TranslatorException
      */
     public function passes($attribute, $qcloudSecretId)
     {
@@ -75,7 +77,7 @@ class QcloudSecretVerify extends AbstractRule
             // Result data is string can print_r($str)
             $str = $resp->toJsonString();
         } catch (TencentCloudSDKException $e) {
-            throw new TencentCloudSDKException('tencent_secret_key_error');
+            throw new TranslatorException('tencent_secret_key_error', [$e->getErrorCode()]);
         }
 
         return true;

@@ -25,8 +25,8 @@ use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
 use RuntimeException;
+use Tobscure\JsonApi\Document;
 
 class UpdateNotificationTplController extends AbstractResourceController
 {
@@ -79,12 +79,14 @@ class UpdateNotificationTplController extends AbstractResourceController
                 }
                 break;
             case 1:
-                $this->validation->make($attributes, [
-                    'template_id'     => 'filled',
-                ])->validate();
+                if ($notificationTpl->status == 1) {
+                    $this->validation->make($attributes, [
+                        'template_id'     => 'filled',
+                    ])->validate();
+                }
 
-                if ($template_id = Arr::get($attributes, 'template_id')) {
-                    $notificationTpl->template_id = $template_id;
+                if (Arr::has($attributes, 'template_id')) {
+                    $notificationTpl->template_id = Arr::get($attributes, 'template_id');
                 }
                 break;
         }

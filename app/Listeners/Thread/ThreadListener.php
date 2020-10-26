@@ -185,6 +185,7 @@ class ThreadListener
                 //用户提问数
                 if ($thread->type == Thread::TYPE_OF_QUESTION) {
                     $user->refreshQuestionCount();
+                    $thread->question->beUser->refreshQuestionCount()->save();
                 }
 
                 $user->save();

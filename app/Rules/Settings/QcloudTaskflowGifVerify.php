@@ -62,7 +62,7 @@ class QcloudTaskflowGifVerify extends BaseQcloud
             $res = $this->describeProcedureTemplates($value);
         } catch (TencentCloudSDKException $e) {
             if ($e->getCode() == 'InvalidParameterValue') {
-                throw new TencentCloudSDKException('InvalidParameterValue');
+                throw new TranslatorException('InvalidParameterValue', [$e->getErrorCode()]);
             } else {
                 throw new TranslatorException('tencent_vod_error', [$e->getCode()]);
             }

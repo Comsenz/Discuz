@@ -73,7 +73,7 @@ use Illuminate\Support\Str;
  * @property UserWallet $userWallet
  * @property UserWechat $wechat
  * @property UserDistribution $userDistribution
- * @package App\Models
+ * @property User $deny
  * @method truncate()
  * @method hasAvatar()
  */
@@ -345,22 +345,26 @@ class User extends Model
      */
     public function getAvatarAttribute($value)
     {
-        if ($value) {
-            if (strpos($value, '://') === false) {
-                $value = app(UrlGenerator::class)->to('/storage/avatars/' . $value);
-            } else {
-                /** @var SettingsRepository $settings */
-                $settings = app(SettingsRepository::class);
-
-                $path = 'public/avatar/' . Str::after($value, '://');
-
-                $value = (bool) $settings->get('qcloud_cos_sign_url', 'qcloud', true)
-                    ? app(Filesystem::class)->disk('avatar_cos')->temporaryUrl($path, Carbon::now()->addDay())
-                    : app(Filesystem::class)->disk('avatar_cos')->url($path);
-            }
+        if (empty($value)) {
+            return $value;
         }
 
-        return $value ? $value . '?' . Carbon::parse($this->avatar_at)->timestamp : '';
+        if (strpos($value, '://') === false) {
+            return app(UrlGenerator::class)->to('/storage/avatars/' . $value)
+                . '?' . Carbon::parse($this->avatar_at)->timestamp;
+        }
+
+        /** @var SettingsRepository $settings */
+        $settings = app(SettingsRepository::class);
+
+        $path = 'public/avatar/' . Str::after($value, '://');
+
+        if ($settings->get('qcloud_cos_sign_url', 'qcloud', true)) {
+            return app(Filesystem::class)->disk('avatar_cos')->temporaryUrl($path, Carbon::now()->addDay());
+        } else {
+            return app(Filesystem::class)->disk('avatar_cos')->url($path)
+                . '?' . Carbon::parse($this->avatar_at)->timestamp;
+        }
     }
 
     public function getMobileAttribute($value)

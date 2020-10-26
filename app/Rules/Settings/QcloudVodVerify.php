@@ -70,7 +70,7 @@ class QcloudVodVerify extends BaseQcloud
             $this->describeStorageData($value);
         } catch (TencentCloudSDKException $e) {
             if ($e->getCode() == 'FailedOperation.InvalidVodUser') {
-                throw new TencentCloudSDKException('tencent_vod_subappid_error');
+                throw new TranslatorException('tencent_vod_subappid_error', [$e->getErrorCode()]);
             } else {
                 throw new TranslatorException('tencent_vod_error', [$e->getCode()]);
             }

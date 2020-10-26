@@ -89,10 +89,17 @@ export default {
           if (data.errors) {
             this.$message.error(data.errors[0].code);
           } else {
+            console.log("11111");
+            // 微信支付关闭时置灰付费模式
+            if (data.readdata._data.paycenter.wxpay_close == false) {
+              this.disabled = true;
+            } else {
+              this.disabled = false;
+            }
+            //
             this.siteName = data.readdata._data.set_site.site_name;
             this.siteIntroduction =
               data.readdata._data.set_site.site_introduction;
-            this.siteKeywords = data.readdata._data.set_site.site_keywords;
             this.siteMode = data.readdata._data.set_site.site_mode;
             this.numberimg[0].imageUrl = data.readdata._data.set_site.site_logo;
             this.numberimg[1].imageUrl =
@@ -102,6 +109,47 @@ export default {
             // icon
             this.numberimg[3].imageUrl =
               data.readdata._data.set_site.site_favicon;
+            if (this.siteMode == "pay") {
+              this.radio = "2";
+            } else {
+              this.radio = "1";
+            }
+            this.sitePrice = data.readdata._data.set_site.site_price;
+            this.siteExpire = data.readdata._data.set_site.site_expire;
+            this.siteAuthorScale =
+              data.readdata._data.set_site.site_author_scale;
+            this.siteMasterScale =
+              data.readdata._data.set_site.site_master_scale;
+            // this.siteLogoFile = data.readdata._data.siteLogoFile;
+            this.siteRecord = data.readdata._data.set_site.site_record;
+            this.recodeNumber = data.readdata._data.set_site.site_record_code;
+            this.siteStat = data.readdata._data.set_site.site_stat;
+
+            if (
+              data.readdata._data.set_site.site_author &&
+              data.readdata._data.set_site.site_author.id
+            ) {
+              this.siteMasterId = data.readdata._data.set_site.site_author.id;
+            }
+
+            this.askPrice = data.readdata._data.set_site.site_onlooker_price;
+            // if (data.readdata._data.logo) {
+            //   this.fileList.push({url: data.readdata._data.logo});
+            // }
+            this.siteClose = data.readdata._data.set_site.site_close;
+            if (this.siteClose === true) {
+              this.radio2 = "1";
+            } else {
+              this.radio2 = "2";
+            }
+
+            this.siteCloseMsg = data.readdata._data.set_site.site_close_msg;
+            // 微信支付关闭时置灰付费模式
+            if (data.readdata._data.paycenter.wxpay_close == false) {
+              this.disabled = true;
+            } else {
+              this.disabled = false;
+            }
             this.getScaleImgSize(this.numberimg[0].imageUrl, {
               width: 140,
               height: 140
@@ -130,119 +178,6 @@ export default {
               this.numberimg[3].imgWidht = res.width;
               this.numberimg[3].imgHeight = res.height;
             });
-            if (this.siteMode == "pay") {
-              this.radio = "2";
-            } else {
-              this.siteName = data.readdata._data.set_site.site_name;
-              this.siteIntroduction =
-                data.readdata._data.set_site.site_introduction;
-              this.siteKeywords = data.readdata._data.set_site.site_keywords;
-              this.siteTitle = data.readdata._data.set_site.site_title;
-              this.siteMode = data.readdata._data.set_site.site_mode;
-              this.numberimg[0].imageUrl =
-                data.readdata._data.set_site.site_logo;
-              this.numberimg[1].imageUrl =
-                data.readdata._data.set_site.site_header_logo;
-              this.numberimg[2].imageUrl =
-                data.readdata._data.set_site.site_background_image;
-              // icon
-              this.numberimg[3].imageUrl =
-                data.readdata._data.set_site.site_favicon;
-              this.getScaleImgSize(this.numberimg[0].imageUrl, {
-                width: 140,
-                height: 140
-              }).then(res => {
-                this.numberimg[0].imgWidht = res.width;
-                this.numberimg[0].imgHeight = res.height;
-              });
-              this.getScaleImgSize(this.numberimg[1].imageUrl, {
-                width: 140,
-                height: 140
-              }).then(res => {
-                this.numberimg[1].imgWidht = res.width;
-                this.numberimg[1].imgHeight = res.height;
-              });
-              this.getScaleImgSize(this.numberimg[2].imageUrl, {
-                width: 140,
-                height: 140
-              }).then(res => {
-                this.numberimg[2].imgWidht = res.width;
-                this.numberimg[2].imgHeight = res.height;
-              });
-              this.getScaleImgSize(this.numberimg[3].imageUrl, {
-                width: 140,
-                height: 140
-              }).then(res => {
-                this.numberimg[3].imgWidht = res.width;
-                this.numberimg[3].imgHeight = res.height;
-              });
-              if (this.siteMode == "pay") {
-                this.radio = "2";
-              } else {
-                this.radio = "1";
-              }
-              this.sitePrice = data.readdata._data.set_site.site_price;
-              this.siteExpire = data.readdata._data.set_site.site_expire;
-              this.siteAuthorScale =
-                data.readdata._data.set_site.site_author_scale;
-              this.siteMasterScale =
-                data.readdata._data.set_site.site_master_scale;
-              // this.siteLogoFile = data.readdata._data.siteLogoFile;
-              this.siteRecord = data.readdata._data.set_site.site_record;
-              this.recodeNumber = data.readdata._data.set_site.site_record_code;
-              this.siteStat = data.readdata._data.set_site.site_stat;
-              this.siteClose = data.readdata._data.set_site.site_close;
-              this.siteMasterId = data.readdata._data.set_site.site_author.id;
-              this.askPrice = data.readdata._data.set_site.site_onlooker_price;
-              // if (data.readdata._data.logo) {
-              //   this.fileList.push({url: data.readdata._data.logo});
-              // }
-              if (this.siteClose == true) {
-                this.radio2 = "1";
-              } else {
-                this.radio2 = "2";
-              }
-              this.siteCloseMsg = data.readdata._data.set_site.site_close_msg;
-              // 微信支付关闭时置灰付费模式
-              if (data.readdata._data.paycenter.wxpay_close == false) {
-                this.disabled = true;
-              } else {
-                this.disabled = false;
-              }
-            }
-            this.sitePrice = data.readdata._data.set_site.site_price;
-            this.siteExpire = data.readdata._data.set_site.site_expire;
-            this.siteAuthorScale =
-              data.readdata._data.set_site.site_author_scale;
-            this.siteMasterScale =
-              data.readdata._data.set_site.site_master_scale;
-            // this.siteLogoFile = data.readdata._data.siteLogoFile;
-            this.siteRecord = data.readdata._data.set_site.site_record;
-            this.recodeNumber = data.readdata._data.set_site.site_record_code;
-            this.siteStat = data.readdata._data.set_site.site_stat;
-            this.siteClose = data.readdata._data.set_site.site_close;
-            this.siteMasterId = data.readdata._data.set_site.site_author.id;
-            this.askPrice = data.readdata._data.set_site.site_onlooker_price;
-            console.log(data);
-            this.purchase =
-              data.readdata._data.set_site.site_pay_group_close == "1"
-                ? true
-                : false;
-            // if (data.readdata._data.logo) {
-            //   this.fileList.push({url: data.readdata._data.logo});
-            // }
-            if (this.siteClose == true) {
-              this.radio2 = "1";
-            } else {
-              this.radio2 = "2";
-            }
-            this.siteCloseMsg = data.readdata._data.set_site.site_close_msg;
-            // 微信支付关闭时置灰付费模式
-            if (data.readdata._data.paycenter.wxpay_close == false) {
-              this.disabled = true;
-            } else {
-              this.disabled = false;
-            }
           }
         })
         .catch(error => {});
@@ -302,6 +237,9 @@ export default {
     },
     handleFile() {},
     getScaleImgSize(url, obj) {
+      if (url === "") {
+        return;
+      }
       //处理等比例上传图片，
       return new Promise((resolve, reject) => {
         this.getImageSize(url)
@@ -320,19 +258,20 @@ export default {
             }
           })
           .catch(err => {
-            reject(err);
+            console.log(err);
+            // reject(err);
           });
       });
     },
     getImageSize(url) {
       const img = document.createElement("img");
-
       return new Promise((resolve, reject) => {
         img.onload = ev => {
           resolve({ width: img.naturalWidth, height: img.naturalHeight });
         };
         img.src = url;
         img.onerror = reject;
+        console.log(url);
       });
     },
 

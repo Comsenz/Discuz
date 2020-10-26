@@ -117,9 +117,6 @@ abstract class AbstractWechatUserController extends AbstractResourceController
         }
 
         if (!$wechatUser || !$wechatUser->user) {
-            // 站点关闭
-            $this->assertPermission((bool)$this->settings->get('register_close'));
-
             // 更新微信用户信息
             if (!$wechatUser) {
                 $wechatUser = new UserWechat();
@@ -128,6 +125,11 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
             // 自动注册
             if (Arr::get($request->getQueryParams(), 'register', 0) && $actor->isGuest()) {
+                // 站点关闭注册
+                if (!(bool)$this->settings->get('register_close')) {
+                    throw new PermissionDeniedException('register_close');
+                }
+
                 $data['code'] = Arr::get($request->getQueryParams(), 'inviteCode');
                 $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
                 $data['register_reason'] = trans('user.register_by_wechat_h5');
@@ -148,17 +150,18 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                 if (!$actor->isGuest() && is_null($actor->wechat)) {
                     // 登陆用户且没有绑定||换绑微信 添加微信绑定关系
                     $wechatUser->user_id = $actor->id;
+                    $wechatUser->setRelation('user', $actor);
                     $wechatUser->save();
                 }
             }
         } else {
-            // 登陆用户已绑定微信时调取接口时，抛出异常
-            if (!$actor->isGuest() && $wechatUser->mp_openid) {
+            // 登陆用户和微信绑定不同时，微信已绑定用户，抛出异常
+            if (!$actor->isGuest() && $actor->id != $wechatUser->user_id) {
                 throw new Exception('account_has_been_bound');
             }
 
-            //更新微信信息
-            $wechatUser->setRawAttributes($this->fixData($wxuser->getRaw(), $actor));
+            // 登陆用户和微信绑定相同，更新微信信息
+            $wechatUser->setRawAttributes($this->fixData($wxuser->getRaw(), $wechatUser->user));
             $wechatUser->save();
         }
 

@@ -80,6 +80,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_onlooker_price' => $this->settings->get('site_onlooker_price') ?: 0, // 默认围观值前端根据权限判断
                 'site_master_scale' => $this->settings->get('site_master_scale'), // 站长比例
                 'site_pay_group_close' => $this->settings->get('site_pay_group_close'), // 用户组购买开关
+                'site_minimum_amount' => $this->settings->get('site_minimum_amount'),
             ],
 
             // 注册设置
@@ -123,6 +124,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'qcloud_faceid' => (bool)$this->settings->get('qcloud_faceid', 'qcloud'),
                 'qcloud_sms' => (bool)$this->settings->get('qcloud_sms', 'qcloud'),
                 'qcloud_vod' => (bool)$this->settings->get('qcloud_vod', 'qcloud'),
+                'qcloud_cos_doc_preview' => (bool)$this->settings->get('qcloud_cos_doc_preview', 'qcloud'),
             ],
 
             // 提现设置
