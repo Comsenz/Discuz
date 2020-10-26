@@ -56,6 +56,11 @@ class ClearDisabledPermission
 
         // 关闭腾讯云短信时
         if (! $this->settings->get('qcloud_sms', 'qcloud')) {
+            // 注册模式如果是「手机号优先」则设为「用户名优先」
+            if ($this->settings->get('register_type') == 1) {
+                $this->settings->set('register_type', 0);
+            }
+
             $permissions[] = 'publishNeedBindPhone';        // 发布内容需先绑定手机
         }
 
