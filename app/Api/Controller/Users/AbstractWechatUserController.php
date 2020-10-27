@@ -239,7 +239,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                 /** @var SessionToken $sessionTokenQuery */
                 $sessionTokenQuery->payload = [
                     'token' => $token,
-                    'code' => $noUserException->getCode(),
+                    'code' => $noUserException->getCode() ?: 'no_bind_user',
                     'user' => $noUserException->getUser(),
                 ];
                 $sessionTokenQuery->save();

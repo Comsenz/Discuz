@@ -69,12 +69,17 @@ class WechatPcLoginController extends AbstractResourceController
         ];
 
         // data judgment payload
-        if (!is_null($token->payload)) {
+        if (!is_null($token->payload) && !isset($token->payload['code'])) {
             $build = $token->payload;
             $build += [
                 'pc_login' => true,
                 'user_id' => $token->user_id
             ];
+        } else {
+            $build['throw']['token'] = $token->payload['token'] ?: '';
+            $build['throw']['code'] = $token->payload['code'] ?: '';
+            $build['throw']['user'] = $token->payload['user'] ?: '';
+            $build['user_id'] = $token->user_id;
         }
 
         return (object) $build;
