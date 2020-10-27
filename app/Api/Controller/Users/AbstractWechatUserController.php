@@ -89,6 +89,8 @@ abstract class AbstractWechatUserController extends AbstractResourceController
     {
         $sessionId = Arr::get($request->getQueryParams(), 'sessionId');
 
+        $sessionToken = Arr::get($request->getQueryParams(), 'session_token', null);
+
         $request = $request->withAttribute('session', new SessionToken())->withAttribute('sessionId', $sessionId);
 
         $this->validation->make([
@@ -113,7 +115,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
         // 换绑时直接返回token供后续操作使用
         if ($rebind = Arr::get($request->getQueryParams(), 'rebind', 0)) {
-            $this->error($wxuser, new Guest(), $wechatUser, $rebind);
+            $this->error($wxuser, new Guest(), $wechatUser, $rebind, $sessionToken);
         }
 
         if (!$wechatUser || !$wechatUser->user) {
@@ -189,25 +191,25 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
             // bound
             if (Arr::has($request->getQueryParams(), 'session_token')) {
-                $sessionToken = Arr::get($request->getQueryParams(), 'session_token');
                 $accessToken = $this->bound->pcLogin($sessionToken, $accessToken, ['user_id' => $wechatUser->user->id]);
             }
 
             return $accessToken;
         }
 
-        $this->error($wxuser, $actor, $wechatUser);
+        $this->error($wxuser, $actor, $wechatUser, null, $sessionToken);
     }
 
     /**
      * @param $wxuser
      * @param $actor
      * @param UserWechat $wechatUser
-     * @param int $rebind 换绑时返回新的code供前端使用
+     * @param null $rebind 换绑时返回新的code供前端使用
+     * @param null $sessionToken
      * @return mixed
      * @throws NoUserException
      */
-    private function error($wxuser, $actor, $wechatUser, $rebind = null)
+    private function error($wxuser, $actor, $wechatUser, $rebind = null, $sessionToken = null)
     {
         $rawUser = $wxuser->getRaw();
 
@@ -229,6 +231,22 @@ abstract class AbstractWechatUserController extends AbstractResourceController
         $noUserException->setToken($token);
         $noUserException->setUser(Arr::only($wechatUser->toArray(), ['nickname', 'headimgurl']));
         $rebind && $noUserException->setCode('rebind_mp_wechat');
+
+        // 存储异常 PC 端使用
+        if (!is_null($sessionToken)) {
+            $sessionTokenQuery = SessionToken::query()->where('token', $sessionToken)->first();
+            if (!empty($sessionTokenQuery)) {
+                /** @var SessionToken $sessionTokenQuery */
+                $sessionTokenQuery->payload = [
+                    'token' => $token,
+                    'code' => $noUserException->getCode() ?: 'no_bind_user',
+                    'user' => $noUserException->getUser(),
+                    'rebind' => $rebind,
+                ];
+                $sessionTokenQuery->save();
+            }
+        }
+
         throw $noUserException;
     }
 
