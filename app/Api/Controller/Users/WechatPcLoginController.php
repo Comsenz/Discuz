@@ -61,10 +61,15 @@ class WechatPcLoginController extends AbstractResourceController
             throw new Exception('pc_qrcode_time_out');
         }
 
-        if (! is_null($token->payload) && isset($token->payload['code'])) {
+        if (is_null($token->payload)) {
+            // 扫码中
+            throw new Exception('pc_qrcode_scanning_code');
+        }
+
+        if (isset($token->payload['code'])) {
             if (empty($token->payload['code'])) {
                 // 扫码中
-                throw new Exception('pc_qrcode_scanning_code');
+                throw new Exception('pc_qrcode_error');
             } else {
                 $noUserException = new NoUserException();
                 $noUserException->setToken($token->payload['token']);
