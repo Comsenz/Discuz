@@ -238,7 +238,11 @@ export default {
       })
         .then(res => {
           if (res.errors) {
-            this.$message.error(res.errors[0].code);
+            if (res.errors[0].detail){
+              this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
+            } else {
+              this.$message.error(res.errors[0].code);
+            }
           } else {
             this.ispad = res.data.attributes.isPaid;
             this.purchasePrice = res.data.attributes.fee;
