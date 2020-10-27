@@ -1,13 +1,13 @@
 <template>
   <div class="site-set-box">
     <Card header="站点名称：">
-      <CardRow description="你的Discuz!Q 站点的名称">
+      <CardRow description="你的Discuz! Q 站点的名称">
         <el-input placeholder="站点名称" v-model="siteName"></el-input>
       </CardRow>
     </Card>
 
     <Card header="站点介绍：">
-      <CardRow description="你的Discuz!Q 站点的介绍">
+      <CardRow description="你的Discuz! Q 站点的介绍">
         <el-input
           type="textarea"
           :autosize="{ minRows: 4, maxRows: 4 }"
@@ -17,7 +17,7 @@
       </CardRow>
     </Card>
     <Card header="站点keywords：">
-      <CardRow description="你的Discuz!Q 站点的keywords">
+      <CardRow description="你的Discuz! Q 站点的keywords">
         <el-input placeholder="站点keywords" v-model="siteKeywords"></el-input>
       </CardRow>
     </Card>
@@ -92,7 +92,7 @@
       </CardRow>
     </Card>
     <Card header="站点模式：" class="card-radio-con">
-      <CardRow description="你的Discuz!Q 站点的运行模式">
+      <CardRow description="你的Discuz! Q 站点的运行模式">
         <el-radio @change="radioChange('public')" v-model="radio" label="1"
           >公开模式</el-radio
         >
@@ -187,7 +187,7 @@
 
     <Card header="网站备案信息：">
       <div class="record-top">
-        <CardRow description="你的Discuz!Q 站点的 ICP 备案编号">
+        <CardRow description="你的Discuz! Q 站点的 ICP 备案编号">
           <el-input v-model="siteRecord"></el-input>
         </CardRow>
       </div>
@@ -195,7 +195,7 @@
 
     <Card header="公安备案信息：">
       <div class="record-bottom">
-        <CardRow description="你的Discuz!Q 站点的 公安备案编号">
+        <CardRow description="你的Discuz! Q 站点的 公安备案编号">
           <el-input v-model="recodeNumber"></el-input>
         </CardRow>
       </div>
@@ -203,7 +203,7 @@
 
     <Card header="第三方统计：">
       <CardRow
-        description="你的Discuz!Q 网站的第三方统计代码（禁止使用含有document.write的统计代码）"
+        description="你的Discuz! Q 网站的第三方统计代码（禁止使用含有document.write的统计代码）"
       >
         <el-input
           type="textarea"
