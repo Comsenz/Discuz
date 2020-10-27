@@ -241,6 +241,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                     'token' => $token,
                     'code' => $noUserException->getCode() ?: 'no_bind_user',
                     'user' => $noUserException->getUser(),
+                    'rebind' => $rebind,
                 ];
                 $sessionTokenQuery->save();
             }

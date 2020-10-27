@@ -51,13 +51,6 @@ class TokenSerializer extends AbstractSerializer
             'refresh_token' => $model->refresh_token,
         ];
 
-        if (property_exists($model, 'pc_login')) {
-            $build += ['pc_login' => $model->pc_login];
-            if (! $model->pc_login) {
-                $build += ['throw' => $model->throw];
-            }
-        }
-
         return $build;
     }
 
