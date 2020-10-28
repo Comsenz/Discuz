@@ -45,5 +45,10 @@ class ClearDisabledSettings
         if (! $this->settings->get('qcloud_captcha', 'qcloud')) {
             $this->settings->set('register_captcha', '0');
         }
+
+        // 关闭公众号配置时 关闭 PC 微信扫码登录
+        if (! $this->settings->get('offiaccount_close', 'wx_offiaccount')) {
+            $this->settings->set('oplatform_close', '0', 'wx_oplatform');
+        }
     }
 }
