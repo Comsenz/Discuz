@@ -98,6 +98,7 @@ export default {
     },
     //修改配置状态
     loginSetting(index,type,status){
+      console.log(type, status, '9999999')
       if(status == '1') {
         if(type == 'offiaccount_close'){
           if(!this.forums.passport.offiaccount_app_id || !this.forums.passport.offiaccount_app_secret){
@@ -127,6 +128,12 @@ export default {
       } else if (type == 'ucenter_close') {
         this.changeSettings('ucenter', status == '1' ? true : false, 'ucenter');
       } else {
+        if(status == '1') {
+          if(!this.forums.passport.offiaccount_close){
+            this.$message.error('请先开启公众号配置');
+            return;
+          }
+        }
         this.changeSettings('oplatform_close', status, 'wx_oplatform');
       }
     },
