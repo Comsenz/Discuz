@@ -20,13 +20,13 @@ namespace App\Passport\Repositories;
 
 use App\Api\Serializer\TokenSerializer;
 use App\Events\Users\Logining;
+use App\Passport\Entities\UserEntity;
+use App\Repositories\UserRepository as RepositoriesUserRepository;
 use Discuz\Auth\Exception\LoginFailedException;
 use Illuminate\Contracts\Events\Dispatcher;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
-use App\Passport\Entities\UserEntity;
-use App\Repositories\UserRepository as RepositoriesUserRepository;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -52,9 +52,6 @@ class UserRepository implements UserRepositoryInterface
      */
     public function getUserEntityByUserCredentials($username, $password, $grantType, ClientEntityInterface $clientEntity)
     {
-        // 将名字中的空白字符替换为空
-        $username = preg_replace('/\s/ui', '', $username);
-
         $user = $this->users->findByIdentification(compact('username'));
 
         if (! $user && ! $user = $this->users->findByIdentification(['mobile'=>$username])) {
