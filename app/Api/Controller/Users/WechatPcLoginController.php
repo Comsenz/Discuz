@@ -72,8 +72,8 @@ class WechatPcLoginController extends AbstractResourceController
                 throw new Exception('pc_qrcode_error');
             } else {
                 $noUserException = new NoUserException();
-                $noUserException->setToken($token->payload['token']);
-                $noUserException->setUser($token->payload['user']);
+                $noUserException->setToken((object) $token->payload['token']);
+                $noUserException->setUser((object) $token->payload['user']);
                 $token->payload['rebind'] && $noUserException->setCode('rebind_mp_wechat');
 
                 throw $noUserException;
