@@ -8,10 +8,10 @@
     </Card>
 
     <Card header="注册模式：">
-      <CardRow description="开启无感模式后，微信下将自动注册。开启手机号模式后，将优先以手机号的方式注册登录。开启用户名模式后，将优先以用户名的方式注册登录。">
-        <el-radio v-model="register_type" :label="0"> 用户名优先 </el-radio>
-        <el-radio v-model="register_type" :label="1" :disabled="qcloud_sms">手机号优先</el-radio>
-        <el-radio v-model="register_type" :label="2" :disabled="qcloud_wx">无感模式</el-radio>
+      <CardRow description="开启用户名模式后，将以用户名密码为核心进行注册和登录。开启手机号模式后，将以手机号为核心进行注册和登录。开启微信无感模式后，微信内将自动注册和登录，且各端的注册和登录，将仅支持微信。">
+        <el-radio v-model="register_type" :label="0"> 用户名模式 </el-radio>
+        <el-radio v-model="register_type" :label="1" :disabled="qcloud_sms">手机号模式</el-radio>
+        <el-radio v-model="register_type" :label="2" :disabled="qcloud_wx">微信无感模式</el-radio>
       </CardRow>
     </Card>
 
