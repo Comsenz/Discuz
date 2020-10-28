@@ -21,17 +21,18 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\WechatPcQrCodeSerializer;
 use App\Models\SessionToken;
 use Discuz\Api\Controller\AbstractResourceController;
+use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Wechat\EasyWechatTrait;
 use Endroid\QrCode\QrCode;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
 class WechatPcQrCodeController extends AbstractResourceController
 {
     use EasyWechatTrait;
-
-    const IDENTIFIER = 'WECHAT_PC'; // PC作用域
+    use AssertPermissionTrait;
 
     public $serializer = WechatPcQrCodeSerializer::class;
 
@@ -52,14 +53,35 @@ class WechatPcQrCodeController extends AbstractResourceController
 
     /**
      * {@inheritdoc}
+     * @throws \Exception
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
+        $type = Arr::get($request->getQueryParams(), 'type');
+
+        // Generate parameters
+        $params = [];
+
+        switch ($type) {
+            default:
+            case 'pc_login':
+                $identifier = SessionToken::WECHAT_PC_LOGIN;
+                $route = '/pages/user/pc-login';
+                $token = SessionToken::generate($identifier);
+                break;
+            case 'pc_relation':
+                $actor = $request->getAttribute('actor');
+                $this->assertRegistered($actor);
+                $identifier = SessionToken::WECHAT_PC_BIND;
+                $route = '/pages/user/pc-relation';
+                $token = SessionToken::generate($identifier, null, $actor->id);
+                break;
+        }
+
         // create token
-        $token = SessionToken::generate(self::IDENTIFIER);
         $token->save();
 
-        $locationUrl = $this->url->action('/pages/user/pc-login', ['session_token' => $token->token]);
+        $locationUrl = $this->url->action($route, array_merge($params, ['session_token' => $token->token]));
 
         $qrCode = new QrCode($locationUrl);
 
