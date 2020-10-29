@@ -96,6 +96,11 @@ abstract class AbstractWechatPcBindController extends AbstractResourceController
             throw new Exception('pc_qrcode_time_out');
         }
 
+        // check scope
+        if ($sessionToken->scope != SessionToken::WECHAT_PC_BIND) {
+            throw new Exception('session_token_scope_error');
+        }
+
         /** @var User $actor */
         $actor = User::query()->where('id', $sessionToken->user_id)->first();
         if (empty($actor)) {
