@@ -18,7 +18,7 @@
 
 namespace App\Api\Controller\Users;
 
-use App\Api\Serializer\TokenSerializer;
+use App\Api\Serializer\UserWechatSerializer;
 use App\Models\SessionToken;
 use App\Models\User;
 use App\Models\UserWechat;
@@ -54,7 +54,7 @@ abstract class AbstractWechatPcBindController extends AbstractResourceController
 
     protected $bound;
 
-    public $serializer = TokenSerializer::class;
+    public $serializer = UserWechatSerializer::class;
 
     public function __construct(Factory $socialite, Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events, SettingsRepository $settings, Bound $bound)
     {
@@ -89,14 +89,16 @@ abstract class AbstractWechatPcBindController extends AbstractResourceController
             'session_token' => 'required',
         ])->validate();
 
-        /** @var User $actor */
+        /** @var SessionToken $sessionToken */
         $sessionToken = SessionToken::query()->where('token', Arr::get($request->getQueryParams(), 'session_token'))->first();
-        if (! empty($sessionToken)) {
-            /** @var SessionToken $sessionToken */
-            $actor = User::query()->where('id', $sessionToken->user_id)->first();
+        if (empty($sessionToken)) {
+            // 二维码已过期
+            throw new Exception('pc_qrcode_time_out');
         }
 
-        if (! isset($actor)) {
+        /** @var User $actor */
+        $actor = User::query()->where('id', $sessionToken->user_id)->first();
+        if (empty($actor)) {
             throw new Exception('not_found_user');
         }
 
@@ -108,13 +110,23 @@ abstract class AbstractWechatPcBindController extends AbstractResourceController
 
         /** @var UserWechat $wechatUser */
         $wechatUser = UserWechat::where($this->getType(), $wxuser->getId())->orWhere('unionid', Arr::get($wxuser->getRaw(), 'unionid'))->first();
+        if (! $wechatUser) {
+            $wechatUser = new UserWechat();
+        }
 
-        if (! $wechatUser || ! $wechatUser->user) {
-            if (! $actor->isGuest() && is_null($actor->wechat)) {
+        if (! $wechatUser->user) {
+            if (! $actor->isGuest()) {
+                $wechatUser->setRawAttributes($this->fixData($wxuser->getRaw(), $actor));
+
                 // 登陆用户且没有绑定||换绑微信 添加微信绑定关系
-                $wechatUser->user_id = $actor->id;
                 $wechatUser->setRelation('user', $actor);
                 $wechatUser->save();
+
+                // 删除原账号绑定数据
+                $actor->wechat->delete();
+            } else {
+                // 账号已经被绑定
+                throw new Exception('account_has_been_bound');
             }
         } else {
             // 登陆用户和微信绑定不同时，微信已绑定用户，抛出异常
@@ -126,6 +138,11 @@ abstract class AbstractWechatPcBindController extends AbstractResourceController
             $wechatUser->setRawAttributes($this->fixData($wxuser->getRaw(), $wechatUser->user));
             $wechatUser->save();
         }
+
+        // save session_token
+        $sessionToken->payload = ['success'];
+
+        return $wechatUser;
     }
 
     abstract protected function getDriver();
