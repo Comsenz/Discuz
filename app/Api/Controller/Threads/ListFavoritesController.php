@@ -19,6 +19,7 @@
 namespace App\Api\Controller\Threads;
 
 use App\Models\Order;
+use App\Models\Post;
 use App\Models\Thread;
 use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Support\Arr;
@@ -65,6 +66,7 @@ class ListFavoritesController extends ListThreadsController
         ]);
 
         Thread::setStateUser($actor, $threads);
+        Post::setStateUser($actor);
 
         // 特殊关联：最新三条回复
         if (in_array('lastThreePosts', $include)) {

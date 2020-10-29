@@ -34,6 +34,10 @@ use Illuminate\Support\Str;
  */
 class SessionToken extends Model
 {
+    const WECHAT_PC_LOGIN = 'wechat_pc_login'; // 微信 PC 扫码登陆
+
+    const WECHAT_PC_BIND = 'wechat_pc_bind'; // 微信 PC 绑定
+
     /**
      * {@inheritdoc}
      */

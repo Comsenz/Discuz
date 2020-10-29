@@ -19,6 +19,7 @@
 namespace App\Api\Controller\Topic;
 
 use App\Api\Serializer\TopicSerializer;
+use App\Models\Category;
 use App\Models\ThreadTopic;
 use App\Models\Topic;
 use App\Repositories\TopicRepository;
@@ -101,6 +102,8 @@ class ListTopicController extends AbstractListController
         $include = $this->extractInclude($request);
         $sort = $this->extractSort($request);
 
+        $actor = $request->getAttribute('actor');
+
         $topics = $this->search($filter, $sort, $limit, $offset);
 
         $document->addPaginationLinks(
@@ -116,11 +119,13 @@ class ListTopicController extends AbstractListController
             $threadTopic = ThreadTopic::query()
                 ->selectRaw(' `topic_id`, MAX(`thread_id`) as thread_id')
                 ->join('threads', 'id', '=', 'thread_id')
+                ->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'viewThreads'))
                 ->whereNull('deleted_at')
                 ->whereNotNull('threads.user_id')
                 ->whereIn('topic_id', $topicIds)
                 ->groupBy('topic_id')
                 ->get();
+
             $threadIds = $threadTopic->pluck('thread_id');
             $topics->load([
                 'lastThread' => function ($query) use ($threadIds) {

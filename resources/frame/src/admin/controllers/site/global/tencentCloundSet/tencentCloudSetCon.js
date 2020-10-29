@@ -1,4 +1,3 @@
-
 import Card from '../../../../view/site/common/card/card';
 import CardRow from '../../../../view/site/common/card/cardRow';
 
@@ -152,7 +151,7 @@ export default {
         this.changeSettings('qcloud_cms_text', status);
       } else if (type == 'qcloud_sms') {
         if (status == 0) {
-          this.$confirm('若您在用户角色中设置了发布内容需先绑定手机，关闭短信服务将同时清空该设置', {
+          this.$confirm('若您在用户角色中设置了发布内容需先绑定手机，关闭短信服务将同时清空该设置。若当前注册模式为手机号模式，将更改为用户名模式。', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
@@ -170,7 +169,7 @@ export default {
             type: 'warning'
           }).then(() => {
             this.changeSettings('qcloud_faceid', status);
-          })          
+          })
         } else {
           this.changeSettings('qcloud_faceid', status);
         }

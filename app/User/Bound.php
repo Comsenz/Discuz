@@ -48,9 +48,6 @@ class Bound
             $token->payload = $accessToken;
             $token->user_id = $data['user_id'];
             $token->save();
-            $accessToken->pc_login = true;
-        } else {
-            $accessToken->pc_login = false;
         }
 
         return $accessToken;

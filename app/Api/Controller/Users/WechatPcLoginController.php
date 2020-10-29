@@ -19,6 +19,7 @@
 namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\TokenSerializer;
+use App\Exceptions\NoUserException;
 use App\Models\SessionToken;
 use Discuz\Api\Controller\AbstractResourceController;
 use Exception;
@@ -56,26 +57,33 @@ class WechatPcLoginController extends AbstractResourceController
 
         $token = SessionToken::get($sessionToken);
         if (empty($token)) {
-            throw new Exception(trans('user.pc_qrcode_time_out'));
+            // 二维码已失效，扫码超时
+            throw new Exception('pc_qrcode_time_out');
         }
 
-        $build = [
-            'token_type' => '',
-            'expires_in' => '',
-            'access_token' => '',
-            'refresh_token' => '',
-            'pc_login' => false,
-            'user_id' => null,
-        ];
-
-        // data judgment payload
-        if (!is_null($token->payload)) {
-            $build = $token->payload;
-            $build += [
-                'pc_login' => true,
-                'user_id' => $token->user_id
-            ];
+        if (is_null($token->payload)) {
+            // 扫码中
+            throw new Exception('pc_qrcode_scanning_code');
         }
+
+        if (isset($token->payload['code'])) {
+            if (empty($token->payload['code'])) {
+                // 扫码中
+                throw new Exception('pc_qrcode_error');
+            } else {
+                $noUserException = new NoUserException();
+                $noUserException->setToken((object) $token->payload['token']);
+                $noUserException->setUser((object) $token->payload['user']);
+                $token->payload['rebind'] && $noUserException->setCode('rebind_mp_wechat');
+
+                throw $noUserException;
+            }
+        }
+
+        // build
+        $build = $token->payload;
+        $build['pc_login'] = true; // 用于序列化判断
+        $build['user_id'] = $token->user_id; // 用于序列化返回 user_id
 
         return (object) $build;
     }
