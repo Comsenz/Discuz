@@ -18,15 +18,70 @@
 
 namespace App\Api\Controller\Users;
 
-class WechatPcBindController extends AbstractWechatPcBindController
-{
-    protected function getDriver()
-    {
-        return 'wechat';
-    }
+use App\Models\SessionToken;
+use App\Models\User;
+use App\Models\UserWechat;
+use Discuz\Http\DiscuzResponseFactory;
+use Exception;
+use Illuminate\Support\Arr;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-    protected function getType()
+class WechatPcBindController implements RequestHandlerInterface
+{
+    /**
+     * {@inheritdoc}
+     * @throws Exception
+     */
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return 'mp_openid';
+        $sessionToken = Arr::get($request->getQueryParams(), 'session_token'); // 轮询 token
+        $token = Arr::get($request->getQueryParams(), 'wechat_token'); // 微信信息
+
+        /**
+         * @var SessionToken $sessionTokenData
+         * @var SessionToken $tokenData
+         */
+        $sessionTokenData = SessionToken::query()->where('token', $sessionToken)->first();
+        $tokenData = SessionToken::query()->where('token', $token)->first();
+        if (empty($sessionTokenData) || empty($tokenData)) {
+            throw new Exception('session_token_expired'); // session token expired 已过期
+        }
+
+        /**
+         * 查询 原账户的用户信息
+         *
+         * @var User $originUser
+         */
+        $originUser = User::query()->where('id', $sessionTokenData->user_id)->first();
+        if (empty($originUser)) {
+            throw new Exception('not_found_user'); // 未查询到用户信息
+        }
+        // change bind 解除绑定原号关系
+        if (! empty($originUser->wechat)) {
+            $originUser->wechat->user_id = null;
+            $originUser->wechat->save();
+        }
+
+        /**
+         * 查询 要绑定的微信信息
+         *
+         * @var UserWechat $userWechat
+         */
+        $userWechat = UserWechat::query()->where('mp_openid', $tokenData->payload['openid'])->first();
+        if (empty($userWechat)) {
+            throw new Exception('not_found_user_wechat'); // 未查询到微信信息
+        }
+
+        // bind
+        $userWechat->user_id = $sessionTokenData->user_id;
+        $userWechat->save();
+
+        $build = ['bind' => true, 'code' => 'success_bind'];
+        $sessionTokenData->payload = $build;
+
+        // return $accessToken;
+        return DiscuzResponseFactory::JsonApiResponse($build);
     }
 }
