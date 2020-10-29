@@ -80,6 +80,7 @@ class WechatPcBindController implements RequestHandlerInterface
 
         $build = ['bind' => true, 'code' => 'success_bind'];
         $sessionTokenData->payload = $build;
+        $sessionTokenData->save();
 
         // return $accessToken;
         return DiscuzResponseFactory::JsonApiResponse($build);
