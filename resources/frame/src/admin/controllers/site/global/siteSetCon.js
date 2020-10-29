@@ -339,12 +339,6 @@ export default {
         })
         .catch(error => {});
     },
-    errorFile() {},
-    // purchaseBtn(e) {
-    //   if (e) {
-
-    //   }
-    // },
     siteSetPost() {
       this.appFetch({
         url: "settings",
@@ -466,7 +460,7 @@ export default {
             {
               attributes: {
                 key: "site_pay_group_close",
-                value: this.purchase ? 1 : 0,
+                value: this.purchase,
                 tag: "default"
               }
             }
