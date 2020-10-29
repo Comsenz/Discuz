@@ -100,6 +100,8 @@ export default {
             this.siteName = data.readdata._data.set_site.site_name;
             this.siteIntroduction =
               data.readdata._data.set_site.site_introduction;
+            this.siteKeywords = data.readdata._data.set_site.site_keywords;
+            this.siteTitle = data.readdata._data.set_site.site_title;
             this.siteMode = data.readdata._data.set_site.site_mode;
             this.numberimg[0].imageUrl = data.readdata._data.set_site.site_logo;
             this.numberimg[1].imageUrl =
@@ -144,6 +146,7 @@ export default {
             }
 
             this.siteCloseMsg = data.readdata._data.set_site.site_close_msg;
+            this.purchase = !!data.readdata._data.set_site.site_pay_group_close;
             // 微信支付关闭时置灰付费模式
             if (data.readdata._data.paycenter.wxpay_close == false) {
               this.disabled = true;
@@ -337,12 +340,6 @@ export default {
         })
         .catch(error => {});
     },
-    errorFile() {},
-    // purchaseBtn(e) {
-    //   if (e) {
-
-    //   }
-    // },
     siteSetPost() {
       this.appFetch({
         url: "settings",
@@ -464,7 +461,7 @@ export default {
             {
               attributes: {
                 key: "site_pay_group_close",
-                value: this.purchase ? 1 : 0,
+                value: this.purchase,
                 tag: "default"
               }
             }

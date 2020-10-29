@@ -89,6 +89,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
         $attachmentId = Arr::get($request->getQueryParams(), 'id');
         $page = (int)Arr::get($request->getQueryParams(), 'page');
         $t =  Arr::get($request->getQueryParams(), 't', '');
+        $isAttachment =  Arr::get($request->getQueryParams(), 'isAttachment', 0);
         $token = SessionToken::get($t);
         if ($token) {
             $user = $token->user;
@@ -125,9 +126,16 @@ class ResourceAttachmentController implements RequestHandlerInterface
                     return DiscuzResponseFactory::JsonResponse($data);
                 } else {
                     //下载
-                    $header = [
-                        'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
-                    ];
+                    if ($isAttachment) {
+                        $header = [
+                            'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
+                        ];
+                    } else {
+                        $header = [
+                            'Content-Type' => $attachment->file_type,
+                            'Content-Disposition' => 'inline;filename=' . $attachment->file_name,
+                        ];
+                    }
 
                     return DiscuzResponseFactory::FileStreamResponse(
                         $response->getBody(),
