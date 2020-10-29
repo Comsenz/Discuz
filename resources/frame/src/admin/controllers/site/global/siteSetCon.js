@@ -100,6 +100,8 @@ export default {
             this.siteName = data.readdata._data.set_site.site_name;
             this.siteIntroduction =
               data.readdata._data.set_site.site_introduction;
+            this.siteKeywords = data.readdata._data.set_site.site_keywords;
+            this.siteTitle = data.readdata._data.set_site.site_title;
             this.siteMode = data.readdata._data.set_site.site_mode;
             this.numberimg[0].imageUrl = data.readdata._data.set_site.site_logo;
             this.numberimg[1].imageUrl =
