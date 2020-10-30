@@ -154,7 +154,7 @@ class CreateThread
 
             // 付费长文帖可设置免费阅读字数
             if ($thread->type === Thread::TYPE_OF_LONG && $thread->price) {
-                $thread->free_words = (int)Arr::get($this->data, 'attributes.free_words', 0);
+                $thread->free_words = (float)Arr::get($this->data, 'attributes.free_words', 0);
             }
         }
 

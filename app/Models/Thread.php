@@ -112,7 +112,7 @@ class Thread extends Model
     protected $casts = [
         'type' => 'integer',
         'price' => 'decimal:2',
-        'free_words' => 'integer',
+        'free_words' => 'float',
         'is_sticky' => 'boolean',
         'is_essence' => 'boolean',
         'is_anonymous' => 'boolean',

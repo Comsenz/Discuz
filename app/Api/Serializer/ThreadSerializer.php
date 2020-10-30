@@ -63,7 +63,7 @@ class ThreadSerializer extends AbstractSerializer
             'title'             => $model->title,
             'price'             => $model->price,
             'attachmentPrice'   => $model->attachment_price,
-            'freeWords'         => (int) $model->free_words,
+            'freeWords'         => $this->percentFreeWord($model),
             'viewCount'         => (int) $model->view_count,
             'postCount'         => (int) $model->post_count,
             'paidCount'         => (int) $model->paid_count,
@@ -109,6 +109,20 @@ class ThreadSerializer extends AbstractSerializer
         $this->isQuestion($model, $attributes);
 
         return $attributes;
+    }
+
+    public function percentFreeWord($model)
+    {
+        if ($model->free_words <= 1) {
+            return $model->free_words;
+        } else {
+            $percent = $model->free_words / strlen($model->firstPost->content);
+            if ($percent > 1) {
+                return 1;
+            } else {
+                return sprintf('%.2f', $percent);
+            }
+        }
     }
 
     /**

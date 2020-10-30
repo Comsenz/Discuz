@@ -111,10 +111,12 @@ trait HasPaidContent
             && $this->cannotView($post->thread)
         ) {
             $content = Str::of($post->content);
-
-            if ($content->length() > $post->thread->free_words) {
-                $post->content = $content->substr(0, $post->thread->free_words)->finish(Post::SUMMARY_END_WITH);
+            if ($post->thread->free_words > 1) {
+                $words = (int)$post->thread->free_words;
+            } else {
+                $words = ceil($content->length() * $post->thread->free_words);
             }
+            $post->content = $content->substr(0, $words)->finish(Post::SUMMARY_END_WITH);
         }
     }
 
