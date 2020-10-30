@@ -131,24 +131,29 @@ class ThreadSerializer extends AbstractSerializer
         /**
          * 判断是否围观过帖子
          */
-        if ($this->actor->isGuest()) {
-            // 游客身份 直接未围观
-            $attributes['onlookerState'] = false;
-        } elseif (
-            $model->user_id === $this->actor->id
-            || $model->question->be_user_id === $this->actor->id
-            || $this->actor->isAdmin()
-            || ! is_null($model->onlookerState)
-        ) {
-            // 作者 或 被提问者 或 管理员 直接已围观
+        if ($model->question->price == 0) {
+            // 免费的问答，直接可以围观
             $attributes['onlookerState'] = true;
         } else {
-            // 判断是否是免费的问答免费的围观，直接等于围观过
-            if ($model->question->price == 0 && $model->question->onlooker_unit_price == 0) {
+            if ($this->actor->isGuest()) {
+                // 游客身份 直接未围观
+                $attributes['onlookerState'] = false;
+            } elseif (
+                $model->user_id === $this->actor->id
+                || $model->question->be_user_id === $this->actor->id
+                || $this->actor->isAdmin()
+                || ! is_null($model->onlookerState)
+            ) {
+                // 作者 或 被提问者 或 管理员 直接已围观
                 $attributes['onlookerState'] = true;
             } else {
-                // 判断其它人查询订单是否围观过
-                $attributes['onlookerState'] = false;
+                // 判断是否是免费的问答免费的围观，直接等于围观过
+                if ($model->question->price == 0 && $model->question->onlooker_unit_price == 0) {
+                    $attributes['onlookerState'] = true;
+                } else {
+                    // 判断其它人查询订单是否围观过
+                    $attributes['onlookerState'] = false;
+                }
             }
         }
 
