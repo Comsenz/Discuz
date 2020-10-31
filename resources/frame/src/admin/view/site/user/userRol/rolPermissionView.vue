@@ -551,8 +551,8 @@
     </div>
     <!-- 价格设置 -->
     <div v-show="activeTab.name === 'pricesetting'">
-      <Card header="允许购买：">
-        <CardRow description="允许购买" class="allow-box">
+      <Card header="允许被购买：">
+        <CardRow description="允许被购买" class="allow-box">
           <el-switch
             :disabled="
               $router.history.current.query.id === '1' ||
