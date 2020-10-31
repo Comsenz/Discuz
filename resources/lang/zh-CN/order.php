@@ -20,7 +20,7 @@ return [
 
     'payee_not_found'               => '收款人不存在',
     'order_group_error'             => '用户组不存在或配置有误',
-    'order_group_forbidden'         => '默认用户组不允许购买',
+    'order_group_forbidden'         => '默认用户组不允许被购买',
 
     'order_question_onlooker_reject'     => '帖子不允许围观',
     'order_question_onlooker_unanswered' => '帖子还未回答，不允许围观',
