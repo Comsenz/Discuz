@@ -62,7 +62,8 @@
             v-model="checked"
             label="createThreadAudio"
             :disabled="
-              $router.history.current.query.id === '1' ||
+              videoDisabled ||
+                $router.history.current.query.id === '1' ||
                 $router.history.current.query.id === '7'
             "
             >发布语音</el-checkbox
