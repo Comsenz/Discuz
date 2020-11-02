@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card header="视频配置"></Card>
+    <Card header="云点播配置"></Card>
     <Card header="子应用：">
       <CardRow description="请填写子应用 ID，如果没有开启子应用，此处留空即可，留空将自动采用主应用。">
         <el-input v-model="subApplication" clearable></el-input>
