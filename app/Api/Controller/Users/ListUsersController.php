@@ -81,8 +81,6 @@ class ListUsersController extends AbstractListController
     {
         $actor = $request->getAttribute('actor');
 
-        $this->assertCan($actor, 'viewUserList');
-
         $filter = $this->extractFilter($request);
         $sort = $this->extractSort($request);
 

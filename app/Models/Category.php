@@ -130,20 +130,12 @@ class Category extends Model
             $categories = static::all();
         }
 
-        if ($permission === 'createThread') {
-            $hasGlobalPermission = $user->hasPermission([
-                'createThread',
-                'createThreadLong',
-                'createThreadVideo',
-                'createThreadImage',
-                'createThreadAudio',
-            ], false);
-        } else {
-            $hasGlobalPermission = $user->hasPermission($permission);
+        if (in_array($permission, Thread::$allowCreateTypes)) {
+            $permission = 'createThread';
         }
 
-        $canForCategory = function (self $category) use ($user, $permission, $hasGlobalPermission) {
-            return $hasGlobalPermission && $user->hasPermission('category'.$category->id.'.'.$permission);
+        $canForCategory = function (self $category) use ($user, $permission) {
+            return $user->hasPermission('category'.$category->id.'.'.$permission);
         };
 
         $ids = [];

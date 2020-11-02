@@ -42,7 +42,6 @@ use App\Notifications\System;
 use App\Traits\PostNoticesTrait;
 use Discuz\Api\Events\Serializing;
 use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Auth\Exception\PermissionDeniedException;
 use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
@@ -57,7 +56,6 @@ class PostListener
     {
         // 发表回复
         $events->listen(Saving::class, CheckPublish::class);
-        $events->listen(Saving::class, [$this, 'whenPostWasSaving']);
         $events->listen(Created::class, [$this, 'whenPostWasCreated']);
 
         // 审核回复
@@ -88,21 +86,6 @@ class PostListener
 
         // 设置主题,商品关联关系
         $events->listen(Saved::class, [$this, 'postGoods']);
-    }
-
-    /**
-     * @param Saving $event
-     * @throws PermissionDeniedException
-     */
-    public function whenPostWasSaving(Saving $event)
-    {
-        $post = $event->post;
-        $actor = $event->actor;
-
-        // 是否有权限在该主题所在分类下回复
-        if (! $post->exists && ! $post->is_first && $actor->cannot('replyThread', $post->thread->category)) {
-            throw new PermissionDeniedException;
-        }
     }
 
     /**

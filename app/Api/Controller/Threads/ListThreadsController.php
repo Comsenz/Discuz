@@ -51,7 +51,6 @@ class ListThreadsController extends AbstractListController
      * {@inheritdoc}
      */
     public $include = [
-        'user',
         'firstPost',
         'threadVideo',
         'threadAudio',
@@ -81,6 +80,7 @@ class ListThreadsController extends AbstractListController
     ];
 
     public $mustInclude = [
+        'user',
         'favoriteState',
         'firstPost.likeState',
         'question',

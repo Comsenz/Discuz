@@ -61,9 +61,7 @@ class SaveCategoryToDatabase
             }
 
             // 是否有权在该分类下发布内容
-            if ($actor->cannot('createThread', $category)) {
-                throw new PermissionDeniedException;
-            }
+            $this->assertCan($actor, 'createThread', $category);
         }
     }
 }
