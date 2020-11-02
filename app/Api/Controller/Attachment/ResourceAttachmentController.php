@@ -147,7 +147,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
                 throw new ModelNotFoundException();
             }
         } else {
-            $filePath = storage_path('app/attachment/' . $attachment->attachment);
+            $filePath = storage_path('app/' . $attachment->full_path);
 
             // 帖子图片直接显示
             if ($attachment->type == Attachment::TYPE_OF_IMAGE) {
