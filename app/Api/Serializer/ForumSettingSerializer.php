@@ -146,7 +146,6 @@ class ForumSettingSerializer extends AbstractSerializer
 
                 // 查看权限
                 'can_view_threads' => $actor->can('viewThreads'),                       // 查看主题列表
-                'can_view_user_list' => $actor->can('viewUserList'),                    // 查看用户列表
 
                 // 发布权限
                 'can_create_dialog' => $actor->can('dialog.create'),                    // 发短消息
@@ -170,7 +169,6 @@ class ForumSettingSerializer extends AbstractSerializer
 
                 // 其他
                 'initialized_pay_password' => (bool) $actor->pay_password,              // 是否初始化支付密码
-                'can_be_reward' => $actor->can('canBeReward'),                          // 是否允许被打赏
                 'can_be_asked' => $actor->can('canBeAsked'),                            // 是否允许被提问
                 'can_be_onlooker' => $this->settings->get('site_onlooker_price') > 0 && $actor->can('canBeOnlooker'),           // 是否允许被围观
                 'create_thread_with_captcha' => ! $actor->isAdmin() && $actor->can('createThreadWithCaptcha'),                  // 发布内容需要验证码

@@ -121,7 +121,7 @@ class AttachmentSerializer extends AbstractSerializer
             $model->post->is_first &&
             (
                 ($model->post->thread->price > 0 || $model->post->thread->attachment_price > 0) ||
-                $this->settings->get('qcloud_cos_doc_preview', 'qcloud')
+                ($this->settings->get('qcloud_cos_doc_preview', 'qcloud') && $this->settings->get('qcloud_cos', 'qcloud'))
             )
         ) {
             $attributes['url'] = $this->url->to('/api/attachments/' . $model->id) . '?t=' .Attachment::getFileToken($this->actor);

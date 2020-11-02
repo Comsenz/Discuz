@@ -21,6 +21,14 @@
  * not_not_*       拒绝/不允许
  */
 return [
+    // 帖子默认内容
+    'default_content' => [
+        'video' => '分享视频',
+        'image' => '分享图片',
+        'audio' => '分享语音',
+        'goods' => '分享商品',
+    ],
+
     'post_not_found' => '未查询到该条回复',
     'post_not_comment' => '不能回复，回复回帖的内容', // 点评
 

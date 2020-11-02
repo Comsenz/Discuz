@@ -71,12 +71,14 @@ trait HasPaidContent
     /**
      * 是否无权查看
      * 没权限查看时，如果是推荐到站点首页的可以查看
+     *
      * @param Thread $thread
      * @return bool
      */
     public function cannotView(Thread $thread)
     {
-        return (! $this->actor->hasPermission('thread.viewPosts') && !$thread->is_site)
+        return (! $this->actor->hasPermission("category{$thread->category_id}.thread.viewPosts") && ! $thread->is_site)
+            || ! $this->actor->hasPermission("category{$thread->category_id}.freeViewPosts.{$thread->type}")
             || ($thread->price > 0 && ! $thread->is_paid);
     }
 
