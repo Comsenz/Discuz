@@ -52,7 +52,7 @@ export default {
                 allPermissions.indexOf(`category${categoryId}.createThread`) !==
                 -1;
               const replyThread =
-                allPermissions.indexOf(`category${categoryId}.replyThread`) !==
+                allPermissions.indexOf(`category${categoryId}.thread.reply`) !==
                 -1;
               const editThread =
                 allPermissions.indexOf(`category${categoryId}.thread.edit`) !==
@@ -131,7 +131,7 @@ export default {
         url: "setPermission",
         method: "post",
         data: {
-          permission: `category${categoryId}.replyThread`,
+          permission: `category${categoryId}.thread.reply`,
           groupIds: replyThread
         }
       }).then(res => {

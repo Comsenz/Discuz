@@ -19,6 +19,7 @@
 namespace App\Policies;
 
 use App\Models\Category;
+use App\Models\Thread;
 use App\Models\User;
 use Discuz\Foundation\AbstractPolicy;
 use Illuminate\Database\Eloquent\Builder;
@@ -68,10 +69,7 @@ class CategoryPolicy extends AbstractPolicy
      */
     public function viewThreads(User $actor, Category $category)
     {
-        if (
-            $actor->hasPermission('viewThreads')
-            && $actor->hasPermission('category'.$category->id.'.viewThreads')
-        ) {
+        if ($actor->hasPermission('category'.$category->id.'.viewThreads')) {
             return true;
         }
     }
@@ -84,13 +82,7 @@ class CategoryPolicy extends AbstractPolicy
     public function createThread(User $actor, Category $category)
     {
         if (
-            $actor->hasPermission([
-                'createThread',
-                'createThreadLong',
-                'createThreadVideo',
-                'createThreadImage',
-                'createThreadAudio',
-            ], false)
+            $actor->hasPermission(Thread::$allowCreateTypes, false)
             && $actor->hasPermission('category'.$category->id.'.viewThreads')
             && $actor->hasPermission('category'.$category->id.'.createThread')
         ) {
@@ -106,9 +98,8 @@ class CategoryPolicy extends AbstractPolicy
     public function replyThread(User $actor, Category $category)
     {
         if (
-            $actor->hasPermission('thread.reply')
-            && $actor->hasPermission('category'.$category->id.'.viewThreads')
-            && $actor->hasPermission('category'.$category->id.'.replyThread')
+            $actor->hasPermission('category'.$category->id.'.viewThreads')
+            && $actor->hasPermission('category'.$category->id.'.thread.reply')
         ) {
             return true;
         }

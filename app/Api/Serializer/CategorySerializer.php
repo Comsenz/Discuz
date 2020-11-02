@@ -47,7 +47,7 @@ class CategorySerializer extends AbstractSerializer
             'updated_at'        => $this->formatDate($model->updated_at),
             'canViewThreads'    => $this->actor->can('viewThreads', $model),
             'canCreateThread'   => $this->actor->can('createThread', $model),
-            'canReplyThread'    => $this->actor->can('replyThread', $model),
+            'canReplyThread'    => $this->actor->can('thread.reply', $model),
             'canEditThread'     => $this->actor->can('thread.edit', $model),
             'canHideThread'     => $this->actor->can('thread.hide', $model),
             'canEssenceThread'  => $this->actor->can('thread.essence', $model),

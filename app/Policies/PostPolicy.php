@@ -126,8 +126,11 @@ class PostPolicy extends AbstractPolicy
             return $actor->can('edit', $post->thread);
         }
 
-        // 是作者本人且拥有编辑自己主题或回复的权限 或者 是管理员
-        if (($post->user_id == $actor->id && $actor->hasPermission('editOwnThreadOrPost')) || $actor->isAdmin()) {
+        // 是作者本人且拥有编辑自己主题或回复的权限
+        if (
+            $post->user_id == $actor->id
+            && $actor->hasPermission('category'.$post->thread->category_id.'.editOwnThreadOrPost')
+        ) {
             return true;
         }
     }
@@ -144,8 +147,11 @@ class PostPolicy extends AbstractPolicy
             return $actor->can('hide', $post->thread);
         }
 
-        // 是作者本人且拥有删除自己主题或回复的权限 或者 是管理员
-        if (($post->user_id == $actor->id && $actor->hasPermission('hideOwnThreadOrPost')) || $actor->isAdmin()) {
+        // 是作者本人且拥有删除自己主题或回复的权限
+        if (
+            $post->user_id == $actor->id
+            && $actor->hasPermission('category'.$post->thread->category_id.'.hideOwnThreadOrPost')
+        ) {
             return true;
         }
     }

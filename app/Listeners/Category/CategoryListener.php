@@ -48,17 +48,25 @@ class CategoryListener
                 ],
                 [
                     'group_id' => $groupId,
+                    'permission' => "category{$category->id}.thread.viewPosts",
+                ],
+                [
+                    'group_id' => $groupId,
                     'permission' => "category{$category->id}.createThread",
                 ],
                 [
                     'group_id' => $groupId,
-                    'permission' => "category{$category->id}.replyThread",
+                    'permission' => "category{$category->id}.thread.reply",
                 ],
             ]);
         }, [
             [
                 'group_id' => Group::GUEST_ID,
                 'permission' => "category{$category->id}.viewThreads",
+            ],
+            [
+                'group_id' => Group::GUEST_ID,
+                'permission' => "category{$category->id}.thread.viewPosts",
             ],
         ]);
 

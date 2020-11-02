@@ -141,7 +141,7 @@ export default {
       let categoryPermissions = [
         `category${category.id}.viewThreads`,
         `category${category.id}.createThread`,
-        `category${category.id}.replyThread`,
+        `category${category.id}.thread.reply`,
         `category${category.id}.thread.edit`,
         `category${category.id}.thread.hide`,
         `category${category.id}.thread.essence`
@@ -174,7 +174,7 @@ export default {
       let categoryPermissions = [
         `category${category.id}.viewThreads`,
         `category${category.id}.createThread`,
-        `category${category.id}.replyThread`,
+        `category${category.id}.thread.reply`,
         `category${category.id}.thread.edit`,
         `category${category.id}.thread.hide`,
         `category${category.id}.thread.essence`

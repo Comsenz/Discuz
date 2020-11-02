@@ -314,16 +314,6 @@
         </CardRow>
       </Card>-->
       <!-- $router.history.current.query.id === '7' -->
-      <Card>
-        <CardRow description="查看站点成员列表、搜索成员的权限">
-          <el-checkbox
-            v-model="checked"
-            label="viewUserList"
-            :disabled="$router.history.current.query.id === '1'"
-            >站点会员列表</el-checkbox
-          >
-        </CardRow>
-      </Card>
 
       <Card>
         <CardRow description="作者编辑自己的主题或回复的权限">
@@ -650,7 +640,7 @@
                 checked.indexOf(`category${scope.row.id}.viewThreads`) === -1 ||
                   groupId === '7'
               "
-              :label="`category${scope.row.id}.replyThread`"
+              :label="`category${scope.row.id}.thread.reply`"
               @change="handleCheckedCategoryPermissionsChange(scope.row)"
               >{{ "" }}
             </el-checkbox>
