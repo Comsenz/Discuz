@@ -57,7 +57,7 @@
       </Card>
 
       <Card>
-        <CardRow description="允许发布语音帖">
+        <CardRow description="允许发布语音帖，需先开启腾讯云-云点播服务">
           <el-checkbox
             v-model="checked"
             label="createThreadAudio"
@@ -72,7 +72,7 @@
       </Card>
 
       <Card>
-        <CardRow description="允许发布视频帖">
+        <CardRow description="允许发布视频帖，需先开启腾讯云-云点播服务">
           <el-checkbox
             v-model="checked"
             label="createThreadVideo"
