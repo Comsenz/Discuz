@@ -98,20 +98,12 @@ export default {
           this.$message.error(res.errors[0].code);
         } else {
           this.videoDisabled = res.readdata._data.qcloud.qcloud_vod === false;
-          this.captchaDisabled =
-            res.readdata._data.qcloud.qcloud_captcha === false;
-          this.realNameDisabled =
-            res.readdata._data.qcloud.qcloud_faceid === false;
-          this.bindPhoneDisabled =
-            res.readdata._data.qcloud.qcloud_sms === false;
-          this.wechatPayment =
-            res.readdata._data.paycenter.wxpay_close === false;
-          this.canBeOnlooker =
-            res.readdata._data.set_site.site_onlooker_price > 0;
-          this.allowtobuy =
-            res.readdata._data.set_site.site_pay_group_close == "1"
-              ? true
-              : false;
+          this.captchaDisabled = res.readdata._data.qcloud.qcloud_captcha === false;
+          this.realNameDisabled = res.readdata._data.qcloud.qcloud_faceid === false;
+          this.bindPhoneDisabled = res.readdata._data.qcloud.qcloud_sms === false;
+          this.wechatPayment = res.readdata._data.paycenter.wxpay_close === false;
+          this.canBeOnlooker = res.readdata._data.set_site.site_onlooker_price > 0;
+          this.allowtobuy = res.readdata._data.set_site.site_pay_group_close;
           if (!this.allowtobuy) {
             this.value = false;
           }
@@ -154,7 +146,7 @@ export default {
       let categoryPermissions = [
         `category${category.id}.viewThreads`,
         `category${category.id}.createThread`,
-        `category${category.id}.replyThread`,
+        `category${category.id}.thread.reply`,
         `category${category.id}.thread.edit`,
         `category${category.id}.thread.hide`,
         `category${category.id}.thread.essence`
@@ -187,7 +179,7 @@ export default {
       let categoryPermissions = [
         `category${category.id}.viewThreads`,
         `category${category.id}.createThread`,
-        `category${category.id}.replyThread`,
+        `category${category.id}.thread.reply`,
         `category${category.id}.thread.edit`,
         `category${category.id}.thread.hide`,
         `category${category.id}.thread.essence`
@@ -243,7 +235,11 @@ export default {
       })
         .then(res => {
           if (res.errors) {
-            this.$message.error(res.errors[0].code);
+            if (res.errors[0].detail){
+              this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
+            } else {
+              this.$message.error(res.errors[0].code);
+            }
           } else {
             this.ispad = res.data.attributes.isPaid;
             this.purchasePrice = res.data.attributes.fee;

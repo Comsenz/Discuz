@@ -121,7 +121,7 @@ class CreateOrder
 
                 if ($thread) {
                     // 主题作者是否允许被打赏
-                    $this->assertCan($thread->user, 'canBeReward');
+                    $this->assertCan($thread->user, 'canBeReward', $thread);
 
                     $payeeId = $thread->user_id;
                     $amount = sprintf('%.2f', (float) $this->data->get('amount'));

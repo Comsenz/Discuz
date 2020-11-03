@@ -47,6 +47,10 @@ class IndexController implements RequestHandlerInterface
             if (!$isMobile && Str::startsWith($route, '/pages')) {
                 $file = Str::replaceFirst("/pages", "/pc-pages", $route) . "/index.html";
             }
+
+            if (!$isMobile && (Str::startsWith($route, '/topic/index') || Str::startsWith($route, '/topic/post'))) {
+                $file = Str::replaceFirst("/topic", "/pc-topic", $route) . "/index.html";
+            }
         }
 
         return DiscuzResponseFactory::FileResponse(

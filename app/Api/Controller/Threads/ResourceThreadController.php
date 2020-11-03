@@ -57,7 +57,6 @@ class ResourceThreadController extends AbstractResourceController
      * {@inheritdoc}
      */
     public $include = [
-        'user',
         'firstPost',
         'threadVideo',
         'threadAudio',
@@ -93,6 +92,7 @@ class ResourceThreadController extends AbstractResourceController
      * {@inheritdoc}
      */
     public $mustInclude = [
+        'user',
         'firstPost.images',
         'firstPost.attachments',
         'firstPost.postGoods',

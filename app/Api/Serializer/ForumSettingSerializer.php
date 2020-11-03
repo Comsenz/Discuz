@@ -80,6 +80,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_onlooker_price' => $this->settings->get('site_onlooker_price') ?: 0, // 默认围观值前端根据权限判断
                 'site_master_scale' => $this->settings->get('site_master_scale'), // 站长比例
                 'site_pay_group_close' => $this->settings->get('site_pay_group_close'), // 用户组购买开关
+                'site_minimum_amount' => $this->settings->get('site_minimum_amount'),
             ],
 
             // 注册设置
@@ -123,6 +124,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'qcloud_faceid' => (bool)$this->settings->get('qcloud_faceid', 'qcloud'),
                 'qcloud_sms' => (bool)$this->settings->get('qcloud_sms', 'qcloud'),
                 'qcloud_vod' => (bool)$this->settings->get('qcloud_vod', 'qcloud'),
+                'qcloud_cos_doc_preview' => (bool)$this->settings->get('qcloud_cos_doc_preview', 'qcloud'),
             ],
 
             // 提现设置
@@ -144,7 +146,6 @@ class ForumSettingSerializer extends AbstractSerializer
 
                 // 查看权限
                 'can_view_threads' => $actor->can('viewThreads'),                       // 查看主题列表
-                'can_view_user_list' => $actor->can('viewUserList'),                    // 查看用户列表
 
                 // 发布权限
                 'can_create_dialog' => $actor->can('dialog.create'),                    // 发短消息
@@ -168,7 +169,6 @@ class ForumSettingSerializer extends AbstractSerializer
 
                 // 其他
                 'initialized_pay_password' => (bool) $actor->pay_password,              // 是否初始化支付密码
-                'can_be_reward' => $actor->can('canBeReward'),                          // 是否允许被打赏
                 'can_be_asked' => $actor->can('canBeAsked'),                            // 是否允许被提问
                 'can_be_onlooker' => $this->settings->get('site_onlooker_price') > 0 && $actor->can('canBeOnlooker'),           // 是否允许被围观
                 'create_thread_with_captcha' => ! $actor->isAdmin() && $actor->can('createThreadWithCaptcha'),                  // 发布内容需要验证码

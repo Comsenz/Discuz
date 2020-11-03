@@ -63,7 +63,7 @@ class ThreadSerializer extends AbstractSerializer
             'title'             => $model->title,
             'price'             => $model->price,
             'attachmentPrice'   => $model->attachment_price,
-            'freeWords'         => (int) $model->free_words,
+            'freeWords'         => $this->percentFreeWord($model),
             'viewCount'         => (int) $model->view_count,
             'postCount'         => (int) $model->post_count,
             'paidCount'         => (int) $model->paid_count,
@@ -79,7 +79,7 @@ class ThreadSerializer extends AbstractSerializer
             'isEssence'         => (bool) $model->is_essence,
             'isSite'            => (bool) $model->is_site,
             'isAnonymous'       => (bool) $model->is_anonymous,
-            'canBeReward'       => $model->price == 0 && $model->user->can('canBeReward'),
+            'canBeReward'       => $model->price == 0 && $model->user->can('canBeReward', $model),
             'canViewPosts'      => $gate->allows('viewPosts', $model),
             'canReply'          => $gate->allows('reply', $model),
             'canApprove'        => $gate->allows('approve', $model),
@@ -111,6 +111,20 @@ class ThreadSerializer extends AbstractSerializer
         return $attributes;
     }
 
+    public function percentFreeWord($model)
+    {
+        if ($model->free_words <= 1) {
+            return $model->free_words;
+        } else {
+            $percent = $model->free_words / strlen($model->firstPost->content);
+            if ($percent > 1) {
+                return 1;
+            } else {
+                return sprintf('%.2f', $percent);
+            }
+        }
+    }
+
     /**
      * @param Thread $model
      * @param array $attributes
@@ -131,24 +145,29 @@ class ThreadSerializer extends AbstractSerializer
         /**
          * 判断是否围观过帖子
          */
-        if ($this->actor->isGuest()) {
-            // 游客身份 直接未围观
-            $attributes['onlookerState'] = false;
-        } elseif (
-            $model->user_id === $this->actor->id
-            || $model->question->be_user_id === $this->actor->id
-            || $this->actor->isAdmin()
-            || ! is_null($model->onlookerState)
-        ) {
-            // 作者 或 被提问者 或 管理员 直接已围观
+        if ($model->question->price == 0) {
+            // 免费的问答，直接可以围观
             $attributes['onlookerState'] = true;
         } else {
-            // 判断是否是免费的问答免费的围观，直接等于围观过
-            if ($model->question->price == 0 && $model->question->onlooker_unit_price == 0) {
+            if ($this->actor->isGuest()) {
+                // 游客身份 直接未围观
+                $attributes['onlookerState'] = false;
+            } elseif (
+                $model->user_id === $this->actor->id
+                || $model->question->be_user_id === $this->actor->id
+                || $this->actor->isAdmin()
+                || ! is_null($model->onlookerState)
+            ) {
+                // 作者 或 被提问者 或 管理员 直接已围观
                 $attributes['onlookerState'] = true;
             } else {
-                // 判断其它人查询订单是否围观过
-                $attributes['onlookerState'] = false;
+                // 判断是否是免费的问答免费的围观，直接等于围观过
+                if ($model->question->price == 0 && $model->question->onlooker_unit_price == 0) {
+                    $attributes['onlookerState'] = true;
+                } else {
+                    // 判断其它人查询订单是否围观过
+                    $attributes['onlookerState'] = false;
+                }
             }
         }
 

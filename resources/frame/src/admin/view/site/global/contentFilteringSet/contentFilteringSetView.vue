@@ -66,6 +66,37 @@
               </template>
             </el-table-column>
 
+
+            <el-table-column
+              prop="address"
+              label="签名处理方式">
+              <template slot-scope="scope">
+                <el-select v-model="scope.row._data.signature" placeholder="请选择" @change="selectChange(scope)">
+                  <el-option
+                    v-for="item in optionsUser"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              prop="address"
+              label="短消息处理方式">
+              <template slot-scope="scope">
+                <el-select v-model="scope.row._data.dialog" placeholder="请选择" @change="selectChange(scope)">
+                  <el-option
+                    v-for="item in optionsUser"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </template>
+            </el-table-column>
+
             <el-table-column
               prop="address"
               label="过滤词替换">

@@ -181,14 +181,14 @@ export default {
 
         for (let i = 0, len = this.tableData.length; i < len; i++) {
           const _data = this.tableData[i]._data;
-          const { ugc, username, find, replacement } = _data;
+          const { ugc, username, signature, dialog, find, replacement } = _data;
           if (replacement === '' && ugc === '{REPLACE}' && username === '{REPLACE}') {
             continue;
           }
           let item = '';
 
           if (ugc === '{REPLACE}' && username === '{REPLACE}') {
-            item = `${find}=${replacement}`
+            item = `${find}=${replacement}|`
           } else if (ugc === '{REPLACE}' && username !== '{REPLACE}') {
             item = `${find}=${replacement}|${username}`
           } else if (username === '{REPLACE}' && ugc !== '{REPLACE}') {
@@ -196,6 +196,8 @@ export default {
           } else if (username !== '{REPLACE}' && ugc !== '{REPLACE}') {
             item = `${find}=${ugc}|${username}`
           }
+          
+          item += `|${signature}|${dialog}`;
 
           words.push(item);
         }

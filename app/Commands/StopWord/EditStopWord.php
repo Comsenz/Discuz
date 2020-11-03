@@ -94,6 +94,14 @@ class EditStopWord
             $stopWord->username = $attributes['username'];
         }
 
+        if (isset($attributes['signature'])) {
+            $stopWord->signature = $attributes['signature'];
+        }
+
+        if (isset($attributes['dialog'])) {
+            $stopWord->dialog = $attributes['dialog'];
+        }
+
         if (isset($attributes['find'])) {
             $stopWord->find = $attributes['find'];
         }

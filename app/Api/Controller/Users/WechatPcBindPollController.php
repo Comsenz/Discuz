@@ -18,34 +18,15 @@
 
 namespace App\Api\Controller\Users;
 
-use App\Api\Serializer\TokenSerializer;
 use App\Models\SessionToken;
 use Discuz\Api\Controller\AbstractResourceController;
 use Exception;
-use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class WechatPcLoginController extends AbstractResourceController
+class WechatPcBindPollController extends AbstractResourceController
 {
-    public $serializer = TokenSerializer::class;
-
-    public $optionalInclude = [];
-
-    /**
-     * @var UrlGenerator
-     */
-    protected $url;
-
-    /**
-     * @param UrlGenerator $url
-     */
-    public function __construct(UrlGenerator $url)
-    {
-        $this->url = $url;
-    }
-
     /**
      * {@inheritdoc}
      * @throws Exception
@@ -56,27 +37,20 @@ class WechatPcLoginController extends AbstractResourceController
 
         $token = SessionToken::get($sessionToken);
         if (empty($token)) {
-            throw new Exception(trans('user.pc_qrcode_time_out'));
+            // 二维码已失效，扫码超时
+            throw new Exception('pc_qrcode_time_out');
         }
 
-        $build = [
-            'token_type' => '',
-            'expires_in' => '',
-            'access_token' => '',
-            'refresh_token' => '',
-            'pc_login' => false,
-            'user_id' => null,
-        ];
-
-        // data judgment payload
-        if (!is_null($token->payload)) {
-            $build = $token->payload;
-            $build += [
-                'pc_login' => true,
-                'user_id' => $token->user_id
-            ];
+        if (is_null($token->payload)) {
+            // 扫码中
+            throw new Exception('pc_qrcode_scanning_code');
         }
 
-        return (object) $build;
+        if (isset($token->payload['bind']) && $token->payload['bind']) {
+            // 绑定成功
+            return $token->payload;
+        }
+
+        throw new Exception($token->payload['code'] ?: 'error');
     }
 }

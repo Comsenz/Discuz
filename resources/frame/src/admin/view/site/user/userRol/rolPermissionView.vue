@@ -507,12 +507,13 @@
       </Card>
 
       <Card>
-        <CardRow description="允许发布语音帖">
+        <CardRow description="允许发布语音帖，需先开启腾讯云-云点播服务">
           <el-checkbox
             v-model="checked"
             label="createThreadAudio"
             :disabled="
-              $router.history.current.query.id === '1' ||
+              videoDisabled ||
+                $router.history.current.query.id === '1' ||
                 $router.history.current.query.id === '7'
             "
             >发布语音</el-checkbox
@@ -521,7 +522,7 @@
       </Card>
 
       <Card>
-        <CardRow description="允许发布视频帖">
+        <CardRow description="允许发布视频帖，需先开启腾讯云-云点播服务">
           <el-checkbox
             v-model="checked"
             label="createThreadVideo"
@@ -548,6 +549,8 @@
           >
         </CardRow>
       </Card>
+
+
 
       <Card>
         <CardRow description="允许发布商品帖">
@@ -770,16 +773,6 @@
         </CardRow>
       </Card>-->
       <!-- $router.history.current.query.id === '7' -->
-      <Card>
-        <CardRow description="查看站点成员列表、搜索成员的权限">
-          <el-checkbox
-            v-model="checked"
-            label="viewUserList"
-            :disabled="$router.history.current.query.id === '1'"
-            >站点会员列表</el-checkbox
-          >
-        </CardRow>
-      </Card>
 
       <Card>
         <CardRow description="作者编辑自己的主题或回复的权限">
@@ -1031,8 +1024,8 @@
     </div>
     <!-- 价格设置 -->
     <div v-show="activeTab.name === 'pricesetting'">
-      <Card header="允许购买：">
-        <CardRow description="允许购买" class="allow-box">
+      <Card header="允许被购买：">
+        <CardRow description="需先在全局-站点设置中开启权限购买" class="allow-box">
           <el-switch
             :disabled="
               $router.history.current.query.id === '1' ||
@@ -1130,7 +1123,7 @@
                 checked.indexOf(`category${scope.row.id}.viewThreads`) === -1 ||
                   groupId === '7'
               "
-              :label="`category${scope.row.id}.replyThread`"
+              :label="`category${scope.row.id}.thread.reply`"
               @change="handleCheckedCategoryPermissionsChange(scope.row)"
               >{{ "" }}
             </el-checkbox>

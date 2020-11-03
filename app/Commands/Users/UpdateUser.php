@@ -291,17 +291,13 @@ class UpdateUser
         }
 
         if (Arr::has($attributes, 'signature')) {
-            // 可为空
-            $signature = Arr::get($attributes, 'signature');
+            if ($signature = Arr::get($attributes, 'signature')) {
+                // 敏感词校验
+                $this->censor->checkText($signature, 'signature');
 
-            // 敏感词校验
-            $this->censor->checkText($signature);
-            if ($this->censor->isMod) {
-                throw new TranslatorException('user_signature_censor_error');
+                // 过滤内容
+                $signature = $this->specialChar->purify($signature);
             }
-
-            // 过滤内容
-            $signature = $this->specialChar->purify($signature);
 
             if (Str::of($signature)->length() > 140) {
                 throw new TranslatorException('user_signature_limit_error');

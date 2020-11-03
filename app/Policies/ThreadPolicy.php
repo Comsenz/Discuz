@@ -46,6 +46,22 @@ class ThreadPolicy extends AbstractPolicy
     protected $settings;
 
     /**
+     * 分类权限
+     *
+     * @var array
+     */
+    protected static $categoryPermissions = [
+        'reply',                // 回复帖子
+        'edit',                 // 编辑帖子
+        'hide',                 // 删除帖子
+        'essence',              // 加精帖子
+        'viewPosts',            // 查看详情
+        'editPosts',            // 编辑回复
+        'hidePosts',            // 删除回复
+        'canBeReward',          // 是否允许被打赏
+    ];
+
+    /**
      * @param Dispatcher $events
      * @param SettingsRepository $settings
      */
@@ -67,12 +83,10 @@ class ThreadPolicy extends AbstractPolicy
             return true;
         }
 
-        // 是当前分类的版主 且 拥有该权限
+        // 分类权限
         if (
-            $thread->category
-            && ! $actor->isGuest()
-            // && in_array($actor->id, explode(',', $thread->category->moderators))
-            && $actor->hasPermission('category' . $thread->category->id . '.thread.' . $ability)
+            in_array($ability, self::$categoryPermissions)
+            && $actor->hasPermission('category' . $thread->category_id . '.thread.' . $ability)
         ) {
             return true;
         }
@@ -133,8 +147,11 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function edit(User $actor, Thread $thread)
     {
-        // 是作者本人且拥有编辑自己主题或回复的权限 或者 是管理员
-        if (($thread->user_id == $actor->id && $actor->hasPermission('editOwnThreadOrPost')) || $actor->isAdmin()) {
+        // 是作者本人且拥有编辑自己主题或回复的权限
+        if (
+             $thread->user_id == $actor->id
+             && $actor->hasPermission('category'.$thread->category_id.'.editOwnThreadOrPost')
+        ) {
             return true;
         }
     }
@@ -146,9 +163,24 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function hide(User $actor, Thread $thread)
     {
-        // 是作者本人且拥有删除自己主题或回复的权限 或者 是管理员
-        if (($thread->user_id == $actor->id && $actor->hasPermission('hideOwnThreadOrPost')) || $actor->isAdmin()) {
+        // 是作者本人且拥有删除自己主题或回复的权限
+        if (
+            $thread->user_id == $actor->id
+            && $actor->hasPermission('category'.$thread->category_id.'.hideOwnThreadOrPost')
+        ) {
             return true;
+        }
+    }
+
+    /**
+     * @param User $actor
+     * @param Thread $thread
+     * @return bool
+     */
+    public function reply(User $actor, Thread $thread)
+    {
+        if (! $actor->hasPermission('category'.$thread->category_id.'.viewThreads')) {
+            return false;
         }
     }
 }

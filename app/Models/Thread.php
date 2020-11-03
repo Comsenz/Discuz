@@ -64,6 +64,7 @@ use Illuminate\Support\Stringable;
  * @property bool $is_essence
  * @property bool $is_site
  * @property bool $is_anonymous
+ * @property bool $is_display
  * @property Post $firstPost
  * @property Collection $topic
  * @property Collection $orders
@@ -106,15 +107,31 @@ class Thread extends Model
     const CONTENT_LENGTH = 80;
 
     /**
+     * 允许发布的帖子类型：type => permission
+     *
+     * @var string[]
+     */
+    public static $allowCreateTypes = [
+        self::TYPE_OF_TEXT => 'createThread',
+        self::TYPE_OF_LONG => 'createThreadLong',
+        self::TYPE_OF_VIDEO => 'createThreadVideo',
+        self::TYPE_OF_IMAGE => 'createThreadImage',
+        self::TYPE_OF_AUDIO => 'createThreadAudio',
+        self::TYPE_OF_QUESTION => 'createThreadQuestion',
+        self::TYPE_OF_GOODS => 'createThreadGoods',
+    ];
+
+    /**
      * {@inheritdoc}
      */
     protected $casts = [
         'type' => 'integer',
         'price' => 'decimal:2',
-        'free_words' => 'integer',
+        'free_words' => 'float',
         'is_sticky' => 'boolean',
         'is_essence' => 'boolean',
         'is_anonymous' => 'boolean',
+        'is_display' => 'boolean',
     ];
 
     /**

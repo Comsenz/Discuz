@@ -140,17 +140,21 @@ class Bind
             return $query->where('unionid', $unionid);
         })->orWhere('min_openid', $openid)->first();
 
-        // 非无感模式 且 非小程序抽屉授权登陆时，用户、微信已经存在绑定关系，抛出异常
-        if ($this->settings->get('register_type') != 2 && (!$isMiniProgramLogin || !$user->isGuest())) {
-            if (!is_null($user->wechat) || ($wechatUser && $wechatUser->user_id && $wechatUser->min_openid)) {
-                throw new Exception('account_has_been_bound');
-            }
-        }
-
         // 换绑时删除原双向关系（微信绑定的用户.登陆用户绑定微信）
         if ($rebind) {
             $wechatUser && $wechatUser->delete();
             $user->wechat && $user->wechat->delete();
+        } else {
+            // 非无感模式 且 非小程序抽屉授权登陆时，用户、微信已经存在绑定关系，抛出异常
+            if ($this->settings->get('register_type') != 2 && (!$isMiniProgramLogin || !$user->isGuest())) {
+                if (
+                    (!is_null($user->wechat) && $user->wechat->min_openid) ||
+                    ($wechatUser && $wechatUser->user_id && $user->id != $wechatUser->user_id) ||
+                    ($wechatUser && $wechatUser->user_id && $wechatUser->min_openid)
+                ) {
+                    throw new Exception('account_has_been_bound');
+                }
+            }
         }
 
         if (!$wechatUser || !$wechatUser->exists) {

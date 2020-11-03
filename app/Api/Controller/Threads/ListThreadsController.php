@@ -51,7 +51,6 @@ class ListThreadsController extends AbstractListController
      * {@inheritdoc}
      */
     public $include = [
-        'user',
         'firstPost',
         'threadVideo',
         'threadAudio',
@@ -81,6 +80,7 @@ class ListThreadsController extends AbstractListController
     ];
 
     public $mustInclude = [
+        'user',
         'favoriteState',
         'firstPost.likeState',
         'question',
@@ -516,6 +516,15 @@ class ListThreadsController extends AbstractListController
                 $query->where('threads.is_site', true);
             } elseif ($isSite == 'no') {
                 $query->where('threads.is_site', false);
+            }
+        }
+
+        // 不展示筛选，默认不传筛选显示的帖子
+        if ($isDisplay = Arr::get($filter, 'isDisplay')) {
+            if ($isDisplay == 'yes') {
+                $query->where('threads.is_display', true);
+            } elseif ($isDisplay == 'no') {
+                $query->where('threads.is_display', false);
             }
         }
 

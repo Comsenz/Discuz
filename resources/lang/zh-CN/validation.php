@@ -220,6 +220,7 @@ return [
         'sms_type'  => '验证码类型',
 
         // user
+        'signature'                 => '签名',
         'pay_password'              => '支付密码',
         'pay_password_confirmation' => '支付密码',
         'groupId'                   => '用户组',
@@ -238,6 +239,7 @@ return [
         'template_id' => '模板ID',
 
         // 会话 会话消息
+        'dialog'        => '短消息',
         'dialog_id'     => '会话',
         'message_text'  => '消息内容',
         'attachment_id' => '附件',

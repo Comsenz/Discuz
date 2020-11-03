@@ -87,14 +87,10 @@ class UpdateGroup
 
         if (Arr::has($this->data, 'attributes.is_paid')) {
             $group->is_paid = (int) Arr::get($this->data, 'attributes.is_paid');
-        }
-
-        if ($group->is_paid) {
-            $group->fee = (float) Arr::get($this->data, 'attributes.fee');
-        }
-
-        if ($group->is_paid) {
-            $group->days = Arr::get($this->data, 'attributes.days');
+            if ($group->is_paid) {
+                $group->fee = (float) Arr::get($this->data, 'attributes.fee');
+                $group->days = Arr::get($this->data, 'attributes.days');
+            }
         }
 
         if (Arr::has($this->data, 'attributes.scale')) {
