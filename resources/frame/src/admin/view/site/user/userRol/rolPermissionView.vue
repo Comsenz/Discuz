@@ -543,7 +543,7 @@
     <!-- 价格设置 -->
     <div v-show="activeTab.name === 'pricesetting'">
       <Card header="允许被购买：">
-        <CardRow description="允许被购买" class="allow-box">
+        <CardRow description="需先在全局-站点设置中开启权限购买" class="allow-box">
           <el-switch
             :disabled="
               $router.history.current.query.id === '1' ||
