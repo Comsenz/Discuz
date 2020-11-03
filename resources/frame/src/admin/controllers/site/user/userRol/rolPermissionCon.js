@@ -20,13 +20,18 @@ export default {
       wechatPayment: false, // 是否开启微信支付
       canBeOnlooker: false, // 是否可以设置围观
       categoriesList: [], // 分类列表
+      selectCreateThread: [],
       activeTab: {
         // 设置权限当前项
-        title: "内容发布权限",
-        name: "publish"
+        title: "操作权限",
+        name: "userOperate"
       },
       menuData: [
         // 设置权限
+        {
+          title: "操作权限",
+          name: "userOperate"
+        },
         {
           title: "内容发布权限",
           name: "publish"
