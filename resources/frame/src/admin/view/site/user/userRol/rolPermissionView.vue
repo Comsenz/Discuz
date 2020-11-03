@@ -27,14 +27,6 @@
               "
               >发布文字</el-checkbox
             >
-            <el-select v-model="selectCreateThread" multiple collapse-tags placeholder="请选择">
-              <el-option
-                v-for="item in categoriesList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </el-select>
           </CardRow>
         </Card>
         <Card>
@@ -48,14 +40,6 @@
               "
               >发布帖子</el-checkbox
             >
-            <el-select v-model="selectCreateThread" multiple collapse-tags placeholder="请选择">
-              <el-option
-                v-for="item in categoriesList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </el-select>
           </CardRow>
         </Card>
         <Card>
@@ -178,6 +162,14 @@
               >回复主题</el-checkbox
             >
           </CardRow>
+          <el-select v-model="selectCreateThread" multiple collapse-tags placeholder="请选择">
+            <el-option
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
         </Card>
         <Card>
           <CardRow description="发布主题时上传附件的权限">
@@ -232,8 +224,243 @@
               >允许被打赏</el-checkbox
             >
           </CardRow>
+          <el-select v-model="selectCreateThread" multiple collapse-tags placeholder="请选择">
+            <el-option
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
         </Card>
       </div>
+      <div class="user-operate">
+        <Card header="查看权限"></Card>
+        <Card>
+          <CardRow description="查看主题列表页的权限">
+            <el-checkbox
+              v-model="checked"
+              label="viewThreads"
+              :disabled="$router.history.current.query.id === '1'"
+              >查看主题列表</el-checkbox
+            >
+          </CardRow>
+           <el-select v-model="selectCreateThread" multiple collapse-tags placeholder="请选择">
+              <el-option
+                v-for="item in categoriesList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+        </Card>
+        <Card>
+          <CardRow description="查看主题的详情页的权限">
+            <el-checkbox
+              v-model="checked"
+              label="thread.viewPosts"
+              :disabled="$router.history.current.query.id === '1'"
+              >查看主题详情</el-checkbox
+            >
+          </CardRow>
+          <el-select v-model="selectCreateThread" multiple collapse-tags placeholder="请选择">
+              <el-option
+                v-for="item in categoriesList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+        </Card>
+        <Card>
+          <CardRow description="查看站点成员列表、搜索成员的权限">
+            <el-checkbox
+              v-model="checked"
+              label="viewUserList"
+              :disabled="$router.history.current.query.id === '1'"
+              >站点会员列表</el-checkbox
+            >
+          </CardRow>
+        </Card>
+        <Card>
+          <CardRow description="作者编辑自己的主题或回复的权限">
+            <el-checkbox
+              v-model="checked"
+              label="editOwnThreadOrPost"
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >编辑自己的主题或回复</el-checkbox
+            >
+          </CardRow>
+          <el-select v-model="selectCreateThread" multiple collapse-tags placeholder="请选择">
+            <el-option
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </Card>
+        <Card>
+          <CardRow description="作者删除自己的主题或回复的权限">
+            <el-checkbox
+              v-model="checked"
+              label="hideOwnThreadOrPost"
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >删除自己的主题或回复</el-checkbox
+            >
+          </CardRow>
+          <el-select v-model="selectCreateThread" multiple collapse-tags placeholder="请选择">
+            <el-option
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+        </el-select>
+        </Card>
+      </div>
+      <div class="user-operate">
+        <Card header="管理权限"></Card>
+        <Card>
+          <CardRow description="前台删除单个主题的权限">
+            <el-checkbox
+              v-model="checked"
+              label="thread.hide"
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >删主题</el-checkbox
+            >
+          </CardRow>
+        </Card>
+        <Card>
+          <CardRow description="前台删除单个回复的权限">
+            <el-checkbox
+              v-model="checked"
+              label="thread.hidePosts"
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >删回复</el-checkbox
+            >
+          </CardRow>
+          <el-select v-model="selectCreateThread" multiple collapse-tags placeholder="请选择">
+            <el-option
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+         </el-select>
+        </Card>
+        <Card>
+          <CardRow description="前台置顶、取消置顶主题的权限">
+            <el-checkbox
+              v-model="checked"
+              label="thread.sticky"
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >置顶</el-checkbox
+            >
+          </CardRow>
+        </Card>
+        <Card>
+          <CardRow description="前台精华、取消精华主题的权限">
+            <el-checkbox
+              v-model="checked"
+              label="thread.essence"
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >加精</el-checkbox
+            >
+          </CardRow>
+          <el-select v-model="selectCreateThread" multiple collapse-tags placeholder="请选择">
+            <el-option
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </Card>
+        <Card>
+          <CardRow description="前台单个主题的编辑权限">
+            <el-checkbox
+              v-model="checked"
+              label="thread.editPosts"
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >编辑</el-checkbox
+            >
+          </CardRow>
+        </Card>
+        <Card>
+          <CardRow description="前台批量管理主题的权限">
+            <el-checkbox
+              v-model="checked"
+              label="thread.batchEdit"
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >批量管理主题</el-checkbox
+            >
+          </CardRow>
+        </Card>
+        <Card>
+          <CardRow description="前台按用户组邀请成员的权限">
+            <el-checkbox
+              v-model="checked"
+              label="createInvite"
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >管理-邀请加入</el-checkbox
+            >
+          </CardRow>
+        </Card>
+        <Card>
+          <CardRow description="前台更改成员所属用户组的权限">
+            <el-checkbox
+              v-model="checked"
+              label="user.edit.group"
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >编辑用户组</el-checkbox
+            >
+          </CardRow>
+        </Card>
+        <Card>
+          <CardRow description="前台更改成员禁用状态的权限">
+            <el-checkbox
+              v-model="checked"
+              label="user.edit.status"
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >编辑用户状态</el-checkbox
+            >
+          </CardRow>
+        </Card>
+     </div> 
     </div>
     <!-- 内容发布权限 -->
     <div v-show="activeTab.name === 'publish'">
@@ -392,6 +619,14 @@
             >回复主题</el-checkbox
           >
         </CardRow>
+        <el-select v-model="selectCreateThread" multiple collapse-tags placeholder="请选择">
+          <el-option
+            v-for="item in categoriesList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
       </Card>
 
       <Card>
@@ -558,6 +793,14 @@
             >编辑自己的主题或回复</el-checkbox
           >
         </CardRow>
+        <el-select v-model="selectCreateThread" multiple collapse-tags placeholder="请选择">
+          <el-option
+            v-for="item in categoriesList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
       </Card>
 
       <Card>
@@ -588,6 +831,14 @@
             >删主题</el-checkbox
           >
         </CardRow>
+        <el-select v-model="selectCreateThread" multiple collapse-tags placeholder="请选择">
+          <el-option
+            v-for="item in categoriesList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
       </Card>
 
       <Card>
@@ -602,6 +853,14 @@
             >删回复</el-checkbox
           >
         </CardRow>
+        <el-select v-model="selectCreateThread" multiple collapse-tags placeholder="请选择">
+          <el-option
+            v-for="item in categoriesList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
       </Card>
 
       <Card>
