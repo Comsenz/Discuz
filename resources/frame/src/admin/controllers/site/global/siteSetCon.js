@@ -40,14 +40,14 @@ export default {
           imgWidht: 0,
           imgHeight: 0,
           text: "站点LOGO",
-          textrule: "推荐高度：88px"
+          textrule: "尺寸：438px*88px"
         },
         {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
           text: "首页头部LOGO",
-          textrule: "推荐高度：88px"
+          textrule: "尺寸：438px*88px"
         },
         {
           imageUrl: "",
