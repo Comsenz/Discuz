@@ -37,7 +37,7 @@ export default {
             },
             {
               id: 1,
-              title: "注册设置",
+              title: "注册与登录设置",
               name: "signUpSet",
               icon: "iconzhuceshezhi"
             },

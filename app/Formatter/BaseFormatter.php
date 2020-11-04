@@ -53,6 +53,7 @@ class BaseFormatter
     protected $app;
 
     protected $allowHtmlElements = [
+        'audio' => ['src', 'controls', 'width', 'height', 'loop'],
         'video' => ['src', 'controls', 'width', 'height'],
         'span' => ['class'],
         'blockquote' => ['class']

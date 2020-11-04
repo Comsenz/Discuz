@@ -95,6 +95,7 @@ class Censor
      * @return string
      * @throws GuzzleException
      * @throws InvalidConfigException
+     * @throws CensorNotPassedException
      */
     public function checkText($content, $type = 'ugc')
     {
@@ -120,6 +121,10 @@ class Censor
             }
         } elseif ($this->setting->get('miniprogram_close', 'wx_miniprogram', false)) {
             $content = $this->miniProgramCheck($content);
+        }
+
+        if ($this->isMod && ($type == 'signature' || $type == 'dialog')) {
+            throw new CensorNotPassedException('content_banned');
         }
 
         // Delete repeated words
