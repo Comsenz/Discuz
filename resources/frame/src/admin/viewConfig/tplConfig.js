@@ -47,7 +47,7 @@ export default {
               require(["../view/site/global/signUpSetView"], resolve);
             },
             metaInfo: {
-              title: "注册设置",
+              title: "注册与登录设置",
               name: "signUpSet",
               attribution: "全局"
             }
