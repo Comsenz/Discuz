@@ -20,7 +20,30 @@ export default {
       wechatPayment: false, // 是否开启微信支付
       canBeOnlooker: false, // 是否可以设置围观
       categoriesList: [], // 分类列表
-      selectCreateThread: [],
+      selectList:{
+        editOwnThreadOrPost: this.categoriesList,
+        hideOwnThreadOrPost: this.categoriesList,
+        thread:{
+          reply:this.categoriesList
+        },
+        canBeReward: this.categoriesList,
+        viewThreads: this.categoriesList,
+        thread:{
+          viewPosts:this.categoriesList
+        },
+        thread:{
+          essence:this.categoriesList
+        },
+        thread:{
+          hidePosts:this.categoriesList
+        },
+        thread:{
+          edit:this.categoriesList
+        },
+        thread:{
+          editPosts:this.categoriesList
+        },
+      },
       activeTab: {
         // 设置权限当前项
         title: "操作权限",
@@ -54,7 +77,8 @@ export default {
       dyedate: "",
       ispad: "",
       allowtobuy: "",
-      defaultuser: false
+      defaultuser: false,
+
     };
   },
   methods: {
@@ -116,38 +140,6 @@ export default {
           });
         }
       });
-    },
-
-    /**
-     * 全选与取消全选
-     *
-     * @param category
-     */
-    handleCheckAllChange(category) {
-      let categoryPermissions = [
-        `category${category.id}.viewThreads`,
-        `category${category.id}.createThread`,
-        `category${category.id}.thread.reply`,
-        `category${category.id}.thread.edit`,
-        `category${category.id}.thread.hide`,
-        `category${category.id}.thread.essence`
-      ];
-
-      categoryPermissions.forEach(item => {
-        let index = this.checked.indexOf(item);
-
-        if (category.checkAll) {
-          if (index === -1) {
-            this.checked.push(item);
-          }
-        } else {
-          if (index !== -1) {
-            this.checked.splice(index, 1);
-          }
-        }
-      });
-
-      category.isIndeterminate = false;
     },
 
     submitClick() {
