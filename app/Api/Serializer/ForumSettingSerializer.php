@@ -19,6 +19,7 @@
 namespace App\Api\Serializer;
 
 use App\Models\Category;
+use App\Models\Thread;
 use App\Models\User;
 use App\Settings\ForumSettingField;
 use Discuz\Api\Serializer\AbstractSerializer;
@@ -144,21 +145,22 @@ class ForumSettingSerializer extends AbstractSerializer
                 'can_edit_user_group' => $actor->can('user.edit.group'),                // 修改用户用户组
                 'can_edit_user_status' => $actor->can('user.edit.status'),              // 修改用户状态
 
-                // 查看权限
-                'can_view_threads' => $actor->can('viewThreads'),                       // 查看主题列表
+                // 至少在一个分类下有查看权限 或 有全局查看权限
+                'can_view_threads' => Category::getIdsWhereCan($actor, 'viewThreads')
+                                            || $actor->can('viewThreads'),              // 查看主题列表
 
                 // 发布权限
-                'can_create_dialog' => $actor->can('dialog.create'),                    // 发短消息
-                'can_create_invite' => $actor->can('createInvite'),                     // 发邀请
-                'can_invite_user_scale' => $actor->can('other.canInviteUserScale'),     // 发分成邀请
-                'can_create_thread_paid' => $actor->can('createThreadPaid'),            // 发付费内容
-                'can_create_thread' => $actor->can('createThread'),                     // 发布文字
-                'can_create_thread_long' => $actor->can('createThreadLong'),            // 发布长文
-                'can_create_thread_video' => $actor->can('createThreadVideo'),          // 发布视频
-                'can_create_thread_image' => $actor->can('createThreadImage'),          // 发布图片
-                'can_create_thread_audio' => $actor->can('createThreadAudio'),          // 发布语音
-                'can_create_thread_goods' => $actor->can('createThreadGoods'),          // 发布商品
-                'can_create_thread_question' => $actor->can('createThreadQuestion'),    // 发布问答
+                'can_create_dialog' => $actor->can('dialog.create'),                                        // 发短消息
+                'can_create_invite' => $actor->can('createInvite'),                                         // 发邀请
+                'can_invite_user_scale' => $actor->can('other.canInviteUserScale'),                         // 发分成邀请
+                'can_create_thread_paid' => $actor->can('createThreadPaid'),                                // 发付费内容
+                'can_create_thread' => $actor->can('createThread.' . Thread::TYPE_OF_TEXT),                 // 发布文字
+                'can_create_thread_long' => $actor->can('createThread.' . Thread::TYPE_OF_LONG),            // 发布长文
+                'can_create_thread_video' => $actor->can('createThread.' . Thread::TYPE_OF_VIDEO),          // 发布视频
+                'can_create_thread_image' => $actor->can('createThread.' . Thread::TYPE_OF_IMAGE),          // 发布图片
+                'can_create_thread_audio' => $actor->can('createThread.' . Thread::TYPE_OF_AUDIO),          // 发布语音
+                'can_create_thread_question' => $actor->can('createThread.' . Thread::TYPE_OF_QUESTION),    // 发布问答
+                'can_create_thread_goods' => $actor->can('createThread.' . Thread::TYPE_OF_GOODS),          // 发布商品
 
                 // 至少在一个分类下有发布权限
                 'can_create_thread_in_category' => (bool) Category::getIdsWhereCan($actor, 'createThread'),

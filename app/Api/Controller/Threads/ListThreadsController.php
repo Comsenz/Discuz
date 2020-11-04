@@ -19,6 +19,7 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\PostUser;
@@ -150,10 +151,14 @@ class ListThreadsController extends AbstractListController
     {
         $actor = $request->getAttribute('actor');
 
-        // 获取推荐到站点信息页数据时 不检查权限
         $filter = $this->extractFilter($request);
+
+        // 获取推荐到站点信息页数据时 不检查权限
         if (Arr::get($filter, 'isSite', '') !== 'yes') {
-            $this->assertCan($actor, 'viewThreads');
+            // 没有任何一个分类的查看权限时，判断是否有在全局权限
+            if (Category::getIdsWhereCannot($actor, 'viewThreads')) {
+                $this->assertCan($actor, 'viewThreads');
+            }
         }
 
         $sort = $this->extractSort($request);

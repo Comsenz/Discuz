@@ -66,7 +66,7 @@ class UserValidator extends AbstractValidator
         ],
         [
             'name' => '符号',
-            'pattern' => '/[^a-zA-z0-9]+/',
+            'pattern' => '/[^a-zA-Z0-9]+/',
         ],
         [
             'name' => '大写字母',

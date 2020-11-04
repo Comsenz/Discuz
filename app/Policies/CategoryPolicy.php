@@ -19,7 +19,6 @@
 namespace App\Policies;
 
 use App\Models\Category;
-use App\Models\Thread;
 use App\Models\User;
 use Discuz\Foundation\AbstractPolicy;
 use Illuminate\Database\Eloquent\Builder;
@@ -39,16 +38,11 @@ class CategoryPolicy extends AbstractPolicy
      */
     public function can(User $actor, $ability, Category $category)
     {
-        if ($actor->hasPermission('category.' . $ability)) {
-            return true;
-        }
+        $permission = in_array($ability, Category::$categoryPermissions)
+            ? 'category' . $category->id . '.' . $ability   // 分类下设置的其他权限
+            : 'category.' . $ability;                       // 对分类的操作权限
 
-        if (
-            $category->exists
-            && ! $actor->isGuest()
-            // && in_array($actor->id, explode(',', $category->moderators))
-            && $actor->hasPermission('category' . $category->id . '.' . $ability)
-        ) {
+        if ($actor->hasPermission($permission)) {
             return true;
         }
     }
@@ -67,41 +61,10 @@ class CategoryPolicy extends AbstractPolicy
      * @param Category $category
      * @return bool|null
      */
-    public function viewThreads(User $actor, Category $category)
-    {
-        if ($actor->hasPermission('category'.$category->id.'.viewThreads')) {
-            return true;
-        }
-    }
-
-    /**
-     * @param User $actor
-     * @param Category $category
-     * @return bool|null
-     */
     public function createThread(User $actor, Category $category)
     {
-        if (
-            $actor->hasPermission(Thread::$allowCreateTypes, false)
-            && $actor->hasPermission('category'.$category->id.'.viewThreads')
-            && $actor->hasPermission('category'.$category->id.'.createThread')
-        ) {
-            return true;
-        }
-    }
-
-    /**
-     * @param User $actor
-     * @param Category $category
-     * @return bool|null
-     */
-    public function replyThread(User $actor, Category $category)
-    {
-        if (
-            $actor->hasPermission('category'.$category->id.'.viewThreads')
-            && $actor->hasPermission('category'.$category->id.'.thread.reply')
-        ) {
-            return true;
+        if (! $actor->hasPermission('category'.$category->id.'.viewThreads')) {
+            return false;
         }
     }
 }

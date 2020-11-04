@@ -17,6 +17,7 @@
  */
 
 use App\Models\Permission;
+use App\Models\Thread;
 use Illuminate\Database\Seeder;
 
 class PermissionTableSeeder extends Seeder
@@ -52,13 +53,13 @@ class PermissionTableSeeder extends Seeder
         'category1.thread.hidePosts' => [],     // 删除回复
 
         // 主题
-        'createThread' => [10],                 // 发布文字
-        'createThreadLong' => [10],             // 发布帖子
-        'createThreadImage' => [],              // 发布图片
-        'createThreadVideo' => [],              // 发布视频
-        'createThreadAudio' => [],              // 发布语音
-        'createThreadQuestion' => [10],         // 发布问答
-        'createThreadGoods' => [10],            // 发布商品
+        'createThread.' . Thread::TYPE_OF_TEXT => [10],             // 发布文字
+        'createThread.' . Thread::TYPE_OF_LONG => [10],             // 发布帖子
+        'createThread.' . Thread::TYPE_OF_VIDEO => [],              // 发布图片
+        'createThread.' . Thread::TYPE_OF_IMAGE => [],              // 发布视频
+        'createThread.' . Thread::TYPE_OF_AUDIO => [],              // 发布语音
+        'createThread.' . Thread::TYPE_OF_QUESTION => [10],         // 发布问答
+        'createThread.' . Thread::TYPE_OF_GOODS => [10],            // 发布商品
         'thread.rename' => [],                  // 修改主题标题
         'thread.favorite' => [10],              // 收藏主题
         'createThreadWithCaptcha' => [],        // 发布主题验证验证码
