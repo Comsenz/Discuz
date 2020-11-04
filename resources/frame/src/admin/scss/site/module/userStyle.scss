@@ -247,9 +247,6 @@
     }
   }
   .user-operate {
-    .card-row-box {
-      width: 40%;
-    }
     .card-row-lf{
       width: 100%;
     }
@@ -260,9 +257,14 @@
     .card-box__main {
       position: relative;
     }
+  }
+  .hasSelect{
+    .card-row-box {
+      width: 45%;
+    }
     .el-select{
       position: absolute;
-      left: 40%;
+      left: 45%;
       top: 0;
       width: 340PX;
     }

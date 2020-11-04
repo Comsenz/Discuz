@@ -33,22 +33,6 @@ export default {
           name: "userOperate"
         },
         {
-          title: "内容发布权限",
-          name: "publish"
-        },
-        {
-          title: "内容分类权限",
-          name: "category"
-        },
-        {
-          title: "前台操作权限",
-          name: "operate"
-        },
-        {
-          title: "前台管理权限",
-          name: "manage"
-        },
-        {
           title: "安全设置",
           name: "security"
         },
@@ -128,9 +112,6 @@ export default {
               id: item._data.id,
               name: item._data.name
             };
-
-            this.handleCheckedCategoryPermissionsChange(category);
-
             this.categoriesList.push(category);
           });
         }
@@ -167,33 +148,6 @@ export default {
       });
 
       category.isIndeterminate = false;
-    },
-
-    /**
-     * 分类权限选中状态改变
-     *
-     * @param category
-     */
-    handleCheckedCategoryPermissionsChange(category) {
-      let checkedCount = 0;
-      let categoryPermissions = [
-        `category${category.id}.viewThreads`,
-        `category${category.id}.createThread`,
-        `category${category.id}.thread.reply`,
-        `category${category.id}.thread.edit`,
-        `category${category.id}.thread.hide`,
-        `category${category.id}.thread.essence`
-      ];
-
-      this.checked.forEach(item => {
-        if (categoryPermissions.indexOf(item) !== -1) {
-          checkedCount++;
-        }
-      });
-
-      category.checkAll = checkedCount === categoryPermissions.length;
-      category.isIndeterminate =
-        checkedCount > 0 && checkedCount < categoryPermissions.length;
     },
 
     submitClick() {
@@ -277,7 +231,6 @@ export default {
           }
         });
       }
-      console.log(checked, "参数~~~~~~~~~~~~~~");
       this.appFetch({
         url: "groupPermission",
         method: "post",
@@ -356,8 +309,8 @@ export default {
   },
   created() {
     this.groupId = this.$route.query.id;
-    this.activeTab.title = this.$route.query.title || "内容发布权限";
-    this.activeTab.name = this.$route.query.names || "publish";
+    this.activeTab.title = this.$route.query.title || "操作权限";
+    this.activeTab.name = this.$route.query.names || "userOperate";
     this.getGroupResource();
     this.signUpSet();
   },
