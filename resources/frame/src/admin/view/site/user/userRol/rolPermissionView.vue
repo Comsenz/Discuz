@@ -175,8 +175,13 @@
               >回复主题</el-checkbox
             >
           </CardRow>
-          <el-select v-model="selectList.thread.reply" multiple collapse-tags placeholder="请选择">
+          <el-select 
+            v-model="selectList['thread.reply']" 
+            multiple 
+            collapse-tags placeholder="请选择" 
+          >
             <el-option
+              @click.native="changeCategory('thread.reply',item.id)"
               v-for="item in categoriesList"
               :key="item.id"
               :label="item.name"
@@ -237,8 +242,14 @@
               >允许被打赏</el-checkbox
             >
           </CardRow>
-          <el-select v-model="selectList.canBeReward" multiple collapse-tags placeholder="请选择">
+          <el-select 
+            v-model="selectList.canBeReward" 
+            multiple 
+            collapse-tags 
+            placeholder="请选择" 
+          >
             <el-option
+              @click.native="changeCategory('canBeReward',item.id)"
               v-for="item in categoriesList"
               :key="item.id"
               :label="item.name"
@@ -258,8 +269,14 @@
               >查看主题列表</el-checkbox
             >
           </CardRow>
-           <el-select v-model="selectList.viewThreads" multiple collapse-tags placeholder="请选择">
+           <el-select 
+             v-model="selectList.viewThreads" 
+             multiple 
+             collapse-tags 
+             placeholder="请选择" 
+            >
               <el-option
+               @click.native="changeCategory('viewThreads',item.id)"
                 v-for="item in categoriesList"
                 :key="item.id"
                 :label="item.name"
@@ -276,8 +293,14 @@
               >查看主题详情</el-checkbox
             >
           </CardRow>
-          <el-select v-model="selectList.thread.viewPosts" multiple collapse-tags placeholder="请选择">
+          <el-select 
+            v-model="selectList['thread.viewPosts']" 
+            multiple 
+            collapse-tags 
+            placeholder="请选择" 
+           >
               <el-option
+                @click.native="changeCategory('thread.viewPosts',item.id)"
                 v-for="item in categoriesList"
                 :key="item.id"
                 :label="item.name"
@@ -313,8 +336,14 @@
               >加精</el-checkbox
             >
           </CardRow>
-          <el-select v-model="selectList.thread.essence" multiple collapse-tags placeholder="请选择">
+          <el-select 
+            v-model="selectList['thread.essence']" 
+            multiple 
+            collapse-tags 
+            placeholder="请选择" 
+          >
             <el-option
+              @click.native="changeCategory('thread.essence',item.id)"
               v-for="item in categoriesList"
               :key="item.id"
               :label="item.name"
@@ -347,8 +376,14 @@
               >删回复</el-checkbox
             >
           </CardRow>
-          <el-select v-model="selectList.thread.hidePosts" multiple collapse-tags placeholder="请选择">
+          <el-select 
+            v-model="selectList['thread.hidePosts']" 
+            multiple 
+            collapse-tags 
+            placeholder="请选择" 
+          >
             <el-option
+              @click.native="changeCategory('thread.hidePosts',item.id)"
               v-for="item in categoriesList"
               :key="item.id"
               :label="item.name"
@@ -368,8 +403,14 @@
               >编辑主题</el-checkbox
             >
           </CardRow>
-          <el-select v-model="selectList.thread.edit" multiple collapse-tags placeholder="请选择">
+          <el-select 
+            v-model="selectList['thread.edit']" 
+            multiple 
+            collapse-tags 
+            placeholder="请选择" 
+          >
             <el-option
+              @click.native="changeCategory('thread.edit',item.id)"
               v-for="item in categoriesList"
               :key="item.id"
               :label="item.name"
@@ -389,8 +430,14 @@
               >编辑回复</el-checkbox
             >
           </CardRow>
-          <el-select v-model="selectList.thread.editPosts" multiple collapse-tags placeholder="请选择">
+          <el-select 
+            v-model="selectList['thread.editPosts']" 
+            multiple 
+            collapse-tags 
+            placeholder="请选择" 
+          >
             <el-option
+              @click.native="changeCategory('thread.editPosts',item.id)"
               v-for="item in categoriesList"
               :key="item.id"
               :label="item.name"
@@ -410,8 +457,14 @@
               >编辑自己的主题或回复</el-checkbox
             >
           </CardRow>
-          <el-select v-model="selectList.editOwnThreadOrPost" multiple collapse-tags placeholder="请选择">
+          <el-select 
+            v-model="selectList.editOwnThreadOrPost" 
+            multiple 
+            collapse-tags 
+            placeholder="请选择" 
+          > 
             <el-option
+              @click.native="changeCategory('editOwnThreadOrPost',item.id)"
               v-for="item in categoriesList"
               :key="item.id"
               :label="item.name"
@@ -431,8 +484,14 @@
               >删除自己的主题或回复</el-checkbox
             >
           </CardRow>
-          <el-select v-model="selectList.hideOwnThreadOrPost" multiple collapse-tags placeholder="请选择">
+          <el-select 
+            v-model="selectList.hideOwnThreadOrPost" 
+            multiple 
+            collapse-tags 
+            placeholder="请选择"  
+          >
             <el-option
+              @click.native="changeCategory('hideOwnThreadOrPost',item.id)"
               v-for="item in categoriesList"
               :key="item.id"
               :label="item.name"

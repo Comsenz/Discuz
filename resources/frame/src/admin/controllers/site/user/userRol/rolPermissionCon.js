@@ -21,28 +21,16 @@ export default {
       canBeOnlooker: false, // 是否可以设置围观
       categoriesList: [], // 分类列表
       selectList:{
-        editOwnThreadOrPost: this.categoriesList,
-        hideOwnThreadOrPost: this.categoriesList,
-        thread:{
-          reply:this.categoriesList
-        },
-        canBeReward: this.categoriesList,
-        viewThreads: this.categoriesList,
-        thread:{
-          viewPosts:this.categoriesList
-        },
-        thread:{
-          essence:this.categoriesList
-        },
-        thread:{
-          hidePosts:this.categoriesList
-        },
-        thread:{
-          edit:this.categoriesList
-        },
-        thread:{
-          editPosts:this.categoriesList
-        },
+        editOwnThreadOrPost: [],
+        hideOwnThreadOrPost: [],
+        canBeReward: [],
+        viewThreads: [],
+        'thread.reply':[],
+        'thread.viewPosts':[],
+        'thread.hidePosts':[],
+        'thread.essence':[],
+        'thread.edit':[],
+        'thread.editPosts':[],
       },
       activeTab: {
         // 设置权限当前项
@@ -198,14 +186,16 @@ export default {
             this.defaultuser = res.data.attributes.default;
             if (res.data.attributes.default) {
               this.value = false;
-              this.patchGroupScale();
+              // this.patchGroupScale();
             } else {
               this.value = res.data.attributes.isPaid;
             }
+            this.getCategories();
             data.forEach(item => {
               this.checked.push(item._data.permission);
-            });
-            this.getCategories();
+            }); 
+            // 下拉值回显
+            this.setSelectValue(this.checked);
           }
         })
         .catch(err => {});
@@ -297,7 +287,39 @@ export default {
         return false;
       }
       return true;
-    }
+    },
+    // 下拉改变
+    changeCategory(obj,value) {
+      debugger;
+      const checked = this.checked;
+      const item  = `category${value}.${obj}`;
+      if(this.selectList[obj].indexOf(value)!==-1){
+         if(checked.indexOf(item)===-1){
+           checked.push(item);
+         }
+      }else{
+        checked.forEach((v,index)=>{
+          if(v===item){
+             checked.splice(index,1);
+          }
+        })
+      }
+      this.checked = checked;
+    },
+    setSelectValue(data) {
+      const selectList = this.selectList;
+      data.forEach(value=>{
+        if(value.indexOf('category')!==-1){
+          const splitIndex = value.indexOf('.');
+          const obj = value.substring(splitIndex + 1);
+          const id = value.substring(8,splitIndex);
+          if(selectList[obj]){
+            selectList[obj].push(id);
+          }
+        }
+      })
+      this.selectList = selectList;
+    },
   },
   created() {
     this.groupId = this.$route.query.id;
