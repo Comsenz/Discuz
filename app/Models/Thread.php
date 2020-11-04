@@ -107,21 +107,6 @@ class Thread extends Model
     const CONTENT_LENGTH = 80;
 
     /**
-     * 允许发布的帖子类型：type => permission
-     *
-     * @var string[]
-     */
-    public static $allowCreateTypes = [
-        self::TYPE_OF_TEXT => 'createThread',
-        self::TYPE_OF_LONG => 'createThreadLong',
-        self::TYPE_OF_VIDEO => 'createThreadVideo',
-        self::TYPE_OF_IMAGE => 'createThreadImage',
-        self::TYPE_OF_AUDIO => 'createThreadAudio',
-        self::TYPE_OF_QUESTION => 'createThreadQuestion',
-        self::TYPE_OF_GOODS => 'createThreadGoods',
-    ];
-
-    /**
      * {@inheritdoc}
      */
     protected $casts = [

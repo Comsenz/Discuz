@@ -106,7 +106,7 @@ class CreateThread
         $thread->type = (int) Arr::get($attributes, 'type', Thread::TYPE_OF_TEXT);
 
         // 是否有权发布某类型帖子
-        $this->assertCan($this->actor, Thread::$allowCreateTypes[$thread->type] ?? head(Thread::$allowCreateTypes));
+        $this->assertCan($this->actor, 'createThread.' . $thread->type);
 
         // 标题，长文帖需要设置
         if ($thread->type === Thread::TYPE_OF_LONG) {
