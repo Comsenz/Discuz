@@ -49,6 +49,24 @@ class Category extends Model
     protected $dates = ['created_at', 'updated_at'];
 
     /**
+     * 分类权限
+     *
+     * @var array
+     */
+    public static $categoryPermissions = [
+        'viewThreads',                 // 查看帖子列表
+        'createThread',                // 发布帖子
+        'thread.reply',                // 回复帖子
+        'thread.edit',                 // 编辑帖子
+        'thread.hide',                 // 删除帖子
+        'thread.essence',              // 加精帖子
+        'thread.viewPosts',            // 查看详情
+        'thread.editPosts',            // 编辑回复
+        'thread.hidePosts',            // 删除回复
+        'thread.canBeReward',          // 是否允许被打赏
+    ];
+
+    /**
      * Create a new category.
      *
      * @param string $name
@@ -128,10 +146,6 @@ class Category extends Model
 
         if (! $categories) {
             $categories = static::all();
-        }
-
-        if (in_array($permission, Thread::$allowCreateTypes)) {
-            $permission = 'createThread';
         }
 
         $canForCategory = function (self $category) use ($user, $permission) {

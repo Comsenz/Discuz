@@ -46,22 +46,6 @@ class ThreadPolicy extends AbstractPolicy
     protected $settings;
 
     /**
-     * 分类权限
-     *
-     * @var array
-     */
-    protected static $categoryPermissions = [
-        'reply',                // 回复帖子
-        'edit',                 // 编辑帖子
-        'hide',                 // 删除帖子
-        'essence',              // 加精帖子
-        'viewPosts',            // 查看详情
-        'editPosts',            // 编辑回复
-        'hidePosts',            // 删除回复
-        'canBeReward',          // 是否允许被打赏
-    ];
-
-    /**
      * @param Dispatcher $events
      * @param SettingsRepository $settings
      */
@@ -85,7 +69,7 @@ class ThreadPolicy extends AbstractPolicy
 
         // 分类权限
         if (
-            in_array($ability, self::$categoryPermissions)
+            in_array($ability, Category::$categoryPermissions)
             && $actor->hasPermission('category' . $thread->category_id . '.thread.' . $ability)
         ) {
             return true;
