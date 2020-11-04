@@ -118,7 +118,7 @@ export default {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
-          this.categoriesList = [];
+          this.categoriesList = [{id: '',name: '全局'}];
           res.readdata.forEach(item => {
             let category = {
               id: item._data.id,
@@ -290,25 +290,50 @@ export default {
     },
     // 下拉改变
     changeCategory(obj,value) {
-      debugger;
-      const checked = this.checked;
+      let checked = this.checked;
       const item  = `category${value}.${obj}`;
-      if(this.selectList[obj].indexOf(value)!==-1){
-         if(checked.indexOf(item)===-1){
-           checked.push(item);
-         }
+      // 是否选的是全局
+      if(!value){
+        // 选中全局就去除其他勾选
+        checked = checked.filter(v=>v.indexOf(obj)===-1);
+        checked.push(obj);
+        this.selectList[obj] = [''];
       }else{
-        checked.forEach((v,index)=>{
-          if(v===item){
-             checked.splice(index,1);
+        // 在下拉选中数组里面，并且在权限值里面
+        if(this.selectList[obj].indexOf(value)!==-1){
+          if(checked.indexOf(item)===-1){
+            checked.push(item);
           }
-        })
+       }else{
+         // 不在下拉选中数组中就去除此权限
+         checked.forEach((v,index)=>{
+           if(v===item){
+              checked.splice(index,1);
+           }
+         })
+       }
+       // 选中其他的就去除全局的权限
+       checked = checked.filter(v=>v!==obj);
+       this.selectList[obj] = this.selectList[obj].filter(v=>!!v);
       }
       this.checked = checked;
     },
     setSelectValue(data) {
       const selectList = this.selectList;
+      const selectItem = [
+        'editOwnThreadOrPost',
+        'hideOwnThreadOrPost',
+        'canBeReward',
+        'viewThreads',
+        'thread.reply',
+        'thread.viewPosts',
+        'thread.hidePosts',
+        'thread.essence',
+        'thread.edit',
+        'thread.editPosts',
+      ];
       data.forEach(value=>{
+        // 分类的回显
         if(value.indexOf('category')!==-1){
           const splitIndex = value.indexOf('.');
           const obj = value.substring(splitIndex + 1);
@@ -316,6 +341,10 @@ export default {
           if(selectList[obj]){
             selectList[obj].push(id);
           }
+        }
+        // 全局的回显
+        if(selectItem.indexOf(value)!==-1){
+          selectList[value].push('');
         }
       })
       this.selectList = selectList;

@@ -20,7 +20,7 @@
           <CardRow description="允许发布文字帖">
             <el-checkbox
               v-model="checked"
-              label="createThread"
+              label="createThread.0"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -33,7 +33,7 @@
           <CardRow description="允许发布长文帖">
             <el-checkbox
               v-model="checked"
-              label="createThreadLong"
+              label="createThread.1"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -43,10 +43,24 @@
           </CardRow>
         </Card>
         <Card>
+          <CardRow description="允许发布视频帖">
+            <el-checkbox
+              v-model="checked"
+              label="createThread.2"
+              :disabled="
+                videoDisabled ||
+                  $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >发布视频</el-checkbox
+            >
+          </CardRow>
+        </Card>
+        <Card>
           <CardRow description="允许发布图片帖">
             <el-checkbox
               v-model="checked"
-              label="createThreadImage"
+              label="createThread.3"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -59,7 +73,7 @@
           <CardRow description="允许发布语音帖">
             <el-checkbox
               v-model="checked"
-              label="createThreadAudio"
+              label="createThread.4"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -69,16 +83,17 @@
           </CardRow>
         </Card>
         <Card>
-          <CardRow description="允许发布视频帖">
+          <CardRow
+            description="允许发布问答，只有在开启微信支付且允许发布付费内容时才能设置提问价格"
+          >
             <el-checkbox
               v-model="checked"
-              label="createThreadVideo"
+              label="createThread.5"
               :disabled="
-                videoDisabled ||
-                  $router.history.current.query.id === '1' ||
+                $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
               "
-              >发布视频</el-checkbox
+              >发布问答</el-checkbox
             >
           </CardRow>
         </Card>
@@ -86,27 +101,12 @@
           <CardRow description="允许发布商品帖">
             <el-checkbox
               v-model="checked"
-              label="createThreadGoods"
+              label="createThread.6"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
               "
               >发布商品</el-checkbox
-            >
-          </CardRow>
-        </Card>
-        <Card>
-          <CardRow
-            description="允许发布问答，只有在开启微信支付且允许发布付费内容时才能设置提问价格"
-          >
-            <el-checkbox
-              v-model="checked"
-              label="createThreadQuestion"
-              :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
-              "
-              >发布问答</el-checkbox
             >
           </CardRow>
         </Card>
@@ -166,8 +166,6 @@
         <Card class="hasSelect">
           <CardRow description="回复主题的权限">
             <el-checkbox
-              v-model="checked"
-              label="thread.reply"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -219,7 +217,6 @@
           <CardRow description="允许发布付费内容、付费附件">
             <el-checkbox
               v-model="checked"
-              label="createThreadPaid"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7' ||
@@ -232,8 +229,6 @@
         <Card class="hasSelect">
           <CardRow description="内容允许被打赏">
             <el-checkbox
-              v-model="checked"
-              label="canBeReward"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7' ||
@@ -263,8 +258,6 @@
         <Card class="hasSelect">
           <CardRow description="查看主题列表页的权限">
             <el-checkbox
-              v-model="checked"
-              label="viewThreads"
               :disabled="$router.history.current.query.id === '1'"
               >查看主题列表</el-checkbox
             >
@@ -287,8 +280,6 @@
         <Card class="hasSelect">
           <CardRow description="查看主题的详情页的权限">
             <el-checkbox
-              v-model="checked"
-              label="thread.viewPosts"
               :disabled="$router.history.current.query.id === '1'"
               >查看主题详情</el-checkbox
             >
@@ -327,8 +318,6 @@
         <Card class="hasSelect">
           <CardRow description="前台精华、取消精华主题的权限">
             <el-checkbox
-              v-model="checked"
-              label="thread.essence"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -367,8 +356,6 @@
         <Card class="hasSelect">
           <CardRow description="前台删除单个回复的权限">
             <el-checkbox
-              v-model="checked"
-              label="thread.hidePosts"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -394,8 +381,6 @@
         <Card class="hasSelect">
           <CardRow description="前台单个主题的编辑权限">
             <el-checkbox
-              v-model="checked"
-              label="thread.edit"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -421,8 +406,6 @@
         <Card class="hasSelect">
           <CardRow description="前台单个回复的编辑权限">
             <el-checkbox
-              v-model="checked"
-              label="thread.editPosts"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -448,8 +431,6 @@
         <Card class="hasSelect">
           <CardRow description="作者编辑自己的主题或回复的权限">
             <el-checkbox
-              v-model="checked"
-              label="editOwnThreadOrPost"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -475,8 +456,6 @@
         <Card class="hasSelect">
           <CardRow description="作者删除自己的主题或回复的权限">
             <el-checkbox
-              v-model="checked"
-              label="hideOwnThreadOrPost"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
