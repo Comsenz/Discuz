@@ -39,7 +39,7 @@ class ListLikesController extends ListThreadsController
         $actor = $request->getAttribute('actor');
 
         // 没有任何一个分类的查看权限时，判断是否有全局权限
-        if (Category::getIdsWhereCannot($actor, 'viewThreads')) {
+        if (! Category::getIdsWhereCan($actor, 'viewThreads')) {
             $this->assertCan($actor, 'viewThreads');
         }
 

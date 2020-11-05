@@ -156,7 +156,7 @@ class ListThreadsController extends AbstractListController
         // 获取推荐到站点信息页数据时 不检查权限
         if (Arr::get($filter, 'isSite', '') !== 'yes') {
             // 没有任何一个分类的查看权限时，判断是否有全局权限
-            if (Category::getIdsWhereCannot($actor, 'viewThreads')) {
+            if (! Category::getIdsWhereCan($actor, 'viewThreads')) {
                 $this->assertCan($actor, 'viewThreads');
             }
         }
