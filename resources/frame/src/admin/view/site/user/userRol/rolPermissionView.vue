@@ -250,13 +250,13 @@
             >
           </CardRow>
           <el-select 
-            v-model="selectList.canBeReward" 
+            v-model="selectList['thread.canBeReward']" 
             multiple 
             collapse-tags 
             placeholder="请选择" 
           >
             <el-option
-              @click.native="changeCategory('canBeReward',item.id)"
+              @click.native="changeCategory('thread.canBeReward',item.id)"
               v-for="item in categoriesList"
               :key="item.id"
               :label="item.name"
