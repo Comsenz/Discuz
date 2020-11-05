@@ -117,6 +117,7 @@ class AttachmentSerializer extends AbstractSerializer
 
         // 绑定首帖的附件，如果是付费或开启了预览，返回后端地址
         if (
+            $model->type == Attachment::TYPE_OF_FILE &&
             $model->post &&
             $model->post->is_first &&
             (
