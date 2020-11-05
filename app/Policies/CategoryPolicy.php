@@ -38,12 +38,19 @@ class CategoryPolicy extends AbstractPolicy
      */
     public function can(User $actor, $ability, Category $category)
     {
-        $permission = in_array($ability, Category::$categoryPermissions)
-            ? 'category' . $category->id . '.' . $ability   // 分类下设置的其他权限
-            : 'category.' . $ability;                       // 对分类的操作权限
-
-        if ($actor->hasPermission($permission)) {
-            return true;
+        if (in_array($ability, Category::$categoryPermissions)) {
+            // 分类下设置的其他权限
+            if (
+                $actor->hasPermission($ability)
+                || $actor->hasPermission('category' . $category->id . '.' . $ability)
+            ) {
+                return true;
+            }
+        } else {
+            // 对分类的操作权限
+            if ($actor->hasPermission('category.' . $ability)) {
+                return true;
+            }
         }
     }
 
@@ -63,7 +70,7 @@ class CategoryPolicy extends AbstractPolicy
      */
     public function createThread(User $actor, Category $category)
     {
-        if (! $actor->hasPermission('category'.$category->id.'.viewThreads')) {
+        if (! $actor->can('viewThreads', $category)) {
             return false;
         }
     }
