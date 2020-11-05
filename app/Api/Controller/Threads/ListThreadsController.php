@@ -19,6 +19,7 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
+use App\Common\CacheKey;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Post;
@@ -30,6 +31,7 @@ use App\Repositories\TopicRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -129,14 +131,18 @@ class ListThreadsController extends AbstractListController
      */
     protected $tablePrefix;
 
+    protected $cache;
+
     /**
      * @param ThreadRepository $threads
      * @param UrlGenerator $url
+     * @param Cache $cache
      */
-    public function __construct(ThreadRepository $threads, UrlGenerator $url)
+    public function __construct(ThreadRepository $threads, UrlGenerator $url,Cache $cache)
     {
         $this->threads = $threads;
         $this->url = $url;
+        $this->cache = $cache;
         $this->tablePrefix = config('database.connections.mysql.prefix');
     }
 
@@ -150,7 +156,15 @@ class ListThreadsController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
-
+        $params = $request->getQueryParams();
+        $canCache = $this->canCache($params);
+        if ($canCache) {
+            $cacheKey = CacheKey::LIST_THREAD_HOME_INDEX . md5(json_encode($params, 256));
+            $data = $this->cache->get($cacheKey);
+            if (!empty($data)) {
+                return unserialize($data);
+            }
+        }
         $filter = $this->extractFilter($request);
 
         // 获取推荐到站点信息页数据时 不检查权限
@@ -171,7 +185,7 @@ class ListThreadsController extends AbstractListController
 
         $document->addPaginationLinks(
             $this->url->route('threads.index'),
-            $request->getQueryParams(),
+            $params,
             $offset,
             $limit,
             $this->threadCount
@@ -252,9 +266,50 @@ class ListThreadsController extends AbstractListController
             });
         }
 
+        if($canCache){
+            $this->cache->put($cacheKey, serialize($threads), 3600);
+            $this->appendCache(CacheKey::LIST_THREAD_KEYS, $cacheKey, 3600);
+        }
+
         return $threads;
     }
 
+    private function canCache($params)
+    {
+        $canCache = false;
+        if (isset($params['include'])) {
+            if ($params['include'] == 'firstPost') {
+                $canCache = true;
+            }
+        }
+        if (isset($params['page'])) {
+            if ($params['page']['number'] == 1) {
+                $canCache = true;
+            }
+        }
+        return $canCache;
+    }
+
+    /**
+     *缓存key单独记录便于数据变更的时候清除缓存
+     */
+    private function appendCache($key, $value, $ttl)
+    {
+        $v0 = $this->cache->get($key);
+        if (empty($v0)) {
+            $v1 = [$value];
+        } else {
+            $v1 = json_decode($v0, true);
+            if (!empty($v1)) {
+                $v1[] = $value;
+            } else {
+                return false;
+            }
+        }
+        $v1 = array_unique($v1);
+        $this->cache->put($key, json_encode($v1, 256), $ttl);
+        return $v1;
+    }
     /**
      * @param $actor
      * @param $filter
