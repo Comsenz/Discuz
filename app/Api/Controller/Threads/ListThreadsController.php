@@ -19,7 +19,7 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
-use App\common\CacheKey;
+use App\Common\CacheKey;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Post;

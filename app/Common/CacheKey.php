@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\common;
+namespace App\Common;
 
 
 class CacheKey

@@ -18,7 +18,7 @@
 
 namespace App\Models;
 
-use App\common\CacheKey;
+use App\Common\CacheKey;
 use App\Events\Thread\Hidden;
 use App\Events\Thread\Restored;
 use Carbon\Carbon;
