@@ -19,6 +19,7 @@
 namespace App\Api\Controller\Threads;
 
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\Thread;
 use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Database\Eloquent\Builder;
@@ -37,7 +38,7 @@ class ListLikesController extends ListThreadsController
     {
         $actor = $request->getAttribute('actor');
 
-        // 没有任何一个分类的查看权限时，判断是否有在全局权限
+        // 没有任何一个分类的查看权限时，判断是否有全局权限
         if (Category::getIdsWhereCannot($actor, 'viewThreads')) {
             $this->assertCan($actor, 'viewThreads');
         }
@@ -64,6 +65,7 @@ class ListLikesController extends ListThreadsController
         ]);
 
         Thread::setStateUser($actor, $threads);
+        Post::setStateUser($actor);
 
         // 加载其他关联
         $threads->loadMissing($include);
