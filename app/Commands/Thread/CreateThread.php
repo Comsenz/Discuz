@@ -103,7 +103,7 @@ class CreateThread
         $this->events = $events;
 
         // 没有任何一个分类的发布权限时，判断是否有全局权限
-        if (Category::getIdsWhereCannot($this->actor, 'createThread')) {
+        if (! Category::getIdsWhereCan($this->actor, 'createThread')) {
             $this->assertCan($this->actor, 'createThread');
         }
 

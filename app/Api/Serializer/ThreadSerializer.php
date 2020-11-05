@@ -79,7 +79,7 @@ class ThreadSerializer extends AbstractSerializer
             'isEssence'         => (bool) $model->is_essence,
             'isSite'            => (bool) $model->is_site,
             'isAnonymous'       => (bool) $model->is_anonymous,
-            'canBeReward'       => $model->price == 0 && $model->user->can('canBeReward', $model),
+            'canBeReward'       => $model->price == 0 && $this->gate->forUser($model->user)->allows('canBeReward', $model),
             'canViewPosts'      => $gate->allows('viewPosts', $model),
             'canReply'          => $gate->allows('reply', $model),
             'canApprove'        => $gate->allows('approve', $model),
