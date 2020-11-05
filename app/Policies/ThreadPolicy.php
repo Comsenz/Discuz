@@ -69,7 +69,7 @@ class ThreadPolicy extends AbstractPolicy
 
         // 分类权限
         if (
-            in_array($ability, Category::$categoryPermissions)
+            in_array('thread.' . $ability, Category::$categoryPermissions)
             && $actor->hasPermission('category' . $thread->category_id . '.thread.' . $ability)
         ) {
             return true;
