@@ -22,6 +22,7 @@ use App\Censor\Censor;
 use App\Commands\Post\CreatePost;
 use App\Events\Thread\Created;
 use App\Events\Thread\Saving;
+use App\Models\Category;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
@@ -100,6 +101,11 @@ class CreateThread
     public function handle(EventDispatcher $events, BusDispatcher $bus, Censor $censor, Thread $thread, ThreadValidator $validator)
     {
         $this->events = $events;
+
+        // 没有任何一个分类的发布权限时，判断是否有全局权限
+        if (Category::getIdsWhereCannot($this->actor, 'createThread')) {
+            $this->assertCan($this->actor, 'createThread');
+        }
 
         $attributes = Arr::get($this->data, 'attributes', []);
 
