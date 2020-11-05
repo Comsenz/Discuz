@@ -299,11 +299,9 @@ export default {
         checked.push(obj);
         this.selectList[obj] = [''];
       }else{
-        // 在下拉选中数组里面，并且在权限值里面
+        // 在下拉选中数组里面
         if(this.selectList[obj].indexOf(value)!==-1){
-          if(checked.indexOf(item)===-1){
-            checked.push(item);
-          }
+          checked.push(item);
        }else{
          // 不在下拉选中数组中就去除此权限
          checked.forEach((v,index)=>{
@@ -333,18 +331,18 @@ export default {
         'thread.editPosts',
       ];
       data.forEach(value=>{
+        // 全局的回显
+        if(selectItem.indexOf(value)!==-1){
+          selectList[value].push('');
+        }
         // 分类的回显
         if(value.indexOf('category')!==-1){
           const splitIndex = value.indexOf('.');
           const obj = value.substring(splitIndex + 1);
           const id = value.substring(8,splitIndex);
-          if(selectList[obj]){
+          if(selectList[obj] && data.indexOf(obj)===-1){
             selectList[obj].push(id);
           }
-        }
-        // 全局的回显
-        if(selectItem.indexOf(value)!==-1){
-          selectList[value].push('');
         }
       })
       this.selectList = selectList;
