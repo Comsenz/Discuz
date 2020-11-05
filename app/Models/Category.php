@@ -148,8 +148,10 @@ class Category extends Model
             $categories = static::all();
         }
 
-        $canForCategory = function (self $category) use ($user, $permission) {
-            return $user->hasPermission('category'.$category->id.'.'.$permission);
+        $hasGlobalPermission = $user->hasPermission($permission);
+
+        $canForCategory = function (self $category) use ($user, $permission, $hasGlobalPermission) {
+            return $hasGlobalPermission || $user->hasPermission('category'.$category->id.'.'.$permission);
         };
 
         $ids = [];
