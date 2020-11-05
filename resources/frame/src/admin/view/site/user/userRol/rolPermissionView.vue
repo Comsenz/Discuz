@@ -38,7 +38,7 @@
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
               "
-              >发布帖子</el-checkbox
+              >发布长文</el-checkbox
             >
           </CardRow>
         </Card>
@@ -110,18 +110,29 @@
             >
           </CardRow>
         </Card>
-        <Card>
-          <CardRow description="允许发布内容">
+        <Card class="hasSelect">
+          <CardRow description="允许发布帖子">
             <el-checkbox
-              v-model="checked"
-              label="createThread"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
               "
-              >发布内容</el-checkbox
+              >发布帖子</el-checkbox
             >
           </CardRow>
+          <el-select 
+            v-model="selectList.createThread" 
+            multiple 
+            collapse-tags placeholder="请选择" 
+          >
+            <el-option
+              @click.native="changeCategory('createThread',item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
         </Card>
         <Card>
           <CardRow description="允许发布私信">
@@ -217,6 +228,7 @@
           <CardRow description="允许发布付费内容、付费附件">
             <el-checkbox
               v-model="checked"
+              label="createThreadPaid"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7' ||

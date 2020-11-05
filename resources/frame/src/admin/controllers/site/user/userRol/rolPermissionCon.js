@@ -21,6 +21,7 @@ export default {
       canBeOnlooker: false, // 是否可以设置围观
       categoriesList: [], // 分类列表
       selectList:{
+        createThread:[],
         editOwnThreadOrPost: [],
         hideOwnThreadOrPost: [],
         canBeReward: [],
@@ -295,8 +296,12 @@ export default {
       // 是否选的是全局
       if(!value){
         // 选中全局就去除其他勾选
-        checked = checked.filter(v=>v.indexOf(obj)===-1);
-        checked.push(obj);
+        checked.forEach((v,index)=>{
+          if(v.indexOf(obj)!==-1&&v.indexOf('category')!==-1){
+            checked.splice(index,1);
+          }
+        })
+        if(checked.indexOf(obj)===-1)checked.push(obj);
         this.selectList[obj] = [''];
       }else{
         // 在下拉选中数组里面
@@ -317,8 +322,10 @@ export default {
       this.checked = checked;
     },
     setSelectValue(data) {
+      const checkedData = data;
       const selectList = this.selectList;
       const selectItem = [
+        'createThread',
         'editOwnThreadOrPost',
         'hideOwnThreadOrPost',
         'canBeReward',
@@ -330,22 +337,26 @@ export default {
         'thread.edit',
         'thread.editPosts',
       ];
-      data.forEach(value=>{
+      checkedData.forEach((value,index)=>{
         // 全局的回显
         if(selectItem.indexOf(value)!==-1){
           selectList[value].push('');
         }
         // 分类的回显
-        if(value.indexOf('category')!==-1){
+        if(value.indexOf('category') !== -1){
           const splitIndex = value.indexOf('.');
           const obj = value.substring(splitIndex + 1);
           const id = value.substring(8,splitIndex);
-          if(selectList[obj] && data.indexOf(obj)===-1){
+          if(selectList[obj] && checkedData.indexOf(obj) === -1){
             selectList[obj].push(id);
+          }
+          if(checkedData.indexOf(obj)!==-1){
+            checkedData.splice(index, 1);
           }
         }
       })
       this.selectList = selectList;
+      this.checked = checkedData;
     },
   },
   created() {
