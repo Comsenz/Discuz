@@ -64,6 +64,8 @@ class Category extends Model
         'thread.editPosts',            // 编辑回复
         'thread.hidePosts',            // 删除回复
         'thread.canBeReward',          // 是否允许被打赏
+        'editOwnThreadOrPost',         // 编辑自己主题或回复的权限
+        'hideOwnThreadOrPost',         // 删除自己主题或回复的权限
     ];
 
     /**
