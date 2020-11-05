@@ -77,10 +77,10 @@ trait HasPaidContent
     public function cannotView(Thread $thread)
     {
         // 不能查看详情
-        $cannotViewPosts = ! $this->actor->hasPermission("category{$thread->category_id}.thread.viewPosts");
+        $cannotViewPosts = ! $this->actor->can('viewPosts', $thread);
 
         // 不能免费查看付费内容
-        $cannotFreeViewPosts = ! $this->actor->hasPermission("category{$thread->category_id}.freeViewPosts.{$thread->type}");
+        $cannotFreeViewPosts = ! $this->actor->can('freeViewPosts.' . $thread->type, $thread);
 
         // （非站点推荐帖 且 不能查看详情）或（未付费 且 不能免费查看付费内容）
         return (! $thread->is_site && $cannotViewPosts)
