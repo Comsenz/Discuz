@@ -24,7 +24,6 @@ use App\Events\Thread\Created;
 use App\Events\Thread\Saving;
 use App\Models\Category;
 use App\Models\Post;
-use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\User;
 use App\Validators\ThreadValidator;
@@ -188,14 +187,6 @@ class CreateThread
             Post::query()->where('thread_id', $thread->id)->delete();
             $thread->delete();
             throw $e;
-        }
-
-        // 记录触发的审核词
-        if ($thread->is_approved === Thread::UNAPPROVED && $censor->wordMod) {
-            $stopWords = new PostMod;
-            $stopWords->stop_word = implode(',', array_unique($censor->wordMod));
-
-            $post->stopWords()->save($stopWords);
         }
 
         $thread->setRawAttributes($post->thread->getAttributes(), true);
