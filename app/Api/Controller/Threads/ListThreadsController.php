@@ -589,7 +589,11 @@ class ListThreadsController extends AbstractListController
                             ->orWhere('questions.be_user_id', $actor->id)
                             ->orWhere('questions.is_answer', Question::TYPE_OF_ANSWERED);
                     });
-            });
+            })
+            ->whereRaw(
+                ' IF(('.$this->tablePrefix.'threads.type = '.Thread::TYPE_OF_QUESTION.
+                '), ('.$this->tablePrefix.'questions.id IS not NULL), ('.$this->tablePrefix.'questions.id IS NULL))'
+            );
         }
     }
 
