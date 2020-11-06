@@ -122,6 +122,7 @@
           </CardRow>
           <el-select
             v-model="selectList.createThread"
+            @remove-tag="clearItem($event, 'createThread')"
             multiple
             collapse-tags placeholder="请选择"
           >
@@ -186,6 +187,7 @@
           </CardRow>
           <el-select
             v-model="selectList['thread.reply']"
+            @remove-tag="clearItem($event, 'thread.reply')"
             multiple
             collapse-tags placeholder="请选择"
           >
@@ -277,6 +279,7 @@
           </CardRow>
            <el-select
              v-model="selectList.viewThreads"
+             @remove-tag="clearItem($event, 'viewThreads')"
              multiple
              collapse-tags
              placeholder="请选择"
@@ -299,6 +302,7 @@
           </CardRow>
           <el-select
             v-model="selectList['thread.viewPosts']"
+            @remove-tag="clearItem($event, 'viewPosts')"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -340,6 +344,7 @@
           </CardRow>
           <el-select
             v-model="selectList['thread.essence']"
+            @remove-tag="clearItem($event, 'thread.essence')"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -378,6 +383,7 @@
           </CardRow>
           <el-select
             v-model="selectList['thread.hidePosts']"
+            @remove-tag="clearItem($event, 'thread.hidePosts')"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -403,6 +409,7 @@
           </CardRow>
           <el-select
             v-model="selectList['thread.edit']"
+            @remove-tag="clearItem($event, 'thread.edit')"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -428,6 +435,7 @@
           </CardRow>
           <el-select
             v-model="selectList['thread.editPosts']"
+            @remove-tag="clearItem($event, 'thread.editPosts')"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -453,6 +461,7 @@
           </CardRow>
           <el-select
             v-model="selectList.editOwnThreadOrPost"
+            @remove-tag="clearItem($event, 'editOwnThreadOrPost')"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -478,6 +487,7 @@
           </CardRow>
           <el-select
             v-model="selectList.hideOwnThreadOrPost"
+            @remove-tag="clearItem($event, 'hideOwnThreadOrPost')"
             multiple
             collapse-tags
             placeholder="请选择"
