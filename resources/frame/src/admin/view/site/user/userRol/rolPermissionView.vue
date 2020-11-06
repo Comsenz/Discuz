@@ -11,8 +11,12 @@
         >{{ item.title }}</span
       >
     </div>
-    <Card :header="$router.history.current.query.name + '--' + activeTab.title"></Card>
-    <div class="scope-action" v-if="activeTab.title=='操作权限'">作用范围</div>
+    <Card
+      :header="$router.history.current.query.name + '--' + activeTab.title"
+    ></Card>
+    <div class="scope-action" v-if="activeTab.title == '操作权限'">
+      生效范围
+    </div>
     <!-- 操作权限 -->
     <div v-show="activeTab.name === 'userOperate'">
       <div class="user-operate">
@@ -111,31 +115,6 @@
             >
           </CardRow>
         </Card>
-        <Card class="hasSelect">
-          <CardRow description="允许发布帖子">
-            <el-checkbox
-              :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
-              "
-              >发布帖子</el-checkbox
-            >
-          </CardRow>
-          <el-select
-            v-model="selectList.createThread"
-            @remove-tag="clearItem($event, 'createThread')"
-            multiple
-            collapse-tags placeholder="请选择"
-          >
-            <el-option
-              @click.native="changeCategory('createThread',item.id)"
-              v-for="item in categoriesList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </Card>
         <Card>
           <CardRow description="允许发布私信">
             <el-checkbox
@@ -175,31 +154,6 @@
               >设置围观</el-checkbox
             >
           </CardRow>
-        </Card>
-        <Card class="hasSelect">
-          <CardRow description="回复主题的权限">
-            <el-checkbox
-              :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
-              "
-              >回复主题</el-checkbox
-            >
-          </CardRow>
-          <el-select
-            v-model="selectList['thread.reply']"
-            @remove-tag="clearItem($event, 'thread.reply')"
-            multiple
-            collapse-tags placeholder="请选择"
-          >
-            <el-option
-              @click.native="changeCategory('thread.reply',item.id)"
-              v-for="item in categoriesList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
         </Card>
         <Card>
           <CardRow description="发布主题时上传附件的权限">
@@ -242,6 +196,60 @@
           </CardRow>
         </Card>
         <Card class="hasSelect">
+          <CardRow description="允许发布帖子">
+            <el-checkbox
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >发布帖子</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList.createThread"
+            @remove-tag="clearItem($event, 'createThread')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('createThread', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
+        <Card class="hasSelect">
+          <CardRow description="回复主题的权限">
+            <el-checkbox
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >回复主题</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList['thread.reply']"
+            @remove-tag="clearItem($event, 'thread.reply')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('thread.reply', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
+        <Card class="hasSelect">
           <CardRow description="内容允许被打赏">
             <el-checkbox
               :disabled="
@@ -252,19 +260,20 @@
               >允许被打赏</el-checkbox
             >
           </CardRow>
-          <el-select 
-            v-model="selectList['thread.canBeReward']" 
-            multiple 
-            collapse-tags 
+          <el-select
+            v-model="selectList['thread.canBeReward']"
+            multiple
+            collapse-tags
             @remove-tag="clearItem($event, 'thread.canBeReward')"
-            placeholder="请选择" 
+            placeholder="请选择"
           >
             <el-option
-              @click.native="changeCategory('thread.canBeReward',item.id)"
+              @click.native="changeCategory('thread.canBeReward', item.id)"
               v-for="item in categoriesList"
               :key="item.id"
               :label="item.name"
-              :value="item.id">
+              :value="item.id"
+            >
             </el-option>
           </el-select>
         </Card>
@@ -273,31 +282,30 @@
         <Card header="查看权限"></Card>
         <Card class="hasSelect">
           <CardRow description="查看主题列表页的权限">
-            <el-checkbox
-              :disabled="$router.history.current.query.id === '1'"
+            <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >查看主题列表</el-checkbox
             >
           </CardRow>
-           <el-select
-             v-model="selectList.viewThreads"
-             @remove-tag="clearItem($event, 'viewThreads')"
-             multiple
-             collapse-tags
-             placeholder="请选择"
+          <el-select
+            v-model="selectList.viewThreads"
+            @remove-tag="clearItem($event, 'viewThreads')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('viewThreads', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             >
-              <el-option
-               @click.native="changeCategory('viewThreads',item.id)"
-                v-for="item in categoriesList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </el-select>
+            </el-option>
+          </el-select>
         </Card>
         <Card class="hasSelect">
           <CardRow description="查看主题的详情页的权限">
-            <el-checkbox
-              :disabled="$router.history.current.query.id === '1'"
+            <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >查看主题详情</el-checkbox
             >
           </CardRow>
@@ -307,15 +315,16 @@
             multiple
             collapse-tags
             placeholder="请选择"
-           >
-              <el-option
-                @click.native="changeCategory('thread.viewPosts',item.id)"
-                v-for="item in categoriesList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </el-select>
+          >
+            <el-option
+              @click.native="changeCategory('thread.viewPosts', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
         </Card>
       </div>
       <div class="user-operate">
@@ -333,32 +342,6 @@
             >
           </CardRow>
         </Card>
-        <Card class="hasSelect">
-          <CardRow description="前台精华、取消精华主题的权限">
-            <el-checkbox
-              :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
-              "
-              >加精</el-checkbox
-            >
-          </CardRow>
-          <el-select
-            v-model="selectList['thread.essence']"
-            @remove-tag="clearItem($event, 'thread.essence')"
-            multiple
-            collapse-tags
-            placeholder="请选择"
-          >
-            <el-option
-              @click.native="changeCategory('thread.essence',item.id)"
-              v-for="item in categoriesList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </Card>
         <Card>
           <CardRow description="前台删除单个主题的权限">
             <el-checkbox
@@ -371,136 +354,6 @@
               >删主题</el-checkbox
             >
           </CardRow>
-        </Card>
-        <Card class="hasSelect">
-          <CardRow description="前台删除单个回复的权限">
-            <el-checkbox
-              :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
-              "
-              >删回复</el-checkbox
-            >
-          </CardRow>
-          <el-select
-            v-model="selectList['thread.hidePosts']"
-            @remove-tag="clearItem($event, 'thread.hidePosts')"
-            multiple
-            collapse-tags
-            placeholder="请选择"
-          >
-            <el-option
-              @click.native="changeCategory('thread.hidePosts',item.id)"
-              v-for="item in categoriesList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-         </el-select>
-        </Card>
-        <Card class="hasSelect">
-          <CardRow description="前台单个主题的编辑权限">
-            <el-checkbox
-              :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
-              "
-              >编辑主题</el-checkbox
-            >
-          </CardRow>
-          <el-select
-            v-model="selectList['thread.edit']"
-            @remove-tag="clearItem($event, 'thread.edit')"
-            multiple
-            collapse-tags
-            placeholder="请选择"
-          >
-            <el-option
-              @click.native="changeCategory('thread.edit',item.id)"
-              v-for="item in categoriesList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-         </el-select>
-        </Card>
-        <Card class="hasSelect">
-          <CardRow description="前台单个回复的编辑权限">
-            <el-checkbox
-              :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
-              "
-              >编辑回复</el-checkbox
-            >
-          </CardRow>
-          <el-select
-            v-model="selectList['thread.editPosts']"
-            @remove-tag="clearItem($event, 'thread.editPosts')"
-            multiple
-            collapse-tags
-            placeholder="请选择"
-          >
-            <el-option
-              @click.native="changeCategory('thread.editPosts',item.id)"
-              v-for="item in categoriesList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-         </el-select>
-        </Card>
-        <Card class="hasSelect">
-          <CardRow description="作者编辑自己的主题或回复的权限">
-            <el-checkbox
-              :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
-              "
-              >编辑自己的主题或回复</el-checkbox
-            >
-          </CardRow>
-          <el-select
-            v-model="selectList.editOwnThreadOrPost"
-            @remove-tag="clearItem($event, 'editOwnThreadOrPost')"
-            multiple
-            collapse-tags
-            placeholder="请选择"
-          >
-            <el-option
-              @click.native="changeCategory('editOwnThreadOrPost',item.id)"
-              v-for="item in categoriesList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </Card>
-        <Card class="hasSelect">
-          <CardRow description="作者删除自己的主题或回复的权限">
-            <el-checkbox
-              :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
-              "
-              >删除自己的主题或回复</el-checkbox
-            >
-          </CardRow>
-          <el-select
-            v-model="selectList.hideOwnThreadOrPost"
-            @remove-tag="clearItem($event, 'hideOwnThreadOrPost')"
-            multiple
-            collapse-tags
-            placeholder="请选择"
-          >
-            <el-option
-              @click.native="changeCategory('hideOwnThreadOrPost',item.id)"
-              v-for="item in categoriesList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
         </Card>
         <Card>
           <CardRow description="前台批量管理主题的权限">
@@ -554,7 +407,169 @@
             >
           </CardRow>
         </Card>
-     </div>
+        <Card class="hasSelect">
+          <CardRow description="前台精华、取消精华主题的权限">
+            <el-checkbox
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >加精</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList['thread.essence']"
+            @remove-tag="clearItem($event, 'thread.essence')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('thread.essence', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
+        <Card class="hasSelect">
+          <CardRow description="前台删除单个回复的权限">
+            <el-checkbox
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >删回复</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList['thread.hidePosts']"
+            @remove-tag="clearItem($event, 'thread.hidePosts')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('thread.hidePosts', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
+        <Card class="hasSelect">
+          <CardRow description="前台单个主题的编辑权限">
+            <el-checkbox
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >编辑主题</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList['thread.edit']"
+            @remove-tag="clearItem($event, 'thread.edit')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('thread.edit', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
+        <Card class="hasSelect">
+          <CardRow description="前台单个回复的编辑权限">
+            <el-checkbox
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >编辑回复</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList['thread.editPosts']"
+            @remove-tag="clearItem($event, 'thread.editPosts')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('thread.editPosts', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
+        <Card class="hasSelect">
+          <CardRow description="作者编辑自己的主题或回复的权限">
+            <el-checkbox
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >编辑自己的主题或回复</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList.editOwnThreadOrPost"
+            @remove-tag="clearItem($event, 'editOwnThreadOrPost')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('editOwnThreadOrPost', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
+        <Card class="hasSelect">
+          <CardRow description="作者删除自己的主题或回复的权限">
+            <el-checkbox
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >删除自己的主题或回复</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList.hideOwnThreadOrPost"
+            @remove-tag="clearItem($event, 'hideOwnThreadOrPost')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('hideOwnThreadOrPost', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
+      </div>
     </div>
     <!-- 安全设置 -->
     <div v-show="activeTab.name === 'security'">
