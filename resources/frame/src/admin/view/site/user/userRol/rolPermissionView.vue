@@ -343,19 +343,6 @@
           </CardRow>
         </Card>
         <Card>
-          <CardRow description="前台删除单个主题的权限">
-            <el-checkbox
-              v-model="checked"
-              label="thread.hide"
-              :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
-              "
-              >删主题</el-checkbox
-            >
-          </CardRow>
-        </Card>
-        <Card>
           <CardRow description="前台批量管理主题的权限">
             <el-checkbox
               v-model="checked"
@@ -406,6 +393,33 @@
               >编辑用户状态</el-checkbox
             >
           </CardRow>
+        </Card>
+        <Card class="hasSelect">
+          <CardRow description="前台删除单个主题的权限">
+            <el-checkbox
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >删主题</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList['thread.hide']"
+            @remove-tag="clearItem($event, 'thread.hide')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('thread.hide', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
         </Card>
         <Card class="hasSelect">
           <CardRow description="前台精华、取消精华主题的权限">

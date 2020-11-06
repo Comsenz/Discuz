@@ -27,6 +27,7 @@ export default {
         'thread.canBeReward': [],
         viewThreads: [],
         'thread.reply':[],
+        'thread.hide':[],
         'thread.viewPosts':[],
         'thread.hidePosts':[],
         'thread.essence':[],
@@ -326,6 +327,7 @@ export default {
       const selectList = this.selectList;
       const selectItem = [
         'createThread',
+        'thread.hide',
         'editOwnThreadOrPost',
         'hideOwnThreadOrPost',
         'thread.canBeReward',
