@@ -12,6 +12,7 @@
       >
     </div>
     <Card :header="$router.history.current.query.name + '--' + activeTab.title"></Card>
+    <div class="scope-action" v-if="activeTab.title=='操作权限'">作用范围</div>
     <!-- 操作权限 -->
     <div v-show="activeTab.name === 'userOperate'">
       <div class="user-operate">

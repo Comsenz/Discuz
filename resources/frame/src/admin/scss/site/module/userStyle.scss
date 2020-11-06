@@ -223,7 +223,12 @@
 */
 .rol-permission-box{
   position: relative;
-
+  .scope-action{
+    position: absolute;
+    top: 17PX;
+    left:45%;
+    color: #606266;
+  }
   .permission__title{
     position: absolute;
     left: 70PX;
