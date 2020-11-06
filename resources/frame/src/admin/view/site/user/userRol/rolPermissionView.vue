@@ -120,10 +120,10 @@
               >发布帖子</el-checkbox
             >
           </CardRow>
-          <el-select 
-            v-model="selectList.createThread" 
-            multiple 
-            collapse-tags placeholder="请选择" 
+          <el-select
+            v-model="selectList.createThread"
+            multiple
+            collapse-tags placeholder="请选择"
           >
             <el-option
               @click.native="changeCategory('createThread',item.id)"
@@ -184,10 +184,10 @@
               >回复主题</el-checkbox
             >
           </CardRow>
-          <el-select 
-            v-model="selectList['thread.reply']" 
-            multiple 
-            collapse-tags placeholder="请选择" 
+          <el-select
+            v-model="selectList['thread.reply']"
+            multiple
+            collapse-tags placeholder="请选择"
           >
             <el-option
               @click.native="changeCategory('thread.reply',item.id)"
@@ -275,11 +275,11 @@
               >查看主题列表</el-checkbox
             >
           </CardRow>
-           <el-select 
-             v-model="selectList.viewThreads" 
-             multiple 
-             collapse-tags 
-             placeholder="请选择" 
+           <el-select
+             v-model="selectList.viewThreads"
+             multiple
+             collapse-tags
+             placeholder="请选择"
             >
               <el-option
                @click.native="changeCategory('viewThreads',item.id)"
@@ -297,11 +297,11 @@
               >查看主题详情</el-checkbox
             >
           </CardRow>
-          <el-select 
-            v-model="selectList['thread.viewPosts']" 
-            multiple 
-            collapse-tags 
-            placeholder="请选择" 
+          <el-select
+            v-model="selectList['thread.viewPosts']"
+            multiple
+            collapse-tags
+            placeholder="请选择"
            >
               <el-option
                 @click.native="changeCategory('thread.viewPosts',item.id)"
@@ -338,11 +338,11 @@
               >加精</el-checkbox
             >
           </CardRow>
-          <el-select 
-            v-model="selectList['thread.essence']" 
-            multiple 
-            collapse-tags 
-            placeholder="请选择" 
+          <el-select
+            v-model="selectList['thread.essence']"
+            multiple
+            collapse-tags
+            placeholder="请选择"
           >
             <el-option
               @click.native="changeCategory('thread.essence',item.id)"
@@ -376,11 +376,11 @@
               >删回复</el-checkbox
             >
           </CardRow>
-          <el-select 
-            v-model="selectList['thread.hidePosts']" 
-            multiple 
-            collapse-tags 
-            placeholder="请选择" 
+          <el-select
+            v-model="selectList['thread.hidePosts']"
+            multiple
+            collapse-tags
+            placeholder="请选择"
           >
             <el-option
               @click.native="changeCategory('thread.hidePosts',item.id)"
@@ -401,11 +401,11 @@
               >编辑主题</el-checkbox
             >
           </CardRow>
-          <el-select 
-            v-model="selectList['thread.edit']" 
-            multiple 
-            collapse-tags 
-            placeholder="请选择" 
+          <el-select
+            v-model="selectList['thread.edit']"
+            multiple
+            collapse-tags
+            placeholder="请选择"
           >
             <el-option
               @click.native="changeCategory('thread.edit',item.id)"
@@ -426,11 +426,11 @@
               >编辑回复</el-checkbox
             >
           </CardRow>
-          <el-select 
-            v-model="selectList['thread.editPosts']" 
-            multiple 
-            collapse-tags 
-            placeholder="请选择" 
+          <el-select
+            v-model="selectList['thread.editPosts']"
+            multiple
+            collapse-tags
+            placeholder="请选择"
           >
             <el-option
               @click.native="changeCategory('thread.editPosts',item.id)"
@@ -451,12 +451,12 @@
               >编辑自己的主题或回复</el-checkbox
             >
           </CardRow>
-          <el-select 
-            v-model="selectList.editOwnThreadOrPost" 
-            multiple 
-            collapse-tags 
-            placeholder="请选择" 
-          > 
+          <el-select
+            v-model="selectList.editOwnThreadOrPost"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
             <el-option
               @click.native="changeCategory('editOwnThreadOrPost',item.id)"
               v-for="item in categoriesList"
@@ -476,11 +476,11 @@
               >删除自己的主题或回复</el-checkbox
             >
           </CardRow>
-          <el-select 
-            v-model="selectList.hideOwnThreadOrPost" 
-            multiple 
-            collapse-tags 
-            placeholder="请选择"  
+          <el-select
+            v-model="selectList.hideOwnThreadOrPost"
+            multiple
+            collapse-tags
+            placeholder="请选择"
           >
             <el-option
               @click.native="changeCategory('hideOwnThreadOrPost',item.id)"
@@ -543,7 +543,7 @@
             >
           </CardRow>
         </Card>
-     </div> 
+     </div>
     </div>
     <!-- 安全设置 -->
     <div v-show="activeTab.name === 'security'">
@@ -662,8 +662,8 @@
     </div>
     <!-- 价格设置 -->
     <div v-show="activeTab.name === 'pricesetting'">
-      <Card header="允许被购买：">
-        <CardRow description="需先在全局-站点设置中开启权限购买" class="allow-box">
+      <Card header="允许购买：">
+        <CardRow description="允许购买" class="allow-box">
           <el-switch
             :disabled="
               $router.history.current.query.id === '1' ||

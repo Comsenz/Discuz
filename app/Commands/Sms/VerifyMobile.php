@@ -68,6 +68,7 @@ class VerifyMobile
 
     protected $events;
 
+    /** @var Bind */
     protected $bind;
 
     protected $settings;
@@ -137,7 +138,7 @@ class VerifyMobile
         $iv = Arr::get($this->params, 'iv');
         $encryptedData = Arr::get($this->params, 'encryptedData');
         if ($js_code && $iv && $encryptedData) {
-            $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $this->mobileCode->user);
+            $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, null, $this->mobileCode->user);
         }
 
 
