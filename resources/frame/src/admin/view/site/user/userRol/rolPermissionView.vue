@@ -35,7 +35,7 @@
           </CardRow>
         </Card>
         <Card>
-          <CardRow description="允许发布长文帖">
+          <CardRow description="允许发布帖子">
             <el-checkbox
               v-model="checked"
               label="createThread.1"
@@ -196,7 +196,7 @@
           </CardRow>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="允许发布帖子">
+          <CardRow description="允许发布主题">
             <el-checkbox
               :disabled="
                 $router.history.current.query.id === '1' ||
