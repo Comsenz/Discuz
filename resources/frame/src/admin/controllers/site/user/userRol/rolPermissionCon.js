@@ -360,7 +360,12 @@ export default {
     },
     // 清除某项下拉
     clearItem(value,obj) {
-      const item = `category${value}.${obj}`;
+      let item ='';
+      if(value){
+        item=`category${value}.${obj}`
+      }else{
+        item = obj;
+      }
       let checkedData = this.checked;
       checkedData = checkedData.filter(v=>v!==item);
       this.checked = checkedData;
