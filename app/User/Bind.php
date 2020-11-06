@@ -60,7 +60,7 @@ class Bind
      * @param int $rebind 是否更换绑定
      * @throws Exception
      */
-    public function withToken($token, $user, $rebind)
+    public function withToken($token, $user, $rebind = null)
     {
         $session = SessionToken::get($token);
         $scope = Arr::get($session, 'scope');
