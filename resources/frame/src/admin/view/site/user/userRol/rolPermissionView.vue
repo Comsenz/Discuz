@@ -326,6 +326,121 @@
             </el-option>
           </el-select>
         </Card>
+        <Card class="hasSelect">
+          <CardRow description="免费查看帖子">
+            <el-checkbox :disabled="$router.history.current.query.id === '1'"
+              >免费查看帖子</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList['thread.freeViewPosts.1']"
+            @remove-tag="clearItem($event, 'thread.freeViewPosts.1')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('thread.freeViewPosts.1', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
+        <Card class="hasSelect">
+          <CardRow description="免费查看视频">
+            <el-checkbox :disabled="$router.history.current.query.id === '1'"
+              >免费查看视频</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList['thread.freeViewPosts.2']"
+            @remove-tag="clearItem($event, 'thread.freeViewPosts.2')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('thread.freeViewPosts.2', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
+        <Card class="hasSelect">
+          <CardRow description="免费查看图片">
+            <el-checkbox :disabled="$router.history.current.query.id === '1'"
+              >免费查看图片</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList['thread.freeViewPosts.3']"
+            @remove-tag="clearItem($event, 'thread.freeViewPosts.3')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('thread.freeViewPosts.3', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
+        <Card class="hasSelect">
+          <CardRow description="免费查看语音">
+            <el-checkbox :disabled="$router.history.current.query.id === '1'"
+              >免费查看语音</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList['thread.freeViewPosts.4']"
+            @remove-tag="clearItem($event, 'thread.freeViewPosts.4')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('thread.freeViewPosts.4', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
+        <Card class="hasSelect">
+          <CardRow description="免费查看问答">
+            <el-checkbox :disabled="$router.history.current.query.id === '1'"
+              >免费查看问答</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList['thread.freeViewPosts.5']"
+            @remove-tag="clearItem($event, 'thread.freeViewPosts.5')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('thread.freeViewPosts.5', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
       </div>
       <div class="user-operate">
         <Card header="管理权限"></Card>

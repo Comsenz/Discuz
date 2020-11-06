@@ -33,6 +33,11 @@ export default {
         'thread.essence':[],
         'thread.edit':[],
         'thread.editPosts':[],
+        'thread.freeViewPosts.1':[],
+        'thread.freeViewPosts.2':[],
+        'thread.freeViewPosts.3':[],
+        'thread.freeViewPosts.4':[],
+        'thread.freeViewPosts.5':[],
       },
       activeTab: {
         // 设置权限当前项
@@ -338,6 +343,11 @@ export default {
         'thread.essence',
         'thread.edit',
         'thread.editPosts',
+        'thread.freeViewPosts.1',
+        'thread.freeViewPosts.2',
+        'thread.freeViewPosts.3',
+        'thread.freeViewPosts.4',
+        'thread.freeViewPosts.5',
       ];
       checkedData.forEach((value,index)=>{
         // 全局的回显
