@@ -358,6 +358,13 @@ export default {
       this.selectList = selectList;
       this.checked = checkedData;
     },
+    // 清除某项下拉
+    clearItem(value,obj) {
+      const item = `category${value}.${obj}`;
+      let checkedData = this.checked;
+      checkedData = checkedData.filter(v=>v!==item);
+      this.checked = checkedData;
+    }
   },
   created() {
     this.groupId = this.$route.query.id;

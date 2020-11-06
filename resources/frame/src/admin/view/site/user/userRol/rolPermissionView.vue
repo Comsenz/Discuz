@@ -253,6 +253,7 @@
             v-model="selectList['thread.canBeReward']" 
             multiple 
             collapse-tags 
+            @remove-tag="clearItem($event, 'thread.canBeReward')"
             placeholder="请选择" 
           >
             <el-option
