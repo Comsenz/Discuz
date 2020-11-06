@@ -43,7 +43,7 @@
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
               "
-              >发布长文</el-checkbox
+              >发布帖子</el-checkbox
             >
           </CardRow>
         </Card>
@@ -202,7 +202,7 @@
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
               "
-              >发布帖子</el-checkbox
+              >发布主题</el-checkbox
             >
           </CardRow>
           <el-select
