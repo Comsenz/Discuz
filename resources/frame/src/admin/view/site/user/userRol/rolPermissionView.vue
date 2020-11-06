@@ -327,9 +327,9 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看帖子">
+          <CardRow description="免费查看付费帖子">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
-              >免费查看帖子</el-checkbox
+              >免费查看付费帖子</el-checkbox
             >
           </CardRow>
           <el-select
@@ -350,9 +350,9 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看视频">
+          <CardRow description="免费查看付费视频">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
-              >免费查看视频</el-checkbox
+              >免费查看付费视频</el-checkbox
             >
           </CardRow>
           <el-select
@@ -373,9 +373,9 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看图片">
+          <CardRow description="免费查看付费图片">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
-              >免费查看图片</el-checkbox
+              >免费查看付费图片</el-checkbox
             >
           </CardRow>
           <el-select
@@ -396,9 +396,9 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看语音">
+          <CardRow description="免费查看付费语音">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
-              >免费查看语音</el-checkbox
+              >免费查看付费语音</el-checkbox
             >
           </CardRow>
           <el-select
@@ -419,9 +419,9 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看问答">
+          <CardRow description="免费查看付费问答">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
-              >免费查看问答</el-checkbox
+              >免费查看付费问答</el-checkbox
             >
           </CardRow>
           <el-select
