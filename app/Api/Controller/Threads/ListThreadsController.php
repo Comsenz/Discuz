@@ -157,14 +157,6 @@ class ListThreadsController extends AbstractListController
     {
         $actor = $request->getAttribute('actor');
         $params = $request->getQueryParams();
-        $canCache = $this->canCache($params);
-        if ($canCache) {
-            $cacheKey = CacheKey::LIST_THREAD_HOME_INDEX . md5(json_encode($params, 256));
-            $data = $this->cache->get($cacheKey);
-            if (!empty($data)) {
-                return unserialize($data);
-            }
-        }
         $filter = $this->extractFilter($request);
 
         // 获取推荐到站点信息页数据时 不检查权限
@@ -180,9 +172,7 @@ class ListThreadsController extends AbstractListController
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
         $include = $this->extractInclude($request);
-
         $threads = $this->search($actor, $filter, $sort, $limit, $offset);
-
         $document->addPaginationLinks(
             $this->url->route('threads.index'),
             $params,
@@ -195,6 +185,16 @@ class ListThreadsController extends AbstractListController
             'threadCount' => $this->threadCount,
             'pageCount' => ceil($this->threadCount / $limit),
         ]);
+
+        $canCache = $this->canCache($params);
+//        $canCache=false;
+        if ($canCache) {
+            $cacheKey = CacheKey::LIST_THREAD_HOME_INDEX . md5(json_encode($params, 256));
+            $data = $this->cache->get($cacheKey);
+            if (!empty($data)) {
+                return unserialize($data);
+            }
+        }
 
         Thread::setStateUser($actor, $threads);
         Post::setStateUser($actor);
@@ -270,7 +270,7 @@ class ListThreadsController extends AbstractListController
             $this->cache->put($cacheKey, serialize($threads), 3600);
             $this->appendCache(CacheKey::LIST_THREAD_KEYS, $cacheKey, 3600);
         }
-
+        
         return $threads;
     }
 
