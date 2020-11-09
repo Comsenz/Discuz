@@ -383,6 +383,7 @@ export default {
     this.activeTab.name = this.$route.query.names || "userOperate";
     this.getGroupResource();
     this.signUpSet();
+    this.getCategories();
   },
   components: {
     Card,
