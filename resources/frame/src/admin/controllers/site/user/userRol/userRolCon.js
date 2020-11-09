@@ -21,6 +21,7 @@ export default {
       btnLoading:false,     //提交按钮状态
       delLoading:false,     //删除按钮状态
       groupName:'',      //是否显示用户组名称
+      groupId: '',       // 用户组id
     }
   },
   methods:{
@@ -41,6 +42,7 @@ export default {
     radioChange(val,index){
       this.radioName = val._data.name;
       this.radioIndex = index;
+      this.groupId = val._data.id;
     },
 
     checkSelectable(row){
@@ -135,6 +137,7 @@ export default {
         });
         this.batchPatchGroup(data);
       }
+      this.PermissionPurchaseAllowed();
     },
 
     singleDelete(index,id){
@@ -297,6 +300,25 @@ export default {
         }
       }).catch(err=>{
       })
+    },
+    PermissionPurchaseAllowed () {
+      this.appFetch({
+        url: "groups",
+        method: "PATCH",
+        splice: "/" + this.groupId,
+        data: {
+          data: {
+            attributes: {
+              name: this.radioName,
+              is_paid: 0,
+            }
+          }
+        }
+      })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {});
     }
 
   },

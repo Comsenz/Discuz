@@ -351,8 +351,8 @@ class ListThreadsController extends AbstractListController
 
         $query->skip($offset)->take($limit);
 
-        foreach ((array)$sort as $field => $order) {
-            $query->orderBy('threads.' . Str::snake($field), $order);
+        foreach ((array) $sort as $field => $order) {
+            $query->orderBy(Str::snake($field), $order);
         }
 
         // 搜索事件，给插件一个修改它的机会。
@@ -377,10 +377,10 @@ class ListThreadsController extends AbstractListController
         if (($type = Arr::get($filter, 'type', '')) !== '') {
             // 筛选单个类型 或 以逗号分隔的多个类型
             if (strpos($type, ',') === false) {
-                $query->where('threads.type', (int)$type);
+                $query->where('threads.type', (int) $type);
             } else {
                 $type = Str::of($type)->explode(',')->map(function ($item) {
-                    return (int)$item;
+                    return (int) $item;
                 })->unique()->values();
 
                 $query->whereIn('threads.type', $type);
@@ -546,8 +546,8 @@ class ListThreadsController extends AbstractListController
 
         // 附近的帖
         $location = explode(',', Arr::get($filter, 'location'), 3);
-        $longitude = (float)Arr::get($location, 0, 0);     // 经度
-        $latitude = (float)Arr::get($location, 1, 0);      // 纬度
+        $longitude = (float) Arr::get($location, 0, 0);     // 经度
+        $latitude = (float) Arr::get($location, 1, 0);      // 纬度
         $distance = abs(Arr::get($location, 2, 5));         // 距离
 
         if ($longitude && $latitude && $distance) {
@@ -596,21 +596,15 @@ class ListThreadsController extends AbstractListController
             }
         }
 
-        // 未回答的问答帖，只有双方能看到
-//        if ($type == '' || $type == Thread::TYPE_OF_QUESTION || in_array(Thread::TYPE_OF_QUESTION, $type)) {
-//            $query->leftJoin('questions', function ($join) use ($actor) {
-//                $join->on('threads.id', '=', 'questions.thread_id')
-//                    ->where(function ($join) use ($actor) {
-//                        $join->where('questions.user_id', $actor->id)
-//                            ->orWhere('questions.be_user_id', $actor->id)
-//                            ->orWhere('questions.is_answer', Question::TYPE_OF_ANSWERED);
-//                    });
-//            })
-//                ->whereRaw(
-//                    ' IF((' . $this->tablePrefix . 'threads.type = ' . Thread::TYPE_OF_QUESTION .
-//                    '), (' . $this->tablePrefix . 'questions.id IS not NULL), (' . $this->tablePrefix . 'questions.id IS NULL))'
-//                );
-//        }
+        // 不展示筛选，默认不传筛选显示的帖子
+        if ($isDisplay = Arr::get($filter, 'isDisplay')) {
+            if ($isDisplay == 'yes') {
+                $query->where('threads.is_display', true);
+            } elseif ($isDisplay == 'no') {
+                $query->where('threads.is_display', false);
+            }
+        }
+
     }
 
     /**
