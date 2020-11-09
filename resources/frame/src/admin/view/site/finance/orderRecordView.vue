@@ -83,7 +83,7 @@
               {{scope.row.thread._data.title}}
             </span>
             <span :class="scope.row.thread?'cursor-pointer':''" v-else @click="viewClick(scope.row.thread?scope.row.thread._data.id:'')">
-              {{scope.row.thread?scope.row.thread.firstPost._data.content:'注册付费'}}
+              {{scope.row.thread ? scope.row.thread.firstPost._data.content : scope.row._data.type === 4 ? '权限购买' : '注册付费'}}
             </span>
           </template>
         </el-table-column>

@@ -64,6 +64,8 @@ class Category extends Model
         'thread.editPosts',            // 编辑回复
         'thread.hidePosts',            // 删除回复
         'thread.canBeReward',          // 是否允许被打赏
+        'editOwnThreadOrPost',         // 编辑自己主题或回复的权限
+        'hideOwnThreadOrPost',         // 删除自己主题或回复的权限
     ];
 
     /**
@@ -148,8 +150,10 @@ class Category extends Model
             $categories = static::all();
         }
 
-        $canForCategory = function (self $category) use ($user, $permission) {
-            return $user->hasPermission('category'.$category->id.'.'.$permission);
+        $hasGlobalPermission = $user->hasPermission($permission);
+
+        $canForCategory = function (self $category) use ($user, $permission, $hasGlobalPermission) {
+            return $hasGlobalPermission || $user->hasPermission('category'.$category->id.'.'.$permission);
         };
 
         $ids = [];

@@ -79,7 +79,7 @@ class ThreadSerializer extends AbstractSerializer
             'isEssence'         => (bool) $model->is_essence,
             'isSite'            => (bool) $model->is_site,
             'isAnonymous'       => (bool) $model->is_anonymous,
-            'canBeReward'       => $model->price == 0 && $model->user->can('canBeReward', $model),
+            'canBeReward'       => $model->price == 0 && $this->gate->forUser($model->user)->allows('canBeReward', $model),
             'canViewPosts'      => $gate->allows('viewPosts', $model),
             'canReply'          => $gate->allows('reply', $model),
             'canApprove'        => $gate->allows('approve', $model),
@@ -129,7 +129,7 @@ class ThreadSerializer extends AbstractSerializer
      * @param Thread $model
      * @param array $attributes
      */
-    public function isQuestion($model, &$attributes)
+    public function isQuestion(Thread $model, array &$attributes)
     {
         // 判断是否是问答帖
         if ($model->type !== Thread::TYPE_OF_QUESTION) {
@@ -145,30 +145,16 @@ class ThreadSerializer extends AbstractSerializer
         /**
          * 判断是否围观过帖子
          */
-        if ($model->question->price == 0) {
-            // 免费的问答，直接可以围观
+        if (
+            $model->user_id === $this->actor->id
+            || $model->question->be_user_id === $this->actor->id
+            || $this->actor->isAdmin()
+            || ! is_null($model->onlookerState)
+        ) {
+            // 作者 或 被提问者 或 管理员 或 已支付围观订单 直接已围观
             $attributes['onlookerState'] = true;
         } else {
-            if ($this->actor->isGuest()) {
-                // 游客身份 直接未围观
-                $attributes['onlookerState'] = false;
-            } elseif (
-                $model->user_id === $this->actor->id
-                || $model->question->be_user_id === $this->actor->id
-                || $this->actor->isAdmin()
-                || ! is_null($model->onlookerState)
-            ) {
-                // 作者 或 被提问者 或 管理员 直接已围观
-                $attributes['onlookerState'] = true;
-            } else {
-                // 判断是否是免费的问答免费的围观，直接等于围观过
-                if ($model->question->price == 0 && $model->question->onlooker_unit_price == 0) {
-                    $attributes['onlookerState'] = true;
-                } else {
-                    // 判断其它人查询订单是否围观过
-                    $attributes['onlookerState'] = false;
-                }
-            }
+            $attributes['onlookerState'] = false;
         }
 
         /**

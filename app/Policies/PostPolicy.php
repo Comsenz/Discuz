@@ -127,10 +127,7 @@ class PostPolicy extends AbstractPolicy
         }
 
         // 是作者本人且拥有编辑自己主题或回复的权限
-        if (
-            $post->user_id == $actor->id
-            && $actor->hasPermission('category'.$post->thread->category_id.'.editOwnThreadOrPost')
-        ) {
+        if ($post->user_id == $actor->id && $actor->can('editOwnThreadOrPost', $post->thread->category)) {
             return true;
         }
     }
@@ -148,10 +145,7 @@ class PostPolicy extends AbstractPolicy
         }
 
         // 是作者本人且拥有删除自己主题或回复的权限
-        if (
-            $post->user_id == $actor->id
-            && $actor->hasPermission('category'.$post->thread->category_id.'.hideOwnThreadOrPost')
-        ) {
+        if ($post->user_id == $actor->id && $actor->can('hideOwnThreadOrPost', $post->thread->category)) {
             return true;
         }
     }

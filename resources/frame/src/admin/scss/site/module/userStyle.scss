@@ -223,7 +223,12 @@
 */
 .rol-permission-box{
   position: relative;
-
+  .scope-action{
+    position: absolute;
+    top: 17PX;
+    left:45%;
+    color: #606266;
+  }
   .permission__title{
     position: absolute;
     left: 70PX;
@@ -248,17 +253,27 @@
   }
   .user-operate {
     .card-row-lf{
-      width: 100%;
+      width: 45%;
+      margin-right: 0;
     }
     .card-row-rf{
-      margin-top: 2PX;
-      margin-left: 20PX;
+      margin-left: -4PX;
     }
     .card-box__main {
       position: relative;
     }
   }
   .hasSelect{
+    .card-row-lf{
+      width: 100%;
+    }
+    .card-row-rf{
+      margin-top: 2PX;
+      margin-left: 24PX;
+    }
+    .card-box__main {
+      position: relative;
+    }
     .card-row-box {
       width: 45%;
     }
@@ -267,6 +282,9 @@
       left: 45%;
       top: 0;
       width: 340PX;
+    }
+    .el-checkbox__input {
+      visibility: hidden;
     }
   }
 }

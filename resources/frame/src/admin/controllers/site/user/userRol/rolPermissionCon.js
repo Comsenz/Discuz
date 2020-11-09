@@ -21,16 +21,23 @@ export default {
       canBeOnlooker: false, // 是否可以设置围观
       categoriesList: [], // 分类列表
       selectList:{
+        createThread:[],
         editOwnThreadOrPost: [],
         hideOwnThreadOrPost: [],
-        canBeReward: [],
+        'thread.canBeReward': [],
         viewThreads: [],
         'thread.reply':[],
+        'thread.hide':[],
         'thread.viewPosts':[],
         'thread.hidePosts':[],
         'thread.essence':[],
         'thread.edit':[],
         'thread.editPosts':[],
+        'thread.freeViewPosts.1':[],
+        'thread.freeViewPosts.2':[],
+        'thread.freeViewPosts.3':[],
+        'thread.freeViewPosts.4':[],
+        'thread.freeViewPosts.5':[],
       },
       activeTab: {
         // 设置权限当前项
@@ -118,7 +125,7 @@ export default {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
-          this.categoriesList = [];
+          this.categoriesList = [{id: '',name: '全局'}];
           res.readdata.forEach(item => {
             let category = {
               id: item._data.id,
@@ -184,13 +191,7 @@ export default {
             this.is_subordinate = res.data.attributes.is_subordinate;
             this.is_commission = res.data.attributes.is_commission;
             this.defaultuser = res.data.attributes.default;
-            if (res.data.attributes.default) {
-              this.value = false;
-              // this.patchGroupScale();
-            } else {
-              this.value = res.data.attributes.isPaid;
-            }
-            this.getCategories();
+            this.value = res.data.attributes.isPaid;
             data.forEach(item => {
               this.checked.push(item._data.permission);
             }); 
@@ -207,11 +208,7 @@ export default {
           checked.push("other.canInviteUserScale");
         }
       } else {
-        checked.forEach((item, index) => {
-          if (item === "other.canInviteUserScale") {
-            checked.splice(index, 1);
-          }
-        });
+        checked.filter(v=>v!=='other.canInviteUserScale');
       }
       this.appFetch({
         url: "groupPermission",
@@ -290,36 +287,88 @@ export default {
     },
     // 下拉改变
     changeCategory(obj,value) {
-      debugger;
-      const checked = this.checked;
+      let checked = this.checked;
       const item  = `category${value}.${obj}`;
-      if(this.selectList[obj].indexOf(value)!==-1){
-         if(checked.indexOf(item)===-1){
-           checked.push(item);
-         }
-      }else{
-        checked.forEach((v,index)=>{
-          if(v===item){
-             checked.splice(index,1);
+      // 是否选的是全局
+      if(!value){
+        // 选中全局就去除其他勾选
+        for (let i = 0; i < checked.length; i++) {
+          if(checked[i].indexOf(obj)!==-1 && checked[i].indexOf('category')!==-1){
+            checked.splice(i,1);
+            i = i - 1;
           }
-        })
+        }
+        if(checked.indexOf(obj)===-1)checked.push(obj);
+        this.selectList[obj] = [''];
+      }else{
+        // 在下拉选中数组里面
+        if(this.selectList[obj].indexOf(value)!==-1){
+          checked.push(item);
+       }else{
+         // 不在下拉选中数组中就去除此权限
+         checked = checked.filter(v=>v!==item);
+       }
+       // 选中其他的就去除全局的权限
+       checked = checked.filter(v=>v!==obj);
+       this.selectList[obj] = this.selectList[obj].filter(v=>!!v);
       }
       this.checked = checked;
     },
     setSelectValue(data) {
+      const checkedData = data;
       const selectList = this.selectList;
-      data.forEach(value=>{
-        if(value.indexOf('category')!==-1){
+      const selectItem = [
+        'createThread',
+        'thread.hide',
+        'editOwnThreadOrPost',
+        'hideOwnThreadOrPost',
+        'thread.canBeReward',
+        'viewThreads',
+        'thread.reply',
+        'thread.viewPosts',
+        'thread.hidePosts',
+        'thread.essence',
+        'thread.edit',
+        'thread.editPosts',
+        'thread.freeViewPosts.1',
+        'thread.freeViewPosts.2',
+        'thread.freeViewPosts.3',
+        'thread.freeViewPosts.4',
+        'thread.freeViewPosts.5',
+      ];
+      checkedData.forEach((value,index)=>{
+        // 全局的回显
+        if(selectItem.indexOf(value)!==-1){
+          selectList[value].push('');
+        }
+        // 分类的回显
+        if(value.indexOf('category') !== -1){
           const splitIndex = value.indexOf('.');
           const obj = value.substring(splitIndex + 1);
           const id = value.substring(8,splitIndex);
-          if(selectList[obj]){
+          if(selectList[obj] && checkedData.indexOf(obj) === -1){
             selectList[obj].push(id);
+          }
+          if(checkedData.indexOf(obj)!==-1){
+            checkedData.splice(index, 1);
           }
         }
       })
       this.selectList = selectList;
+      this.checked = checkedData;
     },
+    // 清除某项下拉
+    clearItem(value,obj) {
+      let item ='';
+      if(value){
+        item=`category${value}.${obj}`
+      }else{
+        item = obj;
+      }
+      let checkedData = this.checked;
+      checkedData = checkedData.filter(v=>v!==item);
+      this.checked = checkedData;
+    }
   },
   created() {
     this.groupId = this.$route.query.id;
@@ -327,6 +376,7 @@ export default {
     this.activeTab.name = this.$route.query.names || "userOperate";
     this.getGroupResource();
     this.signUpSet();
+    this.getCategories();
   },
   components: {
     Card,
