@@ -311,7 +311,7 @@
           </CardRow>
           <el-select
             v-model="selectList['thread.viewPosts']"
-            @remove-tag="clearItem($event, 'viewPosts')"
+            @remove-tag="clearItem($event, 'thread.viewPosts')"
             multiple
             collapse-tags
             placeholder="请选择"
