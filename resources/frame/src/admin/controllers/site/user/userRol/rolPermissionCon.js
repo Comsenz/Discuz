@@ -245,12 +245,7 @@ export default {
             this.is_subordinate = res.data.attributes.is_subordinate;
             this.is_commission = res.data.attributes.is_commission;
             this.defaultuser = res.data.attributes.default;
-            if (res.data.attributes.default) {
-              this.value = false;
-              this.patchGroupScale();
-            } else {
-              this.value = res.data.attributes.isPaid;
-            }
+            this.value = res.data.attributes.isPaid;
             data.forEach(item => {
               this.checked.push(item._data.permission);
             });
