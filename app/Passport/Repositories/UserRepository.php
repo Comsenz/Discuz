@@ -52,7 +52,9 @@ class UserRepository implements UserRepositoryInterface
      */
     public function getUserEntityByUserCredentials($username, $password, $grantType, ClientEntityInterface $clientEntity)
     {
-        $user = $this->users->findByIdentification(compact('username'));
+        $id = GenJwtToken::getUid();
+        $wehre = $uid ? compact('id') : compact('username');
+        $user = $this->users->findByIdentification($where);
 
         if (! $user && ! $user = $this->users->findByIdentification(['mobile'=>$username])) {
             throw new LoginFailedException;
