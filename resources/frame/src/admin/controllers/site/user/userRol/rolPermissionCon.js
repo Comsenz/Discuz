@@ -208,11 +208,7 @@ export default {
           checked.push("other.canInviteUserScale");
         }
       } else {
-        checked.forEach((item, index) => {
-          if (item === "other.canInviteUserScale") {
-            checked.splice(index, 1);
-          }
-        });
+        checked.filter(v=>v!=='other.canInviteUserScale');
       }
       this.appFetch({
         url: "groupPermission",
@@ -296,11 +292,12 @@ export default {
       // 是否选的是全局
       if(!value){
         // 选中全局就去除其他勾选
-        checked.forEach((v,index)=>{
-          if(v.indexOf(obj)!==-1&&v.indexOf('category')!==-1){
-            checked.splice(index,1);
+        for (let i = 0; i < checked.length; i++) {
+          if(checked[i].indexOf(obj)!==-1 && checked[i].indexOf('category')!==-1){
+            checked.splice(i,1);
+            i = i - 1;
           }
-        })
+        }
         if(checked.indexOf(obj)===-1)checked.push(obj);
         this.selectList[obj] = [''];
       }else{
@@ -309,11 +306,7 @@ export default {
           checked.push(item);
        }else{
          // 不在下拉选中数组中就去除此权限
-         checked.forEach((v,index)=>{
-           if(v===item){
-              checked.splice(index,1);
-           }
-         })
+         checked = checked.filter(v=>v!==item);
        }
        // 选中其他的就去除全局的权限
        checked = checked.filter(v=>v!==obj);
