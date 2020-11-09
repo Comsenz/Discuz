@@ -212,6 +212,8 @@ class ForumSettingSerializer extends AbstractSerializer
             strpos(Arr::get($this->request->getServerParams(), 'HTTP_X_APP_PLATFORM'), 'wx_miniprogram') !== false) {
             $attributes['other']['can_create_thread_video'] = false;
         }
+        //判断三种注册方式是否置灰禁用
+        $attributes['sign_enable']=$this->getSignInEnable($attributes);
 
         // 判断用户是否存在
         if ($actor->exists) {
@@ -248,6 +250,47 @@ class ForumSettingSerializer extends AbstractSerializer
         }
 
         return $attributes + Arr::except($model, 'id');
+    }
+
+    /**
+     *判断管理后台三个端的选项按钮是否禁用
+     */
+    private function getSignInEnable($attributes)
+    {
+        $siteManage = array_column($attributes['set_site']['site_manage'], null, 'key');
+        $user_name = true;
+        $mobile_phone = false;
+        $wechat_direct = false;
+        //配置了短信服务则允许使用手机号注册
+        $attributes['qcloud']['qcloud_sms'] && $mobile_phone = true;
+        //允许使用微信无感注册登陆
+        //pc :1,h5:2,微信：3
+        $pc = 1;
+        $h5 = 2;
+        $wechat = 3;
+        if ($siteManage[$pc]['value']) {
+            $wechat_direct = false;
+            if ($attributes['passport']['offiaccount_close'] && $attributes['passport']['oplatform_close']) {
+                $wechat_direct = true;
+            }
+        }
+        if ($siteManage[$h5]['value']) {
+            $wechat_direct = false;
+            if ($attributes['passport']['offiaccount_close']) {
+                $wechat_direct = true;
+            }
+        }
+        if ($siteManage[$wechat]['value']) {
+            $wechat_direct = false;
+            if ($attributes['passport']['miniprogram_close']) {
+                $wechat_direct = true;
+            }
+        }
+        return [
+            'user_name' => $user_name,
+            'mobile_phone' => $mobile_phone,
+            'wechat_direct' => $wechat_direct
+        ];
     }
 
     public function getId($model)

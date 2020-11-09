@@ -128,7 +128,7 @@ class SetSettingsController implements RequestHandlerInterface
 
         $settings->each(function ($setting) {
             $key = Arr::get($setting, 'key');
-            $value = trim(Arr::get($setting, 'value'));
+            $value = Arr::get($setting, 'value');
             $tag = Arr::get($setting, 'tag', 'default');
             if ($key == 'site_manage') {
                 if (is_array($value)) {
