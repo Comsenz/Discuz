@@ -60,9 +60,7 @@ class QuestionAnswerSerializer extends AbstractSerializer
 
         // 判断是否已围观来展示答案
         if (
-            $model->price == 0
-            || $model->onlooker_unit_price == 0
-            || $model->user_id == $actor->id
+            $model->user_id == $actor->id
             || $model->be_user_id == $actor->id
             || $actor->isAdmin()
             || ! is_null($model->thread->onlookerState)
