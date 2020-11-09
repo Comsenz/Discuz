@@ -85,11 +85,11 @@ class ThreadPolicy extends AbstractPolicy
         $request = app('request');
 
         // 过滤不存在用户的内容
-        $query->whereExists(function ($query) {
-            $query->selectRaw('1')
-                ->from('users')
-                ->whereColumn('threads.user_id', 'users.id');
-        });
+        // $query->whereExists(function ($query) {
+        //     $query->selectRaw('1')
+        //         ->from('users')
+        //         ->whereColumn('threads.user_id', 'users.id');
+        // });
 
         // 隐藏不允许当前用户查看的分类内容。
         if (Arr::get($request->getQueryParams(), 'filter.isSite', '') !== 'yes') {

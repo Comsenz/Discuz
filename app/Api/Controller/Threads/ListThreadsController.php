@@ -582,13 +582,18 @@ class ListThreadsController extends AbstractListController
 
         // 未回答的问答帖，只有双方能看到
         if ($type == '' || $type == Thread::TYPE_OF_QUESTION || in_array(Thread::TYPE_OF_QUESTION, $type)) {
-            $query->leftJoin('questions', 'threads.id', '=', 'questions.thread_id');
-            $query->orWhere(function (Builder $query) use ($actor) {
-                $query->where('questions.user_id', $actor->id)
-                    ->orWhere('questions.be_user_id', $actor->id)
-                    ->orWhere('questions.is_answer', Question::TYPE_OF_ANSWERED);
-
-            });
+            $query->leftJoin('questions', function ($join) use ($actor) {
+                $join->on('threads.id', '=', 'questions.thread_id')
+                    ->where(function ($join) use ($actor) {
+                        $join->where('questions.user_id', $actor->id)
+                            ->orWhere('questions.be_user_id', $actor->id)
+                            ->orWhere('questions.is_answer', Question::TYPE_OF_ANSWERED);
+                    });
+            })
+            ->whereRaw(
+                ' IF(('.$this->tablePrefix.'threads.type = '.Thread::TYPE_OF_QUESTION.
+                '), ('.$this->tablePrefix.'questions.id IS not NULL), ('.$this->tablePrefix.'questions.id IS NULL))'
+            );
         }
     }
 
