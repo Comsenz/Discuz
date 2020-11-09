@@ -22,7 +22,6 @@ export default {
       delLoading:false,     //删除按钮状态
       groupName:'',      //是否显示用户组名称
       groupId: '',       // 用户组id
-      groupName: '',     // 用户组名字
     }
   },
   methods:{
