@@ -20,6 +20,8 @@ namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
 use App\Common\CacheKey;
+use App\Common\ThreadCache;
+use App\Common\Utils;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Post;
@@ -134,17 +136,19 @@ class ListThreadsController extends AbstractListController
 
     protected $cache;
 
+    private  $threadCache;
     /**
      * @param ThreadRepository $threads
      * @param UrlGenerator $url
      * @param Cache $cache
      */
-    public function __construct(ThreadRepository $threads, UrlGenerator $url,Cache $cache)
+    public function __construct(ThreadRepository $threads, UrlGenerator $url, Cache $cache)
     {
         $this->threads = $threads;
         $this->url = $url;
         $this->cache = $cache;
         $this->tablePrefix = config('database.connections.mysql.prefix');
+        $this->threadCache = new ThreadCache();
     }
 
     /**
@@ -158,22 +162,26 @@ class ListThreadsController extends AbstractListController
     {
         $actor = $request->getAttribute('actor');
         $params = $request->getQueryParams();
-        $canCache = $this->canCache($params);
-        if ($canCache) {
-            $cacheKey = CacheKey::LIST_THREAD_HOME_INDEX . md5(json_encode($params, 256));
-            // $data = $this->cache->get($cacheKey);
-            // if (!empty($data)) {
-            //     return unserialize($data);
-            // }
-        }
         $filter = $this->extractFilter($request);
 
         // 获取推荐到站点信息页数据时 不检查权限
         if (Arr::get($filter, 'isSite', '') !== 'yes') {
             // 没有任何一个分类的查看权限时，判断是否有全局权限
-            if (! Category::getIdsWhereCan($actor, 'viewThreads')) {
+            if (!Category::getIdsWhereCan($actor, 'viewThreads')) {
                 $this->assertCan($actor, 'viewThreads');
             }
+        }
+
+        $canCache = $this->canCache($params);
+        $params['isMobile'] = Utils::isMobile($request->getServerParams());
+        $cacheKey = CacheKey::LIST_THREAD_HOME_INDEX . md5(json_encode($params, 256));
+        $data = $this->cache->get($cacheKey);
+        if (!empty($data)) {
+            $obj  = unserialize($data);
+            $metaLinks = $obj->getMetaLinks();
+            $threads = $obj->getThreads();
+            $this->addDocument($document, $metaLinks['params'], $metaLinks['count'], $metaLinks['offset'], $metaLinks['limit']);
+            return $threads;
         }
 
         $sort = $this->extractSort($request);
@@ -184,18 +192,7 @@ class ListThreadsController extends AbstractListController
 
         $threads = $this->search($actor, $filter, $sort, $limit, $offset);
 
-        $document->addPaginationLinks(
-            $this->url->route('threads.index'),
-            $params,
-            $offset,
-            $limit,
-            $this->threadCount
-        );
-
-        $document->setMeta([
-            'threadCount' => $this->threadCount,
-            'pageCount' => ceil($this->threadCount / $limit),
-        ]);
+        $this->addDocument($document, $params, $this->threadCount, $offset, $limit);
 
         Thread::setStateUser($actor, $threads);
         Post::setStateUser($actor);
@@ -266,13 +263,33 @@ class ListThreadsController extends AbstractListController
                 }
             });
         }
-
-        if($canCache){
-            $this->cache->put($cacheKey, serialize($threads), 3600);
-            $this->appendCache(CacheKey::LIST_THREAD_KEYS, $cacheKey, 3600);
+        if ($canCache) {
+            $this->threadCache->setThreads($threads);
+            $this->cache->put($cacheKey, serialize($this->threadCache), 1800);
+            $this->appendCache(CacheKey::LIST_THREAD_KEYS, $cacheKey, 1800);
         }
-
         return $threads;
+    }
+
+    private function addDocument($document, $params,$count, $offset, $limit)
+    {
+        $document->addPaginationLinks(
+            $this->url->route('threads.index'),
+            $params,
+            $offset,
+            $limit,
+            $count
+        );
+        $document->setMeta([
+            'threadCount' => $count,
+            'pageCount' => ceil($count / $limit),
+        ]);
+        $this->threadCache->setMetaLinks([
+            'params' => $params,
+            'count' => $count,
+            'offset' => $offset,
+            'limit' => $limit
+        ]);
     }
 
     private function canCache($params)
@@ -335,7 +352,7 @@ class ListThreadsController extends AbstractListController
 
         $query->skip($offset)->take($limit);
 
-        foreach ((array) $sort as $field => $order) {
+        foreach ((array)$sort as $field => $order) {
             $query->orderBy('threads.' . Str::snake($field), $order);
         }
 
@@ -361,10 +378,10 @@ class ListThreadsController extends AbstractListController
         if (($type = Arr::get($filter, 'type', '')) !== '') {
             // 筛选单个类型 或 以逗号分隔的多个类型
             if (strpos($type, ',') === false) {
-                $query->where('threads.type', (int) $type);
+                $query->where('threads.type', (int)$type);
             } else {
                 $type = Str::of($type)->explode(',')->map(function ($item) {
-                    return (int) $item;
+                    return (int)$item;
                 })->unique()->values();
 
                 $query->whereIn('threads.type', $type);
@@ -530,8 +547,8 @@ class ListThreadsController extends AbstractListController
 
         // 附近的帖
         $location = explode(',', Arr::get($filter, 'location'), 3);
-        $longitude = (float) Arr::get($location, 0, 0);     // 经度
-        $latitude = (float) Arr::get($location, 1, 0);      // 纬度
+        $longitude = (float)Arr::get($location, 0, 0);     // 经度
+        $latitude = (float)Arr::get($location, 1, 0);      // 纬度
         $distance = abs(Arr::get($location, 2, 5));         // 距离
 
         if ($longitude && $latitude && $distance) {
@@ -581,20 +598,20 @@ class ListThreadsController extends AbstractListController
         }
 
         // 未回答的问答帖，只有双方能看到
-        if ($type == '' || $type == Thread::TYPE_OF_QUESTION || in_array(Thread::TYPE_OF_QUESTION, $type)) {
-            $query->leftJoin('questions', function ($join) use ($actor) {
-                $join->on('threads.id', '=', 'questions.thread_id')
-                    ->where(function ($join) use ($actor) {
-                        $join->where('questions.user_id', $actor->id)
-                            ->orWhere('questions.be_user_id', $actor->id)
-                            ->orWhere('questions.is_answer', Question::TYPE_OF_ANSWERED);
-                    });
-            })
-            ->whereRaw(
-                ' IF(('.$this->tablePrefix.'threads.type = '.Thread::TYPE_OF_QUESTION.
-                '), ('.$this->tablePrefix.'questions.id IS not NULL), ('.$this->tablePrefix.'questions.id IS NULL))'
-            );
-        }
+//        if ($type == '' || $type == Thread::TYPE_OF_QUESTION || in_array(Thread::TYPE_OF_QUESTION, $type)) {
+//            $query->leftJoin('questions', function ($join) use ($actor) {
+//                $join->on('threads.id', '=', 'questions.thread_id')
+//                    ->where(function ($join) use ($actor) {
+//                        $join->where('questions.user_id', $actor->id)
+//                            ->orWhere('questions.be_user_id', $actor->id)
+//                            ->orWhere('questions.is_answer', Question::TYPE_OF_ANSWERED);
+//                    });
+//            })
+//                ->whereRaw(
+//                    ' IF((' . $this->tablePrefix . 'threads.type = ' . Thread::TYPE_OF_QUESTION .
+//                    '), (' . $this->tablePrefix . 'questions.id IS not NULL), (' . $this->tablePrefix . 'questions.id IS NULL))'
+//                );
+//        }
     }
 
     /**
