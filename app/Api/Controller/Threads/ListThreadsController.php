@@ -24,7 +24,6 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\PostUser;
-use App\Models\Question;
 use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
@@ -161,10 +160,10 @@ class ListThreadsController extends AbstractListController
         $canCache = $this->canCache($params);
         if ($canCache) {
             $cacheKey = CacheKey::LIST_THREAD_HOME_INDEX . md5(json_encode($params, 256));
-            // $data = $this->cache->get($cacheKey);
-            // if (!empty($data)) {
-            //     return unserialize($data);
-            // }
+            $data = $this->cache->get($cacheKey);
+            if (!empty($data)) {
+                return unserialize($data);
+            }
         }
         $filter = $this->extractFilter($request);
 
@@ -336,7 +335,7 @@ class ListThreadsController extends AbstractListController
         $query->skip($offset)->take($limit);
 
         foreach ((array) $sort as $field => $order) {
-            $query->orderBy('threads.' . Str::snake($field), $order);
+            $query->orderBy(Str::snake($field), $order);
         }
 
         // 搜索事件，给插件一个修改它的机会。
@@ -580,21 +579,15 @@ class ListThreadsController extends AbstractListController
             }
         }
 
-        // 未回答的问答帖，只有双方能看到
-        if ($type == '' || $type == Thread::TYPE_OF_QUESTION || in_array(Thread::TYPE_OF_QUESTION, $type)) {
-            $query->leftJoin('questions', function ($join) use ($actor) {
-                $join->on('threads.id', '=', 'questions.thread_id')
-                    ->where(function ($join) use ($actor) {
-                        $join->where('questions.user_id', $actor->id)
-                            ->orWhere('questions.be_user_id', $actor->id)
-                            ->orWhere('questions.is_answer', Question::TYPE_OF_ANSWERED);
-                    });
-            })
-            ->whereRaw(
-                ' IF(('.$this->tablePrefix.'threads.type = '.Thread::TYPE_OF_QUESTION.
-                '), ('.$this->tablePrefix.'questions.id IS not NULL), ('.$this->tablePrefix.'questions.id IS NULL))'
-            );
+        // 不展示筛选，默认不传筛选显示的帖子
+        if ($isDisplay = Arr::get($filter, 'isDisplay')) {
+            if ($isDisplay == 'yes') {
+                $query->where('threads.is_display', true);
+            } elseif ($isDisplay == 'no') {
+                $query->where('threads.is_display', false);
+            }
         }
+
     }
 
     /**
