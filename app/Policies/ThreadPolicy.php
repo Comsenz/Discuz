@@ -93,7 +93,11 @@ class ThreadPolicy extends AbstractPolicy
 
         // 隐藏不允许当前用户查看的分类内容。
         if (Arr::get($request->getQueryParams(), 'filter.isSite', '') !== 'yes') {
-            $query->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'viewThreads'));
+            if (Arr::get($request->getQueryParams(), 'id')) {
+                $query->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'thread.viewPosts'));
+            } else {
+                $query->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'viewThreads'));
+            }
         }
 
         // 回收站
@@ -117,7 +121,7 @@ class ThreadPolicy extends AbstractPolicy
             });
         }
 
-        //过滤小程序视频主题
+        // 过滤小程序视频主题
         if (!$this->settings->get('miniprogram_video', 'wx_miniprogram') &&
             strpos(Arr::get($request->getServerParams(), 'HTTP_X_APP_PLATFORM'), 'wx_miniprogram') !== false) {
             $query->where('type', '<>', Thread::TYPE_OF_VIDEO);

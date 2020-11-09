@@ -54,12 +54,11 @@ class ListCategoriesController extends AbstractListController
 
         $query = Category::query();
 
-        // 可查看内容的分类
-        $query->whereNotIn('id', Category::getIdsWhereCannot($actor, 'viewThreads'));
-
-        // 可发布内容的分类
+        // 根据传参返回可发布内容的分类，否则返回可查看内容的分类
         if ($actor->exists && isset($filter['createThread']) && $filter['createThread']) {
             $query->whereNotIn('id', Category::getIdsWhereCannot($actor, 'createThread'));
+        } else {
+            $query->whereNotIn('id', Category::getIdsWhereCannot($actor, 'viewThreads'));
         }
 
         $categories = $query->orderBy('sort')->get();
