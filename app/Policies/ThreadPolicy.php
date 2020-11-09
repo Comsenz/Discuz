@@ -67,12 +67,10 @@ class ThreadPolicy extends AbstractPolicy
             return true;
         }
 
-        // 是当前分类的版主 且 拥有该权限
+        // 分类权限
         if (
-            $thread->category
-            && ! $actor->isGuest()
-            // && in_array($actor->id, explode(',', $thread->category->moderators))
-            && $actor->hasPermission('category' . $thread->category->id . '.thread.' . $ability)
+            in_array('thread.' . $ability, Category::$categoryPermissions)
+            && $actor->can('thread.' . $ability, $thread->category)
         ) {
             return true;
         }
@@ -87,11 +85,11 @@ class ThreadPolicy extends AbstractPolicy
         $request = app('request');
 
         // 过滤不存在用户的内容
-        $query->whereExists(function ($query) {
-            $query->selectRaw('1')
-                ->from('users')
-                ->whereColumn('threads.user_id', 'users.id');
-        });
+        // $query->whereExists(function ($query) {
+        //     $query->selectRaw('1')
+        //         ->from('users')
+        //         ->whereColumn('threads.user_id', 'users.id');
+        // });
 
         // 隐藏不允许当前用户查看的分类内容。
         if (Arr::get($request->getQueryParams(), 'filter.isSite', '') !== 'yes') {
@@ -133,8 +131,8 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function edit(User $actor, Thread $thread)
     {
-        // 是作者本人且拥有编辑自己主题或回复的权限 或者 是管理员
-        if (($thread->user_id == $actor->id && $actor->hasPermission('editOwnThreadOrPost')) || $actor->isAdmin()) {
+        // 是作者本人且拥有编辑自己主题或回复的权限
+        if ($thread->user_id == $actor->id && $actor->can('editOwnThreadOrPost', $thread->category)) {
             return true;
         }
     }
@@ -146,9 +144,21 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function hide(User $actor, Thread $thread)
     {
-        // 是作者本人且拥有删除自己主题或回复的权限 或者 是管理员
-        if (($thread->user_id == $actor->id && $actor->hasPermission('hideOwnThreadOrPost')) || $actor->isAdmin()) {
+        // 是作者本人且拥有删除自己主题或回复的权限
+        if ($thread->user_id == $actor->id && $actor->can('hideOwnThreadOrPost', $thread->category)) {
             return true;
+        }
+    }
+
+    /**
+     * @param User $actor
+     * @param Thread $thread
+     * @return bool
+     */
+    public function reply(User $actor, Thread $thread)
+    {
+        if (! $actor->can('viewThreads', $thread->category)) {
+            return false;
         }
     }
 }

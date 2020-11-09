@@ -136,13 +136,13 @@ module.exports = {
         { from: /.*/, to: "/index.html" },
       ]
     },
-    // port: 443,
-    // http2: true,
-    // disableHostCheck: true,
+    port: 443,
+    http2: true,
+    disableHostCheck: true,
     contentBase: false,
     proxy: {
       "/api": {
-        target: "https://dq.comsenz-service.com",
+        target: "https://discuz.run",
         changeOrigin: true,
         secure: false,
       }

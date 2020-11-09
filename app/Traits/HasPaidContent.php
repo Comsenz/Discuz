@@ -70,14 +70,21 @@ trait HasPaidContent
 
     /**
      * 是否无权查看
-     * 没权限查看时，如果是推荐到站点首页的可以查看
+     *
      * @param Thread $thread
      * @return bool
      */
     public function cannotView(Thread $thread)
     {
-        return (! $this->actor->hasPermission('thread.viewPosts') && !$thread->is_site)
-            || ($thread->price > 0 && ! $thread->is_paid);
+        // 不能查看详情
+        $cannotViewPosts = ! $this->actor->can('viewPosts', $thread);
+
+        // 不能免费查看付费内容
+        $cannotFreeViewPosts = ! $this->actor->can('freeViewPosts.' . $thread->type, $thread);
+
+        // （非站点推荐帖 且 不能查看详情）或（未付费 且 不能免费查看付费内容）
+        return (! $thread->is_site && $cannotViewPosts)
+            || ($thread->price > 0 && ! $thread->is_paid && $cannotFreeViewPosts);
     }
 
     /**
@@ -111,10 +118,12 @@ trait HasPaidContent
             && $this->cannotView($post->thread)
         ) {
             $content = Str::of($post->content);
-
-            if ($content->length() > $post->thread->free_words) {
-                $post->content = $content->substr(0, $post->thread->free_words)->finish(Post::SUMMARY_END_WITH);
+            if ($post->thread->free_words > 1) {
+                $words = (int)$post->thread->free_words;
+            } else {
+                $words = ceil($content->length() * $post->thread->free_words);
             }
+            $post->content = $content->substr(0, $words)->finish(Post::SUMMARY_END_WITH);
         }
     }
 

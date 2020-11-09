@@ -66,11 +66,11 @@ class PostPolicy extends AbstractPolicy
     public function find(User $actor, Builder $query)
     {
         // 过滤不存在用户的内容
-        $query->whereExists(function ($query) {
-            $query->selectRaw('1')
-                ->from('users')
-                ->whereColumn('posts.user_id', 'users.id');
-        });
+        // $query->whereExists(function ($query) {
+        //     $query->selectRaw('1')
+        //         ->from('users')
+        //         ->whereColumn('posts.user_id', 'users.id');
+        // });
 
         // 确保帖子所在主题可见。
         $query->whereExists(function ($query) use ($actor) {
@@ -126,8 +126,8 @@ class PostPolicy extends AbstractPolicy
             return $actor->can('edit', $post->thread);
         }
 
-        // 是作者本人且拥有编辑自己主题或回复的权限 或者 是管理员
-        if (($post->user_id == $actor->id && $actor->hasPermission('editOwnThreadOrPost')) || $actor->isAdmin()) {
+        // 是作者本人且拥有编辑自己主题或回复的权限
+        if ($post->user_id == $actor->id && $actor->can('editOwnThreadOrPost', $post->thread->category)) {
             return true;
         }
     }
@@ -144,8 +144,8 @@ class PostPolicy extends AbstractPolicy
             return $actor->can('hide', $post->thread);
         }
 
-        // 是作者本人且拥有删除自己主题或回复的权限 或者 是管理员
-        if (($post->user_id == $actor->id && $actor->hasPermission('hideOwnThreadOrPost')) || $actor->isAdmin()) {
+        // 是作者本人且拥有删除自己主题或回复的权限
+        if ($post->user_id == $actor->id && $actor->can('hideOwnThreadOrPost', $post->thread->category)) {
             return true;
         }
     }

@@ -20,28 +20,35 @@ export default {
       wechatPayment: false, // 是否开启微信支付
       canBeOnlooker: false, // 是否可以设置围观
       categoriesList: [], // 分类列表
+      selectList:{
+        createThread:[],
+        editOwnThreadOrPost: [],
+        hideOwnThreadOrPost: [],
+        'thread.canBeReward': [],
+        viewThreads: [],
+        'thread.reply':[],
+        'thread.hide':[],
+        'thread.viewPosts':[],
+        'thread.hidePosts':[],
+        'thread.essence':[],
+        'thread.edit':[],
+        'thread.editPosts':[],
+        'thread.freeViewPosts.1':[],
+        'thread.freeViewPosts.2':[],
+        'thread.freeViewPosts.3':[],
+        'thread.freeViewPosts.4':[],
+        'thread.freeViewPosts.5':[],
+      },
       activeTab: {
         // 设置权限当前项
-        title: "内容发布权限",
-        name: "publish"
+        title: "操作权限",
+        name: "userOperate"
       },
       menuData: [
         // 设置权限
         {
-          title: "内容发布权限",
-          name: "publish"
-        },
-        {
-          title: "内容分类权限",
-          name: "category"
-        },
-        {
-          title: "前台操作权限",
-          name: "operate"
-        },
-        {
-          title: "前台管理权限",
-          name: "manage"
+          title: "操作权限",
+          name: "userOperate"
         },
         {
           title: "安全设置",
@@ -65,7 +72,8 @@ export default {
       dyedate: "",
       ispad: "",
       allowtobuy: "",
-      defaultuser: false
+      defaultuser: false,
+
     };
   },
   methods: {
@@ -117,78 +125,16 @@ export default {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
-          this.categoriesList = [];
+          this.categoriesList = [{id: '',name: '全局'}];
           res.readdata.forEach(item => {
             let category = {
               id: item._data.id,
               name: item._data.name
             };
-
-            this.handleCheckedCategoryPermissionsChange(category);
-
             this.categoriesList.push(category);
           });
         }
       });
-    },
-
-    /**
-     * 全选与取消全选
-     *
-     * @param category
-     */
-    handleCheckAllChange(category) {
-      let categoryPermissions = [
-        `category${category.id}.viewThreads`,
-        `category${category.id}.createThread`,
-        `category${category.id}.replyThread`,
-        `category${category.id}.thread.edit`,
-        `category${category.id}.thread.hide`,
-        `category${category.id}.thread.essence`
-      ];
-
-      categoryPermissions.forEach(item => {
-        let index = this.checked.indexOf(item);
-
-        if (category.checkAll) {
-          if (index === -1) {
-            this.checked.push(item);
-          }
-        } else {
-          if (index !== -1) {
-            this.checked.splice(index, 1);
-          }
-        }
-      });
-
-      category.isIndeterminate = false;
-    },
-
-    /**
-     * 分类权限选中状态改变
-     *
-     * @param category
-     */
-    handleCheckedCategoryPermissionsChange(category) {
-      let checkedCount = 0;
-      let categoryPermissions = [
-        `category${category.id}.viewThreads`,
-        `category${category.id}.createThread`,
-        `category${category.id}.replyThread`,
-        `category${category.id}.thread.edit`,
-        `category${category.id}.thread.hide`,
-        `category${category.id}.thread.essence`
-      ];
-
-      this.checked.forEach(item => {
-        if (categoryPermissions.indexOf(item) !== -1) {
-          checkedCount++;
-        }
-      });
-
-      category.checkAll = checkedCount === categoryPermissions.length;
-      category.isIndeterminate =
-        checkedCount > 0 && checkedCount < categoryPermissions.length;
     },
 
     submitClick() {
@@ -248,8 +194,9 @@ export default {
             this.value = res.data.attributes.isPaid;
             data.forEach(item => {
               this.checked.push(item._data.permission);
-            });
-            this.getCategories();
+            }); 
+            // 下拉值回显
+            this.setSelectValue(this.checked);
           }
         })
         .catch(err => {});
@@ -267,7 +214,6 @@ export default {
           }
         });
       }
-      console.log(checked, "参数~~~~~~~~~~~~~~");
       this.appFetch({
         url: "groupPermission",
         method: "post",
@@ -342,12 +288,99 @@ export default {
         return false;
       }
       return true;
+    },
+    // 下拉改变
+    changeCategory(obj,value) {
+      let checked = this.checked;
+      const item  = `category${value}.${obj}`;
+      // 是否选的是全局
+      if(!value){
+        // 选中全局就去除其他勾选
+        checked.forEach((v,index)=>{
+          if(v.indexOf(obj)!==-1&&v.indexOf('category')!==-1){
+            checked.splice(index,1);
+          }
+        })
+        if(checked.indexOf(obj)===-1)checked.push(obj);
+        this.selectList[obj] = [''];
+      }else{
+        // 在下拉选中数组里面
+        if(this.selectList[obj].indexOf(value)!==-1){
+          checked.push(item);
+       }else{
+         // 不在下拉选中数组中就去除此权限
+         checked.forEach((v,index)=>{
+           if(v===item){
+              checked.splice(index,1);
+           }
+         })
+       }
+       // 选中其他的就去除全局的权限
+       checked = checked.filter(v=>v!==obj);
+       this.selectList[obj] = this.selectList[obj].filter(v=>!!v);
+      }
+      this.checked = checked;
+    },
+    setSelectValue(data) {
+      const checkedData = data;
+      const selectList = this.selectList;
+      const selectItem = [
+        'createThread',
+        'thread.hide',
+        'editOwnThreadOrPost',
+        'hideOwnThreadOrPost',
+        'thread.canBeReward',
+        'viewThreads',
+        'thread.reply',
+        'thread.viewPosts',
+        'thread.hidePosts',
+        'thread.essence',
+        'thread.edit',
+        'thread.editPosts',
+        'thread.freeViewPosts.1',
+        'thread.freeViewPosts.2',
+        'thread.freeViewPosts.3',
+        'thread.freeViewPosts.4',
+        'thread.freeViewPosts.5',
+      ];
+      checkedData.forEach((value,index)=>{
+        // 全局的回显
+        if(selectItem.indexOf(value)!==-1){
+          selectList[value].push('');
+        }
+        // 分类的回显
+        if(value.indexOf('category') !== -1){
+          const splitIndex = value.indexOf('.');
+          const obj = value.substring(splitIndex + 1);
+          const id = value.substring(8,splitIndex);
+          if(selectList[obj] && checkedData.indexOf(obj) === -1){
+            selectList[obj].push(id);
+          }
+          if(checkedData.indexOf(obj)!==-1){
+            checkedData.splice(index, 1);
+          }
+        }
+      })
+      this.selectList = selectList;
+      this.checked = checkedData;
+    },
+    // 清除某项下拉
+    clearItem(value,obj) {
+      let item ='';
+      if(value){
+        item=`category${value}.${obj}`
+      }else{
+        item = obj;
+      }
+      let checkedData = this.checked;
+      checkedData = checkedData.filter(v=>v!==item);
+      this.checked = checkedData;
     }
   },
   created() {
     this.groupId = this.$route.query.id;
-    this.activeTab.title = this.$route.query.title || "内容发布权限";
-    this.activeTab.name = this.$route.query.names || "publish";
+    this.activeTab.title = this.$route.query.title || "操作权限";
+    this.activeTab.name = this.$route.query.names || "userOperate";
     this.getGroupResource();
     this.signUpSet();
   },

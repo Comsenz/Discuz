@@ -19,9 +19,12 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
+use App\Common\CacheKey;
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\PostUser;
+use App\Models\Question;
 use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
@@ -29,6 +32,7 @@ use App\Repositories\TopicRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -51,7 +55,6 @@ class ListThreadsController extends AbstractListController
      * {@inheritdoc}
      */
     public $include = [
-        'user',
         'firstPost',
         'threadVideo',
         'threadAudio',
@@ -81,6 +84,7 @@ class ListThreadsController extends AbstractListController
     ];
 
     public $mustInclude = [
+        'user',
         'favoriteState',
         'firstPost.likeState',
         'question',
@@ -128,14 +132,18 @@ class ListThreadsController extends AbstractListController
      */
     protected $tablePrefix;
 
+    protected $cache;
+
     /**
      * @param ThreadRepository $threads
      * @param UrlGenerator $url
+     * @param Cache $cache
      */
-    public function __construct(ThreadRepository $threads, UrlGenerator $url)
+    public function __construct(ThreadRepository $threads, UrlGenerator $url,Cache $cache)
     {
         $this->threads = $threads;
         $this->url = $url;
+        $this->cache = $cache;
         $this->tablePrefix = config('database.connections.mysql.prefix');
     }
 
@@ -149,11 +157,23 @@ class ListThreadsController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
+        $params = $request->getQueryParams();
+        $canCache = $this->canCache($params);
+        if ($canCache) {
+            $cacheKey = CacheKey::LIST_THREAD_HOME_INDEX . md5(json_encode($params, 256));
+            // $data = $this->cache->get($cacheKey);
+            // if (!empty($data)) {
+            //     return unserialize($data);
+            // }
+        }
+        $filter = $this->extractFilter($request);
 
         // 获取推荐到站点信息页数据时 不检查权限
-        $filter = $this->extractFilter($request);
         if (Arr::get($filter, 'isSite', '') !== 'yes') {
-            $this->assertCan($actor, 'viewThreads');
+            // 没有任何一个分类的查看权限时，判断是否有全局权限
+            if (! Category::getIdsWhereCan($actor, 'viewThreads')) {
+                $this->assertCan($actor, 'viewThreads');
+            }
         }
 
         $sort = $this->extractSort($request);
@@ -166,7 +186,7 @@ class ListThreadsController extends AbstractListController
 
         $document->addPaginationLinks(
             $this->url->route('threads.index'),
-            $request->getQueryParams(),
+            $params,
             $offset,
             $limit,
             $this->threadCount
@@ -247,9 +267,50 @@ class ListThreadsController extends AbstractListController
             });
         }
 
+        if($canCache){
+            $this->cache->put($cacheKey, serialize($threads), 3600);
+            $this->appendCache(CacheKey::LIST_THREAD_KEYS, $cacheKey, 3600);
+        }
+
         return $threads;
     }
 
+    private function canCache($params)
+    {
+        $canCache = false;
+        if (isset($params['include'])) {
+            if ($params['include'] == 'firstPost') {
+                $canCache = true;
+            }
+        }
+        if (isset($params['page'])) {
+            if ($params['page']['number'] == 1) {
+                $canCache = true;
+            }
+        }
+        return $canCache;
+    }
+
+    /**
+     *缓存key单独记录便于数据变更的时候清除缓存
+     */
+    private function appendCache($key, $value, $ttl)
+    {
+        $v0 = $this->cache->get($key);
+        if (empty($v0)) {
+            $v1 = [$value];
+        } else {
+            $v1 = json_decode($v0, true);
+            if (!empty($v1)) {
+                $v1[] = $value;
+            } else {
+                return false;
+            }
+        }
+        $v1 = array_unique($v1);
+        $this->cache->put($key, json_encode($v1, 256), $ttl);
+        return $v1;
+    }
     /**
      * @param $actor
      * @param $filter
@@ -275,7 +336,7 @@ class ListThreadsController extends AbstractListController
         $query->skip($offset)->take($limit);
 
         foreach ((array) $sort as $field => $order) {
-            $query->orderBy(Str::snake($field), $order);
+            $query->orderBy('threads.' . Str::snake($field), $order);
         }
 
         // 搜索事件，给插件一个修改它的机会。
@@ -519,15 +580,21 @@ class ListThreadsController extends AbstractListController
             }
         }
 
-        // 不展示筛选，默认不传筛选显示的帖子
-        if ($isDisplay = Arr::get($filter, 'isDisplay')) {
-            if ($isDisplay == 'yes') {
-                $query->where('threads.is_display', true);
-            } elseif ($isDisplay == 'no') {
-                $query->where('threads.is_display', false);
-            }
+        // 未回答的问答帖，只有双方能看到
+        if ($type == '' || $type == Thread::TYPE_OF_QUESTION || in_array(Thread::TYPE_OF_QUESTION, $type)) {
+            $query->leftJoin('questions', function ($join) use ($actor) {
+                $join->on('threads.id', '=', 'questions.thread_id')
+                    ->where(function ($join) use ($actor) {
+                        $join->where('questions.user_id', $actor->id)
+                            ->orWhere('questions.be_user_id', $actor->id)
+                            ->orWhere('questions.is_answer', Question::TYPE_OF_ANSWERED);
+                    });
+            })
+            ->whereRaw(
+                ' IF(('.$this->tablePrefix.'threads.type = '.Thread::TYPE_OF_QUESTION.
+                '), ('.$this->tablePrefix.'questions.id IS not NULL), ('.$this->tablePrefix.'questions.id IS NULL))'
+            );
         }
-
     }
 
     /**

@@ -131,8 +131,7 @@ class EditThread
 
         if ($thread->price > 0 && isset($attributes['free_words'])) {
             $this->assertCan($this->actor, 'edit', $thread);
-
-            $thread->free_words = (int) $attributes['free_words'];
+            $thread->free_words = (float)Arr::get($this->data, 'attributes.free_words', 0);
         }
 
         if (isset($attributes['longitude']) && isset($attributes['latitude'])) {

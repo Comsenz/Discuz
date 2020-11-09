@@ -48,7 +48,7 @@ export default {
           icon: 'iconduixiangcunchu',
           setFlag: true
         }, {
-          name: '视频',
+          name: '云点播',
           type: 'qcloud_vod',
           description: '请先配置云API，开通腾讯云的云点播VOD服务，并确保有对应资源包，<a href="https://discuz.chat/manual-admin/2.html#_2-7-7-%E8%A7%86%E9%A2%91" target="_blank">查看文档</a>',
           status: '',
