@@ -27,6 +27,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
+use App\Commands\Users\GenJwtToken;
 
 class UserRepository implements UserRepositoryInterface
 {
