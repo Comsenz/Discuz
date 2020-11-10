@@ -79,15 +79,47 @@
           label="商品名称"
           min-width="150">
           <template slot-scope="scope">
-            <span :class="scope.row.thread?'cursor-pointer':''" v-if="scope.row.thread && scope.row.thread._data.type === 1" @click="viewClick(scope.row.thread?scope.row.thread._data.id:'')">
-              {{scope.row.thread._data.title}}
+            <span :class="scope.row.thread?'cursor-pointer':''" v-if="scope.row.thread && (scope.row._data.type === 2 || scope.row._data.type === 3 || scope.row._data.type === 5 || scope.row._data.type === 6 || scope.row._data.type === 7)" @click="viewClick(scope.row.thread?scope.row.thread._data.id:'')">
+              {{scope.row.thread.firstPost._data.content}}
             </span>
-            <span :class="scope.row.thread?'cursor-pointer':''" v-else @click="viewClick(scope.row.thread?scope.row.thread._data.id:'')">
-              {{scope.row.thread ? scope.row.thread.firstPost._data.content : scope.row._data.type === 4 ? '权限购买' : '注册付费'}}
+            <span :class="scope.row.thread?'cursor-pointer':''" v-else-if="scope.row._data.type === 1" @click="viewClick('')">
+              注册付费
+            </span>
+            <span :class="scope.row.thread?'cursor-pointer':''" v-else-if="scope.row._data.type === 4" @click="viewClick('')">
+              {{scope.row.group._data.name}}用户组
             </span>
           </template>
         </el-table-column>
-
+        <el-table-column
+          prop="thread.firstPost._data.content"
+          show-overflow-tooltip
+          label="类型"
+          min-width="80">
+          <template slot-scope="scope">
+            <span v-if="scope.row._data.type === 1">
+              注册
+            </span>
+            <span v-else-if="scope.row._data.type === 2">
+              打赏
+            </span>
+            <span  v-else-if="scope.row._data.type === 3">
+              付费主题
+            </span>
+            <span v-else-if="scope.row._data.type === 4">
+              付费用户组
+            </span>
+            <span v-else-if="scope.row._data.type === 5">
+              问答提问支付
+            </span>
+            <span v-else-if="scope.row._data.type === 6">
+              问答围观付费
+            </span>
+            <span v-else-if="scope.row._data.type === 7">
+              付费附件
+            </span>
+          </template>
+        </el-table-column>
+        
         <el-table-column
           prop="_data.amount"
           label="金额"

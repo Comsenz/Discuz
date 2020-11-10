@@ -26,6 +26,8 @@ class GenJwtToken
 {
     protected $data;
 
+    protected static $uid;
+
     public function __construct(array $data)
     {
         $this->data = $data;
@@ -43,5 +45,13 @@ class GenJwtToken
         ];
 
         return $apiClient->send(AccessTokenController::class, null, [], $param);
+    }
+
+    public static function setUid($uid) {
+        self::$uid = $uid;
+    }
+
+    public static function getUid() {
+        return self::$uid;
     }
 }

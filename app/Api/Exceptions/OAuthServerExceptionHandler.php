@@ -19,10 +19,10 @@
 namespace App\Api\Exceptions;
 
 use Exception;
+use Laminas\Diactoros\Response;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;
 use Tobscure\JsonApi\Exception\Handler\ResponseBag;
-use Nyholm\Psr7\Response;
 
 class OAuthServerExceptionHandler implements ExceptionHandlerInterface
 {

@@ -145,16 +145,21 @@ class ThreadSerializer extends AbstractSerializer
         /**
          * 判断是否围观过帖子
          */
-        if (
-            $model->user_id === $this->actor->id
-            || $model->question->be_user_id === $this->actor->id
-            || $this->actor->isAdmin()
-            || ! is_null($model->onlookerState)
-        ) {
-            // 作者 或 被提问者 或 管理员 或 已支付围观订单 直接已围观
-            $attributes['onlookerState'] = true;
+        if ($model->question->is_onlooker) {
+            if (
+                $model->user_id === $this->actor->id
+                || $model->question->be_user_id === $this->actor->id
+                || $this->actor->isAdmin()
+                || ! is_null($model->onlookerState)
+            ) {
+                // 作者 或 被提问者 或 管理员 或 已支付围观订单 直接已围观
+                $attributes['onlookerState'] = true;
+            } else {
+                $attributes['onlookerState'] = false;
+            }
         } else {
-            $attributes['onlookerState'] = false;
+            // 当帖子没有开启围观按钮时，所有人视为已围观
+            $attributes['onlookerState'] = true;
         }
 
         /**

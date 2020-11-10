@@ -93,11 +93,7 @@ class ThreadPolicy extends AbstractPolicy
 
         // 隐藏不允许当前用户查看的分类内容。
         if (Arr::get($request->getQueryParams(), 'filter.isSite', '') !== 'yes') {
-            if (Arr::get($request->getQueryParams(), 'id')) {
-                $query->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'thread.viewPosts'));
-            } else {
-                $query->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'viewThreads'));
-            }
+            $query->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'viewThreads'));
         }
 
         // 回收站
@@ -163,6 +159,22 @@ class ThreadPolicy extends AbstractPolicy
     {
         if (! $actor->can('viewThreads', $thread->category)) {
             return false;
+        }
+    }
+
+    /**
+     * @param User $actor
+     * @param Thread $thread
+     * @return bool|null
+     */
+    public function viewPosts(User $actor, Thread $thread)
+    {
+        if (
+            $thread->user_id == $actor->id
+            && $thread->is_approved == Thread::APPROVED
+            && (! $thread->deleted_at || $thread->deleted_user_id == $actor->id)
+        ) {
+            return true;
         }
     }
 }
