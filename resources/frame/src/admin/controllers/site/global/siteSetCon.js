@@ -79,7 +79,7 @@ export default {
     //     return this.fileList.length >0
     // },
     changeCloseList() {
-      return this.closeSelectList.length != 0;
+      return this.closeSelectList.length == 0;
     }
   },
 
@@ -157,13 +157,11 @@ export default {
 
             this.closeList = data.readdata._data.set_site.site_manage || [];
             this.closeSelectList = this.closeList.reduce((result, item) => {
-              console.log(item);
               if (item.value) {
                 result.push(item.key);
               }
               return result;
             }, []);
-            console.log(this.closeSelectList);
 
             this.siteCloseMsg = data.readdata._data.set_site.site_close_msg;
             this.purchase = !!data.readdata._data.set_site.site_pay_group_close;

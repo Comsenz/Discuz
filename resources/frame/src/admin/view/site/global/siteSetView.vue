@@ -137,8 +137,8 @@
       </CardRow>
     </Card>
 
-    <Card header="关闭站点：" class="card-radio-con">
-      <CardRow description="暂时将网站关闭，其他人无法访问，但不影响管理员访问">
+    <Card header="站点开关：" class="card-radio-con">
+      <CardRow description="站点当前开放的可访问的端，勾选则代表开启">
         <!-- <el-radio @change="radioChangeClose('1')" v-model="radio2" label="1">是</el-radio>
         <el-radio @change="radioChangeClose('2')" v-model="radio2" label="2">否</el-radio> -->
 
