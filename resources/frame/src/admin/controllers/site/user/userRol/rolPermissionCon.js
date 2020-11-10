@@ -208,7 +208,7 @@ export default {
           checked.push("other.canInviteUserScale");
         }
       } else {
-        checked.filter(v=>v!=='other.canInviteUserScale');
+        checked = checked.filter(v=>v!=='other.canInviteUserScale');
       }
       this.appFetch({
         url: "groupPermission",
