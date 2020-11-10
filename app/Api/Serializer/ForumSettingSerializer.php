@@ -266,24 +266,27 @@ class ForumSettingSerializer extends AbstractSerializer
         $attributes['qcloud']['qcloud_sms'] && $mobile_phone = true;
         //允许使用微信无感注册登陆
         //pc :1,h5:2,微信：3
+        $p1 = [];
+        $p2 = [];
         if ($siteManage[PubEnum::PC]['value']) {
-            $wechat_direct = false;
+            $p1[]=PubEnum::PC;
             if ($attributes['passport']['offiaccount_close'] && $attributes['passport']['oplatform_close']) {
-                $wechat_direct = true;
+                $p2[]=PubEnum::PC;
             }
         }
         if ($siteManage[PubEnum::H5]['value']) {
-            $wechat_direct = false;
+            $p1[]=PubEnum::H5;
             if ($attributes['passport']['offiaccount_close']) {
-                $wechat_direct = true;
+                $p2[]=PubEnum::H5;
             }
         }
         if ($siteManage[PubEnum::MinProgram]['value']) {
-            $wechat_direct = false;
+            $p1[]=PubEnum::MinProgram;
             if ($attributes['passport']['miniprogram_close']) {
-                $wechat_direct = true;
+                $p2[]=PubEnum::MinProgram;
             }
         }
+        $p1 == $p2 && $wechat_direct = true;
         return [
             'user_name' => $user_name,
             'mobile_phone' => $mobile_phone,
