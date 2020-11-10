@@ -153,7 +153,7 @@ class Category extends Model
         $hasGlobalPermission = $user->hasPermission($permission);
 
         $canForCategory = function (self $category) use ($user, $permission, $hasGlobalPermission) {
-            return $hasGlobalPermission || $user->hasPermission('category'.$category->id.'.'.$permission);
+            return 'switch.'.$permission && ($hasGlobalPermission || $user->hasPermission('category'.$category->id.'.'.$permission));
         };
 
         $ids = [];

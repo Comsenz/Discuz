@@ -27,6 +27,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
+use App\Commands\Users\GenJwtToken;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -52,7 +53,9 @@ class UserRepository implements UserRepositoryInterface
      */
     public function getUserEntityByUserCredentials($username, $password, $grantType, ClientEntityInterface $clientEntity)
     {
-        $user = $this->users->findByIdentification(compact('username'));
+        $id = GenJwtToken::getUid();
+        $where = $id ? compact('id') : compact('username');
+        $user = $this->users->findByIdentification($where);
 
         if (! $user && ! $user = $this->users->findByIdentification(['mobile'=>$username])) {
             throw new LoginFailedException;

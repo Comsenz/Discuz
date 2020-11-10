@@ -91,8 +91,11 @@ class ThreadPolicy extends AbstractPolicy
                 ->whereColumn('threads.user_id', 'users.id');
         });
 
-        // 隐藏不允许当前用户查看的分类内容。
-        if (Arr::get($request->getQueryParams(), 'filter.isSite', '') !== 'yes') {
+        // 列表中隐藏不允许当前用户查看的分类内容。
+        if (
+            ! Arr::get($request->getQueryParams(), 'id')
+            && Arr::get($request->getQueryParams(), 'filter.isSite', '') !== 'yes'
+        ) {
             $query->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'viewThreads'));
         }
 
@@ -117,7 +120,7 @@ class ThreadPolicy extends AbstractPolicy
             });
         }
 
-        //过滤小程序视频主题
+        // 过滤小程序视频主题
         if (!$this->settings->get('miniprogram_video', 'wx_miniprogram') &&
             strpos(Arr::get($request->getServerParams(), 'HTTP_X_APP_PLATFORM'), 'wx_miniprogram') !== false) {
             $query->where('type', '<>', Thread::TYPE_OF_VIDEO);
@@ -159,6 +162,22 @@ class ThreadPolicy extends AbstractPolicy
     {
         if (! $actor->can('viewThreads', $thread->category)) {
             return false;
+        }
+    }
+
+    /**
+     * @param User $actor
+     * @param Thread $thread
+     * @return bool|null
+     */
+    public function viewPosts(User $actor, Thread $thread)
+    {
+        if (
+            $thread->user_id == $actor->id
+            && $thread->is_approved == Thread::APPROVED
+            && (! $thread->deleted_at || $thread->deleted_user_id == $actor->id)
+        ) {
+            return true;
         }
     }
 }

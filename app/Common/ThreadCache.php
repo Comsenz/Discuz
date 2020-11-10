@@ -17,11 +17,40 @@
 
 namespace App\Common;
 
-
-class CacheKey
+class ThreadCache
 {
-    //记录首页各个分类的数据缓存
-    public const LIST_THREAD_HOME_INDEX = 'list_thread_home_index_';
-    //记录各个缓存的key值，便于数据更新的时候删除
-    public const LIST_THREAD_KEYS = 'list_thread_keys';
+    public $threads;
+    public $metaLinks;
+
+    /**
+     * @param mixed $metaLinks
+     */
+    public function setMetaLinks($metaLinks): void
+    {
+        $this->metaLinks = $metaLinks;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMetaLinks()
+    {
+        return $this->metaLinks;
+    }
+
+    /**
+     * @param mixed $threads
+     */
+    public function setThreads($threads): void
+    {
+        $this->threads = $threads;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getThreads()
+    {
+        return $this->threads;
+    }
 }

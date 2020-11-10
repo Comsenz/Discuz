@@ -48,7 +48,7 @@
           </CardRow>
         </Card>
         <Card>
-          <CardRow description="允许发布视频帖">
+          <CardRow description="允许发布视频帖，需先开启腾讯云-云点播服务">
             <el-checkbox
               v-model="checked"
               label="createThread.2"
@@ -75,12 +75,13 @@
           </CardRow>
         </Card>
         <Card>
-          <CardRow description="允许发布语音帖">
+          <CardRow description="允许发布语音帖，需先开启腾讯云-云点播服务">
             <el-checkbox
               v-model="checked"
               label="createThread.4"
               :disabled="
-                $router.history.current.query.id === '1' ||
+                videoDisabled ||
+                  $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
               "
               >发布语音</el-checkbox
@@ -142,7 +143,7 @@
           </CardRow>
         </Card>
         <Card>
-          <CardRow description="允许在发布问答时设置围观">
+          <CardRow description="允许在发布问答时设置围观，需先在全局设置里配置问答围观价格">
             <el-checkbox
               v-model="checked"
               label="canBeOnlooker"
@@ -196,7 +197,7 @@
           </CardRow>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="允许发布主题">
+          <CardRow description="允许在内容分类发布主题的权限">
             <el-checkbox
               :disabled="
                 $router.history.current.query.id === '1' ||
@@ -223,7 +224,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="回复主题的权限">
+          <CardRow description="允许在内容分类回复主题的权限">
             <el-checkbox
               :disabled="
                 $router.history.current.query.id === '1' ||
@@ -250,7 +251,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="内容允许被打赏">
+          <CardRow description="内容分类下内容允许被打赏的权限">
             <el-checkbox
               :disabled="
                 $router.history.current.query.id === '1' ||
@@ -281,7 +282,7 @@
       <div class="user-operate">
         <Card header="查看权限"></Card>
         <Card class="hasSelect">
-          <CardRow description="查看主题列表页的权限">
+          <CardRow description="查看内容分类主题列表的权限">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >查看主题列表</el-checkbox
             >
@@ -304,7 +305,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="查看主题的详情页的权限">
+          <CardRow description="查看内容分类主题详情的权限">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >查看主题详情</el-checkbox
             >
@@ -327,7 +328,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看付费帖子">
+          <CardRow description="免费查看内容分类下的付费帖子">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >免费查看付费帖子</el-checkbox
             >
@@ -350,7 +351,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看付费视频">
+          <CardRow description="免费查看内容分类下的付费视频">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >免费查看付费视频</el-checkbox
             >
@@ -373,7 +374,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看付费图片">
+          <CardRow description="免费查看内容分类下的付费图片">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >免费查看付费图片</el-checkbox
             >
@@ -396,7 +397,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看付费语音">
+          <CardRow description="免费查看内容分类下的付费语音">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >免费查看付费语音</el-checkbox
             >
@@ -419,7 +420,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看付费问答">
+          <CardRow description="免费查看内容分类下的付费问答">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >免费查看付费问答</el-checkbox
             >
@@ -458,20 +459,7 @@
           </CardRow>
         </Card>
         <Card>
-          <CardRow description="前台批量管理主题的权限">
-            <el-checkbox
-              v-model="checked"
-              label="thread.batchEdit"
-              :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
-              "
-              >批量管理主题</el-checkbox
-            >
-          </CardRow>
-        </Card>
-        <Card>
-          <CardRow description="前台按用户组邀请成员的权限">
+          <CardRow description="前台站点管理中按用户组邀请成员的权限">
             <el-checkbox
               v-model="checked"
               label="createInvite"
@@ -479,7 +467,7 @@
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
               "
-              >管理-邀请加入</el-checkbox
+              >邀请加入</el-checkbox
             >
           </CardRow>
         </Card>
@@ -510,33 +498,6 @@
           </CardRow>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="前台删除单个主题的权限">
-            <el-checkbox
-              :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
-              "
-              >删主题</el-checkbox
-            >
-          </CardRow>
-          <el-select
-            v-model="selectList['thread.hide']"
-            @remove-tag="clearItem($event, 'thread.hide')"
-            multiple
-            collapse-tags
-            placeholder="请选择"
-          >
-            <el-option
-              @click.native="changeCategory('thread.hide', item.id)"
-              v-for="item in categoriesList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            >
-            </el-option>
-          </el-select>
-        </Card>
-        <Card class="hasSelect">
           <CardRow description="前台精华、取消精华主题的权限">
             <el-checkbox
               :disabled="
@@ -555,33 +516,6 @@
           >
             <el-option
               @click.native="changeCategory('thread.essence', item.id)"
-              v-for="item in categoriesList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            >
-            </el-option>
-          </el-select>
-        </Card>
-        <Card class="hasSelect">
-          <CardRow description="前台删除单个回复的权限">
-            <el-checkbox
-              :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
-              "
-              >删回复</el-checkbox
-            >
-          </CardRow>
-          <el-select
-            v-model="selectList['thread.hidePosts']"
-            @remove-tag="clearItem($event, 'thread.hidePosts')"
-            multiple
-            collapse-tags
-            placeholder="请选择"
-          >
-            <el-option
-              @click.native="changeCategory('thread.hidePosts', item.id)"
               v-for="item in categoriesList"
               :key="item.id"
               :label="item.name"
@@ -618,6 +552,33 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
+          <CardRow description="前台删除单个主题的权限">
+            <el-checkbox
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >删除主题</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList['thread.hide']"
+            @remove-tag="clearItem($event, 'thread.hide')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('thread.hide', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
+        <Card class="hasSelect">
           <CardRow description="前台单个回复的编辑权限">
             <el-checkbox
               :disabled="
@@ -636,6 +597,33 @@
           >
             <el-option
               @click.native="changeCategory('thread.editPosts', item.id)"
+              v-for="item in categoriesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </Card>
+        <Card class="hasSelect">
+          <CardRow description="前台删除单个回复的权限">
+            <el-checkbox
+              :disabled="
+                $router.history.current.query.id === '1' ||
+                  $router.history.current.query.id === '7'
+              "
+              >删除回复</el-checkbox
+            >
+          </CardRow>
+          <el-select
+            v-model="selectList['thread.hidePosts']"
+            @remove-tag="clearItem($event, 'thread.hidePosts')"
+            multiple
+            collapse-tags
+            placeholder="请选择"
+          >
+            <el-option
+              @click.native="changeCategory('thread.hidePosts', item.id)"
               v-for="item in categoriesList"
               :key="item.id"
               :label="item.name"
