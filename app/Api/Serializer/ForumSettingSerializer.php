@@ -141,7 +141,6 @@ class ForumSettingSerializer extends AbstractSerializer
                 'count_users' => (int) $this->settings->get('user_count'),              // 站点用户数
 
                 // 管理权限
-                'can_batch_edit_threads' => $actor->can('thread.batchEdit'),            // 批量编辑主题
                 'can_edit_user_group' => $actor->can('user.edit.group'),                // 修改用户用户组
                 'can_edit_user_status' => $actor->can('user.edit.status'),              // 修改用户状态
 
