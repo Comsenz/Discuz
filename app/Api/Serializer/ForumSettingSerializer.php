@@ -68,6 +68,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_mode' => $this->settings->get('site_mode'), // pay public
 //                'site_close' => (bool)$this->settings->get('site_close'),
                 'site_manage' => json_decode($this->settings->get('site_manage'), true),
+                'site_close_msg'=>$this->settings->get('site_close_msg'),
                 'site_favicon' => $favicon ?: app(UrlGenerator::class)->to('/favicon.ico'),
                 'site_logo' => $logo ?: '',
                 'site_header_logo' => $headerLogo ?: '',
