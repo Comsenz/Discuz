@@ -191,9 +191,9 @@ class ForumSettingSerializer extends AbstractSerializer
         ];
 
         // 站点开关 - 满足条件返回
-        if ($attributes['set_site']['site_close'] == 1) {
-            $attributes['set_site'] += $this->forumField->getSiteClose();
-        }
+//        if ($attributes['set_site']['site_close'] == 1) {
+//            $attributes['set_site'] += $this->forumField->getSiteClose();
+//        }
 
         // 付费模式 - 满足条件返回
         if ($attributes['set_site']['site_mode'] == 'pay') {
