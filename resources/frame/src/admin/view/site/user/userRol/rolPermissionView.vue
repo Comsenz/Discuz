@@ -143,7 +143,7 @@
           </CardRow>
         </Card>
         <Card>
-          <CardRow description="允许在发布问答时设置围观">
+          <CardRow description="允许在发布问答时设置围观，需先在全局设置里配置问答围观价格">
             <el-checkbox
               v-model="checked"
               label="canBeOnlooker"
@@ -197,7 +197,7 @@
           </CardRow>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="允许发布主题">
+          <CardRow description="允许在内容分类发布主题的权限">
             <el-checkbox
               :disabled="
                 $router.history.current.query.id === '1' ||
@@ -224,7 +224,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="回复主题的权限">
+          <CardRow description="允许在内容分类回复主题的权限">
             <el-checkbox
               :disabled="
                 $router.history.current.query.id === '1' ||
@@ -251,7 +251,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="内容允许被打赏">
+          <CardRow description="内容分类下内容允许被打赏的权限">
             <el-checkbox
               :disabled="
                 $router.history.current.query.id === '1' ||
@@ -282,7 +282,7 @@
       <div class="user-operate">
         <Card header="查看权限"></Card>
         <Card class="hasSelect">
-          <CardRow description="查看主题列表页的权限">
+          <CardRow description="查看内容分类主题列表的权限">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >查看主题列表</el-checkbox
             >
@@ -305,7 +305,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="查看主题的详情页的权限">
+          <CardRow description="查看内容分类主题详情的权限">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >查看主题详情</el-checkbox
             >
@@ -328,7 +328,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看付费帖子">
+          <CardRow description="免费查看内容分类下的付费帖子">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >免费查看付费帖子</el-checkbox
             >
@@ -351,7 +351,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看付费视频">
+          <CardRow description="免费查看内容分类下的付费视频">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >免费查看付费视频</el-checkbox
             >
@@ -374,7 +374,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看付费图片">
+          <CardRow description="免费查看内容分类下的付费图片">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >免费查看付费图片</el-checkbox
             >
@@ -397,7 +397,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看付费语音">
+          <CardRow description="免费查看内容分类下的付费语音">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >免费查看付费语音</el-checkbox
             >
@@ -420,7 +420,7 @@
           </el-select>
         </Card>
         <Card class="hasSelect">
-          <CardRow description="免费查看付费问答">
+          <CardRow description="免费查看内容分类下的付费问答">
             <el-checkbox :disabled="$router.history.current.query.id === '1'"
               >免费查看付费问答</el-checkbox
             >
