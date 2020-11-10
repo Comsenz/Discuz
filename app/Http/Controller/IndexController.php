@@ -18,13 +18,13 @@
 
 namespace App\Http\Controller;
 
-use App\Common\Utils;
 use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Discuz\Common\Utils;
 
 class IndexController implements RequestHandlerInterface
 {
@@ -38,7 +38,7 @@ class IndexController implements RequestHandlerInterface
         if (Str::startsWith($route, '/admin')) {
             $file = 'admin.html';
         } else {
-            $isMobile = Utils::isMobile($request->getServerParams());
+            $isMobile = Utils::isMobile();
             $file = $isMobile ? 'index.html' : 'pc.html';
 
             if (Arr::has($request->getQueryParams(), 'from')) {
