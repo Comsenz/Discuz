@@ -64,6 +64,7 @@ class QuestionAnswerSerializer extends AbstractSerializer
             || $model->be_user_id == $actor->id
             || $actor->isAdmin()
             || ! is_null($model->thread->onlookerState)
+            || ! $model->is_onlooker
         ) {
             $attributes['content'] = $model->content;
             $attributes['content_html'] = $model->formatContent();
