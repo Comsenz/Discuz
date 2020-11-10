@@ -66,6 +66,11 @@ class Category extends Model
         'thread.canBeReward',          // 是否允许被打赏
         'editOwnThreadOrPost',         // 编辑自己主题或回复的权限
         'hideOwnThreadOrPost',         // 删除自己主题或回复的权限
+        'thread.freeViewPosts.1',      // 免费查看付费帖子
+        'thread.freeViewPosts.2',      // 免费查看付费视频
+        'thread.freeViewPosts.3',      // 免费查看付费图片
+        'thread.freeViewPosts.4',      // 免费查看付费语音
+        'thread.freeViewPosts.5',      // 免费查看付费问答
     ];
 
     /**
