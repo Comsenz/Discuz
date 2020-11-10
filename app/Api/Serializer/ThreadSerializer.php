@@ -106,7 +106,15 @@ class ThreadSerializer extends AbstractSerializer
             $attributes['isPaidAttachment'] = $model->is_paid_attachment;
         }
 
-        $this->isQuestion($model, $attributes);
+        // 问答围观状态
+        if ($model->type === Thread::TYPE_OF_QUESTION) {
+            $attributes['onlookerState'] = $model->getAttribute('onlookerState');
+        }
+
+        // 匿名（最后设置匿名，避免其他地方取不到用户）
+        if ($model->is_anonymous && $model->user->id != $this->actor->id) {
+            $model->user = new Anonymous;
+        }
 
         return $attributes;
     }
@@ -122,52 +130,6 @@ class ThreadSerializer extends AbstractSerializer
             } else {
                 return sprintf('%.2f', $percent);
             }
-        }
-    }
-
-    /**
-     * @param Thread $model
-     * @param array $attributes
-     */
-    public function isQuestion(Thread $model, array &$attributes)
-    {
-        // 判断是否是问答帖
-        if ($model->type !== Thread::TYPE_OF_QUESTION) {
-            return;
-        }
-
-        // 判断问答信息是否存在
-        if (empty($model->question)) {
-            $attributes['onlookerState'] = false;
-            return;
-        }
-
-        /**
-         * 判断是否围观过帖子
-         */
-        if ($model->question->is_onlooker) {
-            if (
-                $model->user_id === $this->actor->id
-                || $model->question->be_user_id === $this->actor->id
-                || $this->actor->isAdmin()
-                || ! is_null($model->onlookerState)
-            ) {
-                // 作者 或 被提问者 或 管理员 或 已支付围观订单 直接已围观
-                $attributes['onlookerState'] = true;
-            } else {
-                $attributes['onlookerState'] = false;
-            }
-        } else {
-            // 当帖子没有开启围观按钮时，所有人视为已围观
-            $attributes['onlookerState'] = true;
-        }
-
-        /**
-         * 判断是否匿名问答
-         * (非当前用户不是作者)
-         */
-        if ($model->is_anonymous && $model->user->id != $this->actor->id) {
-            $model->user = new Anonymous;
         }
     }
 
@@ -306,11 +268,19 @@ class ThreadSerializer extends AbstractSerializer
         return $this->hasMany($thread, TopicSerializer::class);
     }
 
+    /**
+     * @param $thread
+     * @return Relationship
+     */
     public function question($thread)
     {
         return $this->hasOne($thread, QuestionAnswerSerializer::class);
     }
 
+    /**
+     * @param $thread
+     * @return Relationship
+     */
     public function onlookers($thread)
     {
         return $this->hasMany($thread, UserSerializer::class);
