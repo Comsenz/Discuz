@@ -79,7 +79,7 @@ export default {
     //     return this.fileList.length >0
     // },
     changeCloseList() {
-      return this.closeSelectList.length == 0;
+      return this.closeSelectList.length != this.closeList.length;
     }
   },
 
