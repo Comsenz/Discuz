@@ -20,6 +20,7 @@ namespace App\Traits;
 
 use App\Models\Attachment;
 use App\Models\Post;
+use App\Models\Question;
 use App\Models\Thread;
 use App\Models\ThreadVideo;
 use App\Models\User;
@@ -46,7 +47,7 @@ trait HasPaidContent
     protected $orders = [];
 
     /**
-     * @param Thread|Post|Attachment|ThreadVideo $model
+     * @param Thread|Post|Attachment|ThreadVideo|Question $model
      */
     public function paidContent($model)
     {
@@ -59,12 +60,15 @@ trait HasPaidContent
 
         if ($model instanceof Thread) {
             $this->hideImagesAndAttachments($model);
+            $this->getOnlookerState($model);
         } elseif ($model instanceof Post) {
             $this->summaryOfContent($model);
         } elseif ($model instanceof Attachment) {
             $this->blurImage($model);
         } elseif ($model instanceof ThreadVideo) {
             $this->hideMedia($model);
+        } elseif ($model instanceof Question) {
+            $this->hideAnswer($model);
         }
     }
 
@@ -102,6 +106,38 @@ trait HasPaidContent
             $thread->firstPost->setRelation('images', collect());
             $thread->firstPost->setRelation('attachments', collect());
         }
+    }
+
+    /**
+     * 获取问答帖围观状态
+     *
+     * @param Thread $thread
+     */
+    public function getOnlookerState(Thread $thread)
+    {
+        if ($thread->type !== Thread::TYPE_OF_QUESTION) {
+            return;
+        }
+
+        if (! $thread->question) {
+            $onlookerState = false;
+        } elseif (! $thread->question->is_onlooker) {
+            $onlookerState = true;
+        } else {
+            if (
+                $thread->user_id === $this->actor->id
+                || $thread->question->be_user_id === $this->actor->id
+                || $this->actor->isAdmin()
+                || $this->actor->can('freeViewPosts.' . Thread::TYPE_OF_QUESTION, $thread)
+                || ! is_null($thread->onlookerState)
+            ) {
+                $onlookerState = true;
+            } else {
+                $onlookerState = false;
+            }
+        }
+
+        $thread->setAttribute('onlookerState', $onlookerState);
     }
 
     /**
@@ -167,6 +203,21 @@ trait HasPaidContent
         ) {
             $threadVideo->file_id = '';
             $threadVideo->media_url = '';
+        }
+    }
+
+    /**
+     * 没有围观时隐藏问答帖答案
+     *
+     * @param Question $question
+     */
+    public function hideAnswer(Question $question)
+    {
+        $onlookerState = $question->thread->getAttribute('onlookerState')
+            ?? $this->getOnlookerState($question->thread);
+
+        if (! $onlookerState) {
+            $question->content = '';
         }
     }
 }

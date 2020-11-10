@@ -559,6 +559,11 @@ class Thread extends Model
             return null;
         }
 
+        // 免费查看付费内容
+        if ($user->can('freeViewPosts.' . $this->type, $this)) {
+            return true;
+        }
+
         // 用户不存在返回 false
         if (! $user->exists) {
             return false;
@@ -602,6 +607,11 @@ class Thread extends Model
         // 非付费主题返回 null
         if ($this->attachment_price <= 0) {
             return null;
+        }
+
+        // 免费查看付费内容
+        if ($user->can('freeViewPosts.' . $this->type, $this)) {
+            return true;
         }
 
         // 用户不存在返回 false
