@@ -23,6 +23,7 @@ use App\Models\Thread;
 use App\Models\User;
 use App\Settings\ForumSettingField;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Discuz\Common\PubEnum;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Support\Arr;
@@ -266,22 +267,19 @@ class ForumSettingSerializer extends AbstractSerializer
         $attributes['qcloud']['qcloud_sms'] && $mobile_phone = true;
         //允许使用微信无感注册登陆
         //pc :1,h5:2,微信：3
-        $pc = 1;
-        $h5 = 2;
-        $wechat = 3;
-        if ($siteManage[$pc]['value']) {
+        if ($siteManage[PubEnum::PC]['value']) {
             $wechat_direct = false;
             if ($attributes['passport']['offiaccount_close'] && $attributes['passport']['oplatform_close']) {
                 $wechat_direct = true;
             }
         }
-        if ($siteManage[$h5]['value']) {
+        if ($siteManage[PubEnum::H5]['value']) {
             $wechat_direct = false;
             if ($attributes['passport']['offiaccount_close']) {
                 $wechat_direct = true;
             }
         }
-        if ($siteManage[$wechat]['value']) {
+        if ($siteManage[PubEnum::MinProgram]['value']) {
             $wechat_direct = false;
             if ($attributes['passport']['miniprogram_close']) {
                 $wechat_direct = true;
