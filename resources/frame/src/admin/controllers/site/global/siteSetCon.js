@@ -63,7 +63,7 @@ export default {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
-          text: "ICON",
+          text: "站点ICON",
           textrule: "尺寸：120px*120px"
         }
       ]
