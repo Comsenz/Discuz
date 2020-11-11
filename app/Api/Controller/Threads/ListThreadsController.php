@@ -135,7 +135,8 @@ class ListThreadsController extends AbstractListController
 
     protected $cache;
 
-    private  $threadCache;
+    private $threadCache;
+
     /**
      * @param ThreadRepository $threads
      * @param UrlGenerator $url
@@ -270,7 +271,7 @@ class ListThreadsController extends AbstractListController
         return $threads;
     }
 
-    private function addDocument($document, $params,$count, $offset, $limit)
+    private function addDocument($document, $params, $count, $offset, $limit)
     {
         $document->addPaginationLinks(
             $this->url->route('threads.index'),
@@ -327,6 +328,7 @@ class ListThreadsController extends AbstractListController
         $this->cache->put($key, json_encode($v1, 256), $ttl);
         return $v1;
     }
+
     /**
      * @param $actor
      * @param $filter
@@ -604,7 +606,6 @@ class ListThreadsController extends AbstractListController
                 $query->where('threads.is_display', false);
             }
         }
-
     }
 
     /**
