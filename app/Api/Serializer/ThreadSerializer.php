@@ -108,7 +108,7 @@ class ThreadSerializer extends AbstractSerializer
 
         // 问答围观状态
         if ($model->type === Thread::TYPE_OF_QUESTION) {
-            $attributes['onlookerState'] = $model->getAttribute('onlookerState');
+            $attributes['onlookerState'] = $model->getAttribute('onlookerState') ?? true;
         }
 
         // 匿名（最后设置匿名，避免其他地方取不到用户）
