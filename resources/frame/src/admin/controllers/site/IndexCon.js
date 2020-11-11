@@ -323,7 +323,7 @@ export default {
           }
         } else {
           this.$message({
-            message: "清楚成功",
+            message: "清除成功",
             type: "success"
           });
         }
