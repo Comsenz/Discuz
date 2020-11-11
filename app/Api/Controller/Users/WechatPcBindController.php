@@ -83,6 +83,6 @@ class WechatPcBindController implements RequestHandlerInterface
         $sessionTokenData->save();
 
         // return $accessToken;
-        return DiscuzResponseFactory::JsonApiResponse($build);
+        return DiscuzResponseFactory::JsonResponse($build);
     }
 }

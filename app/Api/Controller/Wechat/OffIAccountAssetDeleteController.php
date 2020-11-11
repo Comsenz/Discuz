@@ -64,6 +64,6 @@ class OffIAccountAssetDeleteController implements RequestHandlerInterface
         // 获取永久素材
         $response = $this->easyWechat->material->delete($mediaId);
 
-        return DiscuzResponseFactory::JsonApiResponse($response);
+        return DiscuzResponseFactory::JsonResponse($response);
     }
 }

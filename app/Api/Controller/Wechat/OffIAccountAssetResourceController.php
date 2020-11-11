@@ -81,7 +81,7 @@ class OffIAccountAssetResourceController implements RequestHandlerInterface
                 return $response;
             case 'video': // 视频（video）
                 if (is_array($response)) {
-                    return DiscuzResponseFactory::JsonApiResponse($response);
+                    return DiscuzResponseFactory::JsonResponse($response);
                 }
                 break;
             case 'voice': // 语音（voice）

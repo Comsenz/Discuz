@@ -94,6 +94,6 @@ class WechatQrcodeLoginController implements RequestHandlerInterface
         }
 
         // return $accessToken;
-        return DiscuzResponseFactory::JsonApiResponse(['pc_login' => true]);
+        return DiscuzResponseFactory::JsonResponse(['pc_login' => true]);
     }
 }
