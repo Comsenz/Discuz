@@ -323,7 +323,7 @@ export default {
           }
         } else {
           this.$message({
-            message: "清除成功",
+            message: "缓存清空完毕",
             type: "success"
           });
         }
