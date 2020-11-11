@@ -306,6 +306,30 @@ export default {
     };
   },
   methods: {
+    // 清空缓存
+    clearCache() {
+      this.appFetch({
+        url: "clearCache",
+        method: "delete",
+        data: {}
+      }).then(data => {
+        if (data.errors) {
+          if (data.errors[0].detail) {
+            this.$message.error(
+              data.errors[0].code + "\n" + data.errors[0].detail[0]
+            );
+          } else {
+            this.$message.error(data.errors[0].code);
+          }
+        } else {
+          this.$message({
+            message: "清楚成功",
+            type: "success"
+          });
+        }
+      })
+      .catch(error => {});
+    },
     /*
      *  导航菜单点击事件
      * */

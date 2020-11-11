@@ -22,6 +22,7 @@
       <div class="index-header__info-menu">
         <span>您好，{{userName}}</span>
         <span @click="quitClick">&nbsp;[退出]</span>
+        <span @click="clearCache">&nbsp;清空缓存</span>
         <span class="site-home" ><a :href="appConfig.baseUrl" target="_blank">{{$t('admin.siteHome')}}</a></span>
       </div>
     </el-header>
