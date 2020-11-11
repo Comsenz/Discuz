@@ -40,10 +40,11 @@ class CategoryPolicy extends AbstractPolicy
     {
         if (in_array($ability, Category::$categoryPermissions)) {
             // 分类下设置的其他权限
+            $switchIsTurnOn = $actor->hasPermission('switch.' . $ability);
             $hasGlobalPermission = $actor->hasPermission($ability);
             $hasCategoryPermission = $actor->hasPermission('category' . $category->id . '.' . $ability);
 
-            if ('switch.' . $ability && ($hasGlobalPermission || $hasCategoryPermission)) {
+            if ($switchIsTurnOn && ($hasGlobalPermission || $hasCategoryPermission)) {
                 return true;
             }
         } else {
