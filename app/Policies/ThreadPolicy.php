@@ -91,8 +91,11 @@ class ThreadPolicy extends AbstractPolicy
                 ->whereColumn('threads.user_id', 'users.id');
         });
 
-        // 隐藏不允许当前用户查看的分类内容。
-        if (Arr::get($request->getQueryParams(), 'filter.isSite', '') !== 'yes') {
+        // 列表中隐藏不允许当前用户查看的分类内容。
+        if (
+            ! Arr::get($request->getQueryParams(), 'id')
+            && Arr::get($request->getQueryParams(), 'filter.isSite', '') !== 'yes'
+        ) {
             $query->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'viewThreads'));
         }
 

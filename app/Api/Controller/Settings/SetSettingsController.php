@@ -127,11 +127,15 @@ class SetSettingsController implements RequestHandlerInterface
         $this->validator->valid($validator);
 
         $settings->each(function ($setting) {
-            $this->settings->set(
-                Arr::get($setting, 'key'),
-                trim(Arr::get($setting, 'value')),
-                Arr::get($setting, 'tag', 'default')
-            );
+            $key = Arr::get($setting, 'key');
+            $value = Arr::get($setting, 'value');
+            $tag = Arr::get($setting, 'tag', 'default');
+            if ($key == 'site_manage') {
+                if (is_array($value)) {
+                    $value = json_encode($value, 256);
+                }
+            }
+            $this->settings->set($key, $value, $tag);
         });
 
         $this->events->dispatch(new Saved($settings));
