@@ -197,7 +197,8 @@ class CreateOrder
                 break;
             // 问答提问支付
             case Order::ORDER_TYPE_QUESTION:
-                // 判断是否允许发布问答帖
+                // 判断是否允许发布付费问答帖
+                $this->assertCan($this->actor, 'createThreadPaid');
                 $this->assertCan($this->actor, 'createThread.' . Thread::TYPE_OF_QUESTION);
 
                 // 创建订单
