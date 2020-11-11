@@ -20,19 +20,19 @@ export default {
       wechatPayment: false, // 是否开启微信支付
       canBeOnlooker: false, // 是否可以设置围观
       categoriesList: [], // 分类列表
-      selectList:{
-        createThread:[],
-        editOwnThreadOrPost: [],
-        hideOwnThreadOrPost: [],
-        'thread.canBeReward': [],
-        viewThreads: [],
+      selectList: {
+        'viewThreads': [],
+        'createThread':[],
         'thread.reply':[],
-        'thread.hide':[],
-        'thread.viewPosts':[],
-        'thread.hidePosts':[],
-        'thread.essence':[],
         'thread.edit':[],
+        'thread.hide':[],
+        'thread.essence':[],
+        'thread.viewPosts':[],
         'thread.editPosts':[],
+        'thread.hidePosts':[],
+        'thread.canBeReward': [],
+        'thread.editOwnThreadOrPost': [],
+        'thread.hideOwnThreadOrPost': [],
         'thread.freeViewPosts.1':[],
         'thread.freeViewPosts.2':[],
         'thread.freeViewPosts.3':[],
@@ -194,7 +194,7 @@ export default {
             this.value = res.data.attributes.isPaid;
             data.forEach(item => {
               this.checked.push(item._data.permission);
-            }); 
+            });
             // 下拉值回显
             this.setSelectValue(this.checked);
           }
@@ -318,18 +318,18 @@ export default {
       const checkedData = data;
       const selectList = this.selectList;
       const selectItem = [
-        'createThread',
-        'thread.hide',
-        'editOwnThreadOrPost',
-        'hideOwnThreadOrPost',
-        'thread.canBeReward',
         'viewThreads',
+        'createThread',
         'thread.reply',
-        'thread.viewPosts',
-        'thread.hidePosts',
-        'thread.essence',
         'thread.edit',
+        'thread.hide',
+        'thread.essence',
+        'thread.viewPosts',
         'thread.editPosts',
+        'thread.hidePosts',
+        'thread.canBeReward',
+        'thread.editOwnThreadOrPost',
+        'thread.hideOwnThreadOrPost',
         'thread.freeViewPosts.1',
         'thread.freeViewPosts.2',
         'thread.freeViewPosts.3',
