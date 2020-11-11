@@ -389,3 +389,11 @@ $route->get('/offiaccount/menu', 'offiaccount.menu.list', ApiController\Wechat\O
 $route->post('/offiaccount/menu', 'offiaccount.menu.batchCreate', ApiController\Wechat\OffIAccountMenuBatchCreateController::class);
 $route->get('/offiaccount/reprint/{id}', 'offiaccount.threads.reprint', ApiController\Wechat\OffIAccountThreadsReprintController::class);
 $route->get('/offiaccount/transform', 'offiaccount.threads.transform', ApiController\Wechat\OffIAccountThreadsTransformController::class);
+
+
+/*
+|--------------------------------------------------------------------------
+| Cache
+|--------------------------------------------------------------------------
+*/
+$route->delete('/cache', 'cache.clear', ApiController\Cache\CacheController::class);
