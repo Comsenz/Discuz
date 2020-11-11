@@ -63,16 +63,4 @@ class CategoryPolicy extends AbstractPolicy
     {
         $query->whereIn('id', Category::getIdsWhereCan($actor, 'viewThreads'));
     }
-
-    /**
-     * @param User $actor
-     * @param Category $category
-     * @return bool|null
-     */
-    public function createThread(User $actor, Category $category)
-    {
-        if (! $actor->can('viewThreads', $category)) {
-            return false;
-        }
-    }
 }
