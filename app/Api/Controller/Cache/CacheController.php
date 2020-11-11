@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2020 Tencent Cloud.
  *
@@ -17,18 +18,18 @@
 
 namespace App\Api\Controller\Cache;
 
-
-use Discuz\Api\Controller\AbstractListController;
-use Illuminate\Contracts\Cache\Repository as Cache;
+use Discuz\Http\DiscuzResponseFactory;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class CacheController extends AbstractListController
+class CacheController implements RequestHandlerInterface
 {
 
-    protected function data(ServerRequestInterface $request, Document $document)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $cache = app(Cache::class);
-        return $cache->clear();
+        $cache = app('cache');
+        $cache->clear();
+        return DiscuzResponseFactory::JsonResponse(['status' => "SUCCESS"]);
     }
 }

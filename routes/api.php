@@ -396,5 +396,4 @@ $route->get('/offiaccount/transform', 'offiaccount.threads.transform', ApiContro
 | Cache
 |--------------------------------------------------------------------------
 */
-$route->post('/cache/clear', 'cache.clear', ApiController\Cache\CacheController::class);
-
+$route->delete('/cache', 'cache.clear', ApiController\Cache\CacheController::class);
