@@ -202,7 +202,7 @@
           <CardRow description="允许在内容分类发布主题的权限">
             <el-checkbox
               v-model="checked"
-              label="switch.createThreadPaid"
+              label="switch.createThread"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7' 
@@ -214,7 +214,7 @@
             v-model="selectList.createThread"
             @remove-tag="clearItem($event, 'createThread')"
             multiple
-            :disabled="checked.indexOf('switch.createThreadPaid') === -1"
+            :disabled="checked.indexOf('switch.createThread') === -1"
             collapse-tags
             placeholder="请选择"
           >
