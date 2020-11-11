@@ -143,7 +143,9 @@
           </CardRow>
         </Card>
         <Card>
-          <CardRow description="允许在发布问答时设置围观，需先在全局设置里配置问答围观价格">
+          <CardRow
+            description="允许在发布问答时设置围观，需先在全局设置里配置问答围观价格"
+          >
             <el-checkbox
               v-model="checked"
               label="canBeOnlooker"
@@ -199,9 +201,11 @@
         <Card class="hasSelect">
           <CardRow description="允许在内容分类发布主题的权限">
             <el-checkbox
+              v-model="checked"
+              label="switch.createThreadPaid"
               :disabled="
                 $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
+                  $router.history.current.query.id === '7' 
               "
               >发布主题</el-checkbox
             >
@@ -210,6 +214,7 @@
             v-model="selectList.createThread"
             @remove-tag="clearItem($event, 'createThread')"
             multiple
+            :disabled="checked.indexOf('switch.createThreadPaid') === -1"
             collapse-tags
             placeholder="请选择"
           >
@@ -226,6 +231,8 @@
         <Card class="hasSelect">
           <CardRow description="允许在内容分类回复主题的权限">
             <el-checkbox
+              v-model="checked"
+              label="switch.thread.reply"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -235,6 +242,7 @@
           </CardRow>
           <el-select
             v-model="selectList['thread.reply']"
+            :disabled="checked.indexOf('switch.thread.reply') === -1"
             @remove-tag="clearItem($event, 'thread.reply')"
             multiple
             collapse-tags
@@ -253,6 +261,8 @@
         <Card class="hasSelect">
           <CardRow description="内容分类下内容允许被打赏的权限">
             <el-checkbox
+              v-model="checked"
+              label="switch.thread.canBeReward"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7' ||
@@ -265,6 +275,7 @@
             v-model="selectList['thread.canBeReward']"
             multiple
             collapse-tags
+            :disabled="checked.indexOf('switch.thread.canBeReward') === -1"
             @remove-tag="clearItem($event, 'thread.canBeReward')"
             placeholder="请选择"
           >
@@ -283,13 +294,17 @@
         <Card header="查看权限"></Card>
         <Card class="hasSelect">
           <CardRow description="查看内容分类主题列表的权限">
-            <el-checkbox :disabled="$router.history.current.query.id === '1'"
+            <el-checkbox
+              v-model="checked"
+              label="switch.viewThreads"
+              :disabled="$router.history.current.query.id === '1'"
               >查看主题列表</el-checkbox
             >
           </CardRow>
           <el-select
             v-model="selectList.viewThreads"
             @remove-tag="clearItem($event, 'viewThreads')"
+            :disabled="checked.indexOf('switch.viewThreads') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -306,13 +321,17 @@
         </Card>
         <Card class="hasSelect">
           <CardRow description="查看内容分类主题详情的权限">
-            <el-checkbox :disabled="$router.history.current.query.id === '1'"
+            <el-checkbox
+              v-model="checked"
+              label="switch.thread.viewPosts"
+              :disabled="$router.history.current.query.id === '1'"
               >查看主题详情</el-checkbox
             >
           </CardRow>
           <el-select
             v-model="selectList['thread.viewPosts']"
             @remove-tag="clearItem($event, 'thread.viewPosts')"
+            :disabled="checked.indexOf('switch.thread.viewPosts') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -329,13 +348,17 @@
         </Card>
         <Card class="hasSelect">
           <CardRow description="免费查看内容分类下的付费帖子">
-            <el-checkbox :disabled="$router.history.current.query.id === '1'"
+            <el-checkbox
+              v-model="checked"
+              label="switch.thread.freeViewPosts.1"
+              :disabled="$router.history.current.query.id === '1'"
               >免费查看付费帖子</el-checkbox
             >
           </CardRow>
           <el-select
             v-model="selectList['thread.freeViewPosts.1']"
             @remove-tag="clearItem($event, 'thread.freeViewPosts.1')"
+            :disabled="checked.indexOf('switch.thread.freeViewPosts.1') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -352,13 +375,17 @@
         </Card>
         <Card class="hasSelect">
           <CardRow description="免费查看内容分类下的付费视频">
-            <el-checkbox :disabled="$router.history.current.query.id === '1'"
+            <el-checkbox
+              v-model="checked"
+              label="switch.thread.freeViewPosts.2"
+              :disabled="$router.history.current.query.id === '1'"
               >免费查看付费视频</el-checkbox
             >
           </CardRow>
           <el-select
             v-model="selectList['thread.freeViewPosts.2']"
             @remove-tag="clearItem($event, 'thread.freeViewPosts.2')"
+            :disabled="checked.indexOf('switch.thread.freeViewPosts.2') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -375,13 +402,17 @@
         </Card>
         <Card class="hasSelect">
           <CardRow description="免费查看内容分类下的付费图片">
-            <el-checkbox :disabled="$router.history.current.query.id === '1'"
+            <el-checkbox
+              v-model="checked"
+              label="switch.thread.freeViewPosts.3"
+              :disabled="$router.history.current.query.id === '1'"
               >免费查看付费图片</el-checkbox
             >
           </CardRow>
           <el-select
             v-model="selectList['thread.freeViewPosts.3']"
             @remove-tag="clearItem($event, 'thread.freeViewPosts.3')"
+            :disabled="checked.indexOf('switch.thread.freeViewPosts.3') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -398,13 +429,17 @@
         </Card>
         <Card class="hasSelect">
           <CardRow description="免费查看内容分类下的付费语音">
-            <el-checkbox :disabled="$router.history.current.query.id === '1'"
+            <el-checkbox
+              v-model="checked"
+              label="switch.thread.freeViewPosts.4"
+              :disabled="$router.history.current.query.id === '1'"
               >免费查看付费语音</el-checkbox
             >
           </CardRow>
           <el-select
             v-model="selectList['thread.freeViewPosts.4']"
             @remove-tag="clearItem($event, 'thread.freeViewPosts.4')"
+            :disabled="checked.indexOf('switch.thread.freeViewPosts.4') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -421,13 +456,17 @@
         </Card>
         <Card class="hasSelect">
           <CardRow description="免费查看内容分类下的付费问答">
-            <el-checkbox :disabled="$router.history.current.query.id === '1'"
+            <el-checkbox
+              v-model="checked"
+              label="switch.thread.freeViewPosts.5"
+              :disabled="$router.history.current.query.id === '1'"
               >免费查看付费问答</el-checkbox
             >
           </CardRow>
           <el-select
             v-model="selectList['thread.freeViewPosts.5']"
             @remove-tag="clearItem($event, 'thread.freeViewPosts.5')"
+            :disabled="checked.indexOf('switch.thread.freeViewPosts.5') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -500,6 +539,8 @@
         <Card class="hasSelect">
           <CardRow description="前台精华、取消精华主题的权限">
             <el-checkbox
+              v-model="checked"
+              label="switch.thread.essence"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -510,6 +551,7 @@
           <el-select
             v-model="selectList['thread.essence']"
             @remove-tag="clearItem($event, 'thread.essence')"
+            :disabled="checked.indexOf('switch.thread.essence') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -527,6 +569,8 @@
         <Card class="hasSelect">
           <CardRow description="前台单个主题的编辑权限">
             <el-checkbox
+              v-model="checked"
+              label="switch.thread.edit"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -537,6 +581,7 @@
           <el-select
             v-model="selectList['thread.edit']"
             @remove-tag="clearItem($event, 'thread.edit')"
+            :disabled="checked.indexOf('switch.thread.edit') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -554,6 +599,8 @@
         <Card class="hasSelect">
           <CardRow description="前台删除单个主题的权限">
             <el-checkbox
+              v-model="checked"
+              label="switch.thread.hide"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -564,6 +611,7 @@
           <el-select
             v-model="selectList['thread.hide']"
             @remove-tag="clearItem($event, 'thread.hide')"
+            :disabled="checked.indexOf('switch.thread.hide') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -581,6 +629,8 @@
         <Card class="hasSelect">
           <CardRow description="前台单个回复的编辑权限">
             <el-checkbox
+              v-model="checked"
+              label="switch.thread.editPosts"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -591,6 +641,7 @@
           <el-select
             v-model="selectList['thread.editPosts']"
             @remove-tag="clearItem($event, 'thread.editPosts')"
+            :disabled="checked.indexOf('switch.thread.editPosts') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -608,6 +659,8 @@
         <Card class="hasSelect">
           <CardRow description="前台删除单个回复的权限">
             <el-checkbox
+              v-model="checked"
+              label="switch.thread.hidePosts"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -618,6 +671,7 @@
           <el-select
             v-model="selectList['thread.hidePosts']"
             @remove-tag="clearItem($event, 'thread.hidePosts')"
+            :disabled="checked.indexOf('switch.thread.hidePosts') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -635,6 +689,8 @@
         <Card class="hasSelect">
           <CardRow description="作者编辑自己的主题或回复的权限">
             <el-checkbox
+              v-model="checked"
+              label="switch.editOwnThreadOrPost"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -645,6 +701,7 @@
           <el-select
             v-model="selectList.editOwnThreadOrPost"
             @remove-tag="clearItem($event, 'editOwnThreadOrPost')"
+            :disabled="checked.indexOf('switch.editOwnThreadOrPost') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
@@ -662,6 +719,8 @@
         <Card class="hasSelect">
           <CardRow description="作者删除自己的主题或回复的权限">
             <el-checkbox
+              v-model="checked"
+              label="switch.hideOwnThreadOrPost"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -672,6 +731,7 @@
           <el-select
             v-model="selectList.hideOwnThreadOrPost"
             @remove-tag="clearItem($event, 'hideOwnThreadOrPost')"
+            :disabled="checked.indexOf('switch.hideOwnThreadOrPost') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
