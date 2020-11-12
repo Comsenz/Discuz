@@ -72,8 +72,7 @@ export default {
       dyedate: "",
       ispad: "",
       allowtobuy: "",
-      defaultuser: false,
-
+      defaultuser: false
     };
   },
   methods: {
@@ -101,11 +100,16 @@ export default {
           this.$message.error(res.errors[0].code);
         } else {
           this.videoDisabled = res.readdata._data.qcloud.qcloud_vod === false;
-          this.captchaDisabled = res.readdata._data.qcloud.qcloud_captcha === false;
-          this.realNameDisabled = res.readdata._data.qcloud.qcloud_faceid === false;
-          this.bindPhoneDisabled = res.readdata._data.qcloud.qcloud_sms === false;
-          this.wechatPayment = res.readdata._data.paycenter.wxpay_close === false;
-          this.canBeOnlooker = res.readdata._data.set_site.site_onlooker_price > 0;
+          this.captchaDisabled =
+            res.readdata._data.qcloud.qcloud_captcha === false;
+          this.realNameDisabled =
+            res.readdata._data.qcloud.qcloud_faceid === false;
+          this.bindPhoneDisabled =
+            res.readdata._data.qcloud.qcloud_sms === false;
+          this.wechatPayment =
+            res.readdata._data.paycenter.wxpay_close === false;
+          this.canBeOnlooker =
+            res.readdata._data.set_site.site_onlooker_price > 0;
           this.allowtobuy = res.readdata._data.set_site.site_pay_group_close;
           if (!this.allowtobuy) {
             this.value = false;
@@ -125,7 +129,7 @@ export default {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
-          this.categoriesList = [{id: '',name: '全局'}];
+          this.categoriesList = [{ id: "", name: "全局" }];
           res.readdata.forEach(item => {
             let category = {
               id: item._data.id,
@@ -176,8 +180,10 @@ export default {
       })
         .then(res => {
           if (res.errors) {
-            if (res.errors[0].detail){
-              this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
+            if (res.errors[0].detail) {
+              this.$message.error(
+                res.errors[0].code + "\n" + res.errors[0].detail[0]
+              );
             } else {
               this.$message.error(res.errors[0].code);
             }
@@ -208,7 +214,7 @@ export default {
           checked.push("other.canInviteUserScale");
         }
       } else {
-        checked = checked.filter(v=>v!=='other.canInviteUserScale');
+        checked = checked.filter(v => v !== "other.canInviteUserScale");
       }
       this.appFetch({
         url: "groupPermission",
@@ -286,31 +292,34 @@ export default {
       return true;
     },
     // 下拉改变
-    changeCategory(obj,value) {
+    changeCategory(obj, value) {
       let checked = this.checked;
-      const item  = `category${value}.${obj}`;
+      const item = `category${value}.${obj}`;
       // 是否选的是全局
-      if(!value){
+      if (!value) {
         // 选中全局就去除其他勾选
         for (let i = 0; i < checked.length; i++) {
-          if(checked[i].indexOf(obj)!==-1 && checked[i].indexOf('category')!==-1){
-            checked.splice(i,1);
+          if (
+            checked[i].indexOf(obj) !== -1 &&
+            checked[i].indexOf("category") !== -1
+          ) {
+            checked.splice(i, 1);
             i = i - 1;
           }
         }
-        if(checked.indexOf(obj)===-1)checked.push(obj);
-        this.selectList[obj] = [''];
-      }else{
+        if (checked.indexOf(obj) === -1) checked.push(obj);
+        this.selectList[obj] = [""];
+      } else {
         // 在下拉选中数组里面
-        if(this.selectList[obj].indexOf(value)!==-1){
+        if (this.selectList[obj].indexOf(value) !== -1) {
           checked.push(item);
-       }else{
-         // 不在下拉选中数组中就去除此权限
-         checked = checked.filter(v=>v!==item);
-       }
-       // 选中其他的就去除全局的权限
-       checked = checked.filter(v=>v!==obj);
-       this.selectList[obj] = this.selectList[obj].filter(v=>!!v);
+        } else {
+          // 不在下拉选中数组中就去除此权限
+          checked = checked.filter(v => v !== item);
+        }
+        // 选中其他的就去除全局的权限
+        checked = checked.filter(v => v !== obj);
+        this.selectList[obj] = this.selectList[obj].filter(v => !!v);
       }
       this.checked = checked;
     },
@@ -336,38 +345,45 @@ export default {
         'thread.freeViewPosts.4',
         'thread.freeViewPosts.5',
       ];
-      checkedData.forEach((value,index)=>{
+      checkedData.forEach((value, index) => {
         // 全局的回显
-        if(selectItem.indexOf(value)!==-1){
-          selectList[value].push('');
+        if (selectItem.indexOf(value) !== -1) {
+          selectList[value].push("");
         }
         // 分类的回显
-        if(value.indexOf('category') !== -1){
-          const splitIndex = value.indexOf('.');
+        if (value.indexOf("category") !== -1) {
+          const splitIndex = value.indexOf(".");
           const obj = value.substring(splitIndex + 1);
-          const id = value.substring(8,splitIndex);
-          if(selectList[obj] && checkedData.indexOf(obj) === -1){
+          const id = value.substring(8, splitIndex);
+          if (selectList[obj] && checkedData.indexOf(obj) === -1) {
             selectList[obj].push(id);
           }
-          if(checkedData.indexOf(obj)!==-1){
+          if (checkedData.indexOf(obj) !== -1) {
             checkedData.splice(index, 1);
           }
         }
-      })
+      });
       this.selectList = selectList;
       this.checked = checkedData;
     },
     // 清除某项下拉
-    clearItem(value,obj) {
-      let item ='';
-      if(value){
-        item=`category${value}.${obj}`
-      }else{
+    clearItem(value, obj) {
+      let item = "";
+      if (value) {
+        item = `category${value}.${obj}`;
+      } else {
         item = obj;
       }
       let checkedData = this.checked;
-      checkedData = checkedData.filter(v=>v!==item);
+      checkedData = checkedData.filter(v => v !== item);
       this.checked = checkedData;
+    },
+    changeChecked(value, obj) {
+      if (!value) {
+        const checkedData = this.checked;
+        this.selectList[obj] = [];
+        this.checked = checkedData.filter(v => v.indexOf(obj) === -1);
+      }
     }
   },
   created() {
