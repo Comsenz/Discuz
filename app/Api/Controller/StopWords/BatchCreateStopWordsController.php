@@ -58,6 +58,6 @@ class BatchCreateStopWordsController implements RequestHandlerInterface
             ],
         ];
 
-        return DiscuzResponseFactory::JsonApiResponse($data);
+        return DiscuzResponseFactory::JsonResponse($data);
     }
 }

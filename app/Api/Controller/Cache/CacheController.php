@@ -16,38 +16,20 @@
  * limitations under the License.
  */
 
-namespace App\Http\Controller;
+namespace App\Api\Controller\Cache;
 
 use Discuz\Http\DiscuzResponseFactory;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Discuz\Common\Utils;
 
-class IndexController implements RequestHandlerInterface
+class CacheController implements RequestHandlerInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $route = $request->getUri()->getPath();
-
-        if (Str::startsWith($route, '/admin')) {
-            $file = 'admin.html';
-        } else {
-            $isMobile = Utils::isMobile();
-            $file = $isMobile ? 'index.html' : 'pc.html';
-
-            if (Arr::has($request->getQueryParams(), 'from')) {
-                $file = 'index.html';
-            }
-        }
-
-        return DiscuzResponseFactory::FileResponse(
-            public_path($file)
-        );
+        $cache = app('cache');
+        $cache->clear();
+        return DiscuzResponseFactory::JsonResponse(['status' => "SUCCESS"]);
     }
 }

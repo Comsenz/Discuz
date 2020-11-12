@@ -2,13 +2,10 @@
 
 /**
  * Copyright (C) 2020 Tencent Cloud.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
  *   http://www.apache.org/licenses/LICENSE-2.0
- *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -82,7 +79,6 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
 
     /**
      * {@inheritdoc}
-     *
      * @param ServerRequestInterface $request
      * @param Document $document
      * @return array|mixed
@@ -108,7 +104,7 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
 
         // Filter Url
         $addressRegex = '/(?<address>(https|http):[\S.]+)/i';
-        if (!preg_match($addressRegex, $readyContent, $matchAddress)) {
+        if (! preg_match($addressRegex, $readyContent, $matchAddress)) {
             throw new TranslatorException('post_goods_not_found_address');
         }
         $this->address = $matchAddress['address'];
@@ -123,7 +119,7 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
 
         // Regular Expression Url
         $extractionUrlRegex = '/(https|http):\/\/(?<url>[0-9a-z.]+)/i';
-        if (!preg_match($extractionUrlRegex, $this->address, $match)) {
+        if (! preg_match($extractionUrlRegex, $this->address, $match)) {
             throw new TranslatorException('post_goods_not_found_regex');
         }
 
@@ -133,7 +129,7 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
         }
 
         // Judge Enum
-        if (!PostGoods::enumType(explode('.', $url), function ($callback) {
+        if (! PostGoods::enumType(explode('.', $url), function ($callback) {
             $this->goodsType = $callback;
         })) {
             throw new TranslatorException('post_goods_not_found_enum');
@@ -150,7 +146,7 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
                     ->where('title', $matchContent['title'])
                     ->where('post_id', 0)
                     ->first();
-                if (!empty($existGoods)) {
+                if (! empty($existGoods)) {
                     return $existGoods;
                 }
             }
@@ -158,6 +154,7 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
 
         /**
          * Send
+         *
          * @see https://guzzle-cn.readthedocs.io/zh_CN/latest/request-options.html#allow-redirects
          */
         $sendType = PostGoods::setBySending($this->address);
@@ -165,7 +162,7 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
             $response = $this->httpClient->request('GET', $this->address, [
                 'allow_redirects' => [
                     'max' => 100,
-                    'track_redirects' => true
+                    'track_redirects' => true,
                 ],
             ]);
             if ($response->getStatusCode() != 200) {
@@ -178,6 +175,7 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
 
         /**
          * Get GoodsInfo
+         *
          * @see PostGoodsTrait
          */
         $this->{$this->goodsType['value']}();
@@ -222,7 +220,7 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
 
     protected function checkGoods()
     {
-        $this->goodsInfo['title'] ?: PostGoods::enumTypeName($this->goodsType['key'], '商品');
+        $this->goodsInfo['title'] = $this->goodsInfo['title'] ?: PostGoods::enumTypeName($this->goodsType['key'], '商品');
 
         switch ($this->goodsType['key']) {
             case 0: // 淘宝

@@ -206,7 +206,7 @@
               @change="changeChecked($event,'createThread')"
               :disabled="
                 $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7' 
+                  $router.history.current.query.id === '7'
               "
               >发布主题</el-checkbox
             >
@@ -705,8 +705,8 @@
           <CardRow description="作者编辑自己的主题或回复的权限">
             <el-checkbox
               v-model="checked"
-              label="switch.editOwnThreadOrPost"
-              @change="changeChecked($event,'editOwnThreadOrPost')"
+              @change="changeChecked($event,'thread.editOwnThreadOrPost')"
+              label="switch.thread.editOwnThreadOrPost"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -715,15 +715,15 @@
             >
           </CardRow>
           <el-select
-            v-model="selectList.editOwnThreadOrPost"
-            @remove-tag="clearItem($event, 'editOwnThreadOrPost')"
-            :disabled="checked.indexOf('switch.editOwnThreadOrPost') === -1"
+            v-model="selectList['thread.editOwnThreadOrPost']"
+            @remove-tag="clearItem($event, 'thread.editOwnThreadOrPost')"
+            :disabled="checked.indexOf('switch.thread.editOwnThreadOrPost') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
           >
             <el-option
-              @click.native="changeCategory('editOwnThreadOrPost', item.id)"
+              @click.native="changeCategory('thread.editOwnThreadOrPost', item.id)"
               v-for="item in categoriesList"
               :key="item.id"
               :label="item.name"
@@ -736,8 +736,8 @@
           <CardRow description="作者删除自己的主题或回复的权限">
             <el-checkbox
               v-model="checked"
-              label="switch.hideOwnThreadOrPost"
-              @change="changeChecked($event,'hideOwnThreadOrPost')"
+              @change="changeChecked($event,'thread.hideOwnThreadOrPost')"
+              label="switch.thread.hideOwnThreadOrPost"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -746,15 +746,15 @@
             >
           </CardRow>
           <el-select
-            v-model="selectList.hideOwnThreadOrPost"
-            @remove-tag="clearItem($event, 'hideOwnThreadOrPost')"
-            :disabled="checked.indexOf('switch.hideOwnThreadOrPost') === -1"
+            v-model="selectList['thread.hideOwnThreadOrPost']"
+            @remove-tag="clearItem($event, 'thread.hideOwnThreadOrPost')"
+            :disabled="checked.indexOf('switch.thread.hideOwnThreadOrPost') === -1"
             multiple
             collapse-tags
             placeholder="请选择"
           >
             <el-option
-              @click.native="changeCategory('hideOwnThreadOrPost', item.id)"
+              @click.native="changeCategory('thread.hideOwnThreadOrPost', item.id)"
               v-for="item in categoriesList"
               :key="item.id"
               :label="item.name"

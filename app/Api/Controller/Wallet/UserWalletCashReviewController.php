@@ -18,12 +18,12 @@
 
 namespace App\Api\Controller\Wallet;
 
+use App\Commands\Wallet\UserWalletCashReview;
 use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use App\Commands\Wallet\UserWalletCashReview;
 
 class UserWalletCashReviewController implements RequestHandlerInterface
 {
@@ -59,6 +59,6 @@ class UserWalletCashReviewController implements RequestHandlerInterface
                 'result' => $result
             ],
         ];
-        return DiscuzResponseFactory::JsonApiResponse($data);
+        return DiscuzResponseFactory::JsonResponse($data);
     }
 }

@@ -21,9 +21,9 @@ namespace App\Api\Controller\Invite;
 use App\Exceptions\NoUserException;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Http\DiscuzResponseFactory;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Psr\Http\Message\ResponseInterface;
 
 class UserInviteCodeController implements RequestHandlerInterface
 {
@@ -51,6 +51,6 @@ class UserInviteCodeController implements RequestHandlerInterface
             ],
         ];
 
-        return DiscuzResponseFactory::JsonApiResponse($data);
+        return DiscuzResponseFactory::JsonResponse($data);
     }
 }

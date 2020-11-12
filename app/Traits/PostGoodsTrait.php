@@ -2,13 +2,10 @@
 
 /**
  * Copyright (C) 2020 Tencent Cloud.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
  *   http://www.apache.org/licenses/LICENSE-2.0
- *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,8 +21,8 @@ use Exception;
 
 /**
  * 获取网址里的[商品信息]
- *
  * Trait PostGoodsTrait
+ *
  * @package App\Traits
  */
 trait PostGoodsTrait
@@ -121,7 +118,7 @@ trait PostGoodsTrait
         }
 
         // get price
-        $priceRegex = '/<em\s*class="tb-rmb-num\s*">(?<price>[\d\.]{1,12})<\/em>/i';
+        $priceRegex = '/<em\s*class="tb-rmb-num\s*">(?<price>.+)<\/em>/i';
         if (preg_match($priceRegex, $this->html, $matchPrice)) {
             $this->goodsInfo['price'] = $matchPrice['price'];
         }
@@ -140,7 +137,7 @@ trait PostGoodsTrait
         }
 
         // get price
-        $tMallPrice = '/defaultItemPrice":"(?<price>[\d\.]{1,12})/i';
+        $tMallPrice = '/defaultItemPrice":"(?<price>[\d\.\s-]{1,30})"(,?)/i';
         if (preg_match($tMallPrice, $this->html, $matchPrice)) {
             $this->goodsInfo['price'] = $matchPrice['price'];
         }
@@ -223,14 +220,14 @@ trait PostGoodsTrait
     protected function wirelessShare()
     {
         // 匹配js跳转地址
-        $regex = '/(?<address>(https|http):[\w\/\.\?\=\&\-]+)/i';
+        $regex = "/(?<address>(https|http):.+)'(;?)/i";
         if (preg_match($regex, $this->html, $match)) {
             try {
                 $response = $this->httpClient->request('GET', $match['address'], [
                     'allow_redirects' => [
                         'max' => 100,
-                        'track_redirects' => true
-                    ]
+                        'track_redirects' => true,
+                    ],
                 ]);
             } catch (Exception $e) {
                 // 触发淘宝频繁请求机制
@@ -239,7 +236,7 @@ trait PostGoodsTrait
 
             // 获取最终的重定向真实域名地址
             $redirects = $response->getHeader('X-Guzzle-Redirect-History');
-            if (!empty($redirects)) {
+            if (! empty($redirects)) {
                 $match['address'] = end($redirects);
             }
 

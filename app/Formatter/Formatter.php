@@ -38,6 +38,7 @@ class Formatter extends BaseFormatter
         parent::confTopic($configurator);
 
         $configurator->plugins->load('Litedown');
+        $configurator->plugins->load('TaskLists');
         $configurator->plugins->load('PipeTables');
 
         return $configurator;

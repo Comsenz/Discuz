@@ -86,6 +86,7 @@ class UserSerializer extends AbstractSerializer
             'registerReason'    => $model->register_reason,                 // 注册原因
             'banReason'         => '',                                      // 禁用原因
             'denyStatus'        => (bool) $model->denyStatus,
+            'canBeAsked'        => $model->id !== $this->actor->id && $model->can('canBeAsked'), // 是否允许被提问
         ];
 
         $whitelist = [

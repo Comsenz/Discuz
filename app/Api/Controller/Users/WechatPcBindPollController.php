@@ -49,7 +49,7 @@ class WechatPcBindPollController implements RequestHandlerInterface
 
         if (isset($token->payload['bind']) && $token->payload['bind']) {
             // 绑定成功
-            return DiscuzResponseFactory::JsonApiResponse($token->payload);
+            return DiscuzResponseFactory::JsonResponse($token->payload);
         }
 
         throw new Exception($token->payload['code'] ?: 'error');

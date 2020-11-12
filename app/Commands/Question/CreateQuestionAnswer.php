@@ -111,8 +111,8 @@ class CreateQuestionAnswer
         $question->save();
 
         // 修改主题展示字段
-        $question->thread->is_display = true;
-        $question->thread->save();
+        // $question->thread->is_display = true;
+        // $question->thread->save();
 
         // 最后触发 Saved
         $question->raise(new Saved($question, $this->actor, $this->data));

@@ -21,6 +21,7 @@ export default {
       canBeOnlooker: false, // 是否可以设置围观
       categoriesList: [], // 分类列表
       selectList: {
+<<<<<<< HEAD
         createThread: [],
         editOwnThreadOrPost: [],
         hideOwnThreadOrPost: [],
@@ -38,6 +39,25 @@ export default {
         "thread.freeViewPosts.3": [],
         "thread.freeViewPosts.4": [],
         "thread.freeViewPosts.5": []
+=======
+        'viewThreads': [],
+        'createThread':[],
+        'thread.reply':[],
+        'thread.edit':[],
+        'thread.hide':[],
+        'thread.essence':[],
+        'thread.viewPosts':[],
+        'thread.editPosts':[],
+        'thread.hidePosts':[],
+        'thread.canBeReward': [],
+        'thread.editOwnThreadOrPost': [],
+        'thread.hideOwnThreadOrPost': [],
+        'thread.freeViewPosts.1':[],
+        'thread.freeViewPosts.2':[],
+        'thread.freeViewPosts.3':[],
+        'thread.freeViewPosts.4':[],
+        'thread.freeViewPosts.5':[],
+>>>>>>> cac64aa46debcd3451a21afa6b017f5a2d9c782e
       },
       activeTab: {
         // 设置权限当前项
@@ -327,23 +347,23 @@ export default {
       const checkedData = data;
       const selectList = this.selectList;
       const selectItem = [
-        "createThread",
-        "thread.hide",
-        "editOwnThreadOrPost",
-        "hideOwnThreadOrPost",
-        "thread.canBeReward",
-        "viewThreads",
-        "thread.reply",
-        "thread.viewPosts",
-        "thread.hidePosts",
-        "thread.essence",
-        "thread.edit",
-        "thread.editPosts",
-        "thread.freeViewPosts.1",
-        "thread.freeViewPosts.2",
-        "thread.freeViewPosts.3",
-        "thread.freeViewPosts.4",
-        "thread.freeViewPosts.5"
+        'viewThreads',
+        'createThread',
+        'thread.reply',
+        'thread.edit',
+        'thread.hide',
+        'thread.essence',
+        'thread.viewPosts',
+        'thread.editPosts',
+        'thread.hidePosts',
+        'thread.canBeReward',
+        'thread.editOwnThreadOrPost',
+        'thread.hideOwnThreadOrPost',
+        'thread.freeViewPosts.1',
+        'thread.freeViewPosts.2',
+        'thread.freeViewPosts.3',
+        'thread.freeViewPosts.4',
+        'thread.freeViewPosts.5',
       ];
       checkedData.forEach((value, index) => {
         // 全局的回显

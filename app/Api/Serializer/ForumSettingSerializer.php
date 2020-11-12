@@ -206,6 +206,7 @@ class ForumSettingSerializer extends AbstractSerializer
         } else {
             //未开启vod服务 不可发布视频主题
             $attributes['other']['can_create_thread_video'] = false;
+            $attributes['other']['can_create_thread_audio'] = false;
         }
 
         // 微信小程序请求时判断视频开关

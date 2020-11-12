@@ -65,6 +65,7 @@ class PostAttachment
      */
     public function whenPostIsSaving(Saving $event)
     {
+
         if ($event->post->is_first) {
             if ($event->post->exists) {
                 // 编辑

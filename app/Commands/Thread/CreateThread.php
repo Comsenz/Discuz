@@ -147,8 +147,8 @@ class CreateThread
         // 是否匿名
         $thread->is_anonymous = (bool) Arr::get($attributes, 'is_anonymous', false);
 
-        // 是否显示
-        $thread->is_display = $thread->type !== Thread::TYPE_OF_QUESTION;
+        // 是否显示（问答未回答时也允许查看）
+        // $thread->is_display = $thread->type !== Thread::TYPE_OF_QUESTION;
 
         // 经纬度及地理位置
         $thread->longitude = (float) Arr::get($attributes, 'longitude', 0);

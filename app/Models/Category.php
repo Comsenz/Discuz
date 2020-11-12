@@ -64,8 +64,8 @@ class Category extends Model
         'thread.editPosts',            // 编辑回复
         'thread.hidePosts',            // 删除回复
         'thread.canBeReward',          // 是否允许被打赏
-        'editOwnThreadOrPost',         // 编辑自己主题或回复的权限
-        'hideOwnThreadOrPost',         // 删除自己主题或回复的权限
+        'thread.editOwnThreadOrPost',  // 编辑自己主题或回复的权限
+        'thread.hideOwnThreadOrPost',  // 删除自己主题或回复的权限
         'thread.freeViewPosts.1',      // 免费查看付费帖子
         'thread.freeViewPosts.2',      // 免费查看付费视频
         'thread.freeViewPosts.3',      // 免费查看付费图片
@@ -158,7 +158,8 @@ class Category extends Model
         $hasGlobalPermission = $user->hasPermission($permission);
 
         $canForCategory = function (self $category) use ($user, $permission, $hasGlobalPermission) {
-            return 'switch.'.$permission && ($hasGlobalPermission || $user->hasPermission('category'.$category->id.'.'.$permission));
+            return $user->hasPermission('switch.'.$permission)
+                && ($hasGlobalPermission || $user->hasPermission('category'.$category->id.'.'.$permission));
         };
 
         $ids = [];

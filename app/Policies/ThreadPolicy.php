@@ -63,15 +63,14 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function can(User $actor, $ability, Thread $thread)
     {
-        if ($actor->hasPermission('thread.' . $ability)) {
-            return true;
-        }
+        $permission = 'thread.' . $ability;
 
         // 分类权限
-        if (
-            in_array('thread.' . $ability, Category::$categoryPermissions)
-            && $actor->can('thread.' . $ability, $thread->category)
-        ) {
+        if (in_array($permission, Category::$categoryPermissions)) {
+            return $actor->can($permission, $thread->category);
+        }
+
+        if ($actor->hasPermission($permission)) {
             return true;
         }
     }
@@ -135,7 +134,7 @@ class ThreadPolicy extends AbstractPolicy
     public function edit(User $actor, Thread $thread)
     {
         // 是作者本人且拥有编辑自己主题或回复的权限
-        if ($thread->user_id == $actor->id && $actor->can('editOwnThreadOrPost', $thread->category)) {
+        if ($thread->user_id == $actor->id && $actor->can('editOwnThreadOrPost', $thread)) {
             return true;
         }
     }
@@ -148,7 +147,7 @@ class ThreadPolicy extends AbstractPolicy
     public function hide(User $actor, Thread $thread)
     {
         // 是作者本人且拥有删除自己主题或回复的权限
-        if ($thread->user_id == $actor->id && $actor->can('hideOwnThreadOrPost', $thread->category)) {
+        if ($thread->user_id == $actor->id && $actor->can('hideOwnThreadOrPost', $thread)) {
             return true;
         }
     }
