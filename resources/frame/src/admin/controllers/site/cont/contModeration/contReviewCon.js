@@ -119,10 +119,15 @@ export default {
       btnLoading:0,               //0表示没有loading状态，1：全部通过、2：全部删除、3：全部忽略
 
       //未审核0，已审核\通过1，已忽略2
+      visible:false
     }
   },
 
   methods:{
+    closeDelet(index) {
+      this.$refs[index][0].doClose();
+    },
+
     imgShowClick(list,imgIndex){
       this.url = [];
       let urlList = [];

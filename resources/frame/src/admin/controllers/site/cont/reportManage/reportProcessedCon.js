@@ -41,6 +41,7 @@ export default {
         }
       ],
       subLoading:false,       // 全部删除按钮状态
+      visible: false,
     }
   },
 
@@ -48,6 +49,9 @@ export default {
     /*
     * 举报列表全选状态切换
     * */
+   closeDelet(index) {
+    this.$refs[index][0].doClose();
+  },
     handleCheckAllChange(val) {
       this.checkedReport = val ? this.reportListAll : [];
       this.isIndeterminate = false;

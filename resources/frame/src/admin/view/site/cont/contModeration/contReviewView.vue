@@ -153,10 +153,34 @@
               @click="singleOperationSubmit(1,items.category._data.id,items._data.id,index)"
             >通过</el-button>
             <i></i>
+            <el-popover
+              width="100"
+              placement="top"
+              :ref="`popover-${index}`"
+            >
+              <p>确定删除该项吗？</p>
+              <div style="text-align: right; margin: 10PX 0 0 0 ">
+                <el-button
+                  type="danger"
+                  size="mini"
+                  @click="closeDelet(`popover-${index}`)"
+                >
+                  取消
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="
+                    singleOperationSubmit(2,items.category._data.id,items._data.id,index);
+                    closeDelet(`popover-${index}`)"
+                  >确定</el-button
+                >
+              </div>
             <el-button
               type="text"
-              @click="singleOperationSubmit(2,items.category._data.id,items._data.id,index)"
+              slot="reference"
             >删除</el-button>
+            </el-popover>
             <i></i>
             <el-button
               type="text"
@@ -170,10 +194,34 @@
               @click="singleOperationSubmit(1,items.category._data.id,items._data.id,index)"
             >通过</el-button>
             <i></i>
+            <el-popover
+              width="100"
+              placement="top"
+              :ref="`popover-${index}`"
+            >
+              <p>确定删除该项吗？</p>
+              <div style="text-align: right; margin: 10PX 0 0 0 ">
+                <el-button
+                  type="danger"
+                  size="mini"
+                  @click="closeDelet(`popover-${index}`)"
+                >
+                  取消
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="
+                    singleOperationSubmit(2,items.category._data.id,items._data.id,index);
+                    closeDelet(`popover-${index}`)"
+                  >确定</el-button
+                >
+              </div>
             <el-button
               type="text"
-              @click="singleOperationSubmit(2,items.category._data.id,items._data.id,index)"
+              slot="reference"
             >删除</el-button>
+            </el-popover>
             <i></i>
             <el-button
               type="text"
@@ -233,7 +281,31 @@
     <div class="cont-review-footer footer-btn">
       <el-button size="small" type="primary" :loading="subLoading" @click="submitClick">提交</el-button>
       <el-button type="text" :loading="btnLoading === 1" @click="allOperationsSubmit(1)">全部通过</el-button>
-      <el-button type="text" :loading="btnLoading === 2" @click="allOperationsSubmit(2)">全部删除</el-button>
+            <el-popover
+              width="100"
+              placement="top"
+              v-model="visible"
+            >
+              <p>确定删除该项吗？</p>
+              <div style="text-align: right; margin: 10PX 0 0 0 ">
+                <el-button
+                  type="danger"
+                  size="mini"
+                  @click="visible = false"
+                >
+                  取消
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="
+                    allOperationsSubmit(2)
+                    visible = false"
+                  >确定</el-button
+                >
+              </div>
+      <el-button slot="reference" type="text" :loading="btnLoading === 2">全部删除</el-button>
+            </el-popover>
       <el-button type="text" :loading="btnLoading === 3" v-show="ignoreStatus" @click="allOperationsSubmit(3)">全部忽略</el-button>
       <!-- <el-checkbox v-model="appleAll">将操作应用到其他所有页面</el-checkbox> -->
     </div>

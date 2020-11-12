@@ -91,6 +91,7 @@ export default {
       cancelrecomend: [],
       detelethem: [],
       sobj:'',
+      visible: false,
     }
   },
   computed: mapState({
@@ -101,7 +102,9 @@ export default {
     /*...mapMutations({
       setSearch:'admin/SET_SEARCH_CONDITION'
     }),*/
-
+    closeDelet(index) {
+      this.$refs[index][0].doClose();
+    },
     closeViewer() {
       this.showViewer = false
     },

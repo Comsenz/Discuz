@@ -58,11 +58,14 @@ export default {
       total:0,              //主题列表总条数
       pageCount:1,          //总页数
       showViewer:false,     //预览图
-      subLoading:false,     //提交按钮状态
-
+      subLoading:false,     //提交按钮状态 
+      visible: false,
     }
   },
   methods:{
+    closeDelet(index) {
+      this.$refs[index][0].doClose();
+    },
     searchClick(){
       //处理时间为空
       this.searchData.dataValue = this.searchData.dataValue == null?['','']:this.searchData.dataValue;

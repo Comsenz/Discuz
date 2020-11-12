@@ -66,13 +66,36 @@
               </div>
             </div>
 
-            <div class="latest-reply-theme__table-footer" slot="footer">
-
-              <div class="latest-reply-theme__table-footer__lf">
-                <el-button type="text" @click="singleOperationSubmit(1,items._data.id)">删除</el-button>
+          <div class="latest-reply-theme__table-footer" slot="footer">
+          <div class="latest-reply-theme__table-footer__lf">
+            <el-popover
+              width="100"
+              placement="top"
+              :ref="`popover-${index}`"
+            >
+              <p>确定删除该项吗？</p>
+              <div style="text-align: right; margin: 10PX 0 0 0 ">
+                <el-button
+                  type="danger"
+                  size="mini"
+                  @click="closeDelet(`popover-${index}`)"
+                >
+                  取消
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="
+                    singleOperationSubmit(1,items._data.id);
+                    closeDelet(`popover-${index}`)"
+                  >确定</el-button
+                >
+              </div>
+                <el-button slot="reference" type="text">删除</el-button>
+            </el-popover>
               </div>
 
-            </div>
+          </div>
 
           </ContArrange>
 
@@ -94,7 +117,31 @@
       </div>
 
       <div class="latest-reply-footer">
-        <el-button size="small" type="primary" :loading="subLoading" @click="deleteAllClick">删除</el-button>
+            <el-popover
+              width="100"
+              placement="top"
+              v-model="visible"
+            >
+              <p>确定删除该项吗？</p>
+              <div style="text-align: right; margin: 10PX 0 0 0 ">
+                <el-button
+                  type="danger"
+                  size="mini"
+                  @click="visible = false"
+                >
+                  取消
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="
+                    deleteAllClick()
+                    visible = false"
+                  >确定</el-button
+                >
+              </div>
+            <el-button slot="reference" size="small" type="primary" :loading="subLoading">删除</el-button>
+            </el-popover>
       </div>
     </div>
 </template>

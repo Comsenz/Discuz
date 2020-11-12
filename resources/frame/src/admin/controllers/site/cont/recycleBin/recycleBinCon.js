@@ -61,6 +61,7 @@ export default {
       url:[],
       subLoading:false,           //提交按钮状态
       btnLoading:0,               //0表示没有loading状态，1：全部还原、2：全部删除
+      visible: false,
     }
   },
 
