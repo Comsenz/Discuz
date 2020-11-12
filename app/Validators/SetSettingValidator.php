@@ -30,6 +30,7 @@ use App\Rules\Settings\QcloudTaskflowGifVerify;
 use App\Rules\Settings\QcloudVodCoverTemplateVerify;
 use App\Rules\Settings\QcloudVodTranscodeVerify;
 use App\Rules\Settings\QcloudVodVerify;
+use App\Rules\Settings\SiteOnlookerPrice;
 use App\Rules\Settings\SupportExt;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\AbstractValidator;
@@ -115,6 +116,10 @@ class SetSettingValidator extends AbstractValidator
 
         if (Arr::has($this->data, 'qcloud_vod_taskflow_gif')) {
             $rules['qcloud_vod_taskflow_gif'] = [new QcloudTaskflowGifVerify()];
+        }
+
+        if (Arr::has($this->data, 'site_onlooker_price')) {
+            $rules['site_onlooker_price'] = [new SiteOnlookerPrice()];
         }
 
         return $rules;
