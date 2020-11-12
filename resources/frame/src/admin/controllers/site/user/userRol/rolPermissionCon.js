@@ -21,25 +21,6 @@ export default {
       canBeOnlooker: false, // 是否可以设置围观
       categoriesList: [], // 分类列表
       selectList: {
-<<<<<<< HEAD
-        createThread: [],
-        editOwnThreadOrPost: [],
-        hideOwnThreadOrPost: [],
-        "thread.canBeReward": [],
-        viewThreads: [],
-        "thread.reply": [],
-        "thread.hide": [],
-        "thread.viewPosts": [],
-        "thread.hidePosts": [],
-        "thread.essence": [],
-        "thread.edit": [],
-        "thread.editPosts": [],
-        "thread.freeViewPosts.1": [],
-        "thread.freeViewPosts.2": [],
-        "thread.freeViewPosts.3": [],
-        "thread.freeViewPosts.4": [],
-        "thread.freeViewPosts.5": []
-=======
         'viewThreads': [],
         'createThread':[],
         'thread.reply':[],
@@ -57,7 +38,6 @@ export default {
         'thread.freeViewPosts.3':[],
         'thread.freeViewPosts.4':[],
         'thread.freeViewPosts.5':[],
->>>>>>> cac64aa46debcd3451a21afa6b017f5a2d9c782e
       },
       activeTab: {
         // 设置权限当前项
