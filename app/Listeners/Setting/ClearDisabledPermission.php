@@ -20,6 +20,7 @@ namespace App\Listeners\Setting;
 
 use App\Events\Setting\Saved;
 use App\Models\Permission;
+use App\Models\Thread;
 use Discuz\Contracts\Setting\SettingsRepository;
 
 class ClearDisabledPermission
@@ -67,6 +68,12 @@ class ClearDisabledPermission
         // 关闭腾讯云实名认证时
         if (! $this->settings->get('qcloud_faceid', 'qcloud')) {
             $permissions[] = 'publishNeedRealName';         // 发布内容需先实名认证
+        }
+
+        // 关闭腾讯云点播时
+        if (! $this->settings->get('qcloud_vod', 'qcloud')) {
+            $permissions[] = 'createThread.' . Thread::TYPE_OF_VIDEO;   // 发布视频帖
+            $permissions[] = 'createThread.' . Thread::TYPE_OF_AUDIO;   // 发布语音帖
         }
 
         // 清理权限

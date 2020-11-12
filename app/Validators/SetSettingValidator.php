@@ -30,6 +30,7 @@ use App\Rules\Settings\QcloudTaskflowGifVerify;
 use App\Rules\Settings\QcloudVodCoverTemplateVerify;
 use App\Rules\Settings\QcloudVodTranscodeVerify;
 use App\Rules\Settings\QcloudVodVerify;
+use App\Rules\Settings\SiteOnlookerPrice;
 use App\Rules\Settings\SupportExt;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\AbstractValidator;
@@ -73,7 +74,7 @@ class SetSettingValidator extends AbstractValidator
             'qcloud_cms_text' => Arr::has($this->data, 'qcloud_cms_text') ? [new QcloudMasterSwitch()] : [],
             'qcloud_cos' => Arr::has($this->data, 'qcloud_cos') ? [new QcloudMasterSwitch()] : [],
             'qcloud_captcha' => Arr::has($this->data, 'qcloud_captcha') ? [new QcloudMasterSwitch()] : [],
-            'site_price' => 'required_if:site_mode,pay|nullable|gt:0',
+            'site_price' => 'required_if:site_mode,pay|nullable|gte:0.1',
         ];
 
         // 腾讯云验证码特殊处理
@@ -115,6 +116,10 @@ class SetSettingValidator extends AbstractValidator
 
         if (Arr::has($this->data, 'qcloud_vod_taskflow_gif')) {
             $rules['qcloud_vod_taskflow_gif'] = [new QcloudTaskflowGifVerify()];
+        }
+
+        if (Arr::has($this->data, 'site_onlooker_price')) {
+            $rules['site_onlooker_price'] = [new SiteOnlookerPrice()];
         }
 
         return $rules;

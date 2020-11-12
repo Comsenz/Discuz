@@ -63,7 +63,7 @@ class ThreadSerializer extends AbstractSerializer
             'title'             => $model->title,
             'price'             => $model->price,
             'attachmentPrice'   => $model->attachment_price,
-            'freeWords'         => (int) $model->free_words,
+            'freeWords'         => $this->percentFreeWord($model),
             'viewCount'         => (int) $model->view_count,
             'postCount'         => (int) $model->post_count,
             'paidCount'         => (int) $model->paid_count,
@@ -79,7 +79,7 @@ class ThreadSerializer extends AbstractSerializer
             'isEssence'         => (bool) $model->is_essence,
             'isSite'            => (bool) $model->is_site,
             'isAnonymous'       => (bool) $model->is_anonymous,
-            'canBeReward'       => $model->price == 0 && $model->user->can('canBeReward'),
+            'canBeReward'       => $model->price == 0 && $this->gate->forUser($model->user)->allows('canBeReward', $model),
             'canViewPosts'      => $gate->allows('viewPosts', $model),
             'canReply'          => $gate->allows('reply', $model),
             'canApprove'        => $gate->allows('approve', $model),
@@ -106,58 +106,30 @@ class ThreadSerializer extends AbstractSerializer
             $attributes['isPaidAttachment'] = $model->is_paid_attachment;
         }
 
-        $this->isQuestion($model, $attributes);
+        // 问答围观状态
+        if ($model->type === Thread::TYPE_OF_QUESTION) {
+            $attributes['onlookerState'] = $model->getAttribute('onlookerState') ?? true;
+        }
+
+        // 匿名（最后设置匿名，避免其他地方取不到用户）
+        if ($model->is_anonymous && $model->user->id != $this->actor->id) {
+            $model->user = new Anonymous;
+        }
 
         return $attributes;
     }
 
-    /**
-     * @param Thread $model
-     * @param array $attributes
-     */
-    public function isQuestion($model, &$attributes)
+    public function percentFreeWord($model)
     {
-        // 判断是否是问答帖
-        if ($model->type !== Thread::TYPE_OF_QUESTION) {
-            return;
-        }
-
-        // 判断问答信息是否存在
-        if (empty($model->question)) {
-            $attributes['onlookerState'] = false;
-            return;
-        }
-
-        /**
-         * 判断是否围观过帖子
-         */
-        if ($this->actor->isGuest()) {
-            // 游客身份 直接未围观
-            $attributes['onlookerState'] = false;
-        } elseif (
-            $model->user_id === $this->actor->id
-            || $model->question->be_user_id === $this->actor->id
-            || $this->actor->isAdmin()
-            || ! is_null($model->onlookerState)
-        ) {
-            // 作者 或 被提问者 或 管理员 直接已围观
-            $attributes['onlookerState'] = true;
+        if ($model->free_words <= 1) {
+            return $model->free_words;
         } else {
-            // 判断是否是免费的问答免费的围观，直接等于围观过
-            if ($model->question->price == 0 && $model->question->onlooker_unit_price == 0) {
-                $attributes['onlookerState'] = true;
+            $percent = $model->free_words / strlen($model->firstPost->content);
+            if ($percent > 1) {
+                return 1;
             } else {
-                // 判断其它人查询订单是否围观过
-                $attributes['onlookerState'] = false;
+                return sprintf('%.2f', $percent);
             }
-        }
-
-        /**
-         * 判断是否匿名问答
-         * (非当前用户不是作者)
-         */
-        if ($model->is_anonymous && $model->user->id != $this->actor->id) {
-            $model->user = new Anonymous;
         }
     }
 
@@ -296,11 +268,19 @@ class ThreadSerializer extends AbstractSerializer
         return $this->hasMany($thread, TopicSerializer::class);
     }
 
+    /**
+     * @param $thread
+     * @return Relationship
+     */
     public function question($thread)
     {
         return $this->hasOne($thread, QuestionAnswerSerializer::class);
     }
 
+    /**
+     * @param $thread
+     * @return Relationship
+     */
     public function onlookers($thread)
     {
         return $this->hasMany($thread, UserSerializer::class);

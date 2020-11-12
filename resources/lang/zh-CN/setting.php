@@ -74,4 +74,6 @@ return [
     'api_key_cannot_be_empty' => 'API Key 不能为空。',
 
     'offiaccount_error' => '微信公众号配置错误。',
+
+    'onlooker_price_not_divisible' => '围观单价减掉站点分成后，提问人和回答人不能平分，该金额不能被整除请重新填写'
 ];

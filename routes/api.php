@@ -92,6 +92,8 @@ $route->post('/refresh-token', 'oauth2.refresh.token', ApiController\Oauth2\Refr
 
 $route->get('/oauth/wechat', 'wechat.login', ApiController\Users\WechatLoginController::class); // 已弃用
 $route->get('/oauth/wechat/user', 'wechat.user', ApiController\Users\WechatUserController::class);
+$route->get('/oauth/wechat/pc/bind', 'wechat.pc.bind', ApiController\Users\WechatPcBindController::class);
+$route->get('/oauth/wechat/pc/bind/{session_token}', 'wechat.pc.bind.poll', ApiController\Users\WechatPcBindPollController::class);
 $route->get('/oauth/wechat/pc', 'wechat.web.login', ApiController\Users\WechatWebLoginController::class); // 已弃用
 $route->get('/oauth/wechat/pc/user', 'wechat.pc.user', ApiController\Users\WechatWebUserController::class);
 $route->get('/oauth/welink', 'welink.login', ApiController\Users\WelinkLoginController::class);
@@ -106,7 +108,7 @@ $route->get('/oauth/wechat/qy/user', 'wechat.qy.user', ApiController\Users\Wecha
 $route->get('/oauth/qq', 'qq.login', ApiController\Users\QQLoginController::class);
 $route->get('/oauth/qq/user', 'qq.user', ApiController\Users\QQUserController::class);
 $route->get('/oauth/wechat/pc/qrcode', 'wechat.pc.qrcode', ApiController\Users\WechatPcQrCodeController::class);
-$route->get('/oauth/wechat/pc/login/{session_token}', 'wechat.pc.login', ApiController\Users\WechatPcLoginController::class);
+$route->get('/oauth/wechat/pc/login/{session_token}', 'wechat.pc.login.poll', ApiController\Users\WechatPcLoginPollController::class);
 $route->get('/oauth/wechat/qrcode/login/{session_token}', 'wechat.qrcode.login', ApiController\Users\WechatQrcodeLoginController::class);
 
 /*
@@ -341,8 +343,11 @@ $route->delete('/reports/batch/{ids}', 'reports.batchDelete', ApiController\Repo
 |--------------------------------------------------------------------------
 */
 
+
 $route->post('/goods/analysis', 'goods.analysis', ApiController\Analysis\ResourceAnalysisGoodsController::class);
 $route->get('/goods/{id}', 'goods.resource', ApiController\Analysis\ResourceGoodsController::class);
+$route->post('/analysis/goods', 'analysis.goods.url', ApiController\Analysis\ResourceAnalysisGoodsController::class);
+
 
 /*
 |--------------------------------------------------------------------------
@@ -387,3 +392,11 @@ $route->get('/offiaccount/menu', 'offiaccount.menu.list', ApiController\Wechat\O
 $route->post('/offiaccount/menu', 'offiaccount.menu.batchCreate', ApiController\Wechat\OffIAccountMenuBatchCreateController::class);
 $route->get('/offiaccount/reprint/{id}', 'offiaccount.threads.reprint', ApiController\Wechat\OffIAccountThreadsReprintController::class);
 $route->get('/offiaccount/transform', 'offiaccount.threads.transform', ApiController\Wechat\OffIAccountThreadsTransformController::class);
+
+
+/*
+|--------------------------------------------------------------------------
+| Cache
+|--------------------------------------------------------------------------
+*/
+$route->delete('/cache', 'cache.clear', ApiController\Cache\CacheController::class);

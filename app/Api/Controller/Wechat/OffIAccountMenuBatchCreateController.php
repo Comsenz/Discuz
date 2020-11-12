@@ -82,6 +82,6 @@ class OffIAccountMenuBatchCreateController implements RequestHandlerInterface
             throw new \Exception($result['errmsg']);
         }
 
-        return DiscuzResponseFactory::JsonApiResponse($result);
+        return DiscuzResponseFactory::JsonResponse($result);
     }
 }

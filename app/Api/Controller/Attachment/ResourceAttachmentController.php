@@ -29,6 +29,7 @@ use App\Settings\SettingsRepository;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Discuz\Auth\Guest;
 use Discuz\Http\DiscuzResponseFactory;
 use GuzzleHttp\Client as HttpClient;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
@@ -89,9 +90,10 @@ class ResourceAttachmentController implements RequestHandlerInterface
         $attachmentId = Arr::get($request->getQueryParams(), 'id');
         $page = (int)Arr::get($request->getQueryParams(), 'page');
         $t =  Arr::get($request->getQueryParams(), 't', '');
+        $isAttachment =  Arr::get($request->getQueryParams(), 'isAttachment', 0);
         $token = SessionToken::get($t);
         if ($token) {
-            $user = $token->user;
+            $user = $token->user ?? new Guest();
         } else {
             throw new PermissionDeniedException();
         }
@@ -125,9 +127,16 @@ class ResourceAttachmentController implements RequestHandlerInterface
                     return DiscuzResponseFactory::JsonResponse($data);
                 } else {
                     //下载
-                    $header = [
-                        'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
-                    ];
+                    if ($isAttachment) {
+                        $header = [
+                            'Content-Disposition' => 'attachment;filename=' . $attachment->file_name,
+                        ];
+                    } else {
+                        $header = [
+                            'Content-Type' => $attachment->file_type,
+                            'Content-Disposition' => 'inline;filename=' . $attachment->file_name,
+                        ];
+                    }
 
                     return DiscuzResponseFactory::FileStreamResponse(
                         $response->getBody(),
@@ -139,7 +148,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
                 throw new ModelNotFoundException();
             }
         } else {
-            $filePath = storage_path('app/attachment/' . $attachment->attachment);
+            $filePath = storage_path('app/' . $attachment->full_path);
 
             // 帖子图片直接显示
             if ($attachment->type == Attachment::TYPE_OF_IMAGE) {
@@ -201,7 +210,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
         }
 
         // 主题附件是否付费
-        if ($thread->attachment_price > 0 && ! $actor->isAdmin() && $thread->user_id != $actor->id) {
+        if ($thread->attachment_price > 0 && ! $actor->isAdmin() && $thread->user_id != $actor->id && $attachment->type == Attachment::TYPE_OF_FILE) {
             $order = Order::query()->where('user_id', $actor->id)
                 ->where('thread_id', $thread->id)
                 ->where('type', Order::ORDER_TYPE_ATTACHMENT)

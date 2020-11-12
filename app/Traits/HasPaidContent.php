@@ -20,6 +20,7 @@ namespace App\Traits;
 
 use App\Models\Attachment;
 use App\Models\Post;
+use App\Models\Question;
 use App\Models\Thread;
 use App\Models\ThreadVideo;
 use App\Models\User;
@@ -46,7 +47,7 @@ trait HasPaidContent
     protected $orders = [];
 
     /**
-     * @param Thread|Post|Attachment|ThreadVideo $model
+     * @param Thread|Post|Attachment|ThreadVideo|Question $model
      */
     public function paidContent($model)
     {
@@ -59,25 +60,35 @@ trait HasPaidContent
 
         if ($model instanceof Thread) {
             $this->hideImagesAndAttachments($model);
+            $this->getOnlookerState($model);
         } elseif ($model instanceof Post) {
             $this->summaryOfContent($model);
         } elseif ($model instanceof Attachment) {
             $this->blurImage($model);
         } elseif ($model instanceof ThreadVideo) {
             $this->hideMedia($model);
+        } elseif ($model instanceof Question) {
+            $this->hideAnswer($model);
         }
     }
 
     /**
      * 是否无权查看
-     * 没权限查看时，如果是推荐到站点首页的可以查看
+     *
      * @param Thread $thread
      * @return bool
      */
     public function cannotView(Thread $thread)
     {
-        return (! $this->actor->hasPermission('thread.viewPosts') && !$thread->is_site)
-            || ($thread->price > 0 && ! $thread->is_paid);
+        // 不能查看详情
+        $cannotViewPosts = ! $this->actor->can('viewPosts', $thread);
+
+        // 不能免费查看付费内容
+        $cannotFreeViewPosts = ! $this->actor->can('freeViewPosts.' . $thread->type, $thread);
+
+        // （非站点推荐帖 且 不能查看详情）或（未付费 且 不能免费查看付费内容）
+        return (! $thread->is_site && $cannotViewPosts)
+            || ($thread->price > 0 && ! $thread->is_paid && $cannotFreeViewPosts);
     }
 
     /**
@@ -98,6 +109,38 @@ trait HasPaidContent
     }
 
     /**
+     * 获取问答帖围观状态
+     *
+     * @param Thread $thread
+     */
+    public function getOnlookerState(Thread $thread)
+    {
+        if ($thread->type !== Thread::TYPE_OF_QUESTION) {
+            return;
+        }
+
+        if (! $thread->question) {
+            $onlookerState = false;
+        } elseif (! $thread->question->is_onlooker) {
+            $onlookerState = true;
+        } else {
+            if (
+                $thread->user_id === $this->actor->id
+                || $thread->question->be_user_id === $this->actor->id
+                || $this->actor->isAdmin()
+                || $this->actor->can('freeViewPosts.' . Thread::TYPE_OF_QUESTION, $thread)
+                || ! is_null($thread->onlookerState)
+            ) {
+                $onlookerState = true;
+            } else {
+                $onlookerState = false;
+            }
+        }
+
+        $thread->setAttribute('onlookerState', $onlookerState);
+    }
+
+    /**
      * 付费长文帖未付费时返回免费部分内容
      *
      * @param Post $post
@@ -111,10 +154,12 @@ trait HasPaidContent
             && $this->cannotView($post->thread)
         ) {
             $content = Str::of($post->content);
-
-            if ($content->length() > $post->thread->free_words) {
-                $post->content = $content->substr(0, $post->thread->free_words)->finish(Post::SUMMARY_END_WITH);
+            if ($post->thread->free_words > 1) {
+                $words = (int)$post->thread->free_words;
+            } else {
+                $words = ceil($content->length() * $post->thread->free_words);
             }
+            $post->content = $content->substr(0, $words)->finish(Post::SUMMARY_END_WITH);
         }
     }
 
@@ -158,6 +203,21 @@ trait HasPaidContent
         ) {
             $threadVideo->file_id = '';
             $threadVideo->media_url = '';
+        }
+    }
+
+    /**
+     * 没有围观时隐藏问答帖答案
+     *
+     * @param Question $question
+     */
+    public function hideAnswer(Question $question)
+    {
+        $onlookerState = $question->thread->getAttribute('onlookerState')
+            ?? $this->getOnlookerState($question->thread);
+
+        if (! $onlookerState) {
+            $question->content = '';
         }
     }
 }

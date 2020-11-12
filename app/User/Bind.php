@@ -60,7 +60,7 @@ class Bind
      * @param int $rebind 是否更换绑定
      * @throws Exception
      */
-    public function withToken($token, $user, $rebind)
+    public function withToken($token, $user, $rebind = null)
     {
         $session = SessionToken::get($token);
         $scope = Arr::get($session, 'scope');
@@ -136,9 +136,13 @@ class Bind
 
         //获取小程序用户信息
         /** @var UserWechat $wechatUser */
-        $wechatUser = UserWechat::when($unionid, function ($query, $unionid) {
-            return $query->where('unionid', $unionid);
-        })->orWhere('min_openid', $openid)->first();
+        $wechatUser = UserWechat::query()
+            ->when($unionid, function ($query, $unionid) {
+                return $query->where('unionid', $unionid);
+            })
+            ->orWhere('min_openid', $openid)
+            ->lockForUpdate()
+            ->first();
 
         // 换绑时删除原双向关系（微信绑定的用户.登陆用户绑定微信）
         if ($rebind) {

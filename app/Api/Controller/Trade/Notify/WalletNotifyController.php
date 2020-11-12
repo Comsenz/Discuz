@@ -49,7 +49,7 @@ class WalletNotifyController extends AbstractResourceController
         $document = new Document();
         $data = $this->data($request, $document);
 
-        return DiscuzResponseFactory::JsonApiResponse($data);
+        return DiscuzResponseFactory::JsonResponse($data);
     }
 
     /**

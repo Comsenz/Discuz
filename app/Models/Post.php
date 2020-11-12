@@ -201,6 +201,17 @@ class Post extends Model
      */
     public function setContentAttribute($value)
     {
+        if (blank($value) && $this->is_first) {
+            $defaultContent = [
+                Thread::TYPE_OF_VIDEO => trans('post.default_content.video'),
+                Thread::TYPE_OF_IMAGE => trans('post.default_content.image'),
+                Thread::TYPE_OF_AUDIO => trans('post.default_content.audio'),
+                Thread::TYPE_OF_GOODS => trans('post.default_content.goods'),
+            ];
+
+            $value = $defaultContent[$this->thread->type] ?? '';
+        }
+
         $this->attributes['content'] = $value ? static::$formatter->parse($value, $this) : null;
     }
 

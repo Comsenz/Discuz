@@ -58,7 +58,8 @@ class ResourceGroupsController extends AbstractResourceController
                 $query->with(['permission']);
             } else {
                 $query->with(['permission' => function ($query) {
-                    $query->where('permission', 'not like', 'category%');
+                    $query->where('permission', 'not like', 'category%')
+                        ->where('permission', 'not like', 'switch.%');
                 }]);
             }
         }

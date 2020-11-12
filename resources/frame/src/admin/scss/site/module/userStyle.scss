@@ -223,7 +223,12 @@
 */
 .rol-permission-box{
   position: relative;
-
+  .scope-action{
+    position: absolute;
+    top: 17PX;
+    left:45%;
+    color: #606266;
+  }
   .permission__title{
     position: absolute;
     left: 70PX;
@@ -244,6 +249,39 @@
     .el-input {
       width: 60%;
       margin-left: 20PX;
+    }
+  }
+  .user-operate {
+    .card-row-lf{
+      width: 45%;
+      margin-right: 0;
+    }
+    .card-row-rf{
+      margin-left: -4PX;
+    }
+    .card-box__main {
+      position: relative;
+    }
+  }
+  .hasSelect{
+    .card-row-lf{
+      width: 100%;
+    }
+    .card-row-rf{
+      margin-top: 2PX;
+      margin-left: 24PX;
+    }
+    .card-box__main {
+      position: relative;
+    }
+    .card-row-box {
+      width: 45%;
+    }
+    .el-select{
+      position: absolute;
+      left: 45%;
+      top: 0;
+      width: 340PX;
     }
   }
 }

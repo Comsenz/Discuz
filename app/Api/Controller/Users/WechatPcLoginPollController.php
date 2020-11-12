@@ -28,7 +28,7 @@ use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class WechatPcLoginController extends AbstractResourceController
+class WechatPcLoginPollController extends AbstractResourceController
 {
     public $serializer = TokenSerializer::class;
 

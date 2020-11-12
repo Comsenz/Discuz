@@ -62,7 +62,8 @@ class ListGroupsController extends AbstractListController
                 // 邀请用户组关联权限不返回 分类下权限
                 if (in_array('permission', $include)) {
                     $query->with(['permission' => function ($query) {
-                        $query->where('permission', 'not like', 'category%');
+                        $query->where('permission', 'not like', 'category%')
+                            ->where('permission', 'not like', 'switch.%');
                     }]);
                 }
 

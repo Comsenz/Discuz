@@ -37,7 +37,7 @@ export default {
             },
             {
               id: 1,
-              title: "注册设置",
+              title: "注册与登录设置",
               name: "signUpSet",
               icon: "iconzhuceshezhi"
             },
@@ -306,6 +306,30 @@ export default {
     };
   },
   methods: {
+    // 清空缓存
+    clearCache() {
+      this.appFetch({
+        url: "clearCache",
+        method: "delete",
+        data: {}
+      }).then(data => {
+        if (data.errors) {
+          if (data.errors[0].detail) {
+            this.$message.error(
+              data.errors[0].code + "\n" + data.errors[0].detail[0]
+            );
+          } else {
+            this.$message.error(data.errors[0].code);
+          }
+        } else {
+          this.$message({
+            message: "缓存清空完毕",
+            type: "success"
+          });
+        }
+      })
+      .catch(error => {});
+    },
     /*
      *  导航菜单点击事件
      * */

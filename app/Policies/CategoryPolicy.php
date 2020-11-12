@@ -38,17 +38,20 @@ class CategoryPolicy extends AbstractPolicy
      */
     public function can(User $actor, $ability, Category $category)
     {
-        if ($actor->hasPermission('category.' . $ability)) {
-            return true;
-        }
+        if (in_array($ability, Category::$categoryPermissions)) {
+            // 分类下设置的其他权限
+            $switchIsTurnOn = $actor->hasPermission('switch.' . $ability);
+            $hasGlobalPermission = $actor->hasPermission($ability);
+            $hasCategoryPermission = $actor->hasPermission('category' . $category->id . '.' . $ability);
 
-        if (
-            $category->exists
-            && ! $actor->isGuest()
-            // && in_array($actor->id, explode(',', $category->moderators))
-            && $actor->hasPermission('category' . $category->id . '.' . $ability)
-        ) {
-            return true;
+            if ($switchIsTurnOn && ($hasGlobalPermission || $hasCategoryPermission)) {
+                return true;
+            }
+        } else {
+            // 对分类的操作权限
+            if ($actor->hasPermission('category.' . $ability)) {
+                return true;
+            }
         }
     }
 
@@ -59,58 +62,5 @@ class CategoryPolicy extends AbstractPolicy
     public function find(User $actor, Builder $query)
     {
         $query->whereIn('id', Category::getIdsWhereCan($actor, 'viewThreads'));
-    }
-
-    /**
-     * @param User $actor
-     * @param Category $category
-     * @return bool|null
-     */
-    public function viewThreads(User $actor, Category $category)
-    {
-        if (
-            $actor->hasPermission('viewThreads')
-            && $actor->hasPermission('category'.$category->id.'.viewThreads')
-        ) {
-            return true;
-        }
-    }
-
-    /**
-     * @param User $actor
-     * @param Category $category
-     * @return bool|null
-     */
-    public function createThread(User $actor, Category $category)
-    {
-        if (
-            $actor->hasPermission([
-                'createThread',
-                'createThreadLong',
-                'createThreadVideo',
-                'createThreadImage',
-                'createThreadAudio',
-            ], false)
-            && $actor->hasPermission('category'.$category->id.'.viewThreads')
-            && $actor->hasPermission('category'.$category->id.'.createThread')
-        ) {
-            return true;
-        }
-    }
-
-    /**
-     * @param User $actor
-     * @param Category $category
-     * @return bool|null
-     */
-    public function replyThread(User $actor, Category $category)
-    {
-        if (
-            $actor->hasPermission('thread.reply')
-            && $actor->hasPermission('category'.$category->id.'.viewThreads')
-            && $actor->hasPermission('category'.$category->id.'.replyThread')
-        ) {
-            return true;
-        }
     }
 }
