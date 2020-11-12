@@ -141,6 +141,8 @@ class CreateAttachment
                 new Uploaded($this->actor, $uploader)
             );
 
+            $filePathInfo = pathinfo($file->hashName());
+
             $attachment = Attachment::build(
                 $this->actor->id,
                 $this->type,

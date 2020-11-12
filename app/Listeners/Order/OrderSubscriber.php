@@ -73,4 +73,33 @@ class OrderSubscriber
             $order->thread->refreshPaidCount()->save();
         }
     }
+
+    /**
+     * 发送分成通知
+     *
+     * @param $order
+     * @param bool $type payee 打赏/付费  user 注册
+     */
+    public function sendScaleNotice($order, $type)
+    {
+        /**
+         * 发送分成收入通知
+         * @var Order $order
+         */
+        if ($order->isScale()) {
+            // 判断是发给 收款人/付款人 的上级
+            $userDistribution = $type == 'payee' ? $order->payee->userDistribution : $order->user->userDistribution ;
+            if (!empty($userDistribution)) {
+                $parentUser = $userDistribution->parentUser;
+                $parentUser->notify(new Rewarded($order, $order->user, RewardedScaleMessage::class));
+                $parentUser->notify(new Rewarded($order, $order->user, WechatRewardedScaleMessage::class, [
+                    'message' => $type == 'payee' ? $order->thread->getContentByType(Thread::CONTENT_LENGTH, true) : '注册站点',
+                    'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
+                        'actor_username' => $order->user->username,        // 发送人姓名
+                        'boss_amount' => $order->calculateAuthorAmount(),  // 获取实际金额
+                    ]),
+                ]));
+            }
+        }
+    }
 }
