@@ -127,7 +127,31 @@
                 @click="btnrecomment(items._data.id, items._data.recommended)"
               >{{items._data.recommended === 1 ? recomment2 : recomment1}}</span>
               <span class="cont-manage-theme__table-main-bigbox-span"></span>
-              <span class="cont-manage-theme__table-main-bigbox-box" @click="deteleTopic(items._data.id)">删除</span>
+            <el-popover
+              width="100"
+              placement="top"
+              :ref="`popover-${index}`"
+            >
+              <p>确定删除该项吗？</p>
+              <div style="text-align: right; margin: 10PX 0 0 0 ">
+                <el-button
+                  type="danger"
+                  size="mini"
+                  @click="closeDelet(`popover-${index}`)"
+                >
+                  取消
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="
+                    deteleTopic(items._data.id);
+                    closeDelet(`popover-${index}`)"
+                  >确定</el-button
+                >
+              </div>
+              <span slot="reference" class="cont-manage-theme__table-main-bigbox-box">删除</span>
+            </el-popover>
             </div>
           </div>
           <!-- <div class="cont-manage-theme__table-button" slot="longText">
@@ -155,7 +179,31 @@
         <el-button :loading="subLoading" type="primary"  @click="btnSubmit">提交</el-button>
         <span class="cont-manage-operating-all operating-alls" @click="allRecomment(1,themeListAll, 1)">全部推荐</span>
         <span class="cont-manage-operating-all" @click="allRecomment(0,themeListAll, 1)">全部取消推荐</span>
-        <span class="cont-manage-operating-all" @click="deleteClick(themeListAll, 1)">全部删除</span>
+            <el-popover
+              width="100"
+              placement="top"
+              v-model="visible"
+            >
+              <p>确定删除该项吗？</p>
+              <div style="text-align: right; margin: 10PX 0 0 0 ">
+                <el-button
+                  type="danger"
+                  size="mini"
+                  @click="visible = false"
+                >
+                  取消
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="
+                    deleteClick(themeListAll, 1)
+                    visible = false"
+                  >确定</el-button
+                >
+              </div>
+        <span slot="reference" class="cont-manage-operating-all">全部删除</span>
+            </el-popover>
         <!-- <el-button @click="deleteClick" :loading="subLoading" type="primary">全部删除</el-button> -->
       </Card>
     </div>

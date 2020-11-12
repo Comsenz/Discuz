@@ -39,6 +39,7 @@ export default {
         pageTotal: 0,         // 举报列表总条数
       },
       subLoading:false,       // 提交按钮状态
+      visible: false,
     }
   },
 
@@ -46,6 +47,9 @@ export default {
     /*
     * 举报列表选择
     * */
+   closeDelet(index) {
+    this.$refs[index][0].doClose();
+  },
     radioChange(event, index){
       switch (event){
         case 0:
