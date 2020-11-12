@@ -18,11 +18,12 @@
 
 namespace App\Commands\Users;
 
+use App\Events\Users\UserFollowCreated;
 use App\Models\User;
 use App\Models\UserFollow;
-use App\Events\Users\UserFollowCreated;
 use App\Repositories\UserRepository;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\NotAuthenticatedException;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -54,10 +55,19 @@ class CreateUserFollow
         $this->to_user_id = $to_user_id;
     }
 
+    /**
+     * @param UserFollow $userFollow
+     * @param UserRepository $user
+     * @param Dispatcher $events
+     * @return mixed
+     * @throws PermissionDeniedException
+     * @throws NotAuthenticatedException
+     */
     public function handle(UserFollow $userFollow, UserRepository $user, Dispatcher $events)
     {
         $this->events = $events;
 
+        $this->assertRegistered($this->actor);
         $this->assertCan($this->actor, 'userFollow.create');
         if ($this->actor->id == $this->to_user_id) {
             throw new PermissionDeniedException();
@@ -83,11 +93,9 @@ class CreateUserFollow
             ['is_mutual'=>$is_mutual]
         );
 
-
         $this->events->dispatch(
             new UserFollowCreated($this->actor, $toUser)
         );
-
 
         return $userFollow;
     }
