@@ -19,6 +19,9 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
+use App\Common\CacheKey;
+use App\Common\ThreadCache;
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\PostUser;
@@ -29,6 +32,8 @@ use App\Repositories\TopicRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Discuz\Common\Utils;
+use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -51,7 +56,6 @@ class ListThreadsController extends AbstractListController
      * {@inheritdoc}
      */
     public $include = [
-        'user',
         'firstPost',
         'threadVideo',
         'threadAudio',
@@ -81,6 +85,7 @@ class ListThreadsController extends AbstractListController
     ];
 
     public $mustInclude = [
+        'user',
         'favoriteState',
         'firstPost.likeState',
         'question',
@@ -128,15 +133,22 @@ class ListThreadsController extends AbstractListController
      */
     protected $tablePrefix;
 
+    protected $cache;
+
+    private $threadCache;
+
     /**
      * @param ThreadRepository $threads
      * @param UrlGenerator $url
+     * @param Cache $cache
      */
-    public function __construct(ThreadRepository $threads, UrlGenerator $url)
+    public function __construct(ThreadRepository $threads, UrlGenerator $url, Cache $cache)
     {
         $this->threads = $threads;
         $this->url = $url;
+        $this->cache = $cache;
         $this->tablePrefix = config('database.connections.mysql.prefix');
+        $this->threadCache = new ThreadCache();
     }
 
     /**
@@ -149,11 +161,27 @@ class ListThreadsController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
+        $params = $request->getQueryParams();
+        $filter = $this->extractFilter($request);
 
         // 获取推荐到站点信息页数据时 不检查权限
-        $filter = $this->extractFilter($request);
         if (Arr::get($filter, 'isSite', '') !== 'yes') {
-            $this->assertCan($actor, 'viewThreads');
+            // 没有任何一个分类的查看权限时，判断是否有全局权限
+            if (!Category::getIdsWhereCan($actor, 'viewThreads')) {
+                $this->assertCan($actor, 'viewThreads');
+            }
+        }
+
+        $canCache = $this->canCache($params);
+        $params['isMobile'] = Utils::isMobile($request->getServerParams());
+        $cacheKey = CacheKey::LIST_THREAD_HOME_INDEX . md5(json_encode($params, 256));
+        $data = $this->cache->get($cacheKey);
+        if (!empty($data)) {
+            $obj  = unserialize($data);
+            $metaLinks = $obj->getMetaLinks();
+            $threads = $obj->getThreads();
+            $this->addDocument($document, $metaLinks['params'], $metaLinks['count'], $metaLinks['offset'], $metaLinks['limit']);
+            return $threads;
         }
 
         $sort = $this->extractSort($request);
@@ -164,18 +192,7 @@ class ListThreadsController extends AbstractListController
 
         $threads = $this->search($actor, $filter, $sort, $limit, $offset);
 
-        $document->addPaginationLinks(
-            $this->url->route('threads.index'),
-            $request->getQueryParams(),
-            $offset,
-            $limit,
-            $this->threadCount
-        );
-
-        $document->setMeta([
-            'threadCount' => $this->threadCount,
-            'pageCount' => ceil($this->threadCount / $limit),
-        ]);
+        $this->addDocument($document, $params, $this->threadCount, $offset, $limit);
 
         Thread::setStateUser($actor, $threads);
         Post::setStateUser($actor);
@@ -246,8 +263,70 @@ class ListThreadsController extends AbstractListController
                 }
             });
         }
-
+        if ($canCache) {
+            $this->threadCache->setThreads($threads);
+            $this->cache->put($cacheKey, serialize($this->threadCache), 1800);
+            $this->appendCache(CacheKey::LIST_THREAD_KEYS, $cacheKey, 1800);
+        }
         return $threads;
+    }
+
+    private function addDocument($document, $params, $count, $offset, $limit)
+    {
+        $document->addPaginationLinks(
+            $this->url->route('threads.index'),
+            $params,
+            $offset,
+            $limit,
+            $count
+        );
+        $document->setMeta([
+            'threadCount' => $count,
+            'pageCount' => ceil($count / $limit),
+        ]);
+        $this->threadCache->setMetaLinks([
+            'params' => $params,
+            'count' => $count,
+            'offset' => $offset,
+            'limit' => $limit
+        ]);
+    }
+
+    private function canCache($params)
+    {
+        $canCache = false;
+        if (isset($params['include'])) {
+            if ($params['include'] == 'firstPost') {
+                $canCache = true;
+            }
+        }
+        if (isset($params['page'])) {
+            if ($params['page']['number'] == 1) {
+                $canCache = true;
+            }
+        }
+        return $canCache;
+    }
+
+    /**
+     *缓存key单独记录便于数据变更的时候清除缓存
+     */
+    private function appendCache($key, $value, $ttl)
+    {
+        $v0 = $this->cache->get($key);
+        if (empty($v0)) {
+            $v1 = [$value];
+        } else {
+            $v1 = json_decode($v0, true);
+            if (!empty($v1)) {
+                $v1[] = $value;
+            } else {
+                return false;
+            }
+        }
+        $v1 = array_unique($v1);
+        $this->cache->put($key, json_encode($v1, 256), $ttl);
+        return $v1;
     }
 
     /**
@@ -527,7 +606,6 @@ class ListThreadsController extends AbstractListController
                 $query->where('threads.is_display', false);
             }
         }
-
     }
 
     /**

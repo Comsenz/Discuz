@@ -12,8 +12,9 @@ export default {
       register_captcha:'',    //验证码开始
       disabled:true,            //是否可以开启验证码
       register_type: 0,      // 注册模式
-      qcloud_sms: true,
-      qcloud_wx: true,
+      qcloud_name: false,
+      qcloud_sms: false,
+      qcloud_wx: false,
       privacy: "0", //隐私协议
       register: "0", //用户协议
       register_content:'',
@@ -49,13 +50,20 @@ export default {
           this.register = agreement.register ? "1" : "0";
           this.register_content = agreement.register_content;
           this.privacy_content = agreement.privacy_content;
-          if(res.readdata._data.qcloud.qcloud_sms == true) {
+          // 旧注册登陆模式的禁用控制
+          // if(res.readdata._data.qcloud.qcloud_sms == true) {
+          //   this.qcloud_sms = false
+          // }
+          // if(res.readdata._data.passport.offiaccount_close == true || res.readdata._data.passport.miniprogram_close == true) {
+          //   this.qcloud_wx = false
+          // }
 
-            this.qcloud_sms = false
-          }
-          if(res.readdata._data.passport.offiaccount_close == true || res.readdata._data.passport.miniprogram_close == true) {
-            this.qcloud_wx = false
-          }
+          // 新注册登陆模式的禁用控制
+          this.qcloud_name = !res.readdata._data.sign_enable.user_name;
+          this.qcloud_sms = !res.readdata._data.sign_enable.mobile_phone;
+          this.qcloud_wx = !res.readdata._data.sign_enable.wechat_direct;
+
+
           if(res.readdata._data.qcloud.qcloud_captcha == true){
             this.disabled = false
           }

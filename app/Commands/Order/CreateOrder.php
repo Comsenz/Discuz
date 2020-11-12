@@ -121,7 +121,7 @@ class CreateOrder
 
                 if ($thread) {
                     // 主题作者是否允许被打赏
-                    $this->assertCan($thread->user, 'canBeReward');
+                    $this->assertCan($thread->user, 'canBeReward', $thread);
 
                     $payeeId = $thread->user_id;
                     $amount = sprintf('%.2f', (float) $this->data->get('amount'));
@@ -197,8 +197,9 @@ class CreateOrder
                 break;
             // 问答提问支付
             case Order::ORDER_TYPE_QUESTION:
-                // 判断是否允许发布问答帖
-                $this->assertCan($this->actor, 'createThreadQuestion');
+                // 判断是否允许发布付费问答帖
+                $this->assertCan($this->actor, 'createThreadPaid');
+                $this->assertCan($this->actor, 'createThread.' . Thread::TYPE_OF_QUESTION);
 
                 // 创建订单
                 $amount = sprintf('%.2f', (float) $this->data->get('amount')); // 设置订单问答价格

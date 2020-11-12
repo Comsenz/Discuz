@@ -19,19 +19,20 @@
 namespace App\Api\Controller\Users;
 
 use App\Models\SessionToken;
-use Discuz\Api\Controller\AbstractResourceController;
+use Discuz\Http\DiscuzResponseFactory;
 use Exception;
 use Illuminate\Support\Arr;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class WechatPcBindPollController extends AbstractResourceController
+class WechatPcBindPollController implements RequestHandlerInterface
 {
     /**
      * {@inheritdoc}
      * @throws Exception
      */
-    protected function data(ServerRequestInterface $request, Document $document)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $sessionToken = Arr::get($request->getQueryParams(), 'session_token');
 
@@ -48,7 +49,7 @@ class WechatPcBindPollController extends AbstractResourceController
 
         if (isset($token->payload['bind']) && $token->payload['bind']) {
             // 绑定成功
-            return $token->payload;
+            return DiscuzResponseFactory::JsonResponse($token->payload);
         }
 
         throw new Exception($token->payload['code'] ?: 'error');

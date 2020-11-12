@@ -93,4 +93,5 @@ module.exports = {
 
   reports: '/reports', //举报列表
   reportsBatch: '/reports/batch', //删除举报
+  clearCache: '/cache' // 缓存相关
 };

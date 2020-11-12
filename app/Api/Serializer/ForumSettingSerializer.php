@@ -19,9 +19,11 @@
 namespace App\Api\Serializer;
 
 use App\Models\Category;
+use App\Models\Thread;
 use App\Models\User;
 use App\Settings\ForumSettingField;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Discuz\Common\PubEnum;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Support\Arr;
@@ -65,7 +67,9 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_keywords' => $this->settings->get('site_keywords'),
                 'site_introduction' => $this->settings->get('site_introduction'),
                 'site_mode' => $this->settings->get('site_mode'), // pay public
-                'site_close' => (bool)$this->settings->get('site_close'),
+//                'site_close' => (bool)$this->settings->get('site_close'),
+                'site_manage' => json_decode($this->settings->get('site_manage'), true),
+                'site_close_msg'=>$this->settings->get('site_close_msg'),
                 'site_favicon' => $favicon ?: app(UrlGenerator::class)->to('/favicon.ico'),
                 'site_logo' => $logo ?: '',
                 'site_header_logo' => $headerLogo ?: '',
@@ -140,26 +144,25 @@ class ForumSettingSerializer extends AbstractSerializer
                 'count_users' => (int) $this->settings->get('user_count'),              // 站点用户数
 
                 // 管理权限
-                'can_batch_edit_threads' => $actor->can('thread.batchEdit'),            // 批量编辑主题
                 'can_edit_user_group' => $actor->can('user.edit.group'),                // 修改用户用户组
                 'can_edit_user_status' => $actor->can('user.edit.status'),              // 修改用户状态
 
-                // 查看权限
-                'can_view_threads' => $actor->can('viewThreads'),                       // 查看主题列表
-                'can_view_user_list' => $actor->can('viewUserList'),                    // 查看用户列表
+                // 至少在一个分类下有查看权限 或 有全局查看权限
+                'can_view_threads' => Category::getIdsWhereCan($actor, 'viewThreads')
+                                            || $actor->can('viewThreads'),              // 查看主题列表
 
                 // 发布权限
-                'can_create_dialog' => $actor->can('dialog.create'),                    // 发短消息
-                'can_create_invite' => $actor->can('createInvite'),                     // 发邀请
-                'can_invite_user_scale' => $actor->can('other.canInviteUserScale'),     // 发分成邀请
-                'can_create_thread_paid' => $actor->can('createThreadPaid'),            // 发付费内容
-                'can_create_thread' => $actor->can('createThread'),                     // 发布文字
-                'can_create_thread_long' => $actor->can('createThreadLong'),            // 发布长文
-                'can_create_thread_video' => $actor->can('createThreadVideo'),          // 发布视频
-                'can_create_thread_image' => $actor->can('createThreadImage'),          // 发布图片
-                'can_create_thread_audio' => $actor->can('createThreadAudio'),          // 发布语音
-                'can_create_thread_goods' => $actor->can('createThreadGoods'),          // 发布商品
-                'can_create_thread_question' => $actor->can('createThreadQuestion'),    // 发布问答
+                'can_create_dialog' => $actor->can('dialog.create'),                                        // 发短消息
+                'can_create_invite' => $actor->can('createInvite'),                                         // 发邀请
+                'can_invite_user_scale' => $actor->can('other.canInviteUserScale'),                         // 发分成邀请
+                'can_create_thread_paid' => $actor->can('createThreadPaid'),                                // 发付费内容
+                'can_create_thread' => $actor->can('createThread.' . Thread::TYPE_OF_TEXT),                 // 发布文字
+                'can_create_thread_long' => $actor->can('createThread.' . Thread::TYPE_OF_LONG),            // 发布长文
+                'can_create_thread_video' => $actor->can('createThread.' . Thread::TYPE_OF_VIDEO),          // 发布视频
+                'can_create_thread_image' => $actor->can('createThread.' . Thread::TYPE_OF_IMAGE),          // 发布图片
+                'can_create_thread_audio' => $actor->can('createThread.' . Thread::TYPE_OF_AUDIO),          // 发布语音
+                'can_create_thread_question' => $actor->can('createThread.' . Thread::TYPE_OF_QUESTION),    // 发布问答
+                'can_create_thread_goods' => $actor->can('createThread.' . Thread::TYPE_OF_GOODS),          // 发布商品
 
                 // 至少在一个分类下有发布权限
                 'can_create_thread_in_category' => (bool) Category::getIdsWhereCan($actor, 'createThread'),
@@ -170,7 +173,6 @@ class ForumSettingSerializer extends AbstractSerializer
 
                 // 其他
                 'initialized_pay_password' => (bool) $actor->pay_password,              // 是否初始化支付密码
-                'can_be_reward' => $actor->can('canBeReward'),                          // 是否允许被打赏
                 'can_be_asked' => $actor->can('canBeAsked'),                            // 是否允许被提问
                 'can_be_onlooker' => $this->settings->get('site_onlooker_price') > 0 && $actor->can('canBeOnlooker'),           // 是否允许被围观
                 'create_thread_with_captcha' => ! $actor->isAdmin() && $actor->can('createThreadWithCaptcha'),                  // 发布内容需要验证码
@@ -189,9 +191,9 @@ class ForumSettingSerializer extends AbstractSerializer
         ];
 
         // 站点开关 - 满足条件返回
-        if ($attributes['set_site']['site_close'] == 1) {
-            $attributes['set_site'] += $this->forumField->getSiteClose();
-        }
+//        if ($attributes['set_site']['site_close'] == 1) {
+//            $attributes['set_site'] += $this->forumField->getSiteClose();
+//        }
 
         // 付费模式 - 满足条件返回
         if ($attributes['set_site']['site_mode'] == 'pay') {
@@ -204,6 +206,7 @@ class ForumSettingSerializer extends AbstractSerializer
         } else {
             //未开启vod服务 不可发布视频主题
             $attributes['other']['can_create_thread_video'] = false;
+            $attributes['other']['can_create_thread_audio'] = false;
         }
 
         // 微信小程序请求时判断视频开关
@@ -211,6 +214,8 @@ class ForumSettingSerializer extends AbstractSerializer
             strpos(Arr::get($this->request->getServerParams(), 'HTTP_X_APP_PLATFORM'), 'wx_miniprogram') !== false) {
             $attributes['other']['can_create_thread_video'] = false;
         }
+        //判断三种注册方式是否置灰禁用
+        $attributes['sign_enable']=$this->getSignInEnable($attributes);
 
         // 判断用户是否存在
         if ($actor->exists) {
@@ -247,6 +252,47 @@ class ForumSettingSerializer extends AbstractSerializer
         }
 
         return $attributes + Arr::except($model, 'id');
+    }
+
+    /**
+     *判断管理后台三个端的选项按钮是否禁用
+     */
+    private function getSignInEnable($attributes)
+    {
+        $siteManage = array_column($attributes['set_site']['site_manage'], null, 'key');
+        $user_name = true;
+        $mobile_phone = false;
+        $wechat_direct = false;
+        //配置了短信服务则允许使用手机号注册
+        $attributes['qcloud']['qcloud_sms'] && $mobile_phone = true;
+        //允许使用微信无感注册登陆
+        //pc :1,h5:2,微信：3
+        $p1 = [];
+        $p2 = [];
+        if ($siteManage[PubEnum::PC]['value']) {
+            $p1[]=PubEnum::PC;
+            if ($attributes['passport']['offiaccount_close'] && $attributes['passport']['oplatform_close']) {
+                $p2[]=PubEnum::PC;
+            }
+        }
+        if ($siteManage[PubEnum::H5]['value']) {
+            $p1[]=PubEnum::H5;
+            if ($attributes['passport']['offiaccount_close']) {
+                $p2[]=PubEnum::H5;
+            }
+        }
+        if ($siteManage[PubEnum::MinProgram]['value']) {
+            $p1[]=PubEnum::MinProgram;
+            if ($attributes['passport']['miniprogram_close']) {
+                $p2[]=PubEnum::MinProgram;
+            }
+        }
+        $p1 == $p2 && $wechat_direct = true;
+        return [
+            'user_name' => $user_name,
+            'mobile_phone' => $mobile_phone,
+            'wechat_direct' => $wechat_direct
+        ];
     }
 
     public function getId($model)

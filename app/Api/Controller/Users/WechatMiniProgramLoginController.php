@@ -36,6 +36,7 @@ use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Events\Dispatcher as Events;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
@@ -60,7 +61,9 @@ class WechatMiniProgramLoginController extends AbstractResourceController
 
     protected $bind;
 
-    public function __construct(Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events, SettingsRepository $settings, Bind $bind)
+    protected $db;
+
+    public function __construct(Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events, SettingsRepository $settings, Bind $bind, ConnectionInterface $db)
     {
         $this->bus = $bus;
         $this->cache = $cache;
@@ -68,6 +71,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
         $this->events = $events;
         $this->settings = $settings;
         $this->bind = $bind;
+        $this->db = $db;
     }
 
     /**
@@ -79,6 +83,11 @@ class WechatMiniProgramLoginController extends AbstractResourceController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
+
+        $rebind = Arr::get($attributes, 'rebind', 0);
+        $actor = $request->getAttribute('actor');
+        $user = !$actor->isGuest() ? $actor : new Guest();
+
         $js_code = Arr::get($attributes, 'js_code');
         $iv = Arr::get($attributes, 'iv');
         $encryptedData =Arr::get($attributes, 'encryptedData');
@@ -87,12 +96,14 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             ['js_code' => 'required','iv' => 'required','encryptedData' => 'required']
         )->validate();
 
-        $actor = $request->getAttribute('actor');
-        $user = !$actor->isGuest() ? $actor : new Guest();
-
         // 绑定小程序
-        $rebind = Arr::get($attributes, 'rebind', 0);
-        $wechatUser = $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $rebind, $user, true);
+        $this->db->beginTransaction();
+        try {
+            $wechatUser = $this->bind->bindMiniprogram($js_code, $iv, $encryptedData, $rebind, $user, true);
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw new Exception($e->getMessage(), 500);
+        }
 
         if ($wechatUser->user_id) {
             //已绑定的用户登陆
@@ -100,6 +111,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
 
             //用户被删除
             if (!$user) {
+                $this->db->rollback();
                 throw new \Exception('bind_error');
             }
         } else {
@@ -107,6 +119,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             if (Arr::get($attributes, 'register', 0)) {
                 //未绑定的用户注册
                 if (!(bool)$this->settings->get('register_close')) {
+                    $this->db->rollback();
                     throw new PermissionDeniedException('register_close');
                 }
 
@@ -121,12 +134,16 @@ class WechatMiniProgramLoginController extends AbstractResourceController
                 // 先设置关系再save，为了同步微信头像
                 $wechatUser->setRelation('user', $user);
                 $wechatUser->save();
+
+                $this->db->commit();
             } else {
+                $this->db->rollback();
                 $noUserException = new NoUserException();
                 $noUserException->setUser(['username' => $wechatUser->nickname, 'headimgurl'=>$wechatUser->headimgurl]);
                 throw $noUserException;
             }
         }
+        $this->db->commit();
 
         //创建 token
         $params = [

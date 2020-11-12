@@ -29,7 +29,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Grant\PasswordGrant;
-use Nyholm\Psr7\Response;
+use Laminas\Diactoros\Response;
 
 class AccessTokenController implements RequestHandlerInterface
 {

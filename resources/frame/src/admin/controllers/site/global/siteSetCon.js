@@ -4,8 +4,11 @@ import CardRow from "../../../view/site/common/card/cardRow";
 export default {
   data: function() {
     return {
+      // 关闭站点
+      closeList: [],
+      closeSelectList: [],
       radio: "1",
-      radio2: "2",
+      // radio2: "2",
       // fileList:[],
       loading: true,
       fullscreenLoading: false,
@@ -40,14 +43,14 @@ export default {
           imgWidht: 0,
           imgHeight: 0,
           text: "站点LOGO",
-          textrule: "推荐高度：88px"
+          textrule: "尺寸：438px*88px"
         },
         {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
           text: "首页头部LOGO",
-          textrule: "推荐高度：88px"
+          textrule: "尺寸：438px*88px"
         },
         {
           imageUrl: "",
@@ -60,7 +63,7 @@ export default {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
-          text: "ICON",
+          text: "站点ICON",
           textrule: "尺寸：120px*120px"
         }
       ]
@@ -75,6 +78,9 @@ export default {
     // uploadDisabled:function() {
     //     return this.fileList.length >0
     // },
+    changeCloseList() {
+      return this.closeSelectList.length != this.closeList.length;
+    }
   },
 
   methods: {
@@ -90,6 +96,7 @@ export default {
             this.$message.error(data.errors[0].code);
           } else {
             console.log("11111");
+            console.log(data)
             // 微信支付关闭时置灰付费模式
             if (data.readdata._data.paycenter.wxpay_close == false) {
               this.disabled = true;
@@ -138,12 +145,23 @@ export default {
             // if (data.readdata._data.logo) {
             //   this.fileList.push({url: data.readdata._data.logo});
             // }
-            this.siteClose = data.readdata._data.set_site.site_close;
-            if (this.siteClose === true) {
-              this.radio2 = "1";
-            } else {
-              this.radio2 = "2";
-            }
+
+            // 旧关闭站点
+            // this.siteClose = data.readdata._data.set_site.site_close;
+            // if (this.siteClose === true) {
+            //   this.radio2 = "1";
+            // } else {
+            //   this.radio2 = "2";
+            // }
+            // 新的关闭站点
+
+            this.closeList = data.readdata._data.set_site.site_manage || [];
+            this.closeSelectList = this.closeList.reduce((result, item) => {
+              if (item.value) {
+                result.push(item.key);
+              }
+              return result;
+            }, []);
 
             this.siteCloseMsg = data.readdata._data.set_site.site_close_msg;
             this.purchase = !!data.readdata._data.set_site.site_pay_group_close;
@@ -234,6 +252,10 @@ export default {
       } else {
         this.siteClose = false;
       }
+    },
+    // 关闭站点
+    closeListChange(data) {
+      this.closeSelectList = data.slice();
     },
     handleAvatarSuccess(res, file) {
       // this.imageUrl = URL.createObjectURL(file.raw);
@@ -341,6 +363,11 @@ export default {
         .catch(error => {});
     },
     siteSetPost() {
+
+      const closeData = this.closeList.map((item) => {
+        item.value = this.closeSelectList.indexOf(item.key) != - 1;
+        return item;
+      })
       this.appFetch({
         url: "settings",
         method: "post",
@@ -437,10 +464,17 @@ export default {
                 tag: "default"
               }
             },
+            // {
+            //   attributes: {
+            //     key: "site_close",
+            //     value: this.siteClose,
+            //     tag: "default"
+            //   }
+            // },
             {
               attributes: {
-                key: "site_close",
-                value: this.siteClose,
+                key: "site_manage",
+                value: closeData,
                 tag: "default"
               }
             },

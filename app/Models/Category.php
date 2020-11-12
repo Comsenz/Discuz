@@ -49,6 +49,31 @@ class Category extends Model
     protected $dates = ['created_at', 'updated_at'];
 
     /**
+     * 分类权限
+     *
+     * @var array
+     */
+    public static $categoryPermissions = [
+        'viewThreads',                 // 查看帖子列表
+        'createThread',                // 发布帖子
+        'thread.reply',                // 回复帖子
+        'thread.edit',                 // 编辑帖子
+        'thread.hide',                 // 删除帖子
+        'thread.essence',              // 加精帖子
+        'thread.viewPosts',            // 查看详情
+        'thread.editPosts',            // 编辑回复
+        'thread.hidePosts',            // 删除回复
+        'thread.canBeReward',          // 是否允许被打赏
+        'thread.editOwnThreadOrPost',  // 编辑自己主题或回复的权限
+        'thread.hideOwnThreadOrPost',  // 删除自己主题或回复的权限
+        'thread.freeViewPosts.1',      // 免费查看付费帖子
+        'thread.freeViewPosts.2',      // 免费查看付费视频
+        'thread.freeViewPosts.3',      // 免费查看付费图片
+        'thread.freeViewPosts.4',      // 免费查看付费语音
+        'thread.freeViewPosts.5',      // 免费查看付费问答
+    ];
+
+    /**
      * Create a new category.
      *
      * @param string $name
@@ -130,20 +155,11 @@ class Category extends Model
             $categories = static::all();
         }
 
-        if ($permission === 'createThread') {
-            $hasGlobalPermission = $user->hasPermission([
-                'createThread',
-                'createThreadLong',
-                'createThreadVideo',
-                'createThreadImage',
-                'createThreadAudio',
-            ], false);
-        } else {
-            $hasGlobalPermission = $user->hasPermission($permission);
-        }
+        $hasGlobalPermission = $user->hasPermission($permission);
 
         $canForCategory = function (self $category) use ($user, $permission, $hasGlobalPermission) {
-            return $hasGlobalPermission && $user->hasPermission('category'.$category->id.'.'.$permission);
+            return $user->hasPermission('switch.'.$permission)
+                && ($hasGlobalPermission || $user->hasPermission('category'.$category->id.'.'.$permission));
         };
 
         $ids = [];

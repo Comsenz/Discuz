@@ -139,10 +139,12 @@ module.exports = {
     // port: 443,
     // http2: true,
     // disableHostCheck: true,
-    contentBase: false,
+    // contentBase: false,
     proxy: {
       "/api": {
-        target: "https://dq.comsenz-service.com",
+        // target: "https://discuz.run",
+        // target: "https://dq.comsenz-service.com/",
+        target: "http://dev.discuz.com/",
         changeOrigin: true,
         secure: false,
       }

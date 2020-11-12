@@ -2,13 +2,10 @@
 
 /**
  * Copyright (C) 2020 Tencent Cloud.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
  *   http://www.apache.org/licenses/LICENSE-2.0
- *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,13 +24,12 @@ use Illuminate\Support\Arr;
 
 /**
  * @package App\Models
- *
  * @property int $id
  * @property int $user_id
  * @property int $post_id
  * @property string $platform_id
  * @property string $title
- * @property float $price
+ * @property string $price
  * @property string $image_path
  * @property int $type
  * @property int $status
@@ -100,7 +96,7 @@ class PostGoods extends Model
      * @param int $post_id
      * @param string $platform_id
      * @param string $title
-     * @param float $price
+     * @param string $price
      * @param string $imagePath
      * @param int $type
      * @param int $status
@@ -113,13 +109,14 @@ class PostGoods extends Model
         int $post_id,
         string $platform_id,
         string $title,
-        float $price,
+        string $price,
         string $imagePath,
         int $type,
         int $status,
         string $readyContent,
         string $detailContent
-    ) {
+    )
+    {
         $goods = new static;
 
         $goods->user_id = $user_id;
@@ -143,7 +140,7 @@ class PostGoods extends Model
      * @param string $suffix 后缀拼接
      * @return string
      */
-    public static function enumTypeName(int $type, string $suffix = '') : string
+    public static function enumTypeName(int $type, string $suffix = ''): string
     {
         $typeName = static::$typeName;
 
