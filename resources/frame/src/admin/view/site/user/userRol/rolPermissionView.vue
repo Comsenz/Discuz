@@ -203,6 +203,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.createThread"
+              @change="changeChecked($event,'createThread')"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7' 
@@ -233,6 +234,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.thread.reply"
+               @change="changeChecked($event,'thread.reply')"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -263,6 +265,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.thread.canBeReward"
+              @change="changeChecked($event,'thread.canBeReward')"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7' ||
@@ -297,6 +300,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.viewThreads"
+              @change="changeChecked($event,'viewThreads')"
               :disabled="$router.history.current.query.id === '1'"
               >查看主题列表</el-checkbox
             >
@@ -324,6 +328,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.thread.viewPosts"
+              @change="changeChecked($event,'thread.viewPosts')"
               :disabled="$router.history.current.query.id === '1'"
               >查看主题详情</el-checkbox
             >
@@ -351,6 +356,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.thread.freeViewPosts.1"
+              @change="changeChecked($event,'thread.freeViewPosts.1')"
               :disabled="$router.history.current.query.id === '1'"
               >免费查看付费帖子</el-checkbox
             >
@@ -378,6 +384,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.thread.freeViewPosts.2"
+              @change="changeChecked($event,'thread.freeViewPosts.2')"
               :disabled="$router.history.current.query.id === '1'"
               >免费查看付费视频</el-checkbox
             >
@@ -405,6 +412,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.thread.freeViewPosts.3"
+              @change="changeChecked($event,'thread.freeViewPosts.3')"
               :disabled="$router.history.current.query.id === '1'"
               >免费查看付费图片</el-checkbox
             >
@@ -432,6 +440,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.thread.freeViewPosts.4"
+              @change="changeChecked($event,'thread.freeViewPosts.4')"
               :disabled="$router.history.current.query.id === '1'"
               >免费查看付费语音</el-checkbox
             >
@@ -459,6 +468,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.thread.freeViewPosts.5"
+              @change="changeChecked($event,'thread.freeViewPosts.5')"
               :disabled="$router.history.current.query.id === '1'"
               >免费查看付费问答</el-checkbox
             >
@@ -541,6 +551,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.thread.essence"
+              @change="changeChecked($event,'thread.essence')"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -571,6 +582,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.thread.edit"
+              @change="changeChecked($event,'thread.edit')"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -601,6 +613,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.thread.hide"
+              @change="changeChecked($event,'thread.hide')"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -631,6 +644,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.thread.editPosts"
+              @change="changeChecked($event,'thread.editPosts')"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -661,6 +675,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.thread.hidePosts"
+              @change="changeChecked($event,'thread.hidePosts')"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -691,6 +706,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.editOwnThreadOrPost"
+              @change="changeChecked($event,'editOwnThreadOrPost')"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
@@ -721,6 +737,7 @@
             <el-checkbox
               v-model="checked"
               label="switch.hideOwnThreadOrPost"
+              @change="changeChecked($event,'hideOwnThreadOrPost')"
               :disabled="
                 $router.history.current.query.id === '1' ||
                   $router.history.current.query.id === '7'
