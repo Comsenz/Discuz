@@ -173,7 +173,7 @@ class ListThreadsController extends AbstractListController
         }
 
         $canCache = $this->canCache($params);
-        $params['isMobile'] = Utils::isMobile($request->getServerParams());
+        $params['isMobile'] = Utils::isMobile();
         $cacheKey = CacheKey::LIST_THREAD_HOME_INDEX . md5(json_encode($params, 256));
         $data = $this->cache->get($cacheKey);
         if (!empty($data)) {
@@ -181,7 +181,9 @@ class ListThreadsController extends AbstractListController
             $metaLinks = $obj->getMetaLinks();
             $threads = $obj->getThreads();
             $this->addDocument($document, $metaLinks['params'], $metaLinks['count'], $metaLinks['offset'], $metaLinks['limit']);
-            return $threads;
+            if ($threads->count() != 0 && $metaLinks['count'] != 0) {
+                return $threads;
+            }
         }
 
         $sort = $this->extractSort($request);
