@@ -18,8 +18,6 @@
 
 namespace App\Observer;
 
-use App\MessageTemplate\Wechat\WechatWithdrawalMessage;
-use App\MessageTemplate\WithdrawalMessage;
 use App\Models\UserWalletCash;
 use App\Notifications\Withdrawal;
 
@@ -41,14 +39,15 @@ class UserWalletCashObserver
         });
 
         if (in_array($cash->cash_status, $allowSend)) {
-            $cash->user->notify(new Withdrawal($cash, WithdrawalMessage::class));
-
-            $cash->user->notify(new Withdrawal($cash, WechatWithdrawalMessage::class, [
+            $build = [
                 'cash_actual_amount' => $cash->cash_actual_amount, // 提现实际到账金额
                 'cash_status' => $cash->cash_status, // 提现结果
                 'created_at' => $cash->created_at,  // 提现时间
                 'refuse' => $cash->remark, // 原因
-            ]));
+            ];
+
+            // Tag 发送通知
+            $cash->user->notify(new Withdrawal($cash->user, $cash, $build));
         }
     }
 }

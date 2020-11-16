@@ -47,13 +47,14 @@ class NotificationTpl extends Model
     /**
      * 枚举 - type
      *
-     * 通知类型: 0系统 1微信 2短信
+     * 通知类型: 0系统 1微信 2短信 3企业微信
      * @var array
      */
     protected static $status = [
         'database' => 0,
         'wechat' => 1,
         'sms' => 2, // 待定暂未使用
+        'enterpriseWeChat' => 3,
     ];
 
     /**
