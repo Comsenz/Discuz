@@ -21,8 +21,9 @@ namespace App\Api\Controller\Attachment;
 use App\Api\Serializer\AttachmentSerializer;
 use App\Exceptions\OrderException;
 use App\Models\Attachment;
-use App\Models\Order;
+use App\Models\Post;
 use App\Models\SessionToken;
+use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\AttachmentRepository;
 use App\Settings\SettingsRepository;
@@ -31,6 +32,7 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Auth\Guest;
 use Discuz\Http\DiscuzResponseFactory;
+use Exception;
 use GuzzleHttp\Client as HttpClient;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -78,20 +80,19 @@ class ResourceAttachmentController implements RequestHandlerInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param ServerRequestInterface $request
      * @return ResponseInterface
      * @throws OrderException
      * @throws PermissionDeniedException
+     * @throws Exception
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $attachmentId = Arr::get($request->getQueryParams(), 'id');
         $page = (int)Arr::get($request->getQueryParams(), 'page');
-        $t =  Arr::get($request->getQueryParams(), 't', '');
+        $token = SessionToken::get(Arr::get($request->getQueryParams(), 't', ''));
         $isAttachment =  Arr::get($request->getQueryParams(), 'isAttachment', 0);
-        $token = SessionToken::get($t);
+
         if ($token) {
             $user = $token->user ?? new Guest();
         } else {
@@ -108,9 +109,9 @@ class ResourceAttachmentController implements RequestHandlerInterface
             }
             try {
                 $response = $httpClient->get($url);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 if (Str::contains($e->getMessage(), 'FunctionNotEnabled')) {
-                    throw new \Exception('qcloud_file_preview_unset');
+                    throw new Exception('qcloud_file_preview_unset');
                 } else {
                     throw new ModelNotFoundException();
                 }
@@ -189,37 +190,23 @@ class ResourceAttachmentController implements RequestHandlerInterface
     {
         $attachment = $this->attachments->findOrFail($attachmentId, $actor);
 
-        // 附件是否被绑定到帖子上
         $post = $attachment->post;
-        if (!$attachment->post || ($post->deleted_at && ! $actor->isAdmin())) {
-            throw new PermissionDeniedException();
-        }
+
+        // 是否有权查看帖子
+        $this->assertCan($actor, 'view', $attachment->post ?? new Post());
+
+        Thread::setStateUser($actor);
+
+        $thread = $post->thread;
 
         // 主题是否收费
-        $thread = $post->thread;
-        if ($thread->price > 0 && ! $actor->isAdmin() && $thread->user_id != $actor->id) {
-            $order = Order::query()->where('user_id', $actor->id)
-                ->where('thread_id', $thread->id)
-                ->where('type', Order::ORDER_TYPE_THREAD)
-                ->where('status', Order::ORDER_STATUS_PAID)
-                ->exists();
-
-            if (! $order) {
-                throw new OrderException('order_post_not_found');
-            }
+        if ($thread->price > 0 && ! $thread->is_paid) {
+            throw new OrderException('order_post_not_found');
         }
 
         // 主题附件是否付费
-        if ($thread->attachment_price > 0 && ! $actor->isAdmin() && $thread->user_id != $actor->id && $attachment->type == Attachment::TYPE_OF_FILE) {
-            $order = Order::query()->where('user_id', $actor->id)
-                ->where('thread_id', $thread->id)
-                ->where('type', Order::ORDER_TYPE_ATTACHMENT)
-                ->where('status', Order::ORDER_STATUS_PAID)
-                ->exists();
-
-            if (! $order) {
-                throw new OrderException('order_post_not_found');
-            }
+        if ($thread->attachment_price > 0 && ! $thread->is_paid_attachment) {
+            throw new OrderException('order_post_not_found');
         }
 
         return $attachment;
