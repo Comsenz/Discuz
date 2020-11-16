@@ -140,15 +140,14 @@ class ListThreadsController extends AbstractListController
     /**
      * @param ThreadRepository $threads
      * @param UrlGenerator $url
-     * @param Cache $cache
      */
-    public function __construct(ThreadRepository $threads, UrlGenerator $url, Cache $cache)
+    public function __construct(ThreadRepository $threads, UrlGenerator $url)
     {
         $this->threads = $threads;
         $this->url = $url;
-        $this->cache = $cache;
         $this->tablePrefix = config('database.connections.mysql.prefix');
         $this->threadCache = new ThreadCache();
+        $this->cache = app('cache');
     }
 
     /**
@@ -172,8 +171,14 @@ class ListThreadsController extends AbstractListController
             }
         }
 
+        //设置列表第一页缓存
         $canCache = $this->canCache($params);
         $params['isMobile'] = Utils::isMobile();
+        $groups = $actor->toArray()['groups'];
+        if(!empty($groups)){
+            $group = $groups[0];
+            $params['userRole'] = $group['id'];
+        }
         $cacheKey = CacheKey::LIST_THREAD_HOME_INDEX . md5(json_encode($params, 256));
         $data = $this->cache->get($cacheKey);
         if (!empty($data)) {
