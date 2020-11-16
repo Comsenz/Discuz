@@ -20,7 +20,6 @@ namespace App\Listeners\User;
 
 use App\Events\Users\Registered;
 use App\Models\Group;
-use App\Models\Invite;
 use App\Models\User;
 use App\Models\UserDistribution;
 use App\Models\UserFollow;
@@ -120,7 +119,9 @@ class InviteBind
                 $toUser->refreshUserFans();
                 $toUser->save();
 
-                $bossGroup = $fromUser->groups->first();
+                // 多个用户组时 取主用户组(null值无限期)
+                $bossGroup = $fromUser->groups()->whereNull('group_user.expiration_time')->first();
+
                 // 建立上下级关系
                 UserDistribution::query()->create([
                     'pid' => $fromUserId,
