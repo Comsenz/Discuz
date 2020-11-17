@@ -112,9 +112,9 @@
               <span>{{!items.user?'操作者被禁止或删除':items.deletedUser._data.username}}</span>
             </div>
 
-            <div class="recycle-bin-table__footer-reason" v-if="items.lastDeletedLog._data.message.length > 0">
+            <div class="recycle-bin-table__footer-reason" v-if="items.lastDeletedLog && items.lastDeletedLog._data.message.length > 0">
               <span>原因：</span>
-              <span>{{!items.user?'操作者被禁止或删除':items.lastDeletedLog._data.message}}</span>
+              <span>{{!items.user?'操作者被禁止或删除':items.lastDeletedLog && items.lastDeletedLog._data.message}}</span>
             </div>
             <div class="transcodStatus">
               <span class="transcoding_status" v-if="items.threadVideo && items.threadVideo._data.status == 0">转码中</span>
