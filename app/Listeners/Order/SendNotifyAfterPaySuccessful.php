@@ -149,9 +149,9 @@ class SendNotifyAfterPaySuccessful
     /**
      * 共用发送分成通知
      *
-     * @param bool $type payee 打赏/付费  user 注册
+     * @param string $type payee 打赏/付费  user 注册
      */
-    public function sendScaleNotice(bool $type)
+    public function sendScaleNotice(string $type)
     {
         /**
          * 发送分成收入通知
