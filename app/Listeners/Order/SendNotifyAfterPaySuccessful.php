@@ -162,7 +162,7 @@ class SendNotifyAfterPaySuccessful
                 $userDistribution = $this->order->payee->userDistribution;
                 $infoUser = $this->order->payee;
             } else {
-                $this->order->user->userDistribution;
+                $userDistribution = $this->order->user->userDistribution;
                 $infoUser = $this->order->user;
             }
             if (! empty($userDistribution)) {
