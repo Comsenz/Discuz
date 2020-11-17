@@ -37,7 +37,10 @@ class UserWalletCashObserver
         if ($cash->cash_type == UserWalletCash::TRANSFER_TYPE_MCH) {
             // 判断是否已打款
             if ($cash->cash_status != UserWalletCash::STATUS_PAID) {
-                return;
+                // 如果不是审核拒绝就不发送通知
+                if ($cash->cash_status != UserWalletCash::STATUS_REVIEW_FAILED) {
+                    return;
+                }
             }
         }
 
