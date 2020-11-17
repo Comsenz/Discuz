@@ -30,7 +30,7 @@ use App\Models\MobileCode;
 use App\Models\SessionToken;
 use App\Models\User;
 use App\Models\UserWalletFailLogs;
-use App\Notifications\Messages\Database\RegisterMessage;
+use App\Notifications\Messages\Wechat\RegisterWechatMessage;
 use App\Notifications\System;
 use App\Repositories\MobileCodeRepository;
 use App\User\Bind;
@@ -129,7 +129,7 @@ class VerifyMobile
             $this->bind->withToken($token, $this->mobileCode->user);
             if (!(bool)$this->settings->get('register_validate')) {
                 // Tag 发送通知 （在注册绑定微信后 发送注册微信通知）
-                $this->mobileCode->user->notify(new System(RegisterMessage::class, $this->mobileCode->user, ['send_type' => 'wechat']));
+                $this->mobileCode->user->notify(new System(RegisterWechatMessage::class, $this->mobileCode->user, ['send_type' => 'wechat']));
             }
         }
 
