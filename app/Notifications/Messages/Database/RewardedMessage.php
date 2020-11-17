@@ -115,7 +115,7 @@ class RewardedMessage extends SimpleMessage
      */
     public function noticeByOrder()
     {
-        $this->initData['user_id'] = $this->order->user->id; // 付款人ID
+        $this->initData['user_id'] = $this->actor->id; // 付款人ID
         $this->initData['order_id'] = $this->order->id;
         $this->initData['order_type'] = $this->order->type; // 1：注册，2：打赏，3：付费主题，4：付费用户组
 
