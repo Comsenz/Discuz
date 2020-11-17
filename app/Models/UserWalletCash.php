@@ -218,7 +218,7 @@ class UserWalletCash extends Model
             return $callback([
                 'normal' => [1, 2, 4, 5], // 正常通知状态
                 'fail' => [3, 6],         // 失败通知
-                'send' => [2, 3],         // 允许发送的通知
+                'send' => [2, 3, 5],      // 允许发送的通知
             ]);
         }
     }
