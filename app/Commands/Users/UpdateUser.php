@@ -23,13 +23,11 @@ use App\Events\Group\PaidGroup;
 use App\Events\Users\ChangeUserStatus;
 use App\Events\Users\PayPasswordChanged;
 use App\Exceptions\TranslatorException;
-use App\MessageTemplate\GroupMessage;
-use App\MessageTemplate\Wechat\WechatGroupMessage;
 use App\Models\Group;
 use App\Models\GroupPaidUser;
 use App\Models\User;
 use App\Models\UserActionLogs;
-use App\Models\UserWechat;
+use App\Notifications\Messages\Database\GroupMessage;
 use App\Notifications\System;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
@@ -178,11 +176,6 @@ class UpdateUser
             $status = Arr::get($attributes, 'status');
             $user->changeStatus($status);
 
-            // 禁用、拒审时清理微信绑定关系
-            if ($status == 1 || $status == 3) {
-                UserWechat::query()->where('user_id', $user->id)->delete();
-            }
-
             // 记录用户状态操作日志
             $logMsg = Arr::get($attributes, 'refuse_message', ''); // 拒绝原因
             $actionType = User::enumStatus($status);
@@ -259,11 +252,8 @@ class UpdateUser
                         'old' => $oldGroups,
                     ];
 
-                    // 系统通知
-                    $user->notify(new System(GroupMessage::class, $notifyData));
-
-                    // 微信通知
-                    $user->notify(new System(WechatGroupMessage::class, $notifyData));
+                    // Tag 发送通知
+                    $user->notify(new System(GroupMessage::class, $user, $notifyData));
                 }
             }
         }

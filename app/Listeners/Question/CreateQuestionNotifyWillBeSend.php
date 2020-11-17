@@ -19,9 +19,8 @@
 namespace App\Listeners\Question;
 
 use App\Events\Question\Created;
-use App\MessageTemplate\QuestionedMessage;
-use App\MessageTemplate\Wechat\WechatQuestionedMessage;
 use App\Models\Thread;
+use App\Notifications\Messages\Wechat\QuestionedWechatMessage;
 use App\Notifications\Questioned;
 use Illuminate\Support\Arr;
 
@@ -32,13 +31,14 @@ class CreateQuestionNotifyWillBeSend
         $question = $event->question;
         $actor = $event->actor;
 
-        // 向回答人发送问答通知
-        $question->beUser->notify(new Questioned($question, $actor, QuestionedMessage::class));
-        $question->beUser->notify(new Questioned($question, $actor, WechatQuestionedMessage::class, [
+        $build = [
             'message' => $question->thread->getContentByType(Thread::CONTENT_LENGTH, true),
             'raw' => array_merge(Arr::only($question->toArray(), ['thread_id', 'price']), [
                 'actor_username' => $question->thread->isAnonymousName(),   // 提问人姓名/匿名
             ]),
-        ]));
+        ];
+
+        // Tag 发送通知 (向回答人发送问答通知)
+        $question->beUser->notify(new Questioned(QuestionedWechatMessage::class, $actor, $question, $build));
     }
 }

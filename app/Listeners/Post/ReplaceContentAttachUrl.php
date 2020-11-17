@@ -58,7 +58,11 @@ class ReplaceContentAttachUrl
             // 替换插入内容中的图片 URL
             Utils::replaceAttributes($xml, 'IMG', function ($img) use (&$xml, $attachments) {
                 if (isset($img['title']) && isset($attachments[$img['title']])) {
-                    $xml = str_replace(htmlspecialchars($img['src']), $attachments[$img['title']], $xml);
+                    $xml = str_replace(
+                        htmlspecialchars($img['src']),
+                        htmlspecialchars($attachments[$img['title']]),
+                        $xml
+                    );
                 }
 
                 return $img;
@@ -67,7 +71,11 @@ class ReplaceContentAttachUrl
             // 替换插入内容中的附件 URL
             Utils::replaceAttributes($xml, 'URL', function ($url) use (&$xml, $attachments) {
                 if (isset($url['title']) && isset($attachments[$url['title']])) {
-                    $xml = str_replace(htmlspecialchars($url['url']), $attachments[$url['title']], $xml);
+                    $xml = str_replace(
+                        htmlspecialchars($url['url']),
+                        htmlspecialchars($attachments[$url['title']]),
+                        $xml
+                    );
                 }
 
                 return $url;
