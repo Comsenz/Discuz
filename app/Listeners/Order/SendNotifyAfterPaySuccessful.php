@@ -158,18 +158,24 @@ class SendNotifyAfterPaySuccessful
          */
         if ($this->order->isScale()) {
             // 判断是发给 收款人/付款人 的上级
-            $userDistribution = $type == 'payee' ? $this->order->payee->userDistribution : $this->order->user->userDistribution;
+            if ($type == 'payee') {
+                $userDistribution = $this->order->payee->userDistribution;
+                $infoUser = $this->order->payee;
+            } else {
+                $this->order->user->userDistribution;
+                $infoUser = $this->order->user;
+            }
             if (! empty($userDistribution)) {
                 $data = [
                     'message' => $type == 'payee' ? $this->order->thread->getContentByType(Thread::CONTENT_LENGTH, true) : '注册站点',
                     'raw' => array_merge(Arr::only($this->order->toArray(), ['id', 'thread_id', 'type']), [
-                        'actor_username' => $this->order->user->username,        // 发送人姓名
+                        'actor_username' => $infoUser->username,        // 发送人姓名
                         'boss_amount' => $this->order->calculateAuthorAmount(),  // 获取实际金额
                     ]),
                 ];
 
                 // Tag 发送通知
-                $userDistribution->parentUser->notify(new Rewarded(RewardedScaleWechatMessage::class, $this->order->user, $this->order, $data));
+                $userDistribution->parentUser->notify(new Rewarded(RewardedScaleWechatMessage::class, $infoUser, $this->order, $data));
             }
         }
     }
