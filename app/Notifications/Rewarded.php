@@ -136,7 +136,11 @@ class Rewarded extends AbstractNotification
         if ($this->message instanceof RewardedScaleWechatMessage) {
             // 内容支付分成通知
             $this->tplId['database'] = 37;
-            $this->data = array_merge($this->data, ['notice_types_of' => 2]); // 分成通知
+            // 分成通知
+            $this->data = array_merge($this->data, [
+                'notice_types_of' => 2,
+                'is_scale_class' => true, // 是否是分成通知类
+            ]);
         }
         if ($this->message instanceof ExpiredWechatMessage) {
             // 打赏过期通知

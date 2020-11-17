@@ -36,11 +36,6 @@ class RewardedMessage extends SimpleMessage
      */
     public $question = null;
 
-    /**
-     * @var bool 是否是分成通知类
-     */
-    public $isScaleClass;
-
     public function __construct()
     {
         //
@@ -122,7 +117,7 @@ class RewardedMessage extends SimpleMessage
         /**
          * 判断是否是分成通知，上级金额/自己收款金额 不同
          */
-        if ($this->isScaleClass) {
+        if (Arr::get($this->data, 'is_scale_class', false)) {
             // 分成通知数据
             $this->initData['amount'] = $this->order->calculateAuthorAmount(); // 获取上级的实际分成金额数
             // 判断如果是 打赏/付费有主题 类型
