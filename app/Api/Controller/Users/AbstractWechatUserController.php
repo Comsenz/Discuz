@@ -146,7 +146,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                 // 判断是否开启了注册审核
                 if (!(bool)$this->settings->get('register_validate')) {
                     // Tag 发送通知 (在注册绑定微信后 发送注册微信通知)
-                    $user->notify(new System(RegisterWechatMessage::class, $actor, ['send_type' => 'wechat']));
+                    $user->notify(new System(RegisterWechatMessage::class, $user, ['send_type' => 'wechat']));
                 }
             } else {
                 if (!$actor->isGuest() && is_null($actor->wechat)) {
