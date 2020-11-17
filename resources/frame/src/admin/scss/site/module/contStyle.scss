@@ -1297,6 +1297,10 @@
       }
     }
 
+    &__table-main {
+      word-break:break-all; 
+    }
+
     &__table-footer {
       display: flex;
       align-items: center;
