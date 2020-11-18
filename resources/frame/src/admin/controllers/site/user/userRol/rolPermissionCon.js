@@ -82,7 +82,27 @@ export default {
   },
   watch: {
     checked(val){
-      console.log(val);
+      let isEqual = true;
+      this.checkAllPermission.forEach(item => {
+        if(val.indexOf(item) === -1){
+          isEqual = false;
+          return;
+        }
+      });
+      if(isEqual){
+        this.checkAll = true;
+      }else{
+        this.checkAll = false;
+      }
+    },
+    checkAll(val){
+      if(val){
+        this.isIndeterminate = false;
+        this.selectText = "取消全选";
+      } else {
+        this.isIndeterminate = true;
+        this.selectText = "全选";
+      }
     }
   },
   methods: {
@@ -155,6 +175,9 @@ export default {
       if (!this.checkNum()) {
         return;
       }
+      if (!this.checkSelect()) {
+        return;
+      }
       if (this.value) {
         if (this.purchasePrice == 0) {
           this.$message.error("价格不能为0");
@@ -198,7 +221,6 @@ export default {
               this.$message.error(res.errors[0].code);
             }
           } else {
-            console.log("用户权限", res);
             this.ispad = res.data.attributes.isPaid;
             this.purchasePrice = res.data.attributes.fee;
             this.dyedate = res.data.attributes.days;
@@ -397,23 +419,129 @@ export default {
         this.checked = checkedData.filter(v => v.indexOf(obj) === -1);
       }
     },
+    //全选/取消全选
     handleCheckAllChange(val) {
       if (val) {
-        this.selectText = "取消全选";
         this.checkAllPermission.forEach(item => {
           if(this.checked.indexOf(item) == -1){
             this.checked.push(item);
           }
         })
+        this.setSelectValue(this.checked);
+        this.checkAll = true;
       } else {
-        this.selectText = "全选";
         this.checked = [];
         this.temporaryChecked.forEach(item => {
           this.checked.push(item._data.permission);
         });
+        this.setSelectValue(this.checked);
+        this.checkAll = false;
       }
-       // 下拉值回显
-       this.setSelectValue(this.checked);
+    },
+    checkSelect() {
+      if (this.checked.indexOf('switch.createThread') !== -1) {
+        if(this.selectList.createThread.length === 0){
+          this.$message.error("请选择发布主题权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.reply') !== -1) {
+        if(this.selectList['thread.reply'].length === 0){
+          this.$message.error("请选择回复主题权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.canBeReward') !== -1) {
+        if(this.selectList['thread.canBeReward'].length === 0){
+          this.$message.error("请选择允许被打赏权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.viewThreads') !== -1) {
+        if(this.selectList.viewThreads.length === 0){
+          this.$message.error("请选择查看主题列表权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.viewPosts') !== -1) {
+        if(this.selectList['thread.viewPosts'].length === 0){
+          this.$message.error("请选择查看主题详情权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.freeViewPosts.1') !== -1) {
+        if(this.selectList['thread.freeViewPosts.1'].length === 0){
+          this.$message.error("请选择免费查看付费帖子权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.freeViewPosts.2') !== -1) {
+        if(this.selectList['thread.freeViewPosts.2'].length === 0){
+          this.$message.error("请选择免费查看付费视频权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.freeViewPosts.3') !== -1) {
+        if(this.selectList['thread.freeViewPosts.3'].length === 0){
+          this.$message.error("请选择免费查看付费图片权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.freeViewPosts.4') !== -1) {
+        if(this.selectList['thread.freeViewPosts.4'].length === 0){
+          this.$message.error("请选择免费查看付费语音权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.freeViewPosts.5') !== -1) {
+        if(this.selectList['thread.freeViewPosts.5'].length === 0){
+          this.$message.error("请选择免费查看付费问答权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.essence') !== -1) {
+        if(this.selectList['thread.essence'].length === 0){
+          this.$message.error("请选择加精权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.edit') !== -1) {
+        if(this.selectList['thread.edit'].length === 0){
+          this.$message.error("请选择编辑主题权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.hide') !== -1) {
+        if(this.selectList['thread.hide'].length === 0){
+          this.$message.error("请选择删除主题权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.editPosts') !== -1) {
+        if(this.selectList['thread.editPosts'].length === 0){
+          this.$message.error("请选择编辑回复权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.hidePosts') !== -1) {
+        if(this.selectList['thread.hidePosts'].length === 0){
+          this.$message.error("请选择删除回复权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.editOwnThreadOrPost') !== -1) {
+        if(this.selectList['thread.editOwnThreadOrPost'].length === 0){
+          this.$message.error("请选择编辑自己的主题或回复权限");
+          return false;
+        }
+      }
+      if (this.checked.indexOf('switch.thread.hideOwnThreadOrPost') !== -1) {
+        if(this.selectList['thread.hideOwnThreadOrPost'].length === 0){
+          this.$message.error("请选择删除自己的主题或回复权限");
+          return false;
+        }
+      }
+      return true;
     }
   },
   created() {
