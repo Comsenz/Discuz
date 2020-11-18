@@ -160,7 +160,9 @@ class System extends AbstractNotification
             }
             // set tpl id
             $sendType = $this->data['send_type'];
-            $this->tplId[$sendType] = $this->messageRelationship[$sendType]->tplId; // 1 数据库通知 / 13 微信通知
+            if (! is_null($sendType)) {
+                $this->tplId[$sendType] = $this->messageRelationship[$sendType]->tplId; // 1 数据库通知 / 13 微信通知
+            }
         }
     }
 

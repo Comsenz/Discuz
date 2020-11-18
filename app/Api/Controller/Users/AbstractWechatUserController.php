@@ -27,7 +27,7 @@ use App\Exceptions\NoUserException;
 use App\Models\SessionToken;
 use App\Models\User;
 use App\Models\UserWechat;
-use App\Notifications\Messages\Database\RegisterMessage;
+use App\Notifications\Messages\Wechat\RegisterWechatMessage;
 use App\Notifications\System;
 use App\Settings\SettingsRepository;
 use App\User\Bound;
@@ -146,7 +146,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                 // 判断是否开启了注册审核
                 if (!(bool)$this->settings->get('register_validate')) {
                     // Tag 发送通知 (在注册绑定微信后 发送注册微信通知)
-                    $user->notify(new System(RegisterMessage::class, $actor, ['send_type' => 'wechat']));
+                    $user->notify(new System(RegisterWechatMessage::class, $user, ['send_type' => 'wechat']));
                 }
             } else {
                 if (!$actor->isGuest() && is_null($actor->wechat)) {

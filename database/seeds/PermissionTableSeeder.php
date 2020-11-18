@@ -44,6 +44,8 @@ class PermissionTableSeeder extends Seeder
         'category.edit' => [],                  // 修改分类
 
         // 默认分类下的权限
+        'switch.viewThreads' => [7, 10],        // 默认分类查看帖子列表
+        'switch.thread.viewPosts' => [7, 10],   // 默认分类查看帖子详情
         'category1.viewThreads' => [7, 10],     // 默认分类查看帖子列表
         'category1.createThread' => [10],       // 默认分类发帖权限
         'category1.thread.reply' => [10],       // 默认分类发回复权限

@@ -243,7 +243,7 @@ class PostListener
             ];
 
             // Tag 发送通知
-            $event->post->user->notify(new System(PostMessage::class, $event->actor, $build));
+            $event->post->user->notify(new System(PostMessage::class, $event->post->user, $build));
         }
     }
 
