@@ -431,10 +431,28 @@ export default {
         this.checkAll = true;
       } else {
         this.checked = [];
-        this.temporaryChecked.forEach(item => {
-          this.checked.push(item._data.permission);
-        });
-        this.setSelectValue(this.checked);
+        // this.temporaryChecked.forEach(item => {
+        //   this.checked.push(item._data.permission);
+        // });
+        this.selectList = {
+          'viewThreads': [],
+          'createThread':[],
+          'thread.reply':[],
+          'thread.edit':[],
+          'thread.hide':[],
+          'thread.essence':[],
+          'thread.viewPosts':[],
+          'thread.editPosts':[],
+          'thread.hidePosts':[],
+          'thread.canBeReward': [],
+          'thread.editOwnThreadOrPost': [],
+          'thread.hideOwnThreadOrPost': [],
+          'thread.freeViewPosts.1':[],
+          'thread.freeViewPosts.2':[],
+          'thread.freeViewPosts.3':[],
+          'thread.freeViewPosts.4':[],
+          'thread.freeViewPosts.5':[],
+        };
         this.checkAll = false;
       }
     },
