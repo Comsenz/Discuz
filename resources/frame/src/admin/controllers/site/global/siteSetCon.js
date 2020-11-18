@@ -164,7 +164,7 @@ export default {
             }, []);
 
             this.siteCloseMsg = data.readdata._data.set_site.site_close_msg;
-            this.purchase = !!data.readdata._data.set_site.site_pay_group_close;
+            this.purchase = !!Number(data.readdata._data.set_site.site_pay_group_close);
             // 微信支付关闭时置灰付费模式
             if (data.readdata._data.paycenter.wxpay_close == false) {
               this.disabled = true;
