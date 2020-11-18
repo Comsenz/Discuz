@@ -72,8 +72,18 @@ export default {
       dyedate: "",
       ispad: "",
       allowtobuy: "",
-      defaultuser: false
+      defaultuser: false,
+      checkAll: false, //是否全选
+      isIndeterminate: false,//全选不确定状态
+      selectText: '全选', //全选文字
+      checkAllPermission: [], //所有操作权限
+      temporaryChecked: [], //接口返回权限
     };
+  },
+  watch: {
+    checked(val){
+      console.log(val);
+    }
   },
   methods: {
     duedata: function(evn) {
@@ -188,6 +198,7 @@ export default {
               this.$message.error(res.errors[0].code);
             }
           } else {
+            console.log("用户权限", res);
             this.ispad = res.data.attributes.isPaid;
             this.purchasePrice = res.data.attributes.fee;
             this.dyedate = res.data.attributes.days;
@@ -198,6 +209,7 @@ export default {
             this.is_commission = res.data.attributes.is_commission;
             this.defaultuser = res.data.attributes.default;
             this.value = res.data.attributes.isPaid;
+            this.temporaryChecked = res.readdata.permission;
             data.forEach(item => {
               this.checked.push(item._data.permission);
             });
@@ -384,6 +396,24 @@ export default {
         this.selectList[obj] = [];
         this.checked = checkedData.filter(v => v.indexOf(obj) === -1);
       }
+    },
+    handleCheckAllChange(val) {
+      if (val) {
+        this.selectText = "取消全选";
+        this.checkAllPermission.forEach(item => {
+          if(this.checked.indexOf(item) == -1){
+            this.checked.push(item);
+          }
+        })
+      } else {
+        this.selectText = "全选";
+        this.checked = [];
+        this.temporaryChecked.forEach(item => {
+          this.checked.push(item._data.permission);
+        });
+      }
+       // 下拉值回显
+       this.setSelectValue(this.checked);
     }
   },
   created() {
@@ -393,6 +423,54 @@ export default {
     this.getGroupResource();
     this.signUpSet();
     this.getCategories();
+    if (this.groupId === '7') {
+      this.checkAllPermission = [
+        "switch.viewThreads", //查看主题列表
+        "switch.thread.viewPosts", //查看主题详情
+        "switch.thread.freeViewPosts.1", //免费查看付费帖子
+        "switch.thread.freeViewPosts.2", //免费查看付费视频
+        "switch.thread.freeViewPosts.3", //免费查看付费图片
+        "switch.thread.freeViewPosts.4", //免费查看付费语音
+        "switch.thread.freeViewPosts.5", //免费查看付费问答
+      ];
+    } else {
+      this.checkAllPermission = [
+        "createThread.0", //发布文字帖
+        "createThread.1", //发布帖子
+        "createThread.2", //发布视频帖
+        "createThread.3", //发布图片帖
+        "createThread.4", //发布语音帖
+        "createThread.5", //发布问答
+        "createThread.6", //发布商品帖
+        "dialog.create", //发布私信
+        "canBeAsked", //允许被提问
+        "canBeOnlooker", //设置围观
+        "attachment.create.0", //上传附件
+        "attachment.create.1", //上传图片
+        "createThreadPaid", //发布付费内容
+        "switch.createThread", //发布主题
+        "switch.thread.reply", //回复主题
+        "switch.thread.canBeReward", //允许被打赏
+        "switch.viewThreads", //查看主题列表
+        "switch.thread.viewPosts", //查看主题详情
+        "switch.thread.freeViewPosts.1", //免费查看付费帖子
+        "switch.thread.freeViewPosts.2", //免费查看付费视频
+        "switch.thread.freeViewPosts.3", //免费查看付费图片
+        "switch.thread.freeViewPosts.4", //免费查看付费语音
+        "switch.thread.freeViewPosts.5", //免费查看付费问答
+        "thread.sticky", //置顶
+        "createInvite", //邀请加入
+        "user.edit.group", //编辑用户组
+        "user.edit.status", //编辑用户状态
+        "switch.thread.essence", //加精
+        "switch.thread.edit", //编辑主题
+        "switch.thread.hide", //删除主题
+        "switch.thread.editPosts", //编辑回复
+        "switch.thread.hidePosts", //删除回复
+        "switch.thread.editOwnThreadOrPost", //编辑自己的主题或回复
+        "switch.thread.hideOwnThreadOrPost", //删除自己的主题或回复
+      ];
+    }
   },
   components: {
     Card,
