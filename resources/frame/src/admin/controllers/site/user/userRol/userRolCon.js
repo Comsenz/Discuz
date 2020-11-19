@@ -137,7 +137,7 @@ export default {
         });
         this.batchPatchGroup(data);
       }
-      this.PermissionPurchaseAllowed();
+      // this.PermissionPurchaseAllowed();
     },
 
     singleDelete(index,id){
