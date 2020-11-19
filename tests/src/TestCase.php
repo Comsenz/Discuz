@@ -19,6 +19,7 @@
 namespace Discuz\Tests;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Arr;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
@@ -26,11 +27,43 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
     protected $http;
 
+    protected $token;
+
+
+    protected function setUp(): void
+    {
+        if ($this->token) {
+            return;
+        }
+
+        $response = $this->http()->post('login', [
+            'json' => [
+                'data' => [
+                    'attributes' => [
+                        'username' => 'admin',
+                        'password' => 'admin123'
+                    ]
+                ]
+            ]
+        ]);
+
+        $auth = json_decode($response->getBody()->getContents(), true);
+
+        $this->token = Arr::get($auth, 'data.attributes.access_token');
+    }
+
     protected function http(): Client
     {
+
+        $headers = [];
+        if ($this->token) {
+            $headers['Authorization'] = 'Bearer '.$this->token;
+        }
+
         return $this->http ? $this->http : new Client([
             'base_uri' => self::API_HOST,
-            'timeout'  =>  10
+            'timeout'  =>  10,
+            'headers' => $headers
         ]);
     }
 }
