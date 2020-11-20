@@ -187,7 +187,12 @@ class ListUserFollowController extends AbstractListController
 
         foreach ((array) $sort as $field => $order) {
             if ($field == 'users.createdAt') {
-                $query->join('users', 'users.id', '=', 'user_follow.'.$join_field);
+                // 避免重复 join
+                if (! $username) {
+                    $query->join('users', 'users.id', '=', 'user_follow.'.$join_field);
+                }
+
+                $query->addSelect('users.created_at');
             }
             $query->orderBy(Str::snake($field), $order);
         }
