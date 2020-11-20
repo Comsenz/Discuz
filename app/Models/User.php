@@ -415,6 +415,7 @@ class User extends Model
             ->join('questions', 'threads.id', '=', 'questions.thread_id')
             ->where('threads.type', Thread::TYPE_OF_QUESTION)
             ->where('threads.is_approved', Thread::APPROVED)
+            ->where('threads.is_anonymous', false)
             ->whereNull('threads.deleted_at')
             ->where(function (Builder $query) {
                 $query->where('threads.user_id', $this->id)->orWhere('questions.be_user_id', $this->id);
