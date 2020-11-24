@@ -51,8 +51,11 @@ export default {
           this.register_content = agreement.register_content;
           this.privacy_content = agreement.privacy_content;
           // 旧注册登陆模式的禁用控制
+          console.log(res.readdata._data.qcloud.qcloud_sms,'shshshh')
           if(res.readdata._data.qcloud.qcloud_sms == true) {
             this.qcloud_sms = false
+          } else {
+            this.qcloud_sms = true
           }
           // 第三方登录公众号配置/小程序配置任意开启一项 可选无感模式
           if(res.readdata._data.passport.offiaccount_close == true || res.readdata._data.passport.miniprogram_close == true) {
