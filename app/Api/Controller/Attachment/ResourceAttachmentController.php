@@ -161,7 +161,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
                     if (! file_exists($thumb)) {
                         $img = (new ImageManager())->make($filePath);
 
-                        $img->resize(300, null, function ($constraint) {
+                        $img->resize(Attachment::FIX_WIDTH, Attachment::FIX_WIDTH, function ($constraint) {
                             $constraint->aspectRatio();     // 保持纵横比
                             $constraint->upsize();          // 避免文件变大
                         })->save($thumb);

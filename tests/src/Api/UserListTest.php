@@ -16,4 +16,21 @@
  * limitations under the License.
  */
 
-require __DIR__.'/../vendor/autoload.php';
+namespace Discuz\Tests\Api;
+
+use Discuz\Tests\TestCase;
+use Illuminate\Support\Arr;
+
+class UserListTest extends TestCase
+{
+    public function testUserList()
+    {
+        $response = $this->http()->get('users');
+
+        $this->assertSame($response->getStatusCode(), 200);
+
+        $data = json_decode($response->getBody()->getContents(), true);
+
+        $this->assertIsArray(Arr::get($data, 'data'));
+    }
+}

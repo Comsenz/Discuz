@@ -16,4 +16,17 @@
  * limitations under the License.
  */
 
-require __DIR__.'/../vendor/autoload.php';
+namespace Discuz\Tests\Api;
+
+use Discuz\Tests\TestCase;
+
+class UserProfileTest extends TestCase
+{
+    public function testUserProfile()
+    {
+        $response = $this->http()->get('users/1');
+
+        $this->assertSame($response->getStatusCode(), 200);
+        $this->assertStringContainsString('username', $response->getBody()->getContents());
+    }
+}

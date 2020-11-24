@@ -20,6 +20,8 @@ namespace App\Listeners\Question;
 
 use App\Commands\Wallet\ChangeUserWallet;
 use App\Events\Question\Saved;
+use App\Models\Order;
+use App\Models\Thread;
 use App\Models\UserWallet;
 use App\Models\UserWalletLog;
 use App\Settings\SettingsRepository;
@@ -72,6 +74,20 @@ class QuestionAnswerMakeMoney
         // Start Transaction
         $this->connection->beginTransaction();
         try {
+            // 判断是否是微信支付问答（微信支付后不变动钱包里的金额）
+            $order = $question->thread->ordersByType(Thread::TYPE_OF_QUESTION); // 查询该主题所有订单
+            /** @var Order $questionOrder */
+            $questionOrder = $order->where('type', Order::ORDER_TYPE_QUESTION)->first();
+            // 如果不是钱包支付，一律不需要走钱包流程打款
+            if ($questionOrder->payment_type != Order::PAYMENT_TYPE_WALLET) {
+                // 直接打款到收款人的钱包余额中
+                $payeeWallet = UserWallet::query()->lockForUpdate()->find($questionOrder->payee->id);
+                $payeeWallet->available_amount = numberFormat($payeeWallet->available_amount, '+', $questionOrder->author_amount);
+                $payeeWallet->save();
+                $this->connection->commit();
+                return;
+            }
+
             // freeze amount decrease
             $data = [
                 'question_id' => $question->id, // 关联问答ID

@@ -14,13 +14,24 @@
     <Card
       :header="$router.history.current.query.name + '--' + activeTab.title"
     ></Card>
-    <div class="scope-action" v-if="activeTab.title == '操作权限'">
-      生效范围
-    </div>
     <!-- 操作权限 -->
     <div v-show="activeTab.name === 'userOperate'">
+      <div class="user-operate__title">
+        <el-checkbox
+          :indeterminate="isIndeterminate"
+          v-model="checkAll"
+          @change="handleCheckAllChange"
+        ></el-checkbox>
+        <p style="margin-left: 10PX;">{{selectText}}</p>
+      </div>
       <div class="user-operate">
-        <Card header="内容发布权限"></Card>
+        <div class="user-operate__header">
+          <div class="scope-action">
+              生效范围
+          </div>
+          <Card header="内容发布权限">
+          </Card>
+        </div>
         <Card>
           <CardRow description="允许发布文字帖">
             <el-checkbox
@@ -294,7 +305,12 @@
         </Card>
       </div>
       <div class="user-operate">
-        <Card header="查看权限"></Card>
+        <div class="user-operate__header">
+          <div class="scope-action">
+              生效范围
+          </div>
+          <Card header="查看权限"></Card>
+        </div>
         <Card class="hasSelect">
           <CardRow description="查看内容分类主题列表的权限">
             <el-checkbox
@@ -493,7 +509,12 @@
         </Card>
       </div>
       <div class="user-operate">
-        <Card header="管理权限"></Card>
+        <div class="user-operate__header">
+          <div class="scope-action">
+              生效范围
+          </div>
+          <Card header="管理权限"></Card>
+        </div>
         <Card>
           <CardRow description="前台置顶、取消置顶主题的权限">
             <el-checkbox
@@ -925,7 +946,7 @@
         </CardRow>
       </Card>
     </div>
-    <Card class="footer-btn">
+    <Card class="footer-btn" :class="activeTab.name === 'userOperate' ? 'footer-btn__inner': ''">
       <el-button size="medium" type="primary" @click="submitClick"
         >提交</el-button
       >
