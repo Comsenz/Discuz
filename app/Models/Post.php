@@ -592,10 +592,10 @@ class Post extends Model
     private function removePostCache()
     {
         $threadId = $this->thread_id;
-        $isMobile = Utils::isMobile() ? 1 : 0;
-        $cacheKey = CacheKey::POST_RESOURCE_BY_ID . $isMobile . $threadId;
+        $cacheKey0 = CacheKey::POST_RESOURCE_BY_ID . '0' . $threadId;
+        $cacheKey1 = CacheKey::POST_RESOURCE_BY_ID . '1' . $threadId;
         $cache = app('cache');
-        return $cache->delete($cacheKey);
+        return $cache->delete($cacheKey0) && $cache->delete($cacheKey1);
     }
 
 }

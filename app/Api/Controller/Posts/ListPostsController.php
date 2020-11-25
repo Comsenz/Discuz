@@ -216,6 +216,11 @@ class ListPostsController extends AbstractListController
 
     private function canCache($params)
     {
+        if (isset($params['filter'])) {
+            if (strtolower($params['filter']['isComment']) == 'yes') {
+                return false;
+            }
+        }
         $canCache = false;
         if (isset($params['include'])) {
             if ($params['include'] == 'firstPost') {
