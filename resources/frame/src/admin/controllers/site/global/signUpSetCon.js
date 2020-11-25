@@ -51,7 +51,6 @@ export default {
           this.register_content = agreement.register_content;
           this.privacy_content = agreement.privacy_content;
           // 旧注册登陆模式的禁用控制
-          console.log(res.readdata._data.qcloud.qcloud_sms,'shshshh')
           if(res.readdata._data.qcloud.qcloud_sms == true) {
             this.qcloud_sms = false
           } else {
