@@ -69,7 +69,7 @@ class LocalImageHandler
         $blurPath = Str::replaceLast($image->filename, md5($image->filename) . '_blur', $image->basePath());
 
         // 生成缩略图
-        $image->resize(Attachment::FIX_WIDTH, null, function ($constraint) {
+        $image->resize(Attachment::FIX_WIDTH, Attachment::FIX_WIDTH, function ($constraint) {
             $constraint->aspectRatio();     // 保持纵横比
             $constraint->upsize();          // 避免文件变大
         })->save($thumbPath);

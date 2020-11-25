@@ -276,31 +276,33 @@ class Censor
     /**
      * 检测敏感图片
      *
-     * @param string $filePathname 图片绝对路径
+     * @param string $path 图片绝对路径，远程图片为 url
      * @param bool $isRemote 是否是远程图片
      * @throws GuzzleException
      * @throws InvalidConfigException
      */
-    public function checkImage($filePathname, $isRemote = false)
+    public function checkImage($path, $isRemote = false)
     {
+        // TODO 结耦
+        if ($isRemote) {
+            $path = $path . (strpos($path, '?') === false ? '?' : '&')
+                . 'imageMogr2/thumbnail/' . Attachment::FIX_WIDTH . 'x' . Attachment::FIX_WIDTH;
+        }
+
         if ((bool) $this->setting->get('qcloud_cms_image', 'qcloud', false)) {
             $params = [];
 
             if ($isRemote) {
-                $params['FileUrl'] = $filePathname;
+                $params['FileUrl'] = $path;
             } else {
-                $params['FileContent'] = base64_encode(file_get_contents($filePathname));
+                $params['FileContent'] = base64_encode(file_get_contents($path));
             }
 
-            /**
-             * TODO: 如果config配置图片不是放在本地这里需要修改base64为 传输 FileUrl地址路径
-             * @property QcloudManage
-             */
+            /** @see QcloudManage */
             $result = $this->app->make('qcloud')->service('cms')->ImageModeration($params);
-            $data = Arr::get($result, 'Data', []);
 
-            if (!empty($data)) {
-                $data['EvilType'] != 100 ? $this->isMod = true : $this->isMod = false;
+            if (Arr::get($result, 'Data.EvilType') != 100) {
+                $this->isMod = true;
             }
         } elseif ((bool) $this->setting->get('miniprogram_close', 'wx_miniprogram', false)) {
             $easyWeChat = $this->miniProgram();
@@ -309,10 +311,7 @@ class Censor
                 $tmpFile = tempnam(storage_path('/tmp'), 'checkImage');
 
                 try {
-                    $fileSize = file_put_contents($tmpFile, file_get_contents(
-                        $filePathname . (strpos($filePathname, '?') === false ? '?' : '&')
-                        . 'imageMogr2/thumbnail/' . Attachment::FIX_WIDTH . 'x' . Attachment::FIX_WIDTH
-                    ));
+                    $fileSize = file_put_contents($tmpFile, $path);
 
                     $result = $fileSize ? $easyWeChat->content_security->checkImage($tmpFile) : [];
                 } finally {
@@ -320,7 +319,7 @@ class Censor
                 }
             } else {
                 try {
-                    $result = $easyWeChat->content_security->checkImage($filePathname);
+                    $result = $easyWeChat->content_security->checkImage($path);
                 } finally {
                     $result = $result ?? [];
                 }

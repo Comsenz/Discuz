@@ -98,7 +98,7 @@ class SaveQuestionToDatabase
                  */
                 $questionData['actor'] = $actor;
                 $this->questionValidator->valid($questionData);
-                $price = Arr::get($questionData, 'price');
+                $price = Arr::get($questionData, 'price', 0);
                 $isOnlooker = Arr::get($questionData, 'is_onlooker', true); // 获取帖子是否允许围观
 
                 // get unit price

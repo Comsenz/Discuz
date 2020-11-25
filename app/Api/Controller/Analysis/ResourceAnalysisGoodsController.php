@@ -96,10 +96,14 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
          * 查询数据库中是否存在
          */
         $postGoods = PostGoods::query();
-        $postGoods->where('post_id', 0);
-        $goods = $postGoods->where('ready_content', $readyContent)->first();
-        if (!empty($goods)) {
-            return $goods;
+        $postGoods->where('post_id', 0)->where('user_id', $actor->id);
+        /** @var PostGoods $existsGoods */
+        $existsGoods = $postGoods->where('ready_content', $readyContent)->first();
+        if (! empty($existsGoods)) {
+            if ($this->checkGoodTitle($existsGoods)) {
+                return $existsGoods;
+            }
+            // TODO 未抓取到，但是商品已存在
         }
 
         // Filter Url
@@ -142,12 +146,14 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
         if ($this->goodsType['key'] == 5) {
             $titleRegex = '/【(?<title>.*)】/i';
             if (preg_match($titleRegex, $readyContent, $matchContent)) {
-                $existGoods = PostGoods::query()
+                /** @var PostGoods $existTBGoods */
+                $existTBGoods = PostGoods::query()
                     ->where('title', $matchContent['title'])
                     ->where('post_id', 0)
+                    ->where('user_id', $actor->id)
                     ->first();
-                if (! empty($existGoods)) {
-                    return $existGoods;
+                if (! empty($existTBGoods)) {
+                    return $existTBGoods;
                 }
             }
         }
@@ -216,6 +222,16 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
         $goods->save();
 
         return $goods;
+    }
+
+    private function checkGoodTitle(PostGoods $goods)
+    {
+        // 检测是否未抓取到，创建了默认商品，如果是 true 就代表抓取到了，返回数据库的该商品信息
+        if (! in_array($goods->title, ['淘宝商品', '京东商品', '天猫商品', '有赞商品'])) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function checkGoods()

@@ -22,7 +22,8 @@ use App\Censor\Censor;
 use App\Events\Attachment\Saving;
 use App\Models\Attachment;
 use App\Settings\SettingsRepository;
-use Illuminate\Support\Str;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ServerRequestInterface;
 
 class CheckImage
@@ -54,18 +55,22 @@ class CheckImage
         $this->censor = $censor;
     }
 
+    /**
+     * 图片内容安全
+     *
+     * @param Saving $event
+     * @throws InvalidConfigException
+     * @throws GuzzleException
+     */
     public function handle(Saving $event)
     {
+        $attachment = $event->attachment;
         $uploader = $event->uploader;
-        $file = $uploader->file;
 
-        // 检测敏感图
-        if (Str::startsWith($file->getMimeType(), 'image/')) {
-            $isRemote = $uploader->isRemote();
+        if ($attachment->type === Attachment::TYPE_OF_IMAGE) {
+            $isRemote = $attachment->is_remote;
 
-            $image = $isRemote
-                ? $uploader->getUrl()
-                : storage_path('app/' . $uploader->getFullPath());
+            $image = $isRemote ? $uploader->getUrl() : storage_path('app/' . $attachment->thumb_path);
 
             $this->censor->checkImage($image, $isRemote);
 

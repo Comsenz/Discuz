@@ -134,6 +134,7 @@ class ForumSettingSerializer extends AbstractSerializer
             // 提现设置
             'set_cash' => [
                 'cash_rate' => $this->settings->get('cash_rate', 'cash'), // 提现费率
+                'cash_min_sum' => $this->settings->get('cash_min_sum', 'cash') ?: '',
             ],
 
             // 其它信息(非setting中的信息)

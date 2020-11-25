@@ -44,10 +44,13 @@ class QcloudTaskflowGifVerify extends BaseQcloud
 
     private $randStr;
 
+    private $qcloudVodSubAppId;
 
-    public function __construct()
+    public function __construct($qcloudVodSubAppId)
     {
         parent::__construct();
+
+        $this->qcloudVodSubAppId = $qcloudVodSubAppId;
     }
 
     /**
@@ -59,7 +62,7 @@ class QcloudTaskflowGifVerify extends BaseQcloud
     public function passes($attribute, $value)
     {
         try {
-            $res = $this->describeProcedureTemplates($value);
+            $res = $this->describeProcedureTemplates($value, $this->qcloudVodSubAppId);
         } catch (TencentCloudSDKException $e) {
             if ($e->getCode() == 'InvalidParameterValue') {
                 throw new TranslatorException('InvalidParameterValue', [$e->getErrorCode()]);

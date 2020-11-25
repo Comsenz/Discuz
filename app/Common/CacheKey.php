@@ -24,4 +24,8 @@ class CacheKey
     public const LIST_THREAD_HOME_INDEX = 'list_thread_home_index_';
     //记录各个缓存的key值，便于数据更新的时候删除
     public const LIST_THREAD_KEYS = 'list_thread_keys';
+    //记录
+    public const THREAD_RESOURCE_BY_ID = 'thread_resource_by_id_';
+
+    public const POST_RESOURCE_BY_ID = 'post_resource_by_id_';
 }

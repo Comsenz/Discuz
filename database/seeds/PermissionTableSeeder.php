@@ -44,21 +44,23 @@ class PermissionTableSeeder extends Seeder
         'category.edit' => [],                  // 修改分类
 
         // 默认分类下的权限
-        'switch.viewThreads' => [7, 10],        // 默认分类查看帖子列表
-        'switch.thread.viewPosts' => [7, 10],   // 默认分类查看帖子详情
-        'category1.viewThreads' => [7, 10],     // 默认分类查看帖子列表
-        'category1.createThread' => [10],       // 默认分类发帖权限
-        'category1.thread.reply' => [10],       // 默认分类发回复权限
-        'category1.thread.canBeReward' => [10], // 默认分类帖子允许被打赏
-        'category1.thread.viewPosts' => [7, 10],// 默认分类查看帖子详情
+        'switch.viewThreads' => [7, 10],        // 查看主题列表
+        'category1.viewThreads' => [7, 10],     // 查看主题列表
+        'switch.createThread' => [10],          // 发布主题
+        'category1.createThread' => [10],       // 发布主题
+        'switch.thread.reply' => [10],          // 发布回复
+        'category1.thread.reply' => [10],       // 发布回复
+        'switch.thread.viewPosts' => [7, 10],   // 查看主题详情
+        'category1.thread.viewPosts' => [7, 10],// 查看主题详情
         'category1.thread.editPosts' => [],     // 编辑回复
         'category1.thread.hidePosts' => [],     // 删除回复
+        'category1.thread.canBeReward' => [],   // 帖子允许被打赏
 
         // 主题
         'createThread.' . Thread::TYPE_OF_TEXT => [10],             // 发布文字
         'createThread.' . Thread::TYPE_OF_LONG => [10],             // 发布帖子
         'createThread.' . Thread::TYPE_OF_VIDEO => [],              // 发布图片
-        'createThread.' . Thread::TYPE_OF_IMAGE => [],              // 发布视频
+        'createThread.' . Thread::TYPE_OF_IMAGE => [10],            // 发布视频
         'createThread.' . Thread::TYPE_OF_AUDIO => [],              // 发布语音
         'createThread.' . Thread::TYPE_OF_QUESTION => [10],         // 发布问答
         'createThread.' . Thread::TYPE_OF_GOODS => [10],            // 发布商品
@@ -114,10 +116,10 @@ class PermissionTableSeeder extends Seeder
         'statistic.financeChart' => [],         // 财务图表
 
         // 短消息
-        'dialog.create' => [10],                 // 创建会话、会话消息
+        'dialog.create' => [10],                // 创建会话、会话消息
 
         // 关注
-        'userFollow.create' => [10],           // 创建关注
+        'userFollow.create' => [10],            // 创建关注
     ];
 
     /**
