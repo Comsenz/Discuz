@@ -36,7 +36,6 @@
 	"prefer-stable" : true,
 	"require-dev" : {
 		"friendsofphp/php-cs-fixer": "^2.16",
-		"phpunit/phpunit": "^9.4",
 		"symfony/var-dumper": "^4.3"
 	},
 	"autoload" : {
@@ -46,10 +45,5 @@
         "classmap": [
             "database/seeds"
         ]
-	},
-    "autoload-dev": {
-        "psr-4" : {
-            "Discuz\\Tests\\" : "tests/src"
-        }
-    }
+	}
 }
