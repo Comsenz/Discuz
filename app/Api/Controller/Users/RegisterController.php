@@ -22,7 +22,7 @@ use App\Api\Serializer\TokenSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\RegisterUser;
 use App\Events\Users\RegisteredCheck;
-use App\MessageTemplate\Wechat\WechatRegisterMessage;
+use App\Notifications\Messages\Wechat\RegisterWechatMessage;
 use App\Notifications\System;
 use App\Repositories\UserRepository;
 use App\User\Bind;
@@ -91,8 +91,8 @@ class RegisterController extends AbstractCreateController
             $this->bind->withToken($token, $user, $rebind);
             // 判断是否开启了注册审核
             if (!(bool)$this->settings->get('register_validate')) {
-                // 在注册绑定微信后 发送注册微信通知
-                $user->notify(new System(WechatRegisterMessage::class));
+                // Tag 发送通知 (在注册绑定微信后 发送注册微信通知)
+                $user->notify(new System(RegisterWechatMessage::class, $user, ['send_type' => 'wechat']));
             }
         }
 

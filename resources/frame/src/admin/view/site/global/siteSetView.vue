@@ -35,8 +35,7 @@
               :before-upload="beforeAvatarUpload">
               <div v-if="item.imageUrl" class="avatar">
                 <img :src="item.imageUrl" class="avatar-LogoImage" :alt="item.text" :title="item.text" :style="{
-                    width: item.imgWidht + 'px',
-                    height: item.imgHeight + 'px'
+                    width: 140 + 'px',
                   }" />
               </div>
               <i v-else class="el-icon-circle-plus-outline"></i>

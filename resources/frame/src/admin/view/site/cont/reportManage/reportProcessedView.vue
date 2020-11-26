@@ -73,7 +73,31 @@
           <p>{{items._data.reason}}</p>
         </div>
         <div class="report-manage-content__table-footer" slot="footer">
-          <el-button type="text" @click="deleteOperation(1, items._data.id)">删除</el-button>
+            <el-popover
+              width="100"
+              placement="top"
+              :ref="`popover-${index}`"
+            >
+              <p>确定删除该项吗？</p>
+              <div style="text-align: right; margin: 10PX 0 0 0 ">
+                <el-button
+                  type="danger"
+                  size="mini"
+                  @click="closeDelet(`popover-${index}`)"
+                >
+                  取消
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="
+                    deleteOperation(1, items._data.id);
+                    closeDelet(`popover-${index}`)"
+                  >确定</el-button
+                >
+              </div>
+          <el-button slot="reference" type="text">删除</el-button>
+            </el-popover>
         </div>
       </ContArrange>
        <tableNoList v-show="reportList.length < 1"></tableNoList>
@@ -87,7 +111,31 @@
     </div>
     <!-- 举报操作 -->
     <div class="report-manage-footer">
-			<el-button size="small" type="primary" :loading="subLoading" @click="deleteOperation(2)">全部删除</el-button>
+            <el-popover
+              width="100"
+              placement="top"
+              v-model="visible"
+            >
+              <p>确定删除该项吗？</p>
+              <div style="text-align: right; margin: 10PX 0 0 0 ">
+                <el-button
+                  type="danger"
+                  size="mini"
+                  @click="visible = false"
+                >
+                  取消
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="
+                    deleteOperation(2)
+                    visible = false"
+                  >确定</el-button
+                >
+              </div>
+			<el-button slot="reference" size="small" type="primary" :loading="subLoading">全部删除</el-button>
+            </el-popover>
 		</div>
   </div>
 </template>

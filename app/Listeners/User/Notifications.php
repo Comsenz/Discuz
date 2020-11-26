@@ -19,7 +19,7 @@
 namespace App\Listeners\User;
 
 use App\Events\Users\Registered;
-use App\MessageTemplate\RegisterMessage;
+use App\Notifications\Messages\Database\RegisterMessage;
 use App\Notifications\System;
 
 /**
@@ -32,6 +32,7 @@ class Notifications
 {
     public function handle(Registered $event)
     {
-        $event->user->notify(new System(RegisterMessage::class));
+        // Tag 发送通知
+        $event->user->notify(new System(RegisterMessage::class, $event->user, ['send_type' => 'database']));
     }
 }

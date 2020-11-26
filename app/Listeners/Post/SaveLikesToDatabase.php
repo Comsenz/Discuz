@@ -20,8 +20,6 @@ namespace App\Listeners\Post;
 
 use App\Events\Post\Deleted;
 use App\Events\Post\Saving;
-use App\MessageTemplate\LikedMessage;
-use App\MessageTemplate\Wechat\WechatLikedMessage;
 use App\Notifications\Liked;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
@@ -63,7 +61,7 @@ class SaveLikesToDatabase
 
             if ($isLiked) {
                 // 已喜欢且 isLiked 为 false 时，取消喜欢
-                if (!$data['attributes']['isLiked']) {
+                if (! $data['attributes']['isLiked']) {
                     $actor->likedPosts()->detach($post->id);
 
                     $post->refreshLikeCount()->save();
@@ -83,11 +81,9 @@ class SaveLikesToDatabase
                                 'actor_username' => $actor->username    // 发送人姓名
                             ]),
                         ];
-                        // 数据库通知
-                        $post->user->notify(new Liked(clone $post, $actor, LikedMessage::class));
 
-                        // 微信通知
-                        $post->user->notify(new Liked(clone $post, $actor, WechatLikedMessage::class, $build));
+                        // Tag 发送通知
+                        $post->user->notify(new Liked($actor, clone $post, $build));
                     }
                 }
             }

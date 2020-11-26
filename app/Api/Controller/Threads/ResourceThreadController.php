@@ -19,6 +19,7 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
+use App\Common\CacheKey;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\Thread;
@@ -28,6 +29,7 @@ use App\Repositories\ThreadRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
@@ -124,9 +126,18 @@ class ResourceThreadController extends AbstractResourceController
 
         $this->assertCan($actor, 'viewPosts', $thread);
 
-        // 更新浏览量
-        $thread->timestamps = false;
-        $thread->increment('view_count');
+
+        $cacheKey = CacheKey::THREAD_RESOURCE_BY_ID.$threadId;
+        $cache = app(Cache::class);
+        $cacheData = $cache->get($cacheKey);
+        if(!empty($cacheData)){
+            $cacheThread = unserialize($cacheData);
+            $cacheThread->view_count = $thread->view_count;
+            $cacheThread->timestamps = false;
+            $cacheThread->increment('view_count');
+            return $cacheThread;
+        }
+
 
         // 帖子及其关联模型
         if (($postRelationships = $this->getPostRelationships($include)) || in_array('posts', $include)) {
@@ -156,6 +167,10 @@ class ResourceThreadController extends AbstractResourceController
         // 主题关联模型
         $thread->loadMissing($include);
 
+        // 更新浏览量
+        $thread->timestamps = false;
+        $thread->increment('view_count');
+        $cache->put($cacheKey,serialize($thread),5*60);
         return $thread;
     }
 

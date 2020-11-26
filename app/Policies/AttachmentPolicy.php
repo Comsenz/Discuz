@@ -61,5 +61,17 @@ class AttachmentPolicy extends AbstractPolicy
         if ($attachment->user_id == $actor->id || $actor->isAdmin()) {
             return true;
         }
+
+        // 有权编辑帖子时，允许删除帖子下的附件
+        $postAttachmentTypes = [
+            Attachment::TYPE_OF_FILE,
+            Attachment::TYPE_OF_IMAGE,
+            Attachment::TYPE_OF_AUDIO,
+            Attachment::TYPE_OF_VIDEO,
+        ];
+
+        if (in_array($attachment->type, $postAttachmentTypes) && $actor->can('edit', $attachment->post)) {
+            return true;
+        }
     }
 }

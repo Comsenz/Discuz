@@ -18,8 +18,6 @@
 
 namespace App\Observer;
 
-use App\MessageTemplate\Wechat\WechatWithdrawalMessage;
-use App\MessageTemplate\WithdrawalMessage;
 use App\Models\UserWalletCash;
 use App\Notifications\Withdrawal;
 
@@ -34,21 +32,38 @@ class UserWalletCashObserver
     public function sendNotification($cash)
     {
         /**
+         * 判断如果是 企业零钱付款，必须是回调打款后，已打款的状态再发送通知
+         */
+        if ($cash->cash_type == UserWalletCash::TRANSFER_TYPE_MCH) {
+            // 判断是否已打款
+            if ($cash->cash_status != UserWalletCash::STATUS_PAID) {
+                // 如果不是审核拒绝就不发送通知
+                if ($cash->cash_status != UserWalletCash::STATUS_REVIEW_FAILED) {
+                    return;
+                }
+            }
+        }
+
+        /**
          * 只允许某一些状态发送通知
+         *
+         * 当 cash_type 为0时发送通知，为1时需要等微信异步回调
+         * 提现转账类型：0：人工转账， 1：企业零钱付款
          */
         $allowSend = UserWalletCash::notificationByWhich('', function ($call) {
             return $call['send'];
         });
 
         if (in_array($cash->cash_status, $allowSend)) {
-            $cash->user->notify(new Withdrawal($cash, WithdrawalMessage::class));
-
-            $cash->user->notify(new Withdrawal($cash, WechatWithdrawalMessage::class, [
+            $build = [
                 'cash_actual_amount' => $cash->cash_actual_amount, // 提现实际到账金额
                 'cash_status' => $cash->cash_status, // 提现结果
                 'created_at' => $cash->created_at,  // 提现时间
                 'refuse' => $cash->remark, // 原因
-            ]));
+            ];
+
+            // Tag 发送通知
+            $cash->user->notify(new Withdrawal($cash->user, $cash, $build));
         }
     }
 }

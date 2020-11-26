@@ -27,16 +27,13 @@ use App\Events\Post\Revised;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
 use App\Listeners\User\CheckPublish;
-use App\MessageTemplate\PostMessage;
-use App\MessageTemplate\RepliedMessage;
-use App\MessageTemplate\Wechat\WechatPostMessage;
-use App\MessageTemplate\Wechat\WechatRepliedMessage;
 use App\Models\Post;
 use App\Models\PostGoods;
 use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\ThreadTopic;
 use App\Models\UserActionLogs;
+use App\Notifications\Messages\Database\PostMessage;
 use App\Notifications\Replied;
 use App\Notifications\System;
 use App\Traits\PostNoticesTrait;
@@ -101,17 +98,15 @@ class PostListener
         if ($post->is_approved == Post::APPROVED) {
             // 如果当前用户不是主题作者，也是合法的，则通知主题作者
             if ($post->thread->user_id != $actor->id) {
-                // 数据库通知
-                $post->thread->user->notify(new Replied($post, $actor, RepliedMessage::class));
-
-                // 微信通知
-                $post->thread->user->notify(new Replied($post, $actor, WechatRepliedMessage::class, [
+                $build = [
                     'message' => $post->getSummaryContent(Post::NOTICE_LENGTH, true)['content'],
                     'subject' => $post->getSummaryContent(Post::NOTICE_LENGTH, true)['first_content'],
                     'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
                         'actor_username' => $actor->username    // 发送人姓名
                     ]),
-                ]));
+                ];
+                // Tag 发送通知
+                $post->thread->user->notify(new Replied($actor, $post, $build));
             }
 
             // 如果被回复的用户不是当前用户，也不是主题作者，也是合法的，则通知被回复的人
@@ -120,20 +115,18 @@ class PostListener
                 && $post->reply_user_id != $actor->id
                 && $post->reply_user_id != $post->thread->user_id
             ) {
-                // 数据库通知
-                $post->replyUser->notify(new Replied($post, $actor, RepliedMessage::class));
-
                 // 被回复内容
                 $post->replyPost->content = Str::of($post->replyPost->content)->substr(0, Post::NOTICE_LENGTH);
 
-                // 微信通知
-                $post->replyUser->notify(new Replied($post, $actor, WechatRepliedMessage::class, [
+                $buildReplyUser = [
                     'message' => $post->getSummaryContent(Post::NOTICE_LENGTH, true)['content'],
                     'subject' => $post->replyPost->formatContent(), // 解析content
                     'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
                         'actor_username' => $actor->username    // 发送人姓名
                     ]),
-                ]));
+                ];
+                // Tag 发送通知
+                $post->replyUser->notify(new Replied($actor, $post, $buildReplyUser));
             }
         }
     }
@@ -245,13 +238,12 @@ class PostListener
         if ($event->post->user && $event->post->user->id != $event->actor->id) {
             $build = [
                 'message' => $event->content,
-                'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'is_first'])
+                'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'is_first']),
+                'notify_type' => PostMessage::NOTIFY_EDIT_CONTENT_TYPE,
             ];
-            // 系统通知
-            $event->post->user->notify(new System(PostMessage::class, $build));
 
-            // 微信通知
-            $event->post->user->notify(new System(WechatPostMessage::class, $build));
+            // Tag 发送通知
+            $event->post->user->notify(new System(PostMessage::class, $event->post->user, $build));
         }
     }
 

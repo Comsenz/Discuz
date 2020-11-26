@@ -257,7 +257,7 @@ class OffIAccountThreadsTransformController extends AbstractCreateController
             $thumbPath = Str::replaceLast($thumbnail->filename, $thumbnail->filename . '_thumb', $thumbnail->basePath());
             $blurPath = Str::replaceLast($thumbnail->filename, md5($thumbnail->filename) . '_blur', $thumbnail->basePath());
 
-            $thumbnail->resize(Attachment::FIX_WIDTH, null, function ($constraint) {
+            $thumbnail->resize(Attachment::FIX_WIDTH, Attachment::FIX_WIDTH, function ($constraint) {
                 $constraint->aspectRatio();     // 保持纵横比
                 $constraint->upsize();          // 避免文件变大
             })->save($thumbPath);

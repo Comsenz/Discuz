@@ -18,73 +18,111 @@
 
 namespace App\Notifications;
 
+use App\Models\User;
 use App\Models\UserWalletCash;
-use Illuminate\Bus\Queueable;
+use App\Notifications\Messages\Database\WithdrawalMessage;
+use App\Notifications\Messages\Wechat\WithdrawalWechatMessage;
+use Discuz\Notifications\NotificationManager;
+use Illuminate\Support\Arr;
 
 /**
  * 提现通知
  *
- * Class Withdrawal
  * @package App\Notifications
  */
-class Withdrawal extends System
+class Withdrawal extends AbstractNotification
 {
-    use Queueable;
+    public $actor;
 
     public $cash;
 
-    public $channel;
+    public $data;
 
-    /**
-     * Withdrawal constructor.
-     *
-     * @param UserWalletCash $cash
-     * @param string $messageClass
-     * @param array $build
-     */
-    public function __construct(UserWalletCash $cash, $messageClass = '', $build = [])
+    public $tplId = [];
+
+    public function __construct(User $actor, UserWalletCash $cash, $data = [])
     {
-        $this->setChannelName($messageClass);
-
+        $this->actor = $actor;
         $this->cash = $cash;
+        $this->data = $data;
 
-        parent::__construct($messageClass, $build);
+        /**
+         * 初始化要发送的模板中，对应的 tplId
+         */
+        $this->initNoticeMessage();
+
+        $this->setTemplate();
     }
 
     /**
-     * 数据库驱动通知
+     * 设置所有开启中的，要发送的模板
+     * 查询到数据集合后，存放静态区域
+     */
+    protected function setTemplate()
+    {
+        self::getTemplate($this->tplId);
+    }
+
+    /**
+     * Get the notification's delivery channels.
      *
-     * @param $notifiable
+     * @param mixed $notifiable
      * @return array
      */
+    public function via($notifiable)
+    {
+        // 获取已开启的通知频道
+        return $this->getNotificationChannels();
+    }
+
+    public function getTplModel($type)
+    {
+        return self::$tplData->where('id', $this->tplId[$type])->first();
+    }
+
     public function toDatabase($notifiable)
     {
-        return [
-            'user_id' => $this->cash->user->id,  // 提现人ID
-            'wallet_cash_id' => $this->cash->id, // 提现记录ID
-            'cash_actual_amount' => $this->cash->cash_actual_amount, // 实际提现金额
-            'cash_apply_amount' => $this->cash->cash_apply_amount,   // 提现申请金额
-            'cash_status' => $this->cash->cash_status,
-            'remark' => $this->cash->remark,
-            'created_at' => $this->cash->formatDate('created_at'),
-        ];
+        $message = app(WithdrawalMessage::class);
+        $message->setData($this->getTplModel('database'), $this->actor, $this->cash);
+
+        return (new NotificationManager)->driver('database')->setNotification($message)->build();
+    }
+
+    public function toWechat($notifiable)
+    {
+        $message = app(WithdrawalWechatMessage::class);
+        $message->setData($this->getTplModel('wechat'), $this->actor, $this->cash, $this->data);
+
+        return (new NotificationManager)->driver('wechat')->setNotification($message)->build();
     }
 
     /**
-     * 设置频道名称
-     *
-     * @param $strClass
+     * 初始化对应通知类型
      */
-    protected function setChannelName($strClass)
+    protected function initNoticeMessage()
     {
-        switch ($strClass) {
-            case 'App\MessageTemplate\Wechat\WechatWithdrawalMessage':
-                $this->channel = 'wechat';
-                break;
-            case 'App\MessageTemplate\WithdrawalMessage':
-            default:
-                $this->channel = 'database';
-                break;
+        // set tpl id 获取提现状态
+        $this->cashTpl(Arr::get($this->data, 'cash_status', null));
+    }
+
+    /**
+     * @param int $status 提现状态：1：待审核，2：审核通过，3：审核不通过，4：待打款，5：已打款，6：打款失败
+     */
+    public function cashTpl(int $status)
+    {
+        // 非失败状态
+        if (UserWalletCash::notificationByWhich($status)) {
+            // 提现通知
+            $this->tplId = [
+                'database' => 33,
+                'wechat' => 35,
+            ];
+        } else {
+            // 提现失败通知
+            $this->tplId = [
+                'database' => 34,
+                'wechat' => 36,
+            ];
         }
     }
 }

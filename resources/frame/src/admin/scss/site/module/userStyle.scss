@@ -223,12 +223,6 @@
 */
 .rol-permission-box{
   position: relative;
-  .scope-action{
-    position: absolute;
-    top: 17PX;
-    left:45%;
-    color: #606266;
-  }
   .permission__title{
     position: absolute;
     left: 70PX;
@@ -252,6 +246,27 @@
     }
   }
   .user-operate {
+    &__header {
+      position: relative;
+      .scope-action{
+        position: absolute;
+        top: 17PX;
+        left:47%;
+        color: #606266;
+      }
+    }
+    &__title {
+      width: 100%;
+      height: 53PX;
+      background-color: #FAFAFA;
+      display: flex;
+      align-items: center;
+      padding-left: 27PX;
+      box-sizing: border-box;
+    }
+    .card-box {
+      padding-left: 27PX;
+    }
     .card-row-lf{
       width: 45%;
       margin-right: 0;
@@ -284,6 +299,9 @@
       width: 340PX;
     }
   }
+  .footer-btn__inner{
+    padding-left: 27PX;
+  }
 }
 .elinput{
   margin: 0 10PX;
@@ -308,7 +326,6 @@
   }
 
   .footer-btn{
-
     .el-button--primary{
       margin-right: 20PX;
     }

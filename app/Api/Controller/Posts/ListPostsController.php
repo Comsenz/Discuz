@@ -20,11 +20,14 @@ namespace App\Api\Controller\Posts;
 
 use App\Api\Serializer\CommentPostSerializer;
 use App\Api\Serializer\PostSerializer;
+use App\Common\CacheKey;
+use App\Common\PostCache;
 use App\Models\Post;
 use App\Models\User;
 use App\Repositories\PostRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Common\Utils;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -106,7 +109,8 @@ class ListPostsController extends AbstractListController
      * @var string
      */
     protected $tablePrefix;
-
+    protected $cache;
+    private $postCache;
     /**
      * @param PostRepository $posts
      * @param UrlGenerator $url
@@ -116,6 +120,8 @@ class ListPostsController extends AbstractListController
         $this->posts = $posts;
         $this->url = $url;
         $this->tablePrefix = config('database.connections.mysql.prefix');
+        $this->postCache = new PostCache();
+        $this->cache = app('cache');
     }
 
     /**
@@ -125,30 +131,20 @@ class ListPostsController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
+        $params = $request->getQueryParams();
         $filter = $this->extractFilter($request);
         $sort = $this->extractSort($request);
-
+        //设置评论列表第一页缓存
+        list($cacheKey, $posts) = $this->getCache($params,$filter, $document);
+        if ($posts) {
+            return $posts;
+        }
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
         $include = $this->extractInclude($request);
-
         $posts = $this->search($actor, $filter, $sort, $limit, $offset);
-
-        $document->addPaginationLinks(
-            $this->url->route('posts.index'),
-            $request->getQueryParams(),
-            $offset,
-            $limit,
-            $this->postCount
-        );
-
-        $document->setMeta([
-            'postCount' => $this->postCount,
-            'pageCount' => ceil($this->postCount / $limit),
-        ]);
-
+        $this->addDocument($document, $params, $this->postCount, $offset, $limit);
         Post::setStateUser($actor);
-
         // 特殊关联：最后三条点评
         if (in_array('lastThreeComments', $include)) {
             $posts = $this->loadLastThreeComments($posts);
@@ -183,8 +179,89 @@ class ListPostsController extends AbstractListController
                 }
             });
         }
+        $posts->loadMissing($include);
+        if($this->canCache($params)){
+            $this->postCache->setPosts($posts);
+            $this->cache->put($cacheKey, serialize( $this->postCache), 5*60);
+        }
+        return $posts;
+    }
 
-        return $posts->loadMissing($include);
+    /**
+     *从缓存中取出第一页评论数据
+     * @param $filter
+     * @param $document
+     * @return array
+     */
+    private function getCache($params, $filter, $document)
+    {
+        $isMobile = Utils::isMobile() ? 1 : 0;
+        $threadId = Arr::get($filter, 'thread');
+        $cacheKey = CacheKey::POST_RESOURCE_BY_ID . $isMobile . $threadId;
+        if (!$this->canCache($params)) {
+            return [$cacheKey, false];
+        }
+        $data = $this->cache->get($cacheKey);
+        if (!empty($data)) {
+            $obj = unserialize($data);
+            $metaLinks = $obj->getMetaLinks();
+            $posts = $obj->getPosts();
+            $this->addDocument($document, $metaLinks['params'], $metaLinks['count'], $metaLinks['offset'], $metaLinks['limit']);
+            if ($posts->count() != 0 && $metaLinks['count'] != 0) {
+                return [$cacheKey, $posts];
+            }
+        }
+        return [$cacheKey, false];
+    }
+
+    private function canCache($params)
+    {
+        //pc端倒序不允许使用缓存
+        if($params['sort'] == '-createdAt'){
+            return false;
+        }
+        if (isset($params['filter'])) {
+            if(!isset($params['filter']['isComment'])){
+                return false;
+            }
+            if (strtolower($params['filter']['isComment']) == 'yes') {
+                return false;
+            }
+        }
+        $canCache = false;
+        if (isset($params['include'])) {
+            if ($params['include'] == 'firstPost') {
+                $canCache = true;
+            }
+        }
+        if (isset($params['page'])) {
+            if ($params['page']['number'] == 1) {
+                $canCache = true;
+            }
+        }
+        return $canCache;
+    }
+
+    private function addDocument($document, $params, $count, $offset, $limit)
+    {
+        $document->addPaginationLinks(
+            $this->url->route('posts.index'),
+            $params,
+            $offset,
+            $limit,
+            $this->postCount
+        );
+
+        $document->setMeta([
+            'postCount' => $this->postCount,
+            'pageCount' => ceil($this->postCount / $limit),
+        ]);
+        $this->postCache->setMetaLinks([
+            'params' => $params,
+            'count' => $count,
+            'offset' => $offset,
+            'limit' => $limit
+        ]);
     }
 
     /**

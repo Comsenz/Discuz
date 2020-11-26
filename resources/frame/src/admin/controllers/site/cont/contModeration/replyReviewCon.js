@@ -124,7 +124,6 @@ export default {
   },
 
   methods:{
-
     titleIcon(item){
       return commonHelper.titleIcon(item);
     },

@@ -181,7 +181,6 @@ class ForumSettingField
     {
         return [
             'cash_interval_time' => $this->settings->get('cash_interval_time', 'cash'),
-            'cash_min_sum' => $this->settings->get('cash_min_sum', 'cash') ?: '',
             'cash_max_sum' => $this->settings->get('cash_max_sum', 'cash'),
             'cash_sum_limit' => $this->settings->get('cash_sum_limit', 'cash'),
         ];

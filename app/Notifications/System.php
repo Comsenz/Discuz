@@ -18,141 +18,152 @@
 
 namespace App\Notifications;
 
-use App\MessageTemplate\StatusMessage;
-use App\MessageTemplate\Wechat\WechatStatusMessage;
-use App\MessageTemplate\Wechat\WechatWithdrawalMessage;
-use App\MessageTemplate\WithdrawalMessage;
-use App\Models\NotificationTpl;
-use App\Models\UserWalletCash;
-use Discuz\Contracts\Setting\SettingsRepository;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Arr;
+use App\Models\User;
+use App\Notifications\Messages\Database\GroupMessage;
+use App\Notifications\Messages\Database\PostMessage;
+use App\Notifications\Messages\Database\RegisterMessage;
+use App\Notifications\Messages\Database\StatusMessage;
+use App\Notifications\Messages\Wechat\GroupWechatMessage;
+use App\Notifications\Messages\Wechat\PostWechatMessage;
+use App\Notifications\Messages\Wechat\RegisterWechatMessage;
+use App\Notifications\Messages\Wechat\StatusWechatMessage;
+use Discuz\Notifications\Messages\SimpleMessage;
+use Discuz\Notifications\NotificationManager;
+use Exception;
+use Illuminate\Support\Collection;
 
-/**
- * 系统通知
- *
- * Class System
- * @package App\Notifications
- */
-class System extends Notification
+class System extends AbstractNotification
 {
-    protected $data;
+    public $actor;
 
-    protected $type;
-
-    protected $tplData;
+    public $data;
 
     protected $message;
 
-    protected $settings;
+    public $tplId = [];
 
     /**
-     * System constructor.
-     *
-     * @param $type
-     * @param array $data
+     * @var Collection
      */
-    public function __construct($type, $data = [])
+    protected $messageRelationship;
+
+    public function __construct($message, User $actor, $data = [])
     {
-        $this->type = $type;
+        $this->message = app($message);
+
+        $this->actor = $actor;
         $this->data = $data;
 
-        $this->message = app()->make($type);
-        $this->settings = app()->make(SettingsRepository::class);
+        /**
+         * 初始化要发送的模板中，对应的 tplId
+         */
+        $this->initNoticeMessage();
+
+        $this->setTemplate();
     }
 
+    /**
+     * 设置所有开启中的，要发送的模板
+     * 查询到数据集合后，存放静态区域
+     */
+    protected function setTemplate()
+    {
+        self::getTemplate($this->tplId);
+    }
+
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @param mixed $notifiable
+     * @return array
+     */
     public function via($notifiable)
     {
-        $tplId = $this->message->getTplId();
+        // 获取已开启的通知频道
+        return $this->getNotificationChannels();
+    }
 
-        // Handle Special Notice
-        $this->specialNotice($notifiable, $tplId);
+    public function getTplModel($type)
+    {
+        return self::$tplData->where('id', $this->tplId[$type])->first();
+    }
 
-        // Set TplDataS
-        $this->getTplData($tplId);
-
-        $this->message->setTplData($this->tplData);
-
-        // 开启状态发送系统消息
-        if (!is_null($this->tplData) && $this->tplData->status == NotificationTpl::OPEN) {
-            return (array)NotificationTpl::enumType($this->tplData->type);
-        }
-
-        return [];
+    /**
+     * @param string $type
+     * @return SimpleMessage
+     */
+    public function getMessage(string $type)
+    {
+        return $this->messageRelationship->get($type);
     }
 
     public function toDatabase($notifiable)
     {
-        return $this->message->notifiable($notifiable)->template($this->data);
+        $message = $this->getMessage('database');
+        $message->setData($this->getTplModel('database'), $this->actor, $this->data);
+
+        return (new NotificationManager)->driver('database')->setNotification($message)->build();
     }
 
     public function toWechat($notifiable)
     {
-        return $this->message->notifiable($notifiable)->template($this->data);
-    }
+        $message = $this->getMessage('wechat');
+        $message->setData($this->getTplModel('wechat'), $this->actor, $this->data);
 
-    public function getTplData($id)
-    {
-        return $this->tplData ? $this->tplData : $this->tplData = NotificationTpl::find($id);
-    }
-
-    protected function isMod()
-    {
-        return (bool)$this->settings->get('register_validate');
+        return (new NotificationManager)->driver('wechat')->setNotification($message)->build();
     }
 
     /**
-     * 特殊处理通知类
-     *
-     * @param $notifiable
-     * @param $tplId
+     * 初始化对应通知类型
+     * TODO 尽量拆分通知为独立通知 Message，该方法最好不再叠加新通知类型（通知列表接口查询时传输类型数组筛选，就可做到每种通知的独立性）
      */
-    protected function specialNotice($notifiable, &$tplId)
+    protected function initNoticeMessage()
     {
+        $this->messageRelationship = collect();
+        // init database message
+        $this->messageRelationship['database'] = $this->message;
+
+        // 用户状态通知
         if ($this->message instanceof StatusMessage) {
-            $tplId = $this->discTpl($notifiable->status, $notifiable->getRawOriginal('status'));
+            // set other message relationship
+            $this->messageRelationship['wechat'] = app(StatusWechatMessage::class);
+            // set tpl id
+            $this->discTpl($this->actor->status, $this->actor->getRawOriginal('status'));
         }
 
-        if ($this->message instanceof WechatStatusMessage) {
-            $tplId = $this->discTpl($notifiable->status, $notifiable->getRawOriginal('status'), 1);
+        // 用户组变更通知
+        if ($this->message instanceof GroupMessage) {
+            // set other message relationship
+            $this->messageRelationship['wechat'] = app(GroupWechatMessage::class);
+            // set tpl id
+            $this->tplId['database'] = $this->messageRelationship['database']->tplId; // 12
+            $this->tplId['wechat'] = $this->messageRelationship['wechat']->tplId; // 24
         }
 
-        if ($this->message instanceof WithdrawalMessage || $this->message instanceof WechatWithdrawalMessage) {
-            $cashStatus = Arr::get($this->data, 'cash_status'); // 获取提现状态
-            $type = 0;
-            if ($this->message instanceof WechatWithdrawalMessage) {
-                $type = 1;
+        // Post 通知
+        if ($this->message instanceof PostMessage) {
+            // set other message relationship
+            $this->messageRelationship['wechat'] = app(PostWechatMessage::class);
+            // set tpl id of the notify type
+            $this->postTpl();
+        }
+
+        // 注册通知
+        if ($this->message instanceof RegisterMessage || $this->message instanceof RegisterWechatMessage) {
+            // 分别发送通知类型，因为注册时有未绑定公众号的用户，获取不到 openId
+            if (! isset($this->data['send_type'])) {
+                return;
             }
-
-            $tplId = $this->cashTpl($cashStatus, $type);
-        }
-    }
-
-    /**
-     * @param int $status 提现状态：1：待审核，2：审核通过，3：审核不通过，4：待打款， 5，已打款， 6：打款失败
-     * @param int $type 0系统 1微信
-     * @return int
-     */
-    public function cashTpl($status, $type = 0)
-    {
-        if ($type) {
-            // 微信
-            if (UserWalletCash::notificationByWhich($status)) { // 非失败状态
-                $id = 35;
-            } else {
-                $id = 36;
+            // set other message relationship
+            if ($this->message instanceof RegisterWechatMessage) {
+                $this->messageRelationship['wechat'] = app(RegisterWechatMessage::class);
             }
-        } else {
-            if (UserWalletCash::notificationByWhich($status)) {
-                $id = 33;
-            } else {
-                $id = 34;
+            // set tpl id
+            $sendType = $this->data['send_type'];
+            if (! is_null($sendType)) {
+                $this->tplId[$sendType] = $this->messageRelationship[$sendType]->tplId; // 1 数据库通知 / 13 微信通知
             }
         }
-
-        $this->message->setTplId($id);
-
-        return $id;
     }
 
     /**
@@ -161,48 +172,106 @@ class System extends Notification
      *
      * @param $status
      * @param $originStatus
-     * @param int $type 0系统 1微信
-     * @return int
      */
-    public function discTpl($status, $originStatus, $type = 0)
+    public function discTpl($status, $originStatus)
     {
-        $id = 0;
         if ($status == $originStatus) {
-            return $id;
+            return;
         }
 
         if ($status == 0) {
             if ($originStatus == 1) {
-                $id = 11; // 帐号解除禁用通知
+                // 帐号解除禁用通知
+                $this->tplId = [
+                    'database' => 11,
+                    'wechat' => 23,
+                ];
             } else {
-                $id = 2; // 审核通过通知
+                // 审核通过通知
+                $this->tplId = [
+                    'database' => 2,
+                    'wechat' => 14,
+                ];
             }
         } else {
             if ($originStatus == 0 && $status == 1) {
-                $id = 10; // 帐号禁用通知
+                // 帐号禁用通知
+                $this->tplId = [
+                    'database' => 10,
+                    'wechat' => 22,
+                ];
             } elseif ($originStatus == 2 && $status == 3) { // 2审核中 变 审核拒绝
-                $id = 3; // 审核拒绝通知
+                // 审核拒绝通知
+                $this->tplId = [
+                    'database' => 3,
+                    'wechat' => 15,
+                ];
             } else {
-                $id = 0; // 错误状态下：2审核中变成禁用等 是不允许的
+                // 错误状态下：2审核中变成禁用等 是不允许的
+                return;
             }
         }
+    }
 
-        // 判断和系统通知的对应微信通知关系
-        if ($type == 1) {
-            $wechat = [
-                11 => 23,
-                2 => 14,
-                10 => 22,
-                3 => 15,
-            ];
-            if (array_key_exists($id, $wechat)) {
-                $id = $wechat[$id];
-            }
+    /**
+     * Post 类型通知
+     */
+    public function postTpl()
+    {
+        /**
+         * Post 类型通知扩展参数 必传操作类型
+         *
+         * @see PostMessage 新参数用常量去预设，消除魔术字符串
+         */
+        if (! isset($this->data['notify_type'])) {
+            throw new Exception('not_found_post_notify_type');
         }
 
-        // 设值tplID
-        $this->message->setTplId($id);
-
-        return $id;
+        switch ($this->data['notify_type']) {
+            case PostMessage::NOTIFY_EDIT_CONTENT_TYPE:
+                // 内容修改通知
+                $this->tplId = [
+                    'database' => 9,
+                    'wechat' => 21,
+                ];
+                break;
+            case PostMessage::NOTIFY_APPROVED_TYPE:
+                // 内容审核通过通知
+                $this->tplId = [
+                    'database' => 5,
+                    'wechat' => 16,
+                ];
+                break;
+            case PostMessage::NOTIFY_UNAPPROVED_TYPE:
+                // 内容审核不通过/内容忽略 通知
+                $this->tplId = [
+                    'database' => 4,
+                    'wechat' => 17,
+                ];
+                break;
+            case PostMessage::NOTIFY_DELETE_TYPE:
+                // 内容删除通知
+                $this->tplId = [
+                    'database' => 6,
+                    'wechat' => 18,
+                ];
+                break;
+            case PostMessage::NOTIFY_ESSENCE_TYPE:
+                // 内容精华通知
+                $this->tplId = [
+                    'database' => 7,
+                    'wechat' => 19,
+                ];
+                break;
+            case PostMessage::NOTIFY_STICKY_TYPE:
+                // 内容置顶通知
+                $this->tplId = [
+                    'database' => 8,
+                    'wechat' => 20,
+                ];
+                break;
+            default:
+                throw new Exception('post_notify_type_mismatch');
+        }
     }
 }

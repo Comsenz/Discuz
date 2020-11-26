@@ -14,7 +14,7 @@
           <el-table-column
             label="级别名称">
             <template slot-scope="scope">
-              <el-input maxlength="10" v-model="scope.row._data.name"></el-input>
+              <el-input maxlength="20" v-model="scope.row._data.name"></el-input>
             </template>
           </el-table-column>
 
@@ -41,7 +41,34 @@
           <el-table-column>
             <template slot-scope="scope">
               <el-button v-if="scope.row._data.id !== '1'" :disabled="addStatus && tableData.length-1 === scope.$index" type="text" @click="$router.push({path:'/admin/rol-permission',query:{id:scope.row._data.id,name:scope.row._data.name}})">设置</el-button>
-              <el-button v-if="scope.row._data.id !== '1' && scope.row._data.id !== '6' && scope.row._data.id !== '7' && scope.row._data.id !== '10' && scope.row._data.default !== 1" @click="singleDelete(scope.$index,scope.row._data.id)" type="text">删除</el-button>
+            <el-popover
+              width="100"
+              placement="top"
+              :ref="`popover-${scope.$index}`"
+            >
+              <p>确定删除该项吗？</p>
+              <div style="text-align: right; margin: 10PX 0 0 0 ">
+                <el-button
+                  type="danger"
+                  size="mini"
+                  @click="
+                    scope._self.$refs[`popover-${scope.$index}`].doClose()
+                  "
+                >
+                  取消
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="
+                    singleDelete(scope.$index,scope.row._data.id);
+                    scope._self.$refs[`popover-${scope.$index}`].doClose();
+                  "
+                  >确定</el-button
+                >
+              </div>
+              <el-button slot="reference" v-if="scope.row._data.id !== '1' && scope.row._data.id !== '6' && scope.row._data.id !== '7' && scope.row._data.id !== '10' && scope.row._data.default !== 1" type="text">删除</el-button>
+            </el-popover>
             </template>
           </el-table-column>
 

@@ -50,13 +50,28 @@ class BaseFormatter
      */
     protected static $actor;
 
+    /**
+     * @var Application
+     */
     protected $app;
 
+    /**
+     * @var array
+     */
     protected $allowHtmlElements = [
-        'audio' => ['src', 'controls', 'width', 'height', 'loop'],
-        'video' => ['src', 'controls', 'width', 'height'],
-        'span' => ['class'],
-        'blockquote' => ['class']
+        'summary'       => [],
+        'details'       => [],
+        'center'        => [],
+        'small'         => [],
+        'sub'           => [],
+        'sup'           => [],
+        'br'            => [],
+        'p'             => [],
+        'font'          => [],
+        'audio'         => ['src', 'controls', 'width', 'height', 'loop'],
+        'video'         => ['src', 'controls', 'width', 'height'],
+        'span'          => ['class'],
+        'blockquote'    => ['class'],
     ];
 
     /**

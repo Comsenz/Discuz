@@ -95,7 +95,7 @@ class CreateQuestionAnswer
         // check
         $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
         if (count($censor->wordMod) > 0) {
-            throw new CensorNotPassedException('content_banned', $censor->wordMod);
+            throw new CensorNotPassedException('content_banned_show_words', $censor->wordMod);
         }
 
         $question->content = $content;

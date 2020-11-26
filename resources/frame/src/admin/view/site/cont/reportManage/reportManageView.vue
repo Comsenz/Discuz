@@ -65,7 +65,31 @@
           <p>{{items._data.reason}}</p>
         </div>
         <div class="report-manage-content__table-footer" slot="footer">
-          <el-button type="text" @click="operationsSubmit('delete',1, items._data.id)">删除</el-button>
+            <el-popover
+              width="100"
+              placement="top"
+              :ref="`popover-${index}`"
+            >
+              <p>确定删除该项吗？</p>
+              <div style="text-align: right; margin: 10PX 0 0 0 ">
+                <el-button
+                  type="danger"
+                  size="mini"
+                  @click="closeDelet(`popover-${index}`)"
+                >
+                  取消
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="
+                    operationsSubmit('delete',1, items._data.id)
+                    closeDelet(`popover-${index}`)"
+                  >确定</el-button
+                >
+              </div>
+          <el-button slot="reference" type="text">删除</el-button>
+            </el-popover>
           <i></i>
           <el-button type="text" @click="operationsSubmit('handle',1, items._data.id)">标记已处理</el-button>
         </div>
@@ -82,7 +106,31 @@
     <!-- 举报操作 -->
     <div class="report-manage-footer">
 			<el-button size="small" type="primary" :loading="subLoading" @click="submitClick">提交</el-button>
-      <el-button type="text" @click="operationsSubmit('delete',2)">全部删除</el-button>
+            <el-popover
+              width="100"
+              placement="top"
+              v-model="visible"
+            >
+              <p>确定删除该项吗？</p>
+              <div style="text-align: right; margin: 10PX 0 0 0 ">
+                <el-button
+                  type="danger"
+                  size="mini"
+                  @click="visible = false"
+                >
+                  取消
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="
+                    operationsSubmit('delete',2);
+                    visible = false"
+                  >确定</el-button
+                >
+              </div>
+      <el-button slot="reference" type="text">全部删除</el-button>
+            </el-popover>
       <el-button type="text" @click="operationsSubmit('handle',2)">全部标记已处理</el-button>
 		</div>
   </div>
