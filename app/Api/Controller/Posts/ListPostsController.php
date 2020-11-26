@@ -216,7 +216,14 @@ class ListPostsController extends AbstractListController
 
     private function canCache($params)
     {
+        //pc端倒序不允许使用缓存
+        if($params['sort'] == '-createdAt'){
+            return false;
+        }
         if (isset($params['filter'])) {
+            if(!isset($params['filter']['isComment'])){
+                return false;
+            }
             if (strtolower($params['filter']['isComment']) == 'yes') {
                 return false;
             }

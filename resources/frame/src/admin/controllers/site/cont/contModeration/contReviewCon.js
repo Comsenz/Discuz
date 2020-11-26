@@ -291,9 +291,9 @@ export default {
       window.open(routeData.href, '_blank');
     },
 
-    editClick(id){
+    editClick(id,typeId){
       let routeData = this.$router.resolve({
-        path: `/thread/post?type=1&operating=edit&threadId=${id}`
+        path: `/thread/post?type=${typeId}&operating=edit&threadId=${id}`
       });
       window.open(routeData.href, '_blank');
     },

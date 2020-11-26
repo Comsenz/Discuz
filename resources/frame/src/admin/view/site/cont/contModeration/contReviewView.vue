@@ -260,7 +260,7 @@
               v-if="items.threadVideo && items.threadVideo._data.status == 2"
             >转码失败</el-button>
             <el-button type="text" @click="viewClick(items._data.id)">查看</el-button>
-            <el-button type="text" @click="editClick(items._data.id)">编辑</el-button>
+            <el-button type="text" @click="editClick(items._data.id,items._data.type)">编辑</el-button>
           </div>
         </div>
       </ContArrange>
