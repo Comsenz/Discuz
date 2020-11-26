@@ -221,6 +221,9 @@ class ListPostsController extends AbstractListController
             return false;
         }
         if (isset($params['filter'])) {
+            if(!isset($params['filter']['isComment'])){
+                return false;
+            }
             if (strtolower($params['filter']['isComment']) == 'yes') {
                 return false;
             }
