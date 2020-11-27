@@ -31,14 +31,17 @@ class CreateQuestionNotifyWillBeSend
         $question = $event->question;
         $actor = $event->actor;
 
-        $build = [
-            'message' => $question->thread->getContentByType(Thread::CONTENT_LENGTH, true),
-            'raw' => array_merge(Arr::only($question->toArray(), ['thread_id', 'price']), [
-                'actor_username' => $question->thread->isAnonymousName(),   // 提问人姓名/匿名
-            ]),
-        ];
+        // 帖子合法才允许发送
+        if ($question->thread->is_approved === Thread::APPROVED) {
+            $build = [
+                'message' => $question->thread->getContentByType(Thread::CONTENT_LENGTH, true),
+                'raw' => array_merge(Arr::only($question->toArray(), ['thread_id', 'price']), [
+                    'actor_username' => $question->thread->isAnonymousName(),   // 提问人姓名/匿名
+                ]),
+            ];
 
-        // Tag 发送通知 (向回答人发送问答通知)
-        $question->beUser->notify(new Questioned(QuestionedWechatMessage::class, $actor, $question, $build));
+            // Tag 发送通知 (向回答人发送问答通知)
+            $question->beUser->notify(new Questioned(QuestionedWechatMessage::class, $actor, $question, $build));
+        }
     }
 }
