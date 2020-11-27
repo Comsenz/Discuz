@@ -120,6 +120,7 @@ class VerifyMobile
             $token->save();
 
             $noUserException = new NoUserException();
+            $noUserException->setCode('not_found_user'); // 未查询到用户信息
             $noUserException->setToken($token);
             throw $noUserException;
         }
