@@ -175,8 +175,7 @@
               v-model="checked"
               label="attachment.create.0"
               :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
+                $router.history.current.query.id === '1'
               "
               >上传附件</el-checkbox
             >
@@ -188,8 +187,7 @@
               v-model="checked"
               label="attachment.create.1"
               :disabled="
-                $router.history.current.query.id === '1' ||
-                  $router.history.current.query.id === '7'
+                $router.history.current.query.id === '1'
               "
               >上传图片</el-checkbox
             >

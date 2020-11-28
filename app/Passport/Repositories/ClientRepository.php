@@ -37,8 +37,13 @@ class ClientRepository implements ClientRepositoryInterface
      */
     public function getClientEntity($clientIdentifier)
     {
-        // TODO: Implement getClientEntity() method.
-        return new ClientEntity();
+        $client = new ClientEntity();
+
+        $client->setIdentifier($clientIdentifier);
+        $client->setRedirectUri('/');
+        $client->setConfidential();
+
+        return $client;
     }
 
     /**
