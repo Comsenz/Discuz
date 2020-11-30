@@ -308,8 +308,10 @@ class ListThreadsController extends AbstractListController
             }
         }
         if (isset($params['page'])) {
-            if ($params['page']['number'] == 1) {
-                $canCache = true;
+            if(isset($params['page']['number'])){
+                if ($params['page']['number'] == 1) {
+                    $canCache = true;
+                }
             }
         }
         return $canCache;
