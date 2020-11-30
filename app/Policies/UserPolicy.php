@@ -24,6 +24,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class UserPolicy extends AbstractPolicy
 {
+    /**
+     * {@inheritdoc}
+     */
     protected $model = User::class;
 
     /**

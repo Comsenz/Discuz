@@ -33,7 +33,6 @@ use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Common\Utils;
-use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -175,7 +174,7 @@ class ListThreadsController extends AbstractListController
         $canCache = $this->canCache($params);
         $params['isMobile'] = Utils::isMobile();
         $groups = $actor->toArray()['groups'];
-        if(!empty($groups)){
+        if (!empty($groups)) {
             $group = $groups[0];
             $params['userRole'] = $group['id'];
         }
@@ -308,8 +307,10 @@ class ListThreadsController extends AbstractListController
             }
         }
         if (isset($params['page'])) {
-            if ($params['page']['number'] == 1) {
-                $canCache = true;
+            if(isset($params['page']['number'])){
+                if ($params['page']['number'] == 1) {
+                    $canCache = true;
+                }
             }
         }
         return $canCache;
