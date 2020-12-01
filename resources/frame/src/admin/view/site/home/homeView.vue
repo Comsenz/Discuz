@@ -73,6 +73,7 @@
       <a href="https://www.discuz.chat" target="_blank">支持论坛</a>
       <a href="https://cloud.tencent.com/" target="_blank">腾讯云</a>
       <a href="http://www.dnspod.cn/" target="_blank">DNSPod</a>
+      <a href="https://da.do/hmos" target="_blank">免费SSL证书</a>
     </Card>
   </div>
 </template>
