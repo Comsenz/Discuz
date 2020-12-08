@@ -135,7 +135,8 @@ module.exports = {
           limit: 10000,
           name: "static/img/[name].[hash:7].[ext]"
         }
-      }
+      },
+      conditionalLoader()
     ]
   },
   plugins: [

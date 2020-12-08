@@ -174,7 +174,9 @@
 		js和css加载在tplConfig中
 
 
+## 多场景开发规范
 
+1. [开发规范](./doc/MANY-SCENARIOS.md)
 
 
 
