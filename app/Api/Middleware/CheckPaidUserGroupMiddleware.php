@@ -20,9 +20,10 @@ namespace App\Api\Middleware;
 
 use App\Events\Group\PaidGroup;
 use App\Models\Group;
+use App\Models\GroupPaidUser;
+use App\Models\User;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Carbon;
-use App\Models\GroupPaidUser;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -42,6 +43,7 @@ class CheckPaidUserGroupMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        /** @var User $actor */
         $actor = $request->getAttribute('actor');
 
         if ($actor->groups->count() && !$actor->isGuest()) {
@@ -57,12 +59,18 @@ class CheckPaidUserGroupMiddleware implements MiddlewareInterface
                             new PaidGroup($group_item->id, $actor)
                         );
                     } elseif ($group_item->pivot->expiration_time < $now) {
-                        GroupPaidUser::where('group_id', $group_item->pivot->group_id)
+                        GroupPaidUser::query()
+                            ->where('group_id', $group_item->pivot->group_id)
                             ->where('user_id', $group_item->pivot->user_id)
                             ->update(['deleted_at' => $now, 'delete_type' => GroupPaidUser::DELETE_TYPE_EXPIRE]);
                         $actor->groups()->detach($group_item);
                     }
                 }
+            }
+
+            // 如果付费用户组到期后用户没有其他用户组，将其添加到默认用户组
+            if (! $actor->groups()->count()) {
+                $actor->resetGroup();
             }
         }
 

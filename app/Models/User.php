@@ -296,6 +296,18 @@ class User extends Model
     }
 
     /**
+     * @return $this
+     */
+    public function resetGroup()
+    {
+        $this->groups()->sync(
+            Group::query()->where('default', true)->first() ?? Group::MEMBER_ID
+        );
+
+        return $this;
+    }
+
+    /**
      * Check if a given password matches the user's password.
      *
      * @param string $password

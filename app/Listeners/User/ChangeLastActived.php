@@ -19,7 +19,6 @@
 namespace App\Listeners\User;
 
 use App\Events\Users\Logind;
-use App\Models\Group;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -60,7 +59,7 @@ class ChangeLastActived
 
         // 如果用户没有用户组
         if (! $user->groups->count()) {
-            $user->groups()->attach(Group::MEMBER_ID);
+            $user->resetGroup();
         }
 
         // 更新用户最后登录时间
