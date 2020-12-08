@@ -84,7 +84,7 @@
         </el-table-column>
 
         <el-table-column
-          prop="thread.firstPost._data.content"
+          prop="thread.firstPost._data.title"
           show-overflow-tooltip
           label="商品名称"
           min-width="150"
@@ -94,7 +94,7 @@
               :class="scope.row.thread ? 'cursor-pointer' : ''"
               v-if="scope.row.thread && (scope.row._data.type === 2 || scope.row._data.type === 3 || scope.row._data.type === 5 || scope.row._data.type === 6 || scope.row._data.type === 7)" @click="
                 viewClick(scope.row.thread ? scope.row.thread._data.id : '')">
-              {{ scope.row.thread.firstPost._data.content }}
+              {{ scope.row.thread._data.title }}
             </span>
             <span v-else-if="scope.row._data.type === 1" @click="viewClick('')">
               注册付费
