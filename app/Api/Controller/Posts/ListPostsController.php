@@ -253,8 +253,8 @@ class ListPostsController extends AbstractListController
         );
 
         $document->setMeta([
-            'postCount' => $this->postCount,
-            'pageCount' => ceil($this->postCount / $limit),
+            'postCount' => $count,
+            'pageCount' => ceil($count / $limit),
         ]);
         $this->postCache->setMetaLinks([
             'params' => $params,
