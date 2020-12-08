@@ -18,6 +18,7 @@
 
 namespace App\Traits;
 
+use App\Models\Question;
 use App\Models\Thread;
 use App\Models\User;
 use App\Notifications\Messages\Database\PostMessage;
@@ -47,8 +48,11 @@ trait ThreadNoticesTrait
         // 审核通过时发送 @ 通知
         if ($type === 'isApproved' && $thread->is_approved === Thread::APPROVED) {
             $this->sendRelated($thread->firstPost, $thread->user);
-            // 如果是问答审核，发送回答者通知
-            $this->sendQuestioned($thread->question, $thread->user);
+
+            // 问答帖审核通过时，通知被提问者
+            if ($thread->type === Thread::TYPE_OF_QUESTION && $thread->question) {
+                $this->sendQuestioned($thread->question, $thread->user);
+            }
         }
 
         // 无需给自己发送通知
@@ -75,10 +79,10 @@ trait ThreadNoticesTrait
     }
 
     /**
-     * @param $question
+     * @param Question $question
      * @param User $user 主题创建人
      */
-    public function sendQuestioned($question, User $user)
+    public function sendQuestioned(Question $question, User $user)
     {
         // 帖子合法才允许发送
         $build = [
