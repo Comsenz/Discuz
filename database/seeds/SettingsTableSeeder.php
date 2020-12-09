@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use Illuminate\Database\Seeder;
 use App\Models\Setting;
+use Illuminate\Database\Seeder;
 
 class SettingsTableSeeder extends Seeder
 {
@@ -92,8 +92,8 @@ class SettingsTableSeeder extends Seeder
                 'tag' => 'default',
             ],
             [
-                'key' => 'miniprogram_video',    // 小程序视频开关：0 关闭，1 开启
-                'value' => 1,                    // 默认开启
+                'key' => 'miniprogram_video',   // 小程序视频开关：0 关闭，1 开启
+                'value' => 0,                   // 默认开启
                 'tag' => 'wx_miniprogram',
             ]
         ]);

@@ -9,17 +9,17 @@
 
             <div class="cont-arrange__rt-main-header__release">
               <p v-if="$attrs.author" ref="userName">
-                <a :href="'/profile/index?userId=' + $attrs.userId" style="color: #333333;" target="_blank">
+                <a :href="'/pages/profile/index?userId=' + $attrs.userId" style="color: #333333;" target="_blank">
                   {{$attrs.author}}
                 </a>
               </p>
               <p v-if="$attrs.replyBy" ref="userName">
-                <a :href="'/profile/index?userId=' + $attrs.userId" style="color: #333333;" target="_blank">
+                <a :href="'/pages/profile/index?userId=' + $attrs.userId" style="color: #333333;" target="_blank">
                   {{$attrs.replyBy}}
                 </a>
               </p>
               <p v-if="$attrs.establish" ref="userName">
-                <a :href="'/profile/index?userId=' + $attrs.userId" style="color: #333333;" target="_blank">
+                <a :href="'/pages/profile/index?userId=' + $attrs.userId" style="color: #333333;" target="_blank">
                   {{$attrs.establish}}
                 </a>
               </p>
