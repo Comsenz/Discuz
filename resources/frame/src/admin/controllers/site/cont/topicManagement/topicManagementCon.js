@@ -314,7 +314,6 @@ export default {
      * 获取提交id
     */
     themidpost(e,res) {
-      // console.log(e,res);
       const obj = {type: e, themid: res};
       if(this.themeOperations.indexOf(res) === -1) {
         this.themeOperations.push(res);
@@ -332,6 +331,10 @@ export default {
       * 点击提交
     */
     btnSubmit() {
+      this.recommend = [];
+      this.cancelrecomend = [];
+      this.detelethem = [];
+      console.log(this.themeOperation);
       this.themeOperation.forEach((value,index) => {
         if (value.type === 1) {
           this.recommend.push(value.themid);
@@ -352,6 +355,7 @@ export default {
       }
       this.$message.success("提交成功");
       this.radio = [];
+      this.themeOperation = [];
     }
   },
 
@@ -367,8 +371,6 @@ export default {
         data[key] = ''
       }
     }
-
-    // this.setSearch(data);
   },
 
   created() {

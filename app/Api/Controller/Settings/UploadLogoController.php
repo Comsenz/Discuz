@@ -22,13 +22,16 @@ use App\Api\Serializer\SettingSerializer;
 use Carbon\Carbon;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Http\UrlGenerator;
 use Exception;
 use Illuminate\Contracts\Filesystem\Factory as FileFactory;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Tobscure\JsonApi\Document;
@@ -92,8 +95,11 @@ class UploadLogoController extends AbstractResourceController
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
-     * @return array
-     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @return string[]
+     * @throws FileNotFoundException
+     * @throws PermissionDeniedException
+     * @throws ValidationException
+     * @throws Exception
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -105,6 +111,10 @@ class UploadLogoController extends AbstractResourceController
 
         $type = Arr::get($request->getParsedBody(), 'type', 'logo');
         $file = Arr::get($request->getUploadedFiles(), 'logo');
+
+        if (! $file) {
+            throw new FileNotFoundException('file_not_found');
+        }
 
         $verifyFile = new UploadedFile(
             $file->getStream()->getMetadata('uri'),

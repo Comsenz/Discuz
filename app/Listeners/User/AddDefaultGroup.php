@@ -19,7 +19,6 @@
 namespace App\Listeners\User;
 
 use App\Events\Users\Registered;
-use App\Models\Group;
 use App\Models\Invite;
 use Illuminate\Support\Arr;
 
@@ -35,9 +34,7 @@ class AddDefaultGroup
         $code = Arr::get($event->data, 'code');
 
         if (! $code || ! Invite::lengthByAdmin($code)) {
-            $event->user->groups()->sync(
-                Group::query()->where('default', true)->first()
-            );
+            $event->user->resetGroup();
         }
     }
 }
