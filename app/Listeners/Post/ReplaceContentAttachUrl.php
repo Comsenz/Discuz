@@ -18,9 +18,13 @@
 
 namespace App\Listeners\Post;
 
+use App\Api\Controller\Posts\UpdatePostController;
+use App\Api\Controller\Threads\CreateThreadController;
 use App\Api\Controller\Threads\ResourceThreadController;
+use App\Api\Controller\Threads\UpdateThreadController;
 use App\Api\Serializer\AttachmentSerializer;
 use App\Models\Attachment;
+use App\Models\Post;
 use App\Models\Thread;
 use Discuz\Api\Events\WillSerializeData;
 use s9e\TextFormatter\Utils;
@@ -29,11 +33,22 @@ class ReplaceContentAttachUrl
 {
     public function handle(WillSerializeData $event)
     {
-        if ($event->isController(ResourceThreadController::class)) {
-            /** @var Thread $thread */
-            $thread = $event->data;
+        if (
+            $event->isController(ResourceThreadController::class)
+            || $event->isController(CreateThreadController::class)
+            || $event->isController(UpdateThreadController::class)
+            || $event->isController(UpdatePostController::class)
+        ) {
+            if ($event->data instanceof Thread) {
+                /** @var Thread $thread */
+                $thread = $event->data;
 
-            $post = $thread->firstPost;
+                $post = $thread->firstPost;
+            } elseif ($event->data instanceof Post) {
+                $post = $event->data;
+            } else {
+                return;
+            }
 
             /** @var AttachmentSerializer $attachmentSerializer */
             $attachmentSerializer = app(AttachmentSerializer::class);
@@ -60,7 +75,7 @@ class ReplaceContentAttachUrl
                 if (isset($img['title']) && isset($attachments[$img['title']])) {
                     $xml = str_replace(
                         htmlspecialchars($img['src']),
-                        htmlspecialchars($attachments[$img['title']]),
+                        $attachments[$img['title']],
                         $xml
                     );
                 }
@@ -73,7 +88,7 @@ class ReplaceContentAttachUrl
                 if (isset($url['title']) && isset($attachments[$url['title']])) {
                     $xml = str_replace(
                         htmlspecialchars($url['url']),
-                        htmlspecialchars($attachments[$url['title']]),
+                        $attachments[$url['title']],
                         $xml
                     );
                 }
