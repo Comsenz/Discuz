@@ -1,5 +1,5 @@
 {
-	"name" : "qcloud/discuz",
+	"name" : "discuz/discuz-q",
 	"description" : "Discuz Q",
 	"type" : "project",
 	"keywords" : [
@@ -26,12 +26,6 @@
 		"preferred-install" : "dist",
 		"sort-packages" : true
 	},
-	"repositories" : [
-        {
-            "type" : "path",
-            "url" : "./framework"
-	    }
-	],
 	"minimum-stability" : "dev",
 	"prefer-stable" : true,
 	"require-dev" : {
