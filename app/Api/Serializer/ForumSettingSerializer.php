@@ -36,10 +36,13 @@ class ForumSettingSerializer extends AbstractSerializer
 
     protected $forumField;
 
-    public function __construct(SettingsRepository $settings, ForumSettingField $forumField)
+    protected $url;
+
+    public function __construct(SettingsRepository $settings, ForumSettingField $forumField, UrlGenerator $url)
     {
         $this->settings = $settings;
         $this->forumField = $forumField;
+        $this->url = $url;
     }
 
     /**
@@ -60,6 +63,7 @@ class ForumSettingSerializer extends AbstractSerializer
         $siteUrl = $this->request->getUri()->getScheme() . '://' . $this->request->getUri()->getHost().(in_array($port, [80, 443, null]) ? '' : ':'.$port);
 
         $attributes = [
+            'apiUrl' => $this->url->to('/api'),
             // 站点设置
             'set_site' => [
                 'site_name' => $this->settings->get('site_name'),

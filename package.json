@@ -1,0 +1,25 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "webpack --mode development --watch",
+        "build": "webpack --mode production",
+        "format": "prettier --write src",
+        "format-check": "prettier --check src",
+        "serve": "webpack-dev-server --config webpack.config.js"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.12.3",
+        "@babel/plugin-proposal-decorators": "^7.12.1",
+        "@babel/preset-env": "^7.12.1",
+        "@vue/babel-plugin-jsx": "^1.0.0-rc.3",
+        "babel-loader": "^8.1.0",
+        "vue": "^3.0.2",
+        "webpack": "^4.44.2",
+        "webpack-cli": "^3.3.12",
+        "webpack-dev-server": "^3.11.0"
+    },
+    "dependencies": {
+        "bootstrap": "^4.5.3",
+        "vue-router": "^4.0.0-beta.13"
+    }
+}

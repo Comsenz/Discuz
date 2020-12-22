@@ -1,0 +1,7 @@
+{
+    "plugins": [
+        "@vue/babel-plugin-jsx",
+        ["@babel/proposal-decorators", { "legacy": true }],
+        ["@babel/proposal-class-properties", { "loose": true }]
+    ]
+}

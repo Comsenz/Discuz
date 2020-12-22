@@ -18,42 +18,18 @@
 
 namespace App\Http\Controller;
 
-use Discuz\Common\Utils;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
+use Discuz\Api\Client;
 use Illuminate\View\Factory;
-use Discuz\Http\DiscuzResponseFactory;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Discuz\Web\Controller\AbstractWebController;
+use App\Api\Controller\Threads\ResourceThreadController;
 
-class IndexController extends AbstractWebController
+class DiscussionController extends AbstractWebController
 {
-
     public function render(ServerRequestInterface $request, Factory $view) {
+        $response = $this->app->make(Client::class)->send(ResourceThreadController::class, $request->getAttribute('actor'), $request->getQueryParams());
+
+        $this->apiDocument = json_decode($response->getBody(), true);
         return $view->make('app');
     }
-
-    // /**
-    //  * {@inheritdoc}
-    //  */
-    // public function handle(ServerRequestInterface $request): ResponseInterface
-    // {
-    //     $route = $request->getUri()->getPath();
-
-    //     if (Str::startsWith($route, '/admin')) {
-    //         $file = 'admin.html';
-    //     } else {
-    //         $isMobile = Utils::isMobile();
-    //         $file = $isMobile ? 'index.html' : 'pc.html';
-
-    //         if (Arr::has($request->getQueryParams(), 'from')) {
-    //             $file = 'index.html';
-    //         }
-    //     }
-
-    //     return DiscuzResponseFactory::FileResponse(
-    //         public_path($file)
-    //     );
-    // }
 }

@@ -1,90 +1,47 @@
-<!DOCTYPE html>
-<html lang="zh_CN">
-<head>
-    <title>{{ $title }}</title>
+<!doctype html>
+<html>
+  <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>asdgasdg</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
-    <!-- Styles -->
-    <style>
-        html, body {
-            background-color: #fff;
-            color: #636b6f;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 200;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .full-height {
-            height: 100vh;
-        }
-
-        .flex-center {
-            align-items: center;
-            display: flex;
-            justify-content: center;
-        }
-
-        .position-ref {
-            position: relative;
-        }
-
-        .top-right {
-            position: absolute;
-            right: 10px;
-            top: 18px;
-        }
-
-        .content {
-            text-align: center;
-        }
-
-        .title {
-            font-size: 84px;
-        }
-
-        .links > a {
-            color: #636b6f;
-            padding: 0 25px;
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: .1rem;
-            text-decoration: none;
-            text-transform: uppercase;
-        }
-
-        .m-b-md {
-            margin-bottom: 30px;
-        }
-    </style>
+      {!! $head !!}
 </head>
-
 <body>
+    <div id="modal"></div>
+    <div id="app" class="App">
+        <div id="app-navigation" class="App-navigation"></div>
+        <div id="drawer" class="App-drawer">
 
-<div id="modal"></div>
-<div id="alerts"></div>
+            <header id="header" class="App-header">
+                <div id="header-navigation" class="Header-navigation"></div>
+                <div class="container">
+                    <h1 class="Header-title">
+                        <a href="{{ $forum['set_site']['site_url'] }}" id="home-link">
+                            @if ($forum['set_site']['site_logo'])
+                                <img src="{{ $forum['set_site']['site_logo'] }}" alt="{{ $forum['set_site']['site_name'] }}" class="Header-logo">
+                            @else
+                                {{ $forum['set_site']['site_name'] }}
+                            @endif
+                        </a>
+                    </h1>
+                    <div id="header-primary" class="Header-primary"></div>
+                    <div id="header-secondary" class="Header-secondary"></div>
+                </div>
+            </header>
 
-<div id="container">
-    <div class="content">
-        <div class="title m-b-md">
-            Discuss
         </div>
+        <main class="App-content">
+            <div id="content"></div>
+        </main>
     </div>
-</div>
-
-</div>
-
-<script>
-    try {
-        discuz.load(@json($payload));
-        discuz.boot();
-    } catch (e) {
-        throw e;
-    }
-</script>
+    <script type="text/javascript">
+        var discuz = {};
+    </script>
+    <script type="text/javascript" src="/assets/js/app.js"></script>
+    <script type="text/javascript">
+        discuz.core.app.load(@json($payload));
+        discuz.core.app.boot();
+    </script>
 </body>
 </html>
